@@ -1,0 +1,12 @@
+name: lgplugin
+version: '1.0'
+author: fitzche
+main: fr.fitzche.lgmore.Main
+commands:
+  lgop:
+    description: un test
+    permission: lgmore.admin.all
+  lga:
+    description: multifonction admin
+  lg:
+    description: multifonction non admin  
