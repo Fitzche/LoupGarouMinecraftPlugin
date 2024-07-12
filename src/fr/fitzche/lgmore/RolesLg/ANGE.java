@@ -30,6 +30,8 @@ public class ANGE implements RoleInstance {
 	
 	public void giveEffectAllTime() {
 		//null
+
+		//null
 	}
 	
 
