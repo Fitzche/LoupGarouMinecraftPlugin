@@ -53,9 +53,25 @@ public class DISCIPLE implements RoleInstance {
 		if (sage != null) {
 			playerWithRole.sendMessage(ChatColor.GOLD + "Le vieux sage est "+ sage.Name);
 		}
-		return ("Vous êtes Disciple, vous devez gagner avec le village, pour cela vous connaissez le role du vieux sage, au bout de 20min avec lui, il obtiendra votre role, au bout de 30min, vous aurez accès à la commande /lg aura 2 fois, au bout de 35min vous obtiendrez speed permanent, vous pouvez retrouver le vieux sage avec la commande /lg trouver²²");
+		return ("Vous êtes Disciple, vous devez gagner avec le village, pour cela vous connaissez le role du vieux sage, au bout de 20min avec lui, il obtiendra votre role, au bout de 30min, vous aurez accès à la commande /lg aura 2 fois, au bout de 35min vous obtiendrez speed permanent, vous pouvez retrouver le vieux sage avec la commande /lg trouver, cependant si le sage meure vous perdrez un coeur pour chaque phase passée");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
+
+
+
+	public void sageDeath() {
+		if (firstUnlock) {
+			if (secondUnlock) {
+				if (thirdUnlock) {
+					this.playerWithRole.player.setMaxHealth(this.playerWithRole.player.getMaxHealth() - 6);
+				} else {
+					this.playerWithRole.player.setMaxHealth(this.playerWithRole.player.getMaxHealth() - 4);
+				}
+			} else {
+				this.playerWithRole.player.setMaxHealth(this.playerWithRole.player.getMaxHealth() - 2);
+			}
+		}
+	}
 
 	
 	public void giveEffectAllTime() {

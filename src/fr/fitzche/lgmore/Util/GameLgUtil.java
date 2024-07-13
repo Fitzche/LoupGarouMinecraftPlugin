@@ -28,6 +28,18 @@ public class GameLgUtil {
 		System.out.println("la game n'existe pas");
 		return null;
 	}
+
+	public static PlayerData getAlPlayer(GameLg game) {
+		return game.getPlayerAlive().get(MathUtil.generateAlInt(0, game.getPlayerAlive().size() - 1));
+	}
+
+	public static PlayerData getAlPlayerWithout(GameLg game, PlayerData p) {
+		PlayerData returned;
+		do {
+			returned = getAlPlayer(game);
+		} while (returned.Name.equals(p.Name));
+		return returned;
+	}
 	
 	public static void tpAl(PlayerData player) {
 		player.player.addPotionEffect(PotionUtil.INVINCIBILITY);

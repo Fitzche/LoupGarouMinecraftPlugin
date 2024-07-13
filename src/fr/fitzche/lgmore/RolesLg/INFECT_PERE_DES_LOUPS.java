@@ -116,16 +116,12 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 			System.out.println("déjà infecté");
 			return;
 		}
-		System.out.println("*1*1*1*1");
 		
 		TextComponent text = new TextComponent();
-		System.out.println("*1*1*1*2");
 		text.setText(player.Name + ChatColor.BLUE+" est mort, vous avez 15s pour "+ChatColor.RED+"l infecter"+ChatColor.BLUE+" ou non en cliquant sur ce message ");
-		System.out.println("*1*1*1*3");
 		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg revive "+player.Name+ " "+ this.playerWithRole.Name)));
-		System.out.println("*1*1*1*4");
 		this.playerWithRole.player.spigot().sendMessage(text);
-		System.out.println("*1*1*1*5");
+		
 	}
 
 

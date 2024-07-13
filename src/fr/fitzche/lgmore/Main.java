@@ -148,6 +148,7 @@ public class Main extends JavaPlugin implements Listener {
 	    RoleUtilLg.existingRoles.add(RolesLg.VOYANTE);
 	    RoleUtilLg.existingRoles.add(RolesLg.PERFIDE);
 	    RoleUtilLg.existingRoles.add(RolesLg.ASSASSIN);
+		RoleUtilLg.existingRoles.add(RolesLg.ALLUMEUR);
 	    
 	    
 	    

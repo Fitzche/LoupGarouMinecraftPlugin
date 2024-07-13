@@ -21,10 +21,7 @@ public class LoveDuo implements Listener{
 	public LoveDuo(PlayerData loverOne, PlayerData loverTwo, PlayerData Cupidon) {
 		
 		
-		Main.server.getPluginManager().registerEvents(this, Main.plug);
-		
-		GameLgUtil.getGameOfPlayer(Cupidon.player, " at 26 LoveDuo").couple = this;
-		
+		Main.server.getPluginManager().registerEvents(this, Main.plug);		
 		this.loverOne = loverOne;
 		loverOne.player.sendMessage(ChatColor.AQUA+"Vous venez de tomber amoureux de "+ loverTwo.player.getName() + "\n" + "Vous devez maintenant gagner avec votre amoureux (et votre cupidon), si l'un de vous deux vient à mourir, l'autre mourra aussi"
 				+ " Vous possédez maintenant la commande /don [pourcentage de votre vie] pour envoyer des coeurs à votre âme soeur");

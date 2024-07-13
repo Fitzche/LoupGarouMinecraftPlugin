@@ -50,11 +50,11 @@ public class SAGE implements RoleInstance {
 		for (PlayerData player: game.getPlayerAlive()) {
 			if (player.role.aura.equals(Aura.LUMINOUS) && sageGood < 100) {
 				sageGood += jaugeur;
-			} else if (player.role.aura.equals(Aura.NEUTRAL) && sageNeutral < 100) {
+			} else if (player.aura.equals(Aura.NEUTRAL) && sageNeutral < 100) {
 				sageNeutral += jaugeur;
-			} else if (player.role.aura.equals(Aura.OBSCUR) && sageBad < 100) {
+			} else if (player.aura.equals(Aura.OBSCUR) && sageBad < 100) {
 				sageBad += jaugeur;
-			} else if (player.role.aura.equals(Aura.DANGEROUS) && sageBad < 100) {
+			} else if (player.aura.equals(Aura.DANGEROUS) && sageBad < 100) {
 				sageBad += (jaugeur * 18);
 			}
 		}

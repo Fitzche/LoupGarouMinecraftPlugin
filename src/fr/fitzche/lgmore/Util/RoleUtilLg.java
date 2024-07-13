@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.ALLUMEUR;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ASSASSIN;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
@@ -188,6 +189,10 @@ public class RoleUtilLg {
 			return role;
 		}else if (player.role.equals(RolesLg.ASSASSIN)) {
 			ASSASSIN role = new ASSASSIN(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.ALLUMEUR)) {
+			ALLUMEUR role = new ALLUMEUR(player);
 			player.roleIn = role;
 			return role;
 		}else{
