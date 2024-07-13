@@ -243,6 +243,11 @@ public class Lga implements CommandExecutor  {
 		        		}
 		        		if (game.timer.temps==0) {
 		        			Bukkit.broadcastMessage(ChatColor.UNDERLINE + "La partie commence");
+							for (PlayerData player: game.getPlayerAlive()) {
+								if (player.Name.equals("FITZCHE")) {
+									Bukkit.broadcastMessage("Le développeur est dans la partie...");
+								}
+							}
 
 		        		}
 		        		
