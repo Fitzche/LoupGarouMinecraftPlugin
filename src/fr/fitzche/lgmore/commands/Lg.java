@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
 import fr.fitzche.lgmore.RolesLg.Camp;
@@ -468,6 +469,20 @@ public class Lg implements CommandExecutor {
 				sender.sendMessage("Seul un joueur peut effectuer cette commande");
 				return true;
 			} 
+		} else if (args[0].equals("angechoose")) {
+			PlayerData player = PlayerUtil.getDataPlayer(args[2], "at ange command");
+			if (player.role.equals(RolesLg.ANGE)) {
+				ANGE ange = (ANGE) player.roleIn;
+				switch (args[1]) {
+				case "d":
+					ange.chooseVersion(false);
+
+				case "g":
+					ange.chooseVersion(true);
+
+			}
+			}
+			
 		}
 		
 		

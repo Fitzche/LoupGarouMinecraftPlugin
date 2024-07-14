@@ -45,6 +45,7 @@ import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
+import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
@@ -176,6 +177,14 @@ public class mcListeners implements Listener {
 			    			
 			    			
 			    		} 
+						ArrayList<PlayerData> angels = RoleUtilLg.getPlayersWithRole(gm1, RolesLg.ANGE);
+						for (PlayerData ange: angels) {
+							ANGE angeR = (ANGE) ange.roleIn;
+							if (angeR.target.Name.equals(player1.Name)) {
+								angeR.targetDeath(player1.player.getKiller().getName());
+							}
+						}
+
 			    		
 				    	if (player1.camp.equals(Camp.Wolf)) {
 				    		for (PlayerData player: RoleUtilLg.getPlayersWithRole(gm1, RolesLg.LOUP_MYSTIQUE)) {

@@ -37,7 +37,8 @@ public enum RolesLg {
 	DISCIPLE(Camp.Villager, "Disciple", Material.BOOK_AND_QUILL, Aura.LUMINOUS),
 	LOUP_METAMORPHE(Camp.Wolf, "Loup métamorphe", Material.SLIME_BALL, Aura.OBSCUR),
 	PYROMANE(Camp.Other, "Pyromane", Material.TORCH, Aura.NEUTRAL),
-	ALLUMEUR(Camp.Villager, "Allumeur de Lampadaire", Material.TORCH, Aura .NEUTRAL),
+	ALLUMEUR(Camp.Villager, "Allumeur de Lampadaire", Material.TORCH, Aura.NEUTRAL),
+	ANGE(Camp.Other, "Ange", Material.FEATHER, Aura.LUMINOUS),
 	SIMPLE_WOLF(Camp.Wolf, "Simple Loup Garou", Material.DIAMOND_SWORD, Aura.OBSCUR);
 	
 	private Camp roleCamp;
