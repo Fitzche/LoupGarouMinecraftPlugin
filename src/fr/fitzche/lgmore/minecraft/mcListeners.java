@@ -51,6 +51,7 @@ import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
+import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
@@ -182,6 +183,13 @@ public class mcListeners implements Listener {
 							ANGE angeR = (ANGE) ange.roleIn;
 							if (angeR.target.Name.equals(player1.Name)) {
 								angeR.targetDeath(player1.player.getKiller().getName());
+							}
+						}
+						ArrayList<PlayerData> parrains = RoleUtilLg.getPlayersWithRole(gm1, RolesLg.PARRAIN);
+						for (PlayerData parrain: parrains) {
+							PARRAIN parrainR = (PARRAIN) parrain.roleIn;
+							if (parrainR.target.Name.equals(player1.Name)) {
+								parrainR.targetDeath(player1.player.getKiller().getName());
 							}
 						}
 

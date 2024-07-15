@@ -12,34 +12,35 @@ import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 
 public enum RolesLg {
-	SIMPLE_VILLAGER(Camp.Villager, "Simple Villageois", Material.WHEAT, Aura.LUMINOUS),
-	VOYANTE(Camp.Villager, "Voyante", Material.ENCHANTMENT_TABLE, Aura.LUMINOUS),
-	INFECT_PERE_DES_LOUPS(Camp.Wolf, "Infect Père Des Loups", Material.FERMENTED_SPIDER_EYE, Aura.DANGEROUS),
-	SORCIERE(Camp.Villager, "Sorcière", Material.POTION, Aura.NEUTRAL),
+	SIMPLE_VILLAGER(Camp.Villager, "Simple Villageois", Material.WHEAT, Aura.LUMINOUS),//correspondant
+	VOYANTE(Camp.Villager, "Voyante", Material.ENCHANTMENT_TABLE, Aura.LUMINOUS),//correspondant
+	INFECT_PERE_DES_LOUPS(Camp.Wolf, "Infect Père Des Loups", Material.FERMENTED_SPIDER_EYE, Aura.DANGEROUS),//correspondant
+	SORCIERE(Camp.Villager, "Sorcière", Material.POTION, Aura.NEUTRAL),//correspondant
 	CUPIDON(Camp.Love, "Cupidon", Material.BOW, Aura.NEUTRAL),
-	MONTREUR(Camp.Villager, "Montreur", Material.CARROT_STICK, Aura.LUMINOUS),
-	PETITE_FILLE(Camp.Villager, "Petite Fille", Material.EYE_OF_ENDER, Aura.LUMINOUS),
-	CHASSEUR(Camp.Villager, "Chasseur", Material.BOW, Aura.LUMINOUS),
-	SALVATEUR(Camp.Villager, "Salvateur", Material.IRON_HELMET, Aura.LUMINOUS),
+	MONTREUR(Camp.Villager, "Montreur", Material.CARROT_STICK, Aura.LUMINOUS),//correspondant
+	PETITE_FILLE(Camp.Villager, "Petite Fille", Material.EYE_OF_ENDER, Aura.LUMINOUS),//correspondant
+	CHASSEUR(Camp.Villager, "Chasseur", Material.BOW, Aura.LUMINOUS),//correspondant
+	SALVATEUR(Camp.Villager, "Salvateur", Material.IRON_HELMET, Aura.LUMINOUS),//correspondant
 	CORBEAU(Camp.Villager, "Corbeau", Material.FEATHER, Aura.NEUTRAL),
-	SOEUR(Camp.Villager, "Soeur", Material.MELON, Aura.LUMINOUS),
-	BIENFAITEUR(Camp.Villager, "Bienfaiteur", Material.GOLDEN_CARROT, Aura.LUMINOUS),
-	IDIOT_DU_VILLAGE(Camp.Villager, "Idiot du Village", Material.CARROT_STICK, Aura.LUMINOUS),
-	LOUP_MYSTIQUE(Camp.Wolf, "Loup Mystique", Material.ENDER_PEARL, Aura.OBSCUR),
+	SOEUR(Camp.Villager, "Soeur", Material.MELON, Aura.LUMINOUS),//correspondant
+	BIENFAITEUR(Camp.Villager, "Bienfaiteur", Material.GOLDEN_CARROT, Aura.LUMINOUS),//correspondant
+	IDIOT_DU_VILLAGE(Camp.Villager, "Idiot du Village", Material.CARROT_STICK, Aura.LUMINOUS),//correspondant
+	LOUP_MYSTIQUE(Camp.Wolf, "Loup Mystique", Material.ENDER_PEARL, Aura.OBSCUR),//correspondant
 	VOLEUR(Camp.Other, "Voleur", Material.GOLD_NUGGET, Aura.OBSCUR),
-	RENARD(Camp.Villager, "Renard", Material.LEATHER, Aura.LUMINOUS),
-	ANCIEN(Camp.Villager, "Ancien", Material.SAPLING, Aura.LUMINOUS),
-	PERFIDE(Camp.Wolf, "Loup Garou Perfide", Material.EYE_OF_ENDER, Aura.OBSCUR),
+	RENARD(Camp.Villager, "Renard", Material.LEATHER, Aura.LUMINOUS),//correspondant
+	ANCIEN(Camp.Villager, "Ancien", Material.SAPLING, Aura.LUMINOUS),//correspondant
+	PERFIDE(Camp.Wolf, "Loup Garou Perfide", Material.EYE_OF_ENDER, Aura.OBSCUR),//correspondant
 	ENFANT_SAUVAGE(Camp.Villager, "Enfant Sauvage", Material.STICK, Aura.NEUTRAL),
-	SAGE(Camp.Villager, "Sage", Material.BANNER, Aura.LUMINOUS),
+	SAGE(Camp.Villager, "Sage", Material.BANNER, Aura.LUMINOUS),//correspondant
 	ASSASSIN(Camp.Other, "Assassin", Material.GOLD_SWORD, Aura.NEUTRAL),
 	INTERPRETE(Camp.Villager, "Interprete", Material.FLOWER_POT_ITEM, Aura.NEUTRAL),
-	DISCIPLE(Camp.Villager, "Disciple", Material.BOOK_AND_QUILL, Aura.LUMINOUS),
-	LOUP_METAMORPHE(Camp.Wolf, "Loup métamorphe", Material.SLIME_BALL, Aura.OBSCUR),
+	DISCIPLE(Camp.Villager, "Disciple", Material.BOOK_AND_QUILL, Aura.LUMINOUS),//correspondant
+	LOUP_METAMORPHE(Camp.Wolf, "Loup métamorphe", Material.SLIME_BALL, Aura.OBSCUR),//correspondant
 	PYROMANE(Camp.Other, "Pyromane", Material.TORCH, Aura.NEUTRAL),
 	ALLUMEUR(Camp.Villager, "Allumeur de Lampadaire", Material.TORCH, Aura.NEUTRAL),
 	ANGE(Camp.Other, "Ange", Material.FEATHER, Aura.LUMINOUS),
-	SIMPLE_WOLF(Camp.Wolf, "Simple Loup Garou", Material.DIAMOND_SWORD, Aura.OBSCUR);
+	PARRAIN(Camp.Villager, "Parrain", Material.STONE_SWORD, Aura.DANGEROUS),
+	SIMPLE_WOLF(Camp.Wolf, "Simple Loup Garou", Material.DIAMOND_SWORD, Aura.OBSCUR);//correspondant
 	
 	private Camp roleCamp;
 	private String name;

@@ -12,6 +12,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.ALLUMEUR;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
+import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.ASSASSIN;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
@@ -26,6 +27,7 @@ import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
 import fr.fitzche.lgmore.RolesLg.MONTREUR;
+import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PERFIDE;
 import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
@@ -195,10 +197,22 @@ public class RoleUtilLg {
 			ALLUMEUR role = new ALLUMEUR(player);
 			player.roleIn = role;
 			return role;
+		}else if (player.role.equals(RolesLg.PARRAIN)) {
+			PARRAIN role = new PARRAIN(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.ANGE)) {
+			ANGE role = new ANGE(player);
+			player.roleIn = role;
+			return role;
 		}else{
 			return null;
 		}
 	}
+
+	
+
+
 	public static RoleInstance createRole(RolesLg role, Player player) {
 		PlayerData temp = new PlayerData(player);
 		temp.role = role;

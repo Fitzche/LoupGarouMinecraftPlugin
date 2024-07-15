@@ -33,6 +33,14 @@ public class GameLgUtil {
 		return game.getPlayerAlive().get(MathUtil.generateAlInt(0, game.getPlayerAlive().size() - 1));
 	}
 
+	public static PlayerData getPlayerWithoutCamp(Camp camp, GameLg game) {
+		PlayerData returned;
+		do {
+			returned = getAlPlayer(game);
+		} while (returned.camp.equals(camp));
+		return returned;
+	}
+
 	public static PlayerData getAlPlayerWithout(GameLg game, PlayerData p) {
 		PlayerData returned;
 		do {

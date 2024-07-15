@@ -19,6 +19,7 @@ import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
+import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
 import fr.fitzche.lgmore.RolesLg.RENARD;
 import fr.fitzche.lgmore.RolesLg.RoleInstance;
@@ -483,6 +484,15 @@ public class Lg implements CommandExecutor {
 			}
 			}
 			
+		} else if (args[0].equals("prime")){
+			PlayerData target = PlayerUtil.checkExist(args[1]);
+			Player player = (Player) sender;
+			PlayerData parrain = PlayerUtil.getDataOfPlayer(player, "at /lg cibler command");
+			if (parrain.role.equals(RolesLg.PARRAIN)) {
+				PARRAIN parrainR = (PARRAIN) parrain.roleIn;
+				parrainR.setNexTarget(target);
+				return true;
+			}
 		}
 		
 		
