@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -28,6 +29,8 @@ import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.LocationUtil;
+import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
@@ -60,7 +63,7 @@ public class GameLg implements Listener{
 	public boolean isInVote;
 	public boolean isInDisc;
 	
-	public int eventTrouple;
+	public HashMap<String, Integer> probasEvents = new HashMap<String, Integer>();
 	
 	public Team lgTeam;
 	public Team villTeam;
@@ -77,7 +80,9 @@ public class GameLg implements Listener{
 	public GameLg(String name) {
 		this.stopped = false;
 		
-		eventTrouple = 0;
+		for (String str: Main.eventsNames) {
+			this.probasEvents.put(str, 0);
+		}
 		
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		
@@ -212,6 +217,7 @@ public class GameLg implements Listener{
 		
 		this.setChat();
 		this.startVote();
+		this.decideTimeEvent();
 	}
 	
 	public void addPlayer(String name) {
@@ -438,6 +444,52 @@ public class GameLg implements Listener{
 		}
 		return number;
 	}
+
+	@Deprecated
+	public void decideTimeEvent() {
+		int x = MathUtil.generateAlInt(0, 1200);
+		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug,new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				if (MathUtil.pourcentage(probasEvents.get("Premonition"))) {
+					PlayerData player = getPlayerAlive().get(MathUtil.generateAlInt(0, getPlayerAlive().size() - 1));
+					int s= 0;
+					int c = 0;
+					for (PlayerData players:getPlayerAlive()) {
+						
+						if (LocationUtil.getDistanceBetween(player, players) < 21 ) {
+							switch (players.aura) {
+								case DANGEROUS:
+									s += 2;
+								case LUMINOUS:
+									c += 1;
+								case NEUTRAL:
+									break;
+								case OBSCUR:
+									s+=1;
+								case UNKNOW:
+									break;
+								default:
+									break;
+								
+							}
+
+						}
+
+
+					}
+					if (s > c) {
+						player.sendMessage(ChatColor.DARK_RED + "Vous avez un présentiment negatif envers votre entourage");
+					} else {
+						player.sendMessage(ChatColor.DARK_GREEN + "Vous avez un présentiment positive envers votre entourage");
+
+					}
+				}
+			}
+			
+		} , x*20);
+	}
 	
 	public void announceDeath(PlayerData player1) {
 		
@@ -454,6 +506,9 @@ public class GameLg implements Listener{
 
 		GameLg gm1 =GameLgUtil.getGameOfPlayer(player1, " at 152 Main");
 		if (gm1.name != this.name) {
+			return;
+		}
+		if (MathUtil.pourcentage(probasEvents.get("Brume"))) {
 			return;
 		}
 

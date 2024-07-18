@@ -74,7 +74,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static mcListeners listeners;
 	public static ArrayList<String> eventsNames = new ArrayList<String>();
 	public static HashMap<String, String> descriptionsEvent = new HashMap<String, String>();
-	public static HashMap<String, Integer> probasEvents = new HashMap<String, Integer>();
+	
 
 	public JavaPlugin getPlugin() {
 		return this;
@@ -160,15 +160,8 @@ public class Main extends JavaPlugin implements Listener {
 		eventsNames.add("Brume");
 		descriptionsEvent.put("Brume", "Probabilité à la mort d'un joueur, que le message de mort soit caché au village");
 
-
-
-
-
-		for (String str: eventsNames) {
-			probasEvents.put(str, 0);
-		}
-	    
-	    
+		eventsNames.add("Premonition");
+		descriptionsEvent.put("Premonition", "Probabilité que dans un épisode, un joueur obtienne un présentiment sur son entourage");
 
 	}
 	

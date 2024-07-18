@@ -293,6 +293,7 @@ public class Lga implements CommandExecutor  {
 		        		
 		        		
 		        		if (game.timer.temps > 1200) {
+
 		        			//System.out.println("k.1");
 		        			
 		        			
@@ -323,6 +324,7 @@ public class Lga implements CommandExecutor  {
 		        					//System.out.println("k.3.ser.2");
 		        				}
 		        			}
+							
 		        			
 		        		}
 		        		

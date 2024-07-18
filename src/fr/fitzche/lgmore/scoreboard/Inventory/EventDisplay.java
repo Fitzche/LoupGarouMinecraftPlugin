@@ -70,6 +70,10 @@ public class EventDisplay implements Listener{
         ItemStack next = new ItemStack(Material.ARROW);
         ItemUtil.setName(next, "suivant");
         inv.setItem(36, next);
+
+        ItemStack returnItem = new ItemStack(Material.ARROW);
+        ItemUtil.setName(returnItem, "suivant");
+        inv.setItem(28, returnItem);
     }
 
 
@@ -99,16 +103,16 @@ public class EventDisplay implements Listener{
                             switch(e.getCurrentItem().getItemMeta().getLore().get(0)) {
                                 case "gauche +1/-1 droite":
                                     if (e.getClick().equals(ClickType.LEFT)) {
-                                        Main.probasEvents.put(str, Main.probasEvents.get(str) +1);
+                                        gm.probasEvents.put(str, gm.probasEvents.get(str) +1);
                                     } else if (e.getClick().equals(ClickType.RIGHT)) {
-                                        Main.probasEvents.put(str, Main.probasEvents.get(str) -1);
+                                        gm.probasEvents.put(str, gm.probasEvents.get(str) -1);
                                     }
                                 case "gauche +10/-10 droite":
                                     if (e.getClick().equals(ClickType.LEFT)) {
-                                        Main.probasEvents.put(str, Main.probasEvents.get(str) +10);
+                                        gm.probasEvents.put(str, gm.probasEvents.get(str) +10);
 
                                     } else if (e.getClick().equals(ClickType.RIGHT)) {
-                                        Main.probasEvents.put(str, Main.probasEvents.get(str) -10);
+                                        gm.probasEvents.put(str, gm.probasEvents.get(str) -10);
                                     
                                     }
                             }
@@ -127,6 +131,9 @@ public class EventDisplay implements Listener{
                             return;
                         }
                         e.getWhoClicked().openInventory(this.invs.get(this.invs.indexOf(e.getInventory()) - 1));
+                    } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals("retour")) {
+                        ConfigDisplay config = new ConfigDisplay(gm);
+                        config.open((Player) e.getWhoClicked());
                     }
                 } 
             }
