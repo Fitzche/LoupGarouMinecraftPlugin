@@ -163,6 +163,9 @@ public class Main extends JavaPlugin implements Listener {
 		eventsNames.add("Premonition");
 		descriptionsEvent.put("Premonition", "Probabilité que dans un épisode, un joueur obtienne un présentiment sur son entourage");
 
+		eventsNames.add("Trouple");
+		descriptionsEvent.put("Trouple", "Chance que le couple soit...un trouple");
+
 	}
 	
 	
