@@ -369,8 +369,12 @@ public class GameLg implements Listener{
 				}
 				
 				if (mostVoted.vote > 2 && !equal) {
+					if (MathUtil.pourcentage(probasEvents.get("Erreur aux Urnes"))) {
+						Bukkit.broadcastMessage(ChatColor.GOLD+"Une erreur s'est produite aux urnes...");
+						mostVoted = getPlayerAlive().get(MathUtil.generateAlInt(0, getPlayerAlive().size()  -1));
+					}
 					mostVoted.player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 1));
-					mostVoted.player.setMaxHealth(mostVoted.player.getMaxHealth() - 4);
+					mostVoted.player.setMaxHealth(mostVoted.player.getMaxHealth() - 2);
 					Bukkit.broadcastMessage(ChatColor.GOLD + "Le joueur " + ChatColor.DARK_AQUA + mostVoted.Name +ChatColor.GOLD+ "a été le plus voté" );
 					for (PlayerData player:playerAlive) {
 						
