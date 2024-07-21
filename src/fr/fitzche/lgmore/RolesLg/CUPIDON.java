@@ -84,15 +84,26 @@ public class CUPIDON implements RoleInstance{
 		if (this.couple != null) {
 			return;
 		}
+		GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating ");
+		ArrayList<PlayerData> members = new ArrayList<PlayerData>();
+		
+		if (MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating event mal visé").probasEvents.get("Mal visé"))) {
+			player = Cupidon;
+			player2 = GameLgUtil.getAlPlayerWithout(game, player);
+			Cupidon.sendMessage("Vous avez mal visé");
+
+		} else {
+			members.add(Cupidon);
+		}
 		System.out.println("couple null before creating");
 		
 		//FOR 2 MEMBER OF COUPLE
-		ArrayList<PlayerData> members = new ArrayList<PlayerData>();
+		
 		members.add(player2);
 		player2.team.remove(player2);
 		members.add(player);
 		player.team.remove(player);
-		members.add(Cupidon);
+		
 		
 		ArrayList<PlayerData> couple = new ArrayList<PlayerData>();
 		couple.add(player2);
@@ -105,10 +116,16 @@ public class CUPIDON implements RoleInstance{
 
 		if (MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(this.playerWithRole, "at couple creating").probasEvents.get("Trouple"))) {
 			PlayerData third = GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating //trouple").getPlayerAlive().get(MathUtil.generateAlInt(0, GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating 2//trouple").getPlayerAlive().size()));
+
+			
+			members.add(third);
+			third.team.remove(third);
+			
 			couple.add(third);
 			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
 			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ third.Name);
 			third.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
+			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + ", "+third.Name+" et "+ player2.Name + " en couple");
 
 			third.inLove = true;
 
@@ -116,13 +133,13 @@ public class CUPIDON implements RoleInstance{
 		} else {
 			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
 			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
-
+			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + " et "+ player2.Name + " en couple");
 		}
 		this.couple = new Team(ChatColor.LIGHT_PURPLE+"Couple", Camp.Love, GameLgUtil.getGameOfPlayer(playerWithRole, "at Couple creating"), members, null, "at Couple creating", null, couple, true, false, false, true);
 		GameLgUtil.getGameOfPlayer(playerWithRole, "at Couple creating 2").teams.add(this.couple);
 		
 		
-		Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + " et "+ player2.Name + " en couple");
+		
 		System.out.println("end creating couple");
 	}
 

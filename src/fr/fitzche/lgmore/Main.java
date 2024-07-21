@@ -169,6 +169,9 @@ public class Main extends JavaPlugin implements Listener {
 		eventsNames.add("Erreur aux Urnes");
 		descriptionsEvent.put("Erreur aux Urnes", "Probabilité qu'à un vote, le résultat ne soit pas le bon.");
 
+		eventsNames.add("Mal visé");
+		descriptionsEvent.put("Mal visé", "probabilité que le cupidon vise mal et se mette en couple avec un joueur aléatoire");
+
 	}
 	
 	
