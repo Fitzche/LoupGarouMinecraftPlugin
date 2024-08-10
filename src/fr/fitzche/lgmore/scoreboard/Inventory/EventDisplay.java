@@ -35,29 +35,36 @@ public class EventDisplay implements Listener{
 	int x = 0;
 	
 	Main.server.getPluginManager().registerEvents(this, Main.plug);
-	//System.out.println("b.1.1");
-
+	//System.out.println("b.1.");
+	int done =Main.eventsNames.size();
 
     for (int i = Main.eventsNames.size(); i>0; i =- 9) {
         Inventory inv = Bukkit.createInventory(null, 36);
-        List<String> firstEventsNames = Main.eventsNames.subList(0, 8);
+       
+        int end = 8+(done-i);
+        List<String> firstEventsNames;
+        if (Main.eventsNames.size()< end +1) {
+            firstEventsNames = Main.eventsNames.subList(0 + (done -i), Main.eventsNames.size() - 1);
+
+        } else {
+        	firstEventsNames = Main.eventsNames.subList(0 + (done -i), 8+(done-i));
+
+        }
         for (String eName:firstEventsNames) {
             ItemStack item = new ItemStack(Material.NAME_TAG);
             ItemUtil.setName(item, eName);
             inv.setItem(firstEventsNames.indexOf(eName) + 1, item);
-
             ItemStack itemAdd1 = new ItemStack(Material.IRON_BLOCK);
             ItemUtil.setName(itemAdd1, eName);
-            ArrayList<String> lores = new ArrayList<String>();
+            ArrayList<String> lores= new ArrayList<String>();
             lores.add("gauche +1/-1 droite");
             ItemUtil.setLore(itemAdd1, lores);
             inv.setItem(firstEventsNames.indexOf(eName) + 1, itemAdd1);
 
-
             ItemStack itemAdd10 = new ItemStack(Material.IRON_BLOCK);
             ItemUtil.setName(itemAdd10, eName);
             ArrayList<String> lores10 = new ArrayList<String>();
-            lores10.add("gauche +10/-10 droite");
+            lores10.add("gauche +10/10 droite");
             ItemUtil.setLore(itemAdd10, lores10);
             inv.setItem(firstEventsNames.indexOf(eName) + 1, itemAdd10);
 
