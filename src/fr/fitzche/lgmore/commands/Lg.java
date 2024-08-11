@@ -490,6 +490,9 @@ public class Lg implements CommandExecutor {
 			PlayerData parrain = PlayerUtil.getDataOfPlayer(player, "at /lg cibler command");
 			if (parrain.role.equals(RolesLg.PARRAIN)) {
 				PARRAIN parrainR = (PARRAIN) parrain.roleIn;
+				if (parrainR.powerUsed) {
+					player.sendMessage("Vous devez attendre pour pouvoir mettre un prime sur un joueur");
+				}
 				parrainR.setNexTarget(target);
 				return true;
 			}

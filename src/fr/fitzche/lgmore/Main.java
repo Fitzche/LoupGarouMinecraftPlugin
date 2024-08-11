@@ -191,6 +191,9 @@ public class Main extends JavaPlugin implements Listener {
 		System.out.println("join");
 		e.getPlayer().setScoreboard(Main.scoreboardLg);
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" joined");
+		if (e.getPlayer().getName().equals("TheGuill84")) {
+			e.getPlayer().sendMessage("Hey, tu as rejoint un serveur avec le plugin de lg de Fitzche, fais /lga Game create [nomDeLaGame] pour créer un game, puis /lga Game config [nomDeLaGame] pour la config puis la start... ");
+		}
 		
 		for (GameLg gm: Main.games) {
 			System.out.println("tested for "+ gm.name +" at l.270 of Main");

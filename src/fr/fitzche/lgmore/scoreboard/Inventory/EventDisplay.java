@@ -59,29 +59,30 @@ public class EventDisplay implements Listener{
             ArrayList<String> lores= new ArrayList<String>();
             lores.add("gauche +1/-1 droite");
             ItemUtil.setLore(itemAdd1, lores);
-            inv.setItem(firstEventsNames.indexOf(eName) + 1, itemAdd1);
+            inv.setItem(firstEventsNames.indexOf(eName) + 10, itemAdd1);
 
             ItemStack itemAdd10 = new ItemStack(Material.IRON_BLOCK);
             ItemUtil.setName(itemAdd10, eName);
             ArrayList<String> lores10 = new ArrayList<String>();
-            lores10.add("gauche +10/10 droite");
+            lores10.add("gauche +10/-10 droite");
             ItemUtil.setLore(itemAdd10, lores10);
-            inv.setItem(firstEventsNames.indexOf(eName) + 1, itemAdd10);
+            inv.setItem(firstEventsNames.indexOf(eName) + 19, itemAdd10);
 
         }
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemUtil.setName(back, "précédent");
-        inv.setItem(35, back);
+        inv.setItem(34, back);
 
         ItemStack next = new ItemStack(Material.ARROW);
         ItemUtil.setName(next, "suivant");
-        inv.setItem(36, next);
+        inv.setItem(35, next);
 
         ItemStack returnItem = new ItemStack(Material.ARROW);
-        ItemUtil.setName(returnItem, "suivant");
-        inv.setItem(28, returnItem);
-    }
+        ItemUtil.setName(returnItem, "retour");
+        inv.setItem(27, returnItem);
+        invs.add(inv);
+        }
 
 
 
@@ -105,23 +106,35 @@ public class EventDisplay implements Listener{
             for (Inventory inv: this.invs) {
                 if (e.getInventory().equals(inv)); {
                     e.setCancelled(true);
+                    
                     for (String str: Main.eventsNames) {
+                    	System.out.println("egal ???");
                         if (e.getCurrentItem().getItemMeta().getDisplayName().equals(str)) {
+                        	System.out.println("event correspondant");
                             switch(e.getCurrentItem().getItemMeta().getLore().get(0)) {
-                                case "gauche +1/-1 droite":
+                                case "gauche +1/-1 droite": 
                                     if (e.getClick().equals(ClickType.LEFT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) +1);
+                                        e.getWhoClicked().sendMessage("Vous avez ajouté 1% à l'event "+ str);
                                     } else if (e.getClick().equals(ClickType.RIGHT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) -1);
+                                        e.getWhoClicked().sendMessage("Vous avez retiré 1% à l'event "+ str);
+
                                     }
+                                    break;
                                 case "gauche +10/-10 droite":
                                     if (e.getClick().equals(ClickType.LEFT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) +10);
+                                        e.getWhoClicked().sendMessage("Vous avez ajouté 10% à l'event "+ str);
+
 
                                     } else if (e.getClick().equals(ClickType.RIGHT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) -10);
+                                        e.getWhoClicked().sendMessage("Vous avez retiré 10% à l'event "+ str);
+
                                     
                                     }
+                                    break;
                             }
                         }
                     }

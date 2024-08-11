@@ -16,6 +16,7 @@ public class PARRAIN implements RoleInstance {
 	public String name ="Parrain";
 	public Camp camp = Camp.Villager;
     public GameLg game;
+    public boolean powerUsed = false;
 
     public ArrayList<PlayerData> playersList = new ArrayList<>();
     public PlayerData target;
@@ -28,15 +29,16 @@ public class PARRAIN implements RoleInstance {
 
     public void setNexTarget(PlayerData playerD) {
         playersList = new ArrayList<>();
+        int x = 5;
+        if (GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size()<5) {
+        	x = GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size();
+        }
         
+    
 
 
-        for (int i = 0; i < 5; i++) {
-            playersList.add(GameLgUtil.getPlayerWithoutCamp(playerD.camp, this.game));
-            playersList.add(GameLgUtil.getPlayerWithoutCamp(playerD.camp, this.game));
-            playersList.add(GameLgUtil.getPlayerWithoutCamp(playerD.camp, this.game));
-            playersList.add(GameLgUtil.getPlayerWithoutCamp(playerD.camp, this.game));
-            playersList.add(GameLgUtil.getPlayerWithoutCamp(playerD.camp, this.game));
+        for (int i = 0; i < x; i++) {
+            playersList.add(GameLgUtil.getAlPlayerWithoutCampAnd(game, playersList, playerD.camp));
         }
 
         this.target = playerD;
@@ -52,7 +54,7 @@ public class PARRAIN implements RoleInstance {
 	public String getDescription() {
 		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez à chaque épisode mettre une prime sur la tête d'un joueur à chaque épisode, qui sera envoyé à 5 joueurs au hasard du camp adverse à ce joueur, si ce joueur est tué par un de ces 5 joueurs, vous ainsi que le tueur gagnerez 1/2 coeur et 5% de force");
 	}
-	public static ItemStack logo = new ItemStack(Material.WHEAT);
+	public static ItemStack logo = new ItemStack(Material.STONE_SWORD);
 
 	
 	public void giveEffectAllTime() {
@@ -99,8 +101,11 @@ public class PARRAIN implements RoleInstance {
 
 	@Override
 	public void episodeEffect() {
-		playerWithRole.sendMessage("Vous pouvez utiliser la commande /lg prime [nom du joueur] pour mettre une prime sur la tête d'un joueur");
-		
+		if (game.timer.temps < 3500) {
+			powerUsed = true;
+		}else {
+			playerWithRole.sendMessage("Vous pouvez utiliser la commande /lg prime [nom du joueur] pour mettre une prime sur la tête d'un joueur");
+		}
 	}
 
 	@Override

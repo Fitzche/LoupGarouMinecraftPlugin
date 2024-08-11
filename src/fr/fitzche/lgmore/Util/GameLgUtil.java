@@ -49,6 +49,49 @@ public class GameLgUtil {
 		return returned;
 	}
 	
+	public static PlayerData getAlPlayerWithout(GameLg game, ArrayList<PlayerData> p) {
+		PlayerData returned;
+		boolean present = false;
+		int x = 0;
+		do {
+			returned = getAlPlayer(game);
+			for (PlayerData p2:p) {
+				if (returned.Name.equals(p2.Name)) {
+					present = true;
+					x++;
+				}
+			}
+			
+		} while (present||x> 30);
+		return returned;
+	}
+	public static PlayerData getAlPlayerWithoutCampAnd(GameLg game, ArrayList<PlayerData> p, Camp camp) {
+		PlayerData returned;
+		boolean present = false;
+		int x = 0;
+		do {
+			returned = getAlPlayer(game);
+			for (PlayerData p2:p) {
+				if (returned.Name.equals(p2.Name) || returned.camp.equals(camp)) {
+					present = true;
+					x++;
+				}
+			}
+			
+		} while (present||x> 30);
+		return returned;
+	}
+	
+	public static ArrayList<PlayerData> getPlayersWithOutCamp(GameLg game, Camp camp) {
+		ArrayList<PlayerData> ps = new ArrayList<PlayerData>();
+		for (PlayerData player: game.getPlayerAlive()) {
+			if (!player.camp.equals(camp)) {
+				ps.add(player);
+			}
+		}
+		return ps;
+	}
+	
 	public static void tpAl(PlayerData player) {
 		player.player.addPotionEffect(PotionUtil.INVINCIBILITY);
 		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(0, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(0, 500));
