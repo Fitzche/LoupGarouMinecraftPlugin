@@ -189,7 +189,7 @@ public class mcListeners implements Listener {
 						for (PlayerData parrain: parrains) {
 							PARRAIN parrainR = (PARRAIN) parrain.roleIn;
 							if (parrainR.target.Name.equals(player1.Name)) {
-								parrainR.targetDeath(player1.player.getKiller().getName());
+								parrainR.targetDeath(PlayerUtil.getDataOfPlayer(killer, "at parrain target death check").Name);
 							}
 						}
 

@@ -37,7 +37,11 @@ public class ALLUMEUR implements RoleInstance {
 	public void giveEffectAllTime() {
 		for (PlayerData player:GameLgUtil.getGameOfPlayer(playerWithRole, "at Allumeur checking").getPlayerAlive()) {
             if (LocationUtil.getDistanceBetween(player, playerWithRole) < 20) {
-                this.tauxConversion.put(player, this.tauxConversion.get(player) + 1);
+            	int x = 0;
+            	if (this.tauxConversion.get(player) != null) {
+            		x = this.tauxConversion.get(player);
+            	}
+                this.tauxConversion.put(player, x + 40);
             }
             if (this.tauxConversion.get(player) > 99) {
                 switch (player.camp) {

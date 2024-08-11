@@ -496,6 +496,29 @@ public class Lg implements CommandExecutor {
 				parrainR.setNexTarget(target);
 				return true;
 			}
+		} else if (args[0].equals("help")) {
+			sender.sendMessage(ChatColor.GOLD+"||PRESENTATION||");
+			sender.sendMessage(ChatColor.AQUA+"Ceci est un plugin de loup garou uhc, il faut entre 15 et 30 joueurs, l'host peut créer un partie, y ajouter des joueurs, configurer la probabilité des events et la composition est rôles."
+					+ "Au début de la partie, les joueurs vont miner pour se créer un équipement. "
+					+ "A 20 minutes, tous les joueurs reçoivent un rôle appartenant soit au camp des villageois, soit au camp des loup garou soit à leur propre camp, et devant gagner en solo."
+					+ "Les loup garou doivent s'infiltrer et trahir le village, et les villageois doivent trouver les loups et s'en débarasser."
+					+  ChatColor.DARK_RED
+					+"\n"+"\n"+ "EVENEMENTS"+ "\n"
+					+  ChatColor.AQUA+"Des évènement peuvent arriver aléatoirement dans la partie, dont l'ont peut configurer la probabilité grâce au menu de configuration."
+					+"\n"+ "\n"+ ChatColor.DARK_RED+"COUPLE"+ "\n"
+					+ ChatColor.AQUA+"Le cupidon peut mettre 2 personnes en couple, ces deux personnes doivent gagner ensemble quoi qu'il arrive, et éliminer tout les autres membres de la partie."
+					+"\n"+ "\n"+ ChatColor.DARK_RED+"VOTE"+ "\n"
+					+ ChatColor.AQUA+"A chaque épisode, donc toute les 20min, chaque joueur pourra voter pour une personne qu'il a croisé durant la partie, le joueur le plus voté, s'il est voté plus de 2 fois, subira l'effet poison et prendra quelques dégats."
+					+"\n"+ "\n"+ ChatColor.DARK_RED+"JOUR ET NUIT" + "\n"
+					+ ChatColor.AQUA+"Chaque épisode est constitué de 10min de jour puis 10min de nuit, le moment de la journée influe certains rôles, par exemple les loup-garou possèdent force I de nuit");
+			sender.sendMessage("\n"+ChatColor.GOLD+"||COMMANDE||"+ "\n"+"\n" + ChatColor.AQUA
+					+"\n"+"\n"+ "/lg help --> Vous voyez bien où cela vous a conduit"+ "\n"
+					+ "\n"+"\n"+"/lga Game create [nomDeLaGame] ---> crée une game et ouvre son menu de configuration"+ "\n"
+					+ "\n"+"\n"+"/lga Game config [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+ "ouvre le menu de configuration de la game [nomDeLaGame]"+ "\n"
+					+ "\n"+"\n"+"/lga Game start [nomDeLaGame] ---> "+ChatColor.RED+"(commande op) "+ ChatColor.AQUA+ "lance la partie"+ "\n"
+					+ "\n"+"\n"+"/lga say [message] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" annonce un message à tout le monde"+ "\n"
+					+ "\n"+"\n"+"/lg role ---> affiche le role du joueur, et d'autre infos supplémentaires comme la liste des loups s'il est loup"+ "\n"
+					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n");
 		}
 		
 		

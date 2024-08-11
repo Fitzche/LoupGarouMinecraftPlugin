@@ -76,6 +76,7 @@ public class ConfigDisplay implements Listener{
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Event")) {
 				EventDisplay eventDisplay = new EventDisplay(game);
 				eventDisplay.open((Player)e.getWhoClicked());
+				Main.server.getPluginManager().registerEvents(eventDisplay, Main.plug);
 			}
 			
 			

@@ -34,7 +34,7 @@ public class EventDisplay implements Listener{
 	
 	int x = 0;
 	
-	Main.server.getPluginManager().registerEvents(this, Main.plug);
+	
 	//System.out.println("b.1.");
 	int done =Main.eventsNames.size();
 
@@ -53,9 +53,13 @@ public class EventDisplay implements Listener{
         for (String eName:firstEventsNames) {
             ItemStack item = new ItemStack(Material.NAME_TAG);
             ItemUtil.setName(item, eName);
-            inv.setItem(firstEventsNames.indexOf(eName) + 1, item);
+            ArrayList<String> loreBase = new ArrayList<String>();
+            loreBase.add("clicquez ici pour avoir un description");
+            ItemUtil.setLore(item, loreBase);
             ItemStack itemAdd1 = new ItemStack(Material.IRON_BLOCK);
             ItemUtil.setName(itemAdd1, eName);
+            inv.setItem(firstEventsNames.indexOf(eName) + 1, item);
+            
             ArrayList<String> lores= new ArrayList<String>();
             lores.add("gauche +1/-1 droite");
             ItemUtil.setLore(itemAdd1, lores);
@@ -115,28 +119,42 @@ public class EventDisplay implements Listener{
                                 case "gauche +1/-1 droite": 
                                     if (e.getClick().equals(ClickType.LEFT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) +1);
-                                        e.getWhoClicked().sendMessage("Vous avez ajouté 1% à l'event "+ str);
+                                        e.getWhoClicked().sendMessage("Vous avez ajouté 1% à l'event "+ str + "qui est maintenant à " + gm.probasEvents.get(str) + "%");
+                                        
                                     } else if (e.getClick().equals(ClickType.RIGHT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) -1);
-                                        e.getWhoClicked().sendMessage("Vous avez retiré 1% à l'event "+ str);
+                                        e.getWhoClicked().sendMessage("Vous avez retiré 1% à l'event "+ str+ "qui est maintenant à " + gm.probasEvents.get(str) + "%");
 
                                     }
                                     break;
                                 case "gauche +10/-10 droite":
                                     if (e.getClick().equals(ClickType.LEFT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) +10);
-                                        e.getWhoClicked().sendMessage("Vous avez ajouté 10% à l'event "+ str);
+                                        e.getWhoClicked().sendMessage("Vous avez ajouté 10% à l'event "+ str+ "qui est maintenant à " + gm.probasEvents.get(str) + "%");
 
 
                                     } else if (e.getClick().equals(ClickType.RIGHT)) {
                                         gm.probasEvents.put(str, gm.probasEvents.get(str) -10);
-                                        e.getWhoClicked().sendMessage("Vous avez retiré 10% à l'event "+ str);
+                                        e.getWhoClicked().sendMessage("Vous avez retiré 10% à l'event "+ str+ "qui est maintenant à " + gm.probasEvents.get(str) + "%");
 
                                     
                                     }
                                     break;
+                                case "clicquez ici pour avoir un description":
+                                	e.getWhoClicked().sendMessage(ChatColor.GOLD+ str + ChatColor.AQUA +"\n"+ Main.descriptionsEvent.get(str));
+                                	break;
+                                	
                             }
                         }
+                        if (gm.probasEvents.get(str) > 100) {
+                        	e.getWhoClicked().sendMessage("Correction de la probabilité de "+ gm.probasEvents.get(str)+ "% vers 100%");
+                        	gm.probasEvents.put(str, 100);
+                        } else if (gm.probasEvents.get(str) < 0) {
+                        	e.getWhoClicked().sendMessage("Correction de la probabilité de "+ gm.probasEvents.get(str)+ "% vers 0%");
+                        	gm.probasEvents.put(str, 0);
+                        }
+                        
+                        
                     }
 
 

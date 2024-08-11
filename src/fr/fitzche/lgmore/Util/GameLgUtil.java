@@ -58,15 +58,16 @@ public class GameLgUtil {
 			for (PlayerData p2:p) {
 				if (returned.Name.equals(p2.Name)) {
 					present = true;
-					x++;
+					
 				}
 			}
+			x++;
 			
-		} while (present||x> 30);
+		} while (!(present)&&x< 30);
 		return returned;
 	}
 	public static PlayerData getAlPlayerWithoutCampAnd(GameLg game, ArrayList<PlayerData> p, Camp camp) {
-		PlayerData returned;
+		PlayerData returned = null;
 		boolean present = false;
 		int x = 0;
 		do {
@@ -74,11 +75,12 @@ public class GameLgUtil {
 			for (PlayerData p2:p) {
 				if (returned.Name.equals(p2.Name) || returned.camp.equals(camp)) {
 					present = true;
-					x++;
+					
 				}
 			}
+			x++;
 			
-		} while (present||x> 30);
+		} while (!(present)&& x<30);
 		return returned;
 	}
 	

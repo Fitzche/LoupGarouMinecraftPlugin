@@ -39,9 +39,14 @@ public class PARRAIN implements RoleInstance {
 
         for (int i = 0; i < x; i++) {
             playersList.add(GameLgUtil.getAlPlayerWithoutCampAnd(game, playersList, playerD.camp));
+            
         }
-
         this.target = playerD;
+        for (PlayerData p: playersList) {
+        	p.sendMessage("Vous obtiendrez une prime en tuant "+ this.target.Name);
+        }
+        playerWithRole.sendMessage("Vous mettez un prime sur "+ this.target.Name);
+        
 
     }
 
@@ -101,9 +106,10 @@ public class PARRAIN implements RoleInstance {
 
 	@Override
 	public void episodeEffect() {
-		if (game.timer.temps < 3500) {
+		if (game.timer.temps < 2300) {
 			powerUsed = true;
 		}else {
+			powerUsed = false;
 			playerWithRole.sendMessage("Vous pouvez utiliser la commande /lg prime [nom du joueur] pour mettre une prime sur la tête d'un joueur");
 		}
 	}
