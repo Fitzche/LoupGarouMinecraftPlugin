@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.ParrainChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -24,6 +25,7 @@ public class PARRAIN implements RoleInstance {
 	public PARRAIN(PlayerData player) {
 		this.playerWithRole = player;
         this.game = GameLgUtil.getGameOfPlayer(player, "at parrain creation");
+        this.game.resCheckers.add(new ParrainChecker(game, this));
 
 	}
 

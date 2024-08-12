@@ -13,6 +13,7 @@ import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Love.Team;
+import fr.fitzche.lgmore.RolesLg.Checkers.AngeChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -31,6 +32,7 @@ public class ANGE implements RoleInstance {
 	public ANGE(PlayerData player) {
 		this.playerWithRole = player;
 		this.game = GameLgUtil.getGameOfPlayer(player, "at angel creating");
+		this.game.resCheckers.add(new AngeChecker(game, target, this));
 	}
 
 	public boolean version;

@@ -492,8 +492,11 @@ public class Lg implements CommandExecutor {
 				PARRAIN parrainR = (PARRAIN) parrain.roleIn;
 				if (parrainR.powerUsed) {
 					player.sendMessage("Vous devez attendre pour pouvoir mettre un prime sur un joueur");
+					
+				} else {
+					parrainR.setNexTarget(target);
 				}
-				parrainR.setNexTarget(target);
+				
 				return true;
 			}
 		} else if (args[0].equals("help")) {

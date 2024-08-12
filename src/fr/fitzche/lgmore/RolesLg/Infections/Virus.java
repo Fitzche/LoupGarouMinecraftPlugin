@@ -3,6 +3,11 @@ package fr.fitzche.lgmore.RolesLg.Infections;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.GameLg;
@@ -18,17 +23,42 @@ public class Virus {
 	public PlayerData owner;
 	public GameLg game;
 	public int typeInt;
+	public PlayerData infecter;
+	public int time;
+	public int parasiteIntensity = 10;
 	HashMap<PlayerData , Integer> virusAdvencements = new HashMap<PlayerData, Integer>();
 	
 	
 	public void end() {
+		switch (type) {
+		case ENDED:
+			break;
+		case EPIDEMIE:
+			owner.player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 0, false, false));
+			owner.player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, MathUtil.generateAlInt(2400, 12000), 0, false, false));
+
+			break;
+		case PARASITE:
+			
+			break;
+		case POISON:
+			break;
+		default:
+			break;
+		
+		}
 		this.type = VirusType.ENDED;
 	}
 	@Deprecated
-	public Virus(VirusType type, PlayerData owner) {
+	public Virus(VirusType type, PlayerData owner, PlayerData infecter, int time) {
 		this.game = GameLgUtil.getGameOfPlayer(owner, "at virus creation");
 		this.owner = owner;
 		this.type = type;
+		this.infecter = infecter;
+		this.time = time;
+		
+		
+		
 		for (PlayerData p:game.getPlayerAlive()) {
 			virusAdvencements.put(p, 0);
 			
@@ -63,6 +93,15 @@ public class Virus {
 			break;
 		case PARASITE:
 			typeInt = 1;
+			owner.sendMessage("Vous avez été parasité, au bout de 10 min le parasite vous transformera en lg servant, ce qui vous fera passer loup garou sans vous octroiyer d'effet, de plus si le lg alchimiste meurt, vous mourrez à sa place. Vous pouvez transmettre le parasite à un autre joueur en le tuant, celui-ci sera ressucité avec votre parasite.");
+			Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					end();
+				}
+				
+			}, 12000);
 			break;
 		case POISON:
 			typeInt = 2;
@@ -83,7 +122,7 @@ public class Virus {
 							virusAdvencements.put(p, virusAdvencements.get(p) + 1);
 							if (virusAdvencements.get(p)> 30) {
 								if (MathUtil.pourcentage(virusAdvencements.get(p) /2)) {
-									Virus virus = new Virus(VirusType.EPIDEMIE, p);
+									Virus virus = new Virus(VirusType.EPIDEMIE, p, infecter, time);
 								}
 							}
 						}
@@ -102,4 +141,7 @@ public class Virus {
 			
 		}, 20, 20);
 	}
+	
+	
+	
 }

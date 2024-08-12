@@ -42,45 +42,54 @@ public class GameLgUtil {
 	}
 
 	public static PlayerData getAlPlayerWithout(GameLg game, PlayerData p) {
-		PlayerData returned;
-		do {
-			returned = getAlPlayer(game);
-		} while (returned.Name.equals(p.Name));
+		ArrayList<PlayerData> players = game.getPlayerAlive();
+		ArrayList<PlayerData> players2 = new ArrayList<PlayerData>();
+		for (PlayerData playerToList: players) {
+			players2.add(playerToList);
+		}
+		for (PlayerData ply:players) {
+			if (p.Name.equals(ply.Name)) {
+				players2.remove(p);
+			}
+		}
+		PlayerData returned = players2.get(MathUtil.generateAlInt(0, players2.size() - 1));
+		
+		
 		return returned;
 	}
 	
-	public static PlayerData getAlPlayerWithout(GameLg game, ArrayList<PlayerData> p) {
-		PlayerData returned;
-		boolean present = false;
-		int x = 0;
-		do {
-			returned = getAlPlayer(game);
-			for (PlayerData p2:p) {
-				if (returned.Name.equals(p2.Name)) {
-					present = true;
-					
-				}
+	public static PlayerData getAlPlayerWithout(GameLg game, ArrayList<PlayerData> ps) {
+		ArrayList<PlayerData> players = game.getPlayerAlive();
+		ArrayList<PlayerData> players2 = new ArrayList<PlayerData>();
+		for (PlayerData playerToList: players) {
+			players2.add(playerToList);
+		}
+		for (PlayerData p:players) {
+			if (ps.contains(p) ) {
+				players2.remove(p);
 			}
-			x++;
-			
-		} while (!(present)&&x< 30);
+		}
+		PlayerData returned = players2.get(MathUtil.generateAlInt(0, players2.size() - 1));
+		
+		
 		return returned;
 	}
-	public static PlayerData getAlPlayerWithoutCampAnd(GameLg game, ArrayList<PlayerData> p, Camp camp) {
-		PlayerData returned = null;
-		boolean present = false;
-		int x = 0;
-		do {
-			returned = getAlPlayer(game);
-			for (PlayerData p2:p) {
-				if (returned.Name.equals(p2.Name) || returned.camp.equals(camp)) {
-					present = true;
-					
-				}
+	public static PlayerData getAlPlayerWithoutCampAnd(GameLg game, ArrayList<PlayerData> ps, Camp camp) {
+		
+		
+		ArrayList<PlayerData> players = game.getPlayerAlive();
+		ArrayList<PlayerData> players2 = new ArrayList<PlayerData>();
+		for (PlayerData playerToList: players) {
+			players2.add(playerToList);
+		}
+		for (PlayerData p:players) {
+			if (ps.contains(p) || p.camp.equals(camp)) {
+				players2.remove(p);
 			}
-			x++;
-			
-		} while (!(present)&& x<30);
+		}
+		PlayerData returned = players2.get(MathUtil.generateAlInt(0, players2.size() - 1));
+		
+		
 		return returned;
 	}
 	

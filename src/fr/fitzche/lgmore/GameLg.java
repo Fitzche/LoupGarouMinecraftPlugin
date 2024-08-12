@@ -28,11 +28,13 @@ import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
 import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
+import fr.fitzche.lgmore.RolesLg.Checkers.TimeresCheck;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.minecraft.ResCheck;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import net.minecraft.server.v1_8_R1.Material;
 
@@ -75,6 +77,8 @@ public class GameLg implements Listener{
 	public ArrayList<RolesLg> dispoRoles = new ArrayList<RolesLg>();
 	
 	public boolean stopped;
+	
+	public ArrayList<ResCheck> resCheckers = new ArrayList<ResCheck>();
 
 	
 	public GameLg(String name) {
@@ -83,6 +87,7 @@ public class GameLg implements Listener{
 		for (String str: Main.eventsNames) {
 			this.probasEvents.put(str, 0);
 		}
+		this.resCheckers.add(new TimeresCheck(this));
 		
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		

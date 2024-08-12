@@ -4,7 +4,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.AncienChecker;
+import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 
 public class ANCIEN implements RoleInstance{
@@ -13,9 +16,12 @@ public class ANCIEN implements RoleInstance{
 	public boolean isRes = false;
 	public PlayerData playerWithRole;
 	public String name = "Ancien";
+	public GameLg game;
 	
 	public ANCIEN(PlayerData player) {
 		playerWithRole = player;
+		this.game = GameLgUtil.getGameOfPlayer(player, "at ancien creation");
+		this.game.resCheckers.add(new AncienChecker(this, game));
 
 	}
 	

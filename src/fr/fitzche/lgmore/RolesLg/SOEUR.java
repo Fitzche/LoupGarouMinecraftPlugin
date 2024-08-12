@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.SoeurChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
@@ -17,6 +19,7 @@ public class SOEUR implements RoleInstance {
 	public static Camp camp = Camp.Villager;
 	public PlayerData playerWithRole;
 	public String name ="Soeur";
+	public GameLg game;
 	@Override
 	public String getName() {
 		return camp.getColor()+name;
@@ -24,7 +27,10 @@ public class SOEUR implements RoleInstance {
 	
 	public SOEUR(PlayerData player, ArrayList<PlayerData> sisters) {
 		playerWithRole = player;
-		sisters = sisters;
+		this.sisters = sisters;
+		this.game = GameLgUtil.getGameOfPlayer(player, "at sister creation");
+		game.resCheckers.add(new SoeurChecker(this, game));
+		
 	}
 
 	@Override

@@ -3,7 +3,9 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.ChatColor;
 
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.IDV_Checker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 
 public class IDIOT_DU_VILLAGE implements RoleInstance {
 	public PlayerData playerWithRole;
@@ -13,6 +15,7 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 	
 	public IDIOT_DU_VILLAGE(PlayerData ply) {
 		this.playerWithRole = ply;
+		GameLgUtil.getGameOfPlayer(ply, "at idv creation").resCheckers.add(new IDV_Checker(this, GameLgUtil.getGameOfPlayer(ply, "at idv creation")));
 	}
 
 	@Override

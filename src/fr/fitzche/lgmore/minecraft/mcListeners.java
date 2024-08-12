@@ -117,30 +117,7 @@ public class mcListeners implements Listener {
 				@Override
 				public void run() {
 			
-					if (GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 74 Main").timer.temps < 1200) {
-						GameLgUtil.tpAl(e.getEntity());
-						
-						e.setKeepInventory(true);
-						e.setKeepLevel(true);
-						return;
-						
-					} else if (PlayerUtil.getDataPlayer(e.getEntity().getName(), "at Check for IDV at Main onPlayerDeath").role.equals(RolesLg.IDIOT_DU_VILLAGE)) {
-						PlayerData player = PlayerUtil.getDataPlayer(e.getEntity().getName(), "at Check for IDV at Main onPlayerDeath 2");
-						IDIOT_DU_VILLAGE idiot = (IDIOT_DU_VILLAGE) player.roleIn;
-						if (!idiot.powerUsed && PlayerUtil.getDataOfPlayer(killer, "at check of IDV at Main onPlayerDeath 3").role.getCampOfRole().equals(Camp.Villager)) {
-							idiot.respawn();
-							return;
-						}
-						
-					} else if (PlayerUtil.getDataPlayer(e.getEntity().getName(), "at Check for ancien at Main onPlayerDeath").role.equals(RolesLg.ANCIEN)) {
-						if (PlayerUtil.getDataOfPlayer( killer, "null").role.getCampOfRole().equals(Camp.Wolf) ) {
-							e.setKeepInventory(true);
-							GameLgUtil.tpAl(e.getEntity());
-							ANCIEN ancien = (ANCIEN) PlayerUtil.getDataPlayer(e.getEntity().getName(), "at Check for ancien at Main onPlayerDeath 2").roleIn;
-							ancien.isRes = true;
-							return;
-						}
-					}
+					
 			    	
 			    	System.out.println("revive?");
 			    	
@@ -148,6 +125,13 @@ public class mcListeners implements Listener {
 			    	if (!player1.inLife) {
 			    		return;
 			    	}
+			    	
+			    	for (ResCheck checker: gm1.resCheckers) {
+		    			if (checker.checkRes(e)) {
+		    				player1.relive = true;
+		    			}
+		    		}
+			    	
 			    	player1.player.getInventory().setContents(items);
 			    	if (player1.relive) {
 			    		if (player1.infected) {
@@ -166,90 +150,29 @@ public class mcListeners implements Listener {
 			    		System.out.println("l1");
 			    		e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
 			    		System.out.println("l2");
-			    		GameLgUtil.tpAl(e.getEntity().getPlayer()); 
+			    		GameLgUtil.tpAl(e.getEntity().getPlayer());
+			    		
+			    		
 			    	} else { 
-			    		
-
-				    	player1.player.getInventory().setContents(items);
-
-			    		if (player1.role.equals(RolesLg.SOEUR)) {
-			    			SOEUR soeur = (SOEUR) player1.roleIn;
-			    			soeur.deathMessage(e.getEntity().getKiller().getName());
-			    			
-			    			
-			    		} 
-						ArrayList<PlayerData> angels = RoleUtilLg.getPlayersWithRole(gm1, RolesLg.ANGE);
-						for (PlayerData ange: angels) {
-							ANGE angeR = (ANGE) ange.roleIn;
-							if (angeR.target.Name.equals(player1.Name)) {
-								angeR.targetDeath(player1.player.getKiller().getName());
-							}
-						}
-						ArrayList<PlayerData> parrains = RoleUtilLg.getPlayersWithRole(gm1, RolesLg.PARRAIN);
-						for (PlayerData parrain: parrains) {
-							PARRAIN parrainR = (PARRAIN) parrain.roleIn;
-							if (parrainR.target.Name.equals(player1.Name)) {
-								parrainR.targetDeath(PlayerUtil.getDataOfPlayer(killer, "at parrain target death check").Name);
-							}
-						}
-
-			    		
-				    	if (player1.camp.equals(Camp.Wolf)) {
-				    		for (PlayerData player: RoleUtilLg.getPlayersWithRole(gm1, RolesLg.LOUP_MYSTIQUE)) {
-				    			LOUP_MYSTIQUE loup = (LOUP_MYSTIQUE) player.roleIn;
-				    			loup.voir();
-				    		}
-				    	}
-				    	
-				    	for (PlayerData player: RoleUtilLg.getPlayersWithRole(gm1, RolesLg.ENFANT_SAUVAGE)) {
-				    		ENFANT_SAUVAGE enf = (ENFANT_SAUVAGE) player.roleIn;
-				    		if (enf.model.Name.equals(player1.Name)) {
-				    			enf.camp = Camp.Wolf;
-				    			gm1.lgTeam.add(player);
-				    			
-				    			player.sendMessage(ChatColor.DARK_PURPLE+"Votre Modèle est mort, vous passez donc loup garou");
-				    			for (PlayerData loup:gm1.getFalseWolfAlive()) {
-									loup.sendMessage(ChatColor.GOLD+"Le joueur "+ player.player.getName() + " a rejoint votre camp");
-								}
-				    			if (player.camp != Camp.Love) {
-				    				player.camp = Camp.Wolf;
-				    			}
-				    			
-				    			player.sendMessage(ChatColor.DARK_PURPLE+"Votre modèle est mort, vous rejoignez donc le camp des loups garous");
-				    			
-				    			
-				    		}
-				    	}
-	
-				    	gm1.announceDeath(player1);
-						//ANNOUNCE DEATH
-			    		
-			    		for (PlayerData ply: gm1.playerAlive) {
-			    			if (ply.canVoted.contains(PlayerUtil.getDataOfPlayer(e.getEntity(), "at run() of onPlayerDeath in Main"))) {
-			    				ply.canVoted.remove(PlayerUtil.getDataOfPlayer(e.getEntity(), "at run() of onPlayerDeath in Main, 2"));
-			    			}
-			    			
+			    		//RUN ACTION OF DEATH
+			    		for (ResCheck checker: gm1.resCheckers) {
+			    			checker.runDeathAction(e);
 			    		}
-			    		
-			    		if (PlayerUtil.getDataOfPlayer(killer, "check steal of voleur on onPlayerDeath").role == RolesLg.VOLEUR) {
-			    			VOLEUR voleur = (VOLEUR) PlayerUtil.getDataOfPlayer(killer, "check steal of voleur on onPlayerDeath").roleIn; 
-			    			voleur.steal(player1);
-			    		} 
+
+				    	
+				    	//ANNOUNCE DEATH
+				    	gm1.announceDeath(player1);
+				    	//DROP STUFF
+						player1.player.getInventory().setContents(items);
 			    		for (ItemStack item: items) {
 			    			Main.server.getWorld("world").dropItemNaturally(loc, item);
 			    		}
-			    		
-
 						//REMOVE PLAYER DEAD
 			    		player1.player.teleport(loc);
 						player1.instantDeath = true;
 						
 						player1.player.setGameMode(GameMode.SPECTATOR);
-						if (PlayerUtil.getDataOfPlayer(killer, "check steal of loup metamorphe on onPlayerDeath").role == RolesLg.LOUP_METAMORPHE) {
-							LOUP_METAMORPHE loup = (LOUP_METAMORPHE) PlayerUtil.getDataOfPlayer(killer, "null").roleIn;
-							loup.steal(player1);
-							return;
-						}
+						
 			    		GameLgUtil.getGameOfPlayer(player1.player, " at 174 of Main").removeDiedPlayer(player1);
 
 			    	
