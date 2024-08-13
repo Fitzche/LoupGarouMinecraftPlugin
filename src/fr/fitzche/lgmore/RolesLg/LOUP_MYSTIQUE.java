@@ -5,7 +5,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.MysticChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -15,11 +17,15 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	public PlayerData playerWithRole;
 	public PotionEffect STRENGTH;
 	public static Camp camp = Camp.Wolf;
+	public GameLg game;
 	public String name ="Loup-Garou Mystique";
 	
 	public LOUP_MYSTIQUE (PlayerData player) {
 		this.playerWithRole = player;
 		this.STRENGTH = PotionUtil.STRENGTH;
+		this.game = GameLgUtil.getGameOfPlayer(player, "at mystic lg location ");
+		this.game.resCheckers.add(new MysticChecker(this, game));
+		
 		
 	}
 	

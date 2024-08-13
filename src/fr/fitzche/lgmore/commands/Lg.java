@@ -305,9 +305,11 @@ public class Lg implements CommandExecutor {
 			if (ply.camp.equals(Camp.Wolf) || ply.role.getCampOfRole().equals(Camp.Wolf)) {
 				ply.sendMessage(ChatColor.RED+"Liste:" + "\n");
 				if (game.timer.temps > 2699) {
-					for (PlayerData loup: game.getRealWolfAlive()) {
+					for (PlayerData loup: game.getFalseWolfAlive()) {
 						ply.sendMessage(ChatColor.RED+"-"+ loup.Name+ "\n");
 					}
+				} else {
+					ply.sendMessage(ChatColor.RED+"Attendez 45min pour avoir la liste");
 				}
 				
 				

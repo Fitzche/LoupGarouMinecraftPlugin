@@ -5,6 +5,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.VoleurChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import net.md_5.bungee.api.ChatColor;
@@ -13,10 +14,14 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	
 	public PlayerData playerWithRole;
     public Camp camp = Camp.Wolf;
+    public GameLg game;
 	
 	
 	public LOUP_METAMORPHE(PlayerData player) {
 		this.playerWithRole = player;
+		this.game = GameLgUtil.getGameOfPlayer(player, "at metamorph creation");
+		this.game.resCheckers.add(new VoleurChecker(null, game, this));
+		
 	}
 	
 	@Override

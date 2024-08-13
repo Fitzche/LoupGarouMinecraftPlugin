@@ -3,8 +3,10 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.Checkers.EnfantChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -14,10 +16,13 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 	public PlayerData playerWithRole;
 	public PlayerData model;
 	public boolean transfo = false;
+	public GameLg game;
 	public String name ="Enfant Sauvage";
 	@Deprecated
 	public ENFANT_SAUVAGE(PlayerData player) {
+		this.game = GameLgUtil.getGameOfPlayer(player, "at enfant sauvage creation");
 		this.playerWithRole = player;
+		this.game.resCheckers.add(new EnfantChecker(this, game));
 		playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Vous pouvez choisir un modèle avec la commande /lg choose [nomDuJoueur], si ce modèle meure vous devenez loup garou");
 
 		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {

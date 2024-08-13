@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Love.Team;
+import fr.fitzche.lgmore.RolesLg.Checkers.VoleurChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import net.md_5.bungee.api.ChatColor;
@@ -25,6 +26,7 @@ public class VOLEUR implements RoleInstance{
 		playerWithRole.team = new Team("Voleur", Camp.Other, game, players, null, "at voleur team creating", null, null, true, false, false, false);
 		GameLgUtil.getGameOfPlayer(playerWithRole, "at voleur creating").teams.add(playerWithRole.team);	
 		this.playerWithRole = player;
+		game.resCheckers.add(new VoleurChecker(this, game, null));
 	}
 	
 	@Override
@@ -98,6 +100,9 @@ public class VOLEUR implements RoleInstance{
         
 		stealed.Name = playerWithRole.Name;	
 		playerWithRole.role = stealed.role;
+		playerWithRole.roleIn = stealed.roleIn;
+		stealed.roleIn = null;
+		
 	
 		playerWithRole.player = null;
 

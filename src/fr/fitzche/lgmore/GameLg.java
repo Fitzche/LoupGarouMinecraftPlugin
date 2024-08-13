@@ -29,6 +29,7 @@ import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Checkers.TimeresCheck;
+import fr.fitzche.lgmore.RolesLg.Checkers.VoteChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
@@ -88,6 +89,7 @@ public class GameLg implements Listener{
 			this.probasEvents.put(str, 0);
 		}
 		this.resCheckers.add(new TimeresCheck(this));
+		this.resCheckers.add(new VoteChecker(this));
 		
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		
@@ -295,7 +297,7 @@ public class GameLg implements Listener{
 		ArrayList<PlayerData> returneds = new ArrayList<PlayerData>();
 		
 		for (PlayerData player: playerAlive) {
-			if (player.role.getCampOfRole().equals(Camp.Wolf)) {
+			if (player.role.getCampOfRole().equals(Camp.Wolf) || player.camp.equals(Camp.Wolf)) {
 				returneds.add(player);
 			}
 		}
