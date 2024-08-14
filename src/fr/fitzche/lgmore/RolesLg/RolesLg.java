@@ -40,6 +40,8 @@ public enum RolesLg {
 	ALLUMEUR(Camp.Villager, "Allumeur de Lampadaire", Material.TORCH, Aura.NEUTRAL),
 	ANGE(Camp.Other, "Ange", Material.FEATHER, Aura.LUMINOUS),
 	PARRAIN(Camp.Villager, "Parrain", Material.STONE_SWORD, Aura.DANGEROUS),
+	SERVANT_DES_LOUPS(Camp.Wolf, "Servant des loups", Material.ROTTEN_FLESH, Aura.NEUTRAL),
+	LOUP_ALCHIMISTE(Camp.Wolf, "Loup garou Alchimiste", Material.POTION, Aura.OBSCUR),
 	SIMPLE_WOLF(Camp.Wolf, "Simple Loup Garou", Material.DIAMOND_SWORD, Aura.OBSCUR);//correspondant
 	
 	private Camp roleCamp;

@@ -19,6 +19,7 @@ import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
+import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
 import fr.fitzche.lgmore.RolesLg.RENARD;
@@ -27,6 +28,8 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SALVATEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
+import fr.fitzche.lgmore.RolesLg.Infections.Virus;
+import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -55,6 +58,7 @@ public class Lg implements CommandExecutor {
 				if (!plyD.inLove) {
 					
 					gm.lgTeam.add(plyD);
+					plyD.team = gm.lgTeam;
 				}
 				
 				Player plyI = PlayerUtil.getPlayer(args[2]);
@@ -524,6 +528,45 @@ public class Lg implements CommandExecutor {
 					+ "\n"+"\n"+"/lga say [message] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" annonce un message à tout le monde"+ "\n"
 					+ "\n"+"\n"+"/lg role ---> affiche le role du joueur, et d'autre infos supplémentaires comme la liste des loups s'il est loup"+ "\n"
 					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n");
+		} else if (args[0].equals("virus")) {
+			if (args[1]== null) {
+				sender.sendMessage("Il manque du contenu");
+			}
+			PlayerData alchi = PlayerUtil.getDataOfPlayer((Player) sender, "at virus command");
+			if (alchi.role.equals(RolesLg.LOUP_ALCHIMISTE)) {
+				LOUP_ALCHIMISTE alchiR = (LOUP_ALCHIMISTE) alchi.roleIn;
+				if (alchiR.powerUsed) {
+					alchi.sendMessage(ChatColor.AQUA+"Vous avez déjà utilisé votre pouvoir");
+				} else {
+					alchiR.choose(PlayerUtil.getDataPlayer(args[1], "at virus command"));
+				}
+			}
+		} else if (args[0].equals("declencheVirus")) {
+			
+			PlayerData target = PlayerUtil.getDataPlayer(args[2], "at declenche virus command");
+			PlayerData declencher = PlayerUtil.getDataPlayer(args[3], "at declenche virus command 2");
+			Virus virus;
+			switch (args[1]) {
+			
+			case "epid":
+				virus = new Virus(VirusType.EPIDEMIE	, target, declencher, 12000);
+				target.sendMessage(ChatColor.AQUA+"Vous avez mis une épidémie sur "+target.Name);
+				LOUP_ALCHIMISTE alchi1 = (LOUP_ALCHIMISTE) declencher.roleIn;
+				alchi1.powerUsed = true;
+				break;
+			case "parasit":
+				virus = new Virus(VirusType.PARASITE, target, declencher, 0);
+				target.sendMessage(ChatColor.AQUA+"Vous avez mis un parasite sur "+target.Name);
+				LOUP_ALCHIMISTE alchi2 = (LOUP_ALCHIMISTE) declencher.roleIn;
+				alchi2.powerUsed = true;
+				break;
+			case "pois":
+				virus = new Virus(VirusType.POISON, target, declencher, 0);
+				target.sendMessage(ChatColor.AQUA+"Vous avez empoisonné "+target.Name);
+				LOUP_ALCHIMISTE alchi3 = (LOUP_ALCHIMISTE) declencher.roleIn;
+				alchi3.powerUsed = true;
+				break;
+			}
 		}
 		
 		

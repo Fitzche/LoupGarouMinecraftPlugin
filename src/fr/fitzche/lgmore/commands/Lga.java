@@ -218,6 +218,7 @@ public class Lga implements CommandExecutor  {
 		        		
 		        		//System.out.println("runned");
 		        		if (game.stopped) {
+		        			
 		        			return;
 		        		}
 		        		game.board.refresh();

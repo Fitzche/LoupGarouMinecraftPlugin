@@ -28,9 +28,13 @@ public class EnfantChecker implements ResCheck {
 	public void runDeathAction(PlayerDeathEvent e) {
 		if (e.getEntity().getName().equals(es.model.Name)) {
 			for (PlayerData p:game.getFalseWolfAlive()) {
+				if (!es.playerWithRole.inLove) {
+					
+					game.lgTeam.add(es.playerWithRole);
+				}
 				p.sendMessage(ChatColor.DARK_RED+"Un joueur a rejoint les loups-garou, faites /lg role pour voir la liste");
-				p.camp = Camp.Wolf;
-				p.sendMessage(ChatColor.DARK_RED+"Votre modèle est mort, vous rejoignez donc les loups garou");
+				es.playerWithRole.camp = Camp.Wolf;
+				es.playerWithRole.sendMessage(ChatColor.DARK_RED+"Votre modèle est mort, vous rejoignez donc les loups garou");
 			}
 		}
 
