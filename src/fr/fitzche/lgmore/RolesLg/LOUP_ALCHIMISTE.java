@@ -109,24 +109,24 @@ public class LOUP_ALCHIMISTE implements RoleInstance {
 	}
 	
 	public void choose(PlayerData p) {
-		if (players.get(p) < 900 || powerUsed) {
+		if (players.get(p) < 10 /*900NBL*/ || powerUsed) {
 			playerWithRole.sendMessage(ChatColor.AQUA+ "Vous n'avez pas passé assez de temps à coté de ce joueur, ou vous avez déjà utilisé votre pouvoir");
 			return;
 		} 
 		playerWithRole.sendMessage(ChatColor.AQUA+"Vous choisissez de contaminer "+ p.Name);
 		TextComponent text = new TextComponent();
 		text.setText("Clicquez ici pour choisir l'épidémie");
-		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg declencheVirus epid"+p.Name+ " "+ this.playerWithRole.Name)));
+		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg declencheVirus "+"epid "+p.Name+ " "+ this.playerWithRole.Name)));
 		this.playerWithRole.player.spigot().sendMessage(text);
 		
 		TextComponent text1 = new TextComponent();
 		text1.setText("Clicquez ici pour choisir le poison");
-		text1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg declencheVirus pois"+p.Name+ " "+ this.playerWithRole.Name)));
+		text1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg declencheVirus "+"pois "+p.Name+ " "+ this.playerWithRole.Name)));
 		this.playerWithRole.player.spigot().sendMessage(text1);
 		
 		TextComponent text2 = new TextComponent();
 		text2.setText("Clicquez ici pour choisir le parasite");
-		text2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg declencheVirus parasit"+p.Name+ " "+ this.playerWithRole.Name)));
+		text2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg declencheVirus "+"parasit "+p.Name+ " "+ this.playerWithRole.Name)));
 		this.playerWithRole.player.spigot().sendMessage(text2);
 	}
 
@@ -143,6 +143,18 @@ public class LOUP_ALCHIMISTE implements RoleInstance {
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

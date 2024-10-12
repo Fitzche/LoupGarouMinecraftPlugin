@@ -92,6 +92,11 @@ public class Lga implements CommandExecutor  {
 				
 			}
 			
+			if (!old.isOnline || !ne.isOnline()) {
+				sender.sendMessage("Un des 2 joueur n'est pas en ligne");
+				return false;
+			}
+			
 			for (PotionEffect effet:old.player.getActivePotionEffects()) {
 				ne.addPotionEffect(effet);
 				ne.getInventory().setContents(old.player.getInventory().getContents());
@@ -116,8 +121,8 @@ public class Lga implements CommandExecutor  {
 				
 				Player player = (Player) sender;
 				 
-				ConfigDisplay config = new ConfigDisplay(gm);
-				config.open(player);
+				
+				gm.config.open(player, true);
 				
 				
 				
@@ -235,6 +240,8 @@ public class Lga implements CommandExecutor  {
 		        		
 		        		if (game.timer.temps == -10) {
 		        			for (PlayerData ply:game.players) {
+		        				ply.setMaxHealth(20);
+		        				ply.player.setHealth(20);
 		    					GameLgUtil.tpAl(ply);
 		    					System.out.println("gived start kit Lga l.163");
 		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
@@ -299,7 +306,7 @@ public class Lga implements CommandExecutor  {
 		        			
 		        			
 		        			//FIN ????
-		        			GameLgUtil.isEnded(game);
+		        			
 		        			
 		        			for (PlayerData player: game.getPlayerAlive()) {
 		        				

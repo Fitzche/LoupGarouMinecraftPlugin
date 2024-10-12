@@ -113,10 +113,10 @@ public class CUPIDON implements RoleInstance{
 		
 		player.inLove = true;
 		player2.inLove = true;
-
+		System.out.println("proba of "+ MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(this.playerWithRole, "at couple creating").probasEvents.get("Trouple")));
 		if (MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(this.playerWithRole, "at couple creating").probasEvents.get("Trouple"))) {
 			PlayerData third = GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating //trouple").getPlayerAlive().get(MathUtil.generateAlInt(0, GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating 2//trouple").getPlayerAlive().size()));
-
+			System.out.println("trouple");
 			
 			members.add(third);
 			third.team.remove(third);
@@ -131,6 +131,7 @@ public class CUPIDON implements RoleInstance{
 
 
 		} else {
+			System.out.println("no trouple");
 			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
 			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
 			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + " et "+ player2.Name + " en couple");
@@ -187,6 +188,18 @@ public class CUPIDON implements RoleInstance{
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

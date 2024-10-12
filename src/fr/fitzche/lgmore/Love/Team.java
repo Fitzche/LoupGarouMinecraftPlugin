@@ -83,7 +83,9 @@ public class Team implements Listener{
 		}
 	}
 	
+	
 	public void onPlayerDeath(PlayerData player) {
+		
 		boolean present = false;
 		
 		for (PlayerData ply:members) {
@@ -107,7 +109,7 @@ public class Team implements Listener{
 				inGame = false;
 			}
 		}
-		
+		/*
 		boolean target = false;
 		for (PlayerData ply1:targets) {
 			if (player.Name.equals(ply1.Name)) {
@@ -118,6 +120,13 @@ public class Team implements Listener{
 					}
 				}
 			}
+		}*/
+		System.out.println(this.members.size()+ " members in game, "+ (game.getPlayerAlive().size() -1) + " in game");
+		if (this.winOnlyPlayer && this.members.size() == (game.getPlayerAlive().size()-1) ) {
+			System.out.println(this.members.size()+ " equals "+ (game.getPlayerAlive().size() -1) );
+
+			win();
+			
 		}
 		
 		
@@ -151,9 +160,9 @@ public class Team implements Listener{
 	
 	
 	public void win() {
-		if (true) {
+		/*if (true) {
 			return;
-		}
+		}*/
 		Bukkit.broadcastMessage("Le camp ''" + camp.getColor() + this.name + "'' a gagné la partie");
 		for (PlayerData ply:game.players) {
 			if (ply.inLife) {

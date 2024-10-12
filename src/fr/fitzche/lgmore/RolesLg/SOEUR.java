@@ -58,7 +58,7 @@ public class SOEUR implements RoleInstance {
 		for (PlayerData ply:sisters) {
 			double distance = LocationUtil.getDistanceBetween(ply, playerWithRole);
 			if (distance < 21 && !ply.Name.equals(playerWithRole.Name)) {
-				playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0, false, false));
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0, false, false));
 				return;
 			}
 		}
@@ -105,6 +105,18 @@ public class SOEUR implements RoleInstance {
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

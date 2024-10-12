@@ -53,7 +53,7 @@ public class DISCIPLE implements RoleInstance {
 		if (sage != null) {
 			playerWithRole.sendMessage(ChatColor.GOLD + "Le vieux sage est "+ sage.Name);
 		}
-		return ("Vous êtes Disciple, vous devez gagner avec le village, pour cela vous connaissez le role du vieux sage, au bout de 20min avec lui, il obtiendra votre role, au bout de 30min, vous aurez accès à la commande /lg aura 2 fois, au bout de 35min vous obtiendrez speed permanent, vous pouvez retrouver le vieux sage avec la commande /lg trouver, cependant si le sage meure vous perdrez un coeur pour chaque phase passée");
+		return ("Vous êtes Disciple, vous devez gagner avec le village, pour cela vous connaissez le role du vieux sage, au bout de 20min avec lui, il obtiendra votre role, au bout de 30min, vous aurez accès à la commande /lg aura 2 fois, au bout de 45min vous obtiendrez speed permanent, vous pouvez retrouver le vieux sage avec la commande /lg trouver, cependant si le sage meure vous perdrez un coeur pour chaque phase passée");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 
@@ -63,12 +63,12 @@ public class DISCIPLE implements RoleInstance {
 		if (firstUnlock) {
 			if (secondUnlock) {
 				if (thirdUnlock) {
-					this.playerWithRole.player.setMaxHealth(this.playerWithRole.player.getMaxHealth() - 6);
+					this.playerWithRole.setMaxHealth(this.playerWithRole.getMaxHealth() - 6);
 				} else {
-					this.playerWithRole.player.setMaxHealth(this.playerWithRole.player.getMaxHealth() - 4);
+					this.playerWithRole.setMaxHealth(this.playerWithRole.getMaxHealth() - 4);
 				}
 			} else {
-				this.playerWithRole.player.setMaxHealth(this.playerWithRole.player.getMaxHealth() - 2);
+				this.playerWithRole.setMaxHealth(this.playerWithRole.getMaxHealth() - 2);
 			}
 		}
 	}
@@ -76,24 +76,24 @@ public class DISCIPLE implements RoleInstance {
 	
 	public void giveEffectAllTime() {
         if (thirdUnlock) {
-            playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 0, false, false));
+            playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 0, false, false));
         } else if (LocationUtil.getDistanceBetween(playerWithRole, sage) < 30) {
-            time += 100;
-            if (time == 1200) {
+            time += 1;
+            if (time == 12/*00 NBL*/) {
                 sage.sendMessage(ChatColor.GOLD+"Votre Disciple est "+ playerWithRole.Name);
 				playerWithRole.sendMessage("Le vieux sage a reçu votre nom");
                 firstUnlock = true;
-            } else if (time == 2400) {
+            } else if (time == 18/*00 NBL*/) {
 				playerWithRole.sendMessage("Vous pouvez utiliser la commande /lg aura");
                 secondUnlock = true;
-            } else if (time == 3600) {
+            } else if (time == 36/*00 NBL*/) {
 				playerWithRole.sendMessage("Vous obtenez speed de manière permanente");
                 thirdUnlock = true;
             }
         }
 
         if (sage.inLife) {
-            this.sageLocation = sage.player.getLocation();
+            this.sageLocation = sage.getLocation();
         }
         
 
@@ -164,5 +164,18 @@ public class DISCIPLE implements RoleInstance {
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD+ "Ce joueur est disciple, il perd une utilisation de la commande /lg aura");
+		this.playerWithRole.sendMessage(ChatColor.GOLD+ "Vous avez été aveuglé, vous perdez une utilisation de votre commande /lg aura");
+		this.powerUsed = true;
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

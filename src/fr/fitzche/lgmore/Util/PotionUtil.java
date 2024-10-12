@@ -50,7 +50,7 @@ public class PotionUtil {
     }
   
     if(power == null) {
-      player.player.addPotionEffect(STRENGTH);
+      player.addPotionEffect(STRENGTH);
     }
   }
 
@@ -91,7 +91,7 @@ public class PotionUtil {
     }
   
     if(nightVision == null) {
-      player.player.addPotionEffect(INVISIBILITY);
+      player.addPotionEffect(INVISIBILITY);
     }
   }
 
@@ -104,7 +104,7 @@ public class PotionUtil {
     }
   
     if(resistance == null) {
-      player.player.addPotionEffect(RESISTANCE);
+      player.addPotionEffect(RESISTANCE);
     }
   }
 
@@ -132,7 +132,7 @@ public class PotionUtil {
     }
   
     if(speed == null) {
-      player.player.addPotionEffect(SPEED);
+      player.addPotionEffect(SPEED);
     }
   }
 
@@ -158,7 +158,7 @@ public class PotionUtil {
     }
   
     if(weakness == null) {
-      player.player.addPotionEffect(WEAKNESS);
+      player.addPotionEffect(WEAKNESS);
     }
   }
 
@@ -184,7 +184,7 @@ public class PotionUtil {
     }
   
     if(nightVision == null) {
-      player.player.addPotionEffect(NIGHT_VISION);
+      player.addPotionEffect(NIGHT_VISION);
     }
   }
 }

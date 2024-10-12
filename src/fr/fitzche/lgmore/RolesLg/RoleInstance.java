@@ -25,6 +25,9 @@ public interface RoleInstance {
 	public void setEpisodeTrue();
 	
 	public void startSpecialEvent();
+	public void blind(PlayerData origin);
+	public boolean isInfoRole();
+	
 	
 	
 	

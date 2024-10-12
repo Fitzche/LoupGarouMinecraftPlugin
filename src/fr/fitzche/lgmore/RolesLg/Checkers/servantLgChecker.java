@@ -20,7 +20,9 @@ public class servantLgChecker implements ResCheck {
 		
 		if (e.getEntity().getName().equals(servant.master.Name)) {
 			servant.playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Votre maitre est mort, vous mourrez donc à sa place");
-			servant.playerWithRole.player.damage(1000, e.getEntity().getKiller());
+			if (servant.playerWithRole.isOnline) {	
+				servant.playerWithRole.player.damage(1000, e.getEntity().getKiller());
+			}
 			return true;
 		}
 		

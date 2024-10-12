@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.scoreboard.Inventory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ public class CompoDisplay implements Listener{
 	
 	public Inventory inv;
 	public GameLg gm;
+	public HashMap<String, Boolean> areOp = new HashMap<String, Boolean>();
 	
 	public CompoDisplay(GameLg gm) {
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
@@ -77,7 +79,8 @@ public class CompoDisplay implements Listener{
 
 	}
 	
-	public void open(Player p) {
+	public void open(Player p, boolean isOp) {
+		areOp.put(p.getName(), isOp);
 		p.closeInventory();
 		p.openInventory(this.inv);
 	}
@@ -89,18 +92,18 @@ public class CompoDisplay implements Listener{
 			
 			if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.ITALIC + "Retour")) {
 				ConfigDisplay config = new ConfigDisplay(this.gm);
-				config.open((Player) e.getWhoClicked());
+				config.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
 				
 				
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Villageois")) {
 				
-				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Villager), "Villageois", gm, inv);
+				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Villager), "Villageois", gm, inv, areOp.get(e.getWhoClicked().getName()));
 				e.getWhoClicked().openInventory(menu.invs.get(0));
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_RED+ "Loups-Garou")) {
-				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Wolf), "Loups-Garou", gm, inv);
+				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Wolf), "Loups-Garou", gm, inv, areOp.get(e.getWhoClicked().getName()));
 				e.getWhoClicked().openInventory(menu.invs.get(0));
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Solo et Hybrides"))  {
-				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Other), "Solo et Hybrides", gm, inv);
+				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Other), "Solo et Hybrides", gm, inv, areOp.get(e.getWhoClicked().getName()));
 				e.getWhoClicked().openInventory(menu.invs.get(0));
 			}
 			

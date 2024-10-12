@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Love.Team;
@@ -15,13 +16,17 @@ import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerData {
 	public RoleInstance roleIn;
 	public String Name;
+	public boolean isOnline = true;
 	public ArrayList<PlayerData> canVoted;
 	public int vote;
+	public PlayerDataLeft left;
+	public boolean contamined = false;
 	public boolean isShooted = false;
 	public PlayerData voted;
 	public Player player;
@@ -65,6 +70,58 @@ public class PlayerData {
 		//System.out.println("5");
 
 	}
+	
+	public String getName() {
+		return this.Name;
+	}
+	
+	public void setMaxHealth(double h) {
+		if (isOnline) {
+			this.player.setMaxHealth(h);
+		} else {
+			this.left.life= h;
+		}
+	}
+	
+	public void setHealth(double h) {
+		if (isOnline) {
+			this.player.setHealth(h);
+		}
+	}
+	
+	
+	public double getHealth() {
+		if (isOnline) {
+			return this.player.getHealth();
+		} else {
+			return 0;
+		}
+		
+	}
+	
+	
+	public double getMaxHealth() {
+		if (isOnline) {
+			return this.player.getMaxHealth();
+		} else {
+			return 0;
+		}
+		
+	}
+	public Location getLocation() {
+		
+		if (this.isOnline) {
+			return this.player.getLocation();
+		}
+		return new Location(Main.plug.getServer().getWorld("world"), 10000, 10000, 10000);
+	}
+	
+	public void addPotionEffect(PotionEffect effect) {
+		if (isOnline) {
+			this.player.addPotionEffect(effect);
+		}
+		
+	}
 	public void applyLgRole(RolesLg role) { 
 		this.camp = role.getCampOfRole();
 		this.role = role;
@@ -75,9 +132,7 @@ public class PlayerData {
 	public void sendMessage(String message) {
 		this.player.sendMessage(message);
 	}
-	public Location getLocation() {
-		return this.player.getLocation();
-	}
+	
 	public RolesLg getLgRole() {
 		return this.role;
 	}
@@ -88,6 +143,15 @@ public class PlayerData {
 		this.player.sendMessage(ChatColor.GOLD+"Vous pouvez voter pour le joueur de votre choix"+ "\n"+ " Le joueur le plus voté subira 15s de poison et perdra 1 coeur de façon permanente");
 		this.vote = 0;
 		this.voted = null;
+	}
+	
+	
+	public void changeHealth(double h) {
+		if (this.isOnline) {
+			this.player.setMaxHealth(this.player.getMaxHealth() + h);
+		} else {
+			this.left.life = this.left.life + h;
+		}
 	}
 	
 	public boolean isInGame(String spec) {

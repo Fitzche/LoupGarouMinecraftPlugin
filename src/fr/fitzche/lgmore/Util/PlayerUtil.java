@@ -47,20 +47,20 @@ public class PlayerUtil {
 		
 	}
 	public static void don(PlayerData giver, PlayerData receiver, double give) {
-		double FinalGive = (give/100) * giver.player.getMaxHealth();
+		double FinalGive = (give/100) * giver.getMaxHealth();
 		if (!receiver.inLife) {
 			giver.sendMessage("Le joueur ciblé est disparu");
 			return;
-		} else if (giver.player.getHealth() < FinalGive) {
+		} else if (giver.getHealth() < FinalGive) {
 			giver.sendMessage("Vous n'avez pas assez de vie pour faire ce don");
 			return;
-		} else if ((receiver.player.getMaxHealth() - receiver.player.getHealth()) < FinalGive) {
-			System.out.println("le don est de "+ FinalGive+ " alors qu'il manque " +(receiver.player.getMaxHealth() - receiver.player.getHealth()));
+		} else if ((receiver.getMaxHealth() - receiver.getHealth()) < FinalGive) {
+			System.out.println("le don est de "+ FinalGive+ " alors qu'il manque " +(receiver.getMaxHealth() - receiver.getHealth()));
 			giver.sendMessage("La personne à qui vous envoyez de la vie ne manque pas d'autant de vie");
 			return;
 		} else {
 			giver.player.damage(FinalGive);
-			receiver.player.setHealth(receiver.player.getHealth() + FinalGive);
+			receiver.setHealth(receiver.getHealth() + FinalGive);
 			giver.sendMessage("Vous avez envoyé "+ give + "% de votre vie à "+ receiver.Name);
 		}
 		

@@ -21,6 +21,8 @@ import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.Servant_des_loups;
+import fr.fitzche.lgmore.RolesLg.Checkers.PoisonVirusChecker;
+import fr.fitzche.lgmore.RolesLg.Checkers.VirusChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
@@ -44,8 +46,8 @@ public class Virus {
 		case ENDED:
 			break;
 		case EPIDEMIE:
-			owner.player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 0, false, false));
-			owner.player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, MathUtil.generateAlInt(2400, 12000), 0, false, false));
+			owner.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 0, false, false));
+			owner.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, MathUtil.generateAlInt(2400, 12000), 0, false, false));
 
 			break;
 		case PARASITE:
@@ -61,11 +63,11 @@ public class Virus {
 				owner.team.remove(owner);
 				owner.team = new Team("solo", Camp.TEAM, game, player, null, "at parasite of virus", null, null, true, false, false, false);
 				owner.sendMessage(ChatColor.DARK_PURPLE+ "Le parasite vous a renté fou, vous devez gagner tout seul, il vous rend cependant plus résistant (2 coeur)");
-				owner.player.setMaxHealth(owner.player.getMaxHealth() + 4);
+				owner.setMaxHealth(owner.getMaxHealth() + 4);
 				break;
 			case 2:
-				owner.player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0));
-				owner.player.setMaxHealth(owner.player.getMaxHealth() - 4);
+				owner.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0));
+				owner.setMaxHealth(owner.getMaxHealth() - 4);
 				owner.sendMessage(ChatColor.DARK_PURPLE+"Le Parasite vous a affaibli");
 				break;
 			case 3:
@@ -74,13 +76,13 @@ public class Virus {
 				owner.role = RolesLg.SERVANT_DES_LOUPS;
 				break;
 			case 4:
-				owner.player.setMaxHealth(owner.player.getMaxHealth() - 3);
+				owner.setMaxHealth(owner.getMaxHealth() - 3);
 				owner.sendMessage(ChatColor.DARK_GREEN+"Le parasite vous affaiblie petit à petit, vous perdrez donc 1/2 coeur de manière permanente toutes les 3 minutes tant que le loup garou alchimiste n'est pas mort");
 				Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plug, new BukkitRunnable() {
 
 					@Override
 					public void run() {
-						owner.player.setMaxHealth(owner.player.getMaxHealth() - 1);
+						owner.setMaxHealth(owner.getMaxHealth() - 1);
 						
 					}
 					
@@ -126,6 +128,7 @@ public class Virus {
 		
 		switch (type) {
 		case EPIDEMIE:
+			
 			typeInt = 0;
 			for (PlayerData p:game.getPlayerAlive()) {
 				if (LocationUtil.getDistanceBetween(owner, p) < 50 && p.camp.equals(Camp.Wolf)) {
@@ -137,11 +140,11 @@ public class Virus {
 				@Override
 				public void run() {
 					owner.sendMessage("Vous avez été infecté, vous serez contagieux pendant 5 minutes (moins de 15 blocs)");
-					
+					owner.contamined = true;
 				}
 				
 			}, 1200);
-			Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
+			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
 				@Override
 				public void run() {
@@ -153,35 +156,39 @@ public class Virus {
 		case PARASITE:
 			typeInt = 1;
 			owner.sendMessage("Vous avez été parasité, au bout de 10 min le parasite vous transformera en lg servant, ce qui vous fera passer loup garou sans vous octroiyer d'effet, de plus si le lg alchimiste meurt, vous mourrez à sa place. Vous pouvez transmettre le parasite à un autre joueur en le tuant, celui-ci sera ressucité avec votre parasite.");
-			Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
+			VirusChecker check = new VirusChecker(this);
+			game.resCheckers.add(check);
+			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
 				@Override
 				public void run() {
 					end();
 				}
 				
-			}, 12000);
+			}, 1200);
 			break;
 		case POISON:
+			PoisonVirusChecker checkP = new PoisonVirusChecker(this);
+			game.resCheckers.add(checkP);
 			typeInt = 2;
 			owner.sendMessage(ChatColor.GREEN+"Vous avez été empoisonné par le parasite, vous perdrez donc 1/2 coeur toutes les 5min tant qu'il n'est pas mort, de plus si vous le tuez vous récupererez votre vie perdue, l'alchimiste est "+infecter.Name);
-			Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plug, new BukkitRunnable() {
+			Bukkit.getScheduler().runTaskTimer(Main.plug, new BukkitRunnable() {
 
 				@Override
 				public void run() {
-					owner.player.setMaxHealth(owner.player.getMaxHealth() - 1);
+					owner.setMaxHealth(owner.getMaxHealth() - 1);
 					removed ++;
 					
 				}
 				
-			}, 4800, 4800);
+			}, /*4800, 4800*/ 200, 200);
 			break;
 		default:
 			break;
 		
 		}
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plug, new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskTimer(Main.plug, new BukkitRunnable() {
 
 			@Override
 			public void run() {
@@ -190,11 +197,13 @@ public class Virus {
 				case EPIDEMIE:
 					
 					for (PlayerData p:game.getPlayerAlive()) {
-						if (LocationUtil.getDistanceBetween(owner, p) < 15) {
+						if (LocationUtil.getDistanceBetween(owner, p) < 15 && !owner.Name.equals(p.Name)) {
 							virusAdvencements.put(p, virusAdvencements.get(p) + 1);
 							if (virusAdvencements.get(p)> 30) {
 								if (MathUtil.pourcentage(virusAdvencements.get(p) /2)) {
+									virusAdvencements.put(p, -100000);
 									Virus virus = new Virus(VirusType.EPIDEMIE, p, infecter, time);
+									virusAdvencements.put(p, -30000);
 								}
 							}
 						}
@@ -205,7 +214,7 @@ public class Virus {
 				case POISON:
 					if (stopped&&poisonGuerison) {
 						poisonGuerison = false;
-						owner.player.setMaxHealth(owner.player.getMaxHealth() + removed);
+						owner.setMaxHealth(owner.getMaxHealth() + removed);
 					}
 					break;
 				default:

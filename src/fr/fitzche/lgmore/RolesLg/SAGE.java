@@ -48,15 +48,19 @@ public class SAGE implements RoleInstance {
 	public void giveEffectAllTime() {
 	
 		for (PlayerData player: game.getPlayerAlive()) {
-			if (player.role.aura.equals(Aura.LUMINOUS) && sageGood < 100) {
-				sageGood += jaugeur;
-			} else if (player.aura.equals(Aura.NEUTRAL) && sageNeutral < 100) {
-				sageNeutral += jaugeur;
-			} else if (player.aura.equals(Aura.OBSCUR) && sageBad < 100) {
-				sageBad += jaugeur;
-			} else if (player.aura.equals(Aura.DANGEROUS) && sageBad < 100) {
-				sageBad += (jaugeur * 18);
+			if (!player.getName().equals(this.playerWithRole.getName())) {
+				if (player.role.aura.equals(Aura.LUMINOUS) && sageGood < 100) {
+					sageGood += jaugeur;
+				} else if (player.aura.equals(Aura.NEUTRAL) && sageNeutral < 100) {
+					sageNeutral += jaugeur;
+				} else if (player.aura.equals(Aura.OBSCUR) && sageBad < 100) {
+					sageBad += jaugeur;
+				} else if (player.aura.equals(Aura.DANGEROUS) && sageBad < 100) {
+					sageBad += (jaugeur * 18);
+				}
 			}
+			
+			
 		}
 
 	}
@@ -90,6 +94,9 @@ public class SAGE implements RoleInstance {
 		playerWithRole.sendMessage(ChatColor.GREEN+"Votre jauge d'aura lumineux est à "+ sageGood +"%"+ "\n");
 		playerWithRole.sendMessage(ChatColor.RED+"Votre jauge d'aura obscur est à "+ sageBad +"%"+ "\n");
 		playerWithRole.sendMessage(ChatColor.YELLOW+"Votre jauge d'aura neutre est à "+ sageNeutral +"%"+ "\n");
+		sageBad = 0;
+		sageGood = 0;
+		sageNeutral = 0;
 
 		
 	}
@@ -98,6 +105,21 @@ public class SAGE implements RoleInstance {
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD+ "Ce joueur est vieux sage, sa capacité à voir les auras sera perturbée lors du prochain épisode");
+		this.playerWithRole.sendMessage(ChatColor.GOLD+ "Vous avez été aveuglé, les jauges d'auras seront toutes à 100% lors du prochain épisode");
+		sageBad = 101;
+		sageGood = 101;
+		sageNeutral = 101;
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

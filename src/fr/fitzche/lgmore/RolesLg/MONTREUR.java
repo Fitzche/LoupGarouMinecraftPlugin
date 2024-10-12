@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -72,9 +74,9 @@ public class MONTREUR implements RoleInstance {
 	}
 	
 	public void renifle() {
-		Location loc = this.playerWithRole.player.getLocation();
-		for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole.player, " at renifle() in MONTREUR, at listing of player for test them").playerAlive) {
-			if (target.player.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.player.getLocation().distance(loc) < 50 && target.infected) {
+		Location loc = this.playerWithRole.getLocation();
+		for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole, " at renifle() in MONTREUR, at listing of player for test them").playerAlive) {
+			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
 			}
 		}
@@ -98,5 +100,18 @@ public class MONTREUR implements RoleInstance {
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Montreur D'ours, cependant il ne subira aucun malus car modifier cette mécanique c'est trop galère à coder (bonjour de la part du dev !), je le ferai plus tard, cependant vous avez son role et vous obtenez 5min de speed parce que heu... parce que vous fuyez l'ours");
+		this.playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez été aveuglé, un loup sait donc qui vous etes mais il n'a pas pu vous nuire");
+		origin.addPotionEffect(new PotionEffect(PotionEffectType.SPEED	, 6000, 0, false, false));
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

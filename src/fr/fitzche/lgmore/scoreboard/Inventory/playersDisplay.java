@@ -43,7 +43,7 @@ public class playersDisplay implements Listener{
 			ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 			SkullMeta meta = (SkullMeta) head.getItemMeta();
 			
-			meta.setOwner(player.player.getName());
+			meta.setOwner(player.getName());
 			meta.setDisplayName(player.Name);
 			head.setItemMeta(meta);
 			this.playersInv.setItem(x, head);
@@ -137,7 +137,7 @@ public class playersDisplay implements Listener{
 							
 							CUPIDON cupidon = (CUPIDON) PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 3").roleIn;
 							cupidon.createCouple(Lo1, Lo2, PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 4"));
-							cupi.sendMessage("Vous avez tiré vos flèches sur "+ Lo2.player.getName() + " et " +Lo1.player.getName());
+							cupi.sendMessage("Vous avez tiré vos flèches sur "+ Lo2.getName() + " et " +Lo1.getName());
 							cupi.closeInventory();
 							
 							

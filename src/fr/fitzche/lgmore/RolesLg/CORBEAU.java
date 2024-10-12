@@ -11,10 +11,10 @@ import net.md_5.bungee.api.ChatColor;
 public class CORBEAU implements RoleInstance{
 
 	public static Camp camp = Camp.Villager;
-	public static PlayerData playerWithRole;
-	public static int numberOfVote = 0;
-	public static PlayerData target;
-	public String name = "Corbeau";
+	public PlayerData playerWithRole;
+	public int numberOfVote = 0;
+	public PlayerData target;
+	public static String name = "Corbeau";
 	
 	@Override
     public void changeTo(PlayerData player) {
@@ -30,8 +30,8 @@ public class CORBEAU implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour ce faire votre vote vous octroyera un bonus à chaque fois que voterez pour un loups, de cette manière: "+ "\n" + "1 vote bien choisi vous donnera 2 pommes dorées" + "\n" + "Un 2e vote judicieux vous octroira 4 pommes dorées" +
-				"\n" + "3 bons votes vous donnerons 2 coeurs permanents  "+ "\n"+ "Un quatrième vote correct vous octroira resistance;"+"\n"+"Tous le monde saura pour qui vous avez voté";
+		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour ce faire votre vote vous octroyera un bonus à chaque fois que voterez pour le joueur le + voté, de cette manière: "+ "\n" + "1 vote bien choisi vous donnera 2 pommes dorées" + "\n" + "Un 2e vote judicieux vous octroira 4 pommes dorées" +
+				"\n" + "3 bons votes vous donnerons 2 coeurs permanents  "+ "\n"+ "Un quatrième vote correct vous octroira resistance 0.5;"+"\n"+"Tous le monde saura pour qui vous avez voté";
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class CORBEAU implements RoleInstance{
 			playerWithRole.player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 4));
 
 		} else if (numberOfVote == 2) {
-			playerWithRole.player.setMaxHealth(playerWithRole.player.getMaxHealth() + 4);
+			playerWithRole.changeHealth(4);
 		} 
 		numberOfVote++;
 	}
@@ -61,7 +61,7 @@ public class CORBEAU implements RoleInstance{
 	@Override
 	public void giveEffectAllTime() {
 		if (numberOfVote > 3) {
-			playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
+			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
 		}
 		
 	}
@@ -100,6 +100,18 @@ public class CORBEAU implements RoleInstance{
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

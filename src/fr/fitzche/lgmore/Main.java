@@ -53,6 +53,7 @@ import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.LgTest;
+import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.mcListeners;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R1.BiomeBase;
@@ -131,30 +132,33 @@ public class Main extends JavaPlugin implements Listener {
 	    RoleUtilLg.existingRoles.add(RolesLg.CHASSEUR);
 	    RoleUtilLg.existingRoles.add(RolesLg.CORBEAU);
 	    RoleUtilLg.existingRoles.add(RolesLg.CUPIDON);
-	    RoleUtilLg.existingRoles.add(RolesLg.DISCIPLE);
+	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.DISCIPLE);
 	    RoleUtilLg.existingRoles.add(RolesLg.ENFANT_SAUVAGE);
 	    RoleUtilLg.existingRoles.add(RolesLg.IDIOT_DU_VILLAGE);
 	    RoleUtilLg.existingRoles.add(RolesLg.INFECT_PERE_DES_LOUPS);
 	    RoleUtilLg.existingRoles.add(RolesLg.INTERPRETE);
 	    RoleUtilLg.existingRoles.add(RolesLg.LOUP_METAMORPHE);
 	    RoleUtilLg.existingRoles.add(RolesLg.LOUP_MYSTIQUE);
-	    RoleUtilLg.existingRoles.add(RolesLg.MONTREUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.PETITE_FILLE);
+	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.MONTREUR);
+	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.PETITE_FILLE);
 	    RoleUtilLg.existingRoles.add(RolesLg.PYROMANE);
-	    RoleUtilLg.existingRoles.add(RolesLg.RENARD);
-	    RoleUtilLg.existingRoles.add(RolesLg.SAGE);
+	    /*ROLE INFO*/ RoleUtilLg.existingRoles.add(RolesLg.RENARD);
+	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.SAGE);
 	    RoleUtilLg.existingRoles.add(RolesLg.SALVATEUR);
 	    RoleUtilLg.existingRoles.add(RolesLg.SIMPLE_VILLAGER);
 	    RoleUtilLg.existingRoles.add(RolesLg.SIMPLE_WOLF);
 	    RoleUtilLg.existingRoles.add(RolesLg.SOEUR);
 	    RoleUtilLg.existingRoles.add(RolesLg.SORCIERE);
 	    RoleUtilLg.existingRoles.add(RolesLg.VOLEUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.VOYANTE);
+	    /*ROLE INFO*/ RoleUtilLg.existingRoles.add(RolesLg.VOYANTE);
 	    RoleUtilLg.existingRoles.add(RolesLg.PERFIDE);
 	    RoleUtilLg.existingRoles.add(RolesLg.ASSASSIN);
-		RoleUtilLg.existingRoles.add(RolesLg.ALLUMEUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.PARRAIN);
+	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.ALLUMEUR);
+	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.PARRAIN);
 		RoleUtilLg.existingRoles.add(RolesLg.ANGE);
+		RoleUtilLg.existingRoles.add(RolesLg.LOUP_ALCHIMISTE);
+		RoleUtilLg.existingRoles.add(RolesLg.LOUP_BARBARE);
+		RoleUtilLg.existingRoles.add(RolesLg.LOUP_MANIP);
 
 
 		eventsNames.add("Brume");
@@ -197,23 +201,8 @@ public class Main extends JavaPlugin implements Listener {
 		
 		for (GameLg gm: Main.games) {
 			System.out.println("tested for "+ gm.name +" at l.270 of Main");
-			if (gm.toAdd.size() == 0) {
-				System.out.println("no player to add l.272 of Main");
-			}
-			
-			ArrayList<PlayerData> example = new ArrayList<PlayerData>();
-			for (PlayerData ply : gm.toAdd) {
-				example.add(ply);
-			}
-			for (PlayerData ply: example) {
-				
-				if (ply.Name.equals(e.getPlayer().getName())) {
-					gm.addPlayer(e.getPlayer().getName());
-					gm.toAdd.remove(ply);
-					System.out.println(ply.Name+" removed for disconnect at l.279 of Main");
-				} else {
-					System.out.println(ply.Name +" isn't "+ e.getPlayer().getName() + " at 281 of Main");
-				}
+			if (gm.playersLeft.get(e.getPlayer().getName()) != null) {
+				gm.playersLeft.get(e.getPlayer().getName()).end();
 			}
 		}
 		
@@ -246,11 +235,11 @@ public class Main extends JavaPlugin implements Listener {
 		
 		GameLg gm1 = GameLgUtil.getGameOfPlayer(player, "at l.311 of Main");
 		System.out.println(gm1.name + " is the game ");
-		ItemStack[] inventory = e.getPlayer().getInventory().getContents();
-		gm1.removePlayer(player, "at 314 of Main");
+		
+		
 		System.out.println("removed fot left 307 of Main, and added at list");
 
-		gm1.toAdd.add(player);
+		gm1.playersLeft.put(player.Name, new PlayerDataLeft(player));
 		
 		
 		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
@@ -260,7 +249,7 @@ public class Main extends JavaPlugin implements Listener {
 				System.out.println("online?");
 				
 				
-				if (!player.player.isOnline() && gm1.timer.temps > 1199) {
+				if (!player.isOnline && gm1.timer.temps > 1199) {
 					System.out.println(player.Name+ " not online");
 					gm1.announceDeath(player);
 				}

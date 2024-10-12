@@ -41,9 +41,9 @@ public class ALLUMEUR implements RoleInstance {
             	if (this.tauxConversion.get(player) != null) {
             		x = this.tauxConversion.get(player);
             	}
-                this.tauxConversion.put(player, x + 40);
+                this.tauxConversion.put(player, x + 1);
             }
-            if (this.tauxConversion.get(player) > 99) {
+            if (this.tauxConversion.get(player) > /*600 NBL*/ 20) {
                 switch (player.camp) {
                     case Love:
                         player.aura = Aura.DANGEROUS;
@@ -120,5 +120,20 @@ public class ALLUMEUR implements RoleInstance {
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Allumeur de Lampadaire, ses taux de conversion pour corriger l'aura de son entourage ont donc été remis à 0, à son insu...");
+		for (PlayerData p: GameLgUtil.getGameOfPlayer(origin, "at allumeur blind").getPlayerAlive()) {
+			this.tauxConversion.put(p, 0);
+		}
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

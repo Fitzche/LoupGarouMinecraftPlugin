@@ -20,6 +20,7 @@ import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
+import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
 import fr.fitzche.lgmore.RolesLg.RENARD;
@@ -35,6 +36,8 @@ import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.scoreboard.Inventory.playersDisplay;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Lg implements CommandExecutor {
 
@@ -121,7 +124,7 @@ public class Lg implements CommandExecutor {
 		
 				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role);
 			}  else {
-				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role+ ", il se trouve en "+ply.player.getLocation().getBlockX()+ ", "+ply.player.getLocation().getBlockY() + ", " + ply.player.getLocation().getBlockZ());
+				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role+ ", il se trouve en "+ply.getLocation().getBlockX()+ ", "+ply.getLocation().getBlockY() + ", " + ply.getLocation().getBlockZ());
 
 			}
 			
@@ -213,7 +216,7 @@ public class Lg implements CommandExecutor {
 			
 			
 			PlayerData player = PlayerUtil.getDataPlayer(sender.getName(), "at command ''vote'' of Lg, 1 ");
-			if (!GameLgUtil.getGameOfPlayer(player.player, "at command ''vote'' of Lg, 2 ").isInVote) {
+			if (!GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").isInVote) {
 				player.sendMessage(ChatColor.GOLD +"Ce n'est pas l'heure du vote");
 			} 
 			
@@ -450,7 +453,36 @@ public class Lg implements CommandExecutor {
 					}
 					
 				} 
-		}else if (args[0].equals("switchfire")) {
+		}else if (args[0].equals("aveugler")) {
+			
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at aveugler command check game player exist");
+					if (gameOfSender != null) {
+						if (senderPlayerData.role.equals(RolesLg.LOUP_MANIP)) {
+							
+							LOUP_MANIPULATEUR manip = (LOUP_MANIPULATEUR) senderPlayerData.roleIn;
+							if (manip.powerUsed == 0) {
+								sender.sendMessage(ChatColor.RED+"Il ne vous reste plus assez d'utilisation");
+								return true;
+							}
+							PlayerUtil.getDataPlayer(args[1], "at /lg aveugler in lg").roleIn.blind(senderPlayerData);
+							manip.powerUsed --;
+							return true;
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return true;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return true;
+				}
+				
+			} 
+	}else if (args[0].equals("switchfire")) {
 					System.out.println("switch");
 					if (sender instanceof Player) {
 						Player senderPlayer = (Player) sender;
@@ -512,17 +544,24 @@ public class Lg implements CommandExecutor {
 					+ "A 20 minutes, tous les joueurs reçoivent un rôle appartenant soit au camp des villageois, soit au camp des loup garou soit à leur propre camp, et devant gagner en solo."
 					+ "Les loup garou doivent s'infiltrer et trahir le village, et les villageois doivent trouver les loups et s'en débarasser."
 					+  ChatColor.DARK_RED
-					+"\n"+"\n"+ "EVENEMENTS"+ "\n"
+						+"\n"+"\n"+ "EVENEMENTS"+ "\n"
 					+  ChatColor.AQUA+"Des évènement peuvent arriver aléatoirement dans la partie, dont l'ont peut configurer la probabilité grâce au menu de configuration."
 					+"\n"+ "\n"+ ChatColor.DARK_RED+"COUPLE"+ "\n"
 					+ ChatColor.AQUA+"Le cupidon peut mettre 2 personnes en couple, ces deux personnes doivent gagner ensemble quoi qu'il arrive, et éliminer tout les autres membres de la partie."
 					+"\n"+ "\n"+ ChatColor.DARK_RED+"VOTE"+ "\n"
 					+ ChatColor.AQUA+"A chaque épisode, donc toute les 20min, chaque joueur pourra voter pour une personne qu'il a croisé durant la partie, le joueur le plus voté, s'il est voté plus de 2 fois, subira l'effet poison et prendra quelques dégats."
+							+ "\n"+ ChatColor.DARK_RED +"AURA: "
+							+ "\n"+ ChatColor.AQUA+"Chaque joueur a une aura, donnée par son role, qui peut changer au cours de la partie: "
+									+ "\n"+ "UNKNOW: possédé par très peu de roles comme l'ermite ou le loup craintif"
+									+ "\n"+ "OBSCUR: aura commune pour les rôles loups"
+									+ "\n"+ "LUMINEUSE: aura commune pour les rôles villageois"
+									+ "\n"+ "NEUTRE: aura pour les rolesles plus discret et pour certains solos"
+									+ "\n"+ "DANGEROUS: aura des rôles les plus mauvais comme l'infect père des loup. Agit comme une aura obscur mais de manière augmentée"
 					+"\n"+ "\n"+ ChatColor.DARK_RED+"JOUR ET NUIT" + "\n"
 					+ ChatColor.AQUA+"Chaque épisode est constitué de 10min de jour puis 10min de nuit, le moment de la journée influe certains rôles, par exemple les loup-garou possèdent force I de nuit");
 			sender.sendMessage("\n"+ChatColor.GOLD+"||COMMANDE||"+ "\n"+"\n" + ChatColor.AQUA
 					+"\n"+"\n"+ "/lg help --> Vous voyez bien où cela vous a conduit"+ "\n"
-					+ "\n"+"\n"+"/lga Game create [nomDeLaGame] ---> crée une game et ouvre son menu de configuration"+ "\n"
+					+ "\n"+"\n"+"/lga Game create [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)+"+ ChatColor.AQUA+"crée une game et ouvre son menu de configuration"+ "\n"
 					+ "\n"+"\n"+"/lga Game config [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+ "ouvre le menu de configuration de la game [nomDeLaGame]"+ "\n"
 					+ "\n"+"\n"+"/lga Game start [nomDeLaGame] ---> "+ChatColor.RED+"(commande op) "+ ChatColor.AQUA+ "lance la partie"+ "\n"
 					+ "\n"+"\n"+"/lga say [message] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" annonce un message à tout le monde"+ "\n"
@@ -549,25 +588,87 @@ public class Lg implements CommandExecutor {
 			switch (args[1]) {
 			
 			case "epid":
-				virus = new Virus(VirusType.EPIDEMIE	, target, declencher, 12000);
-				target.sendMessage(ChatColor.AQUA+"Vous avez mis une épidémie sur "+target.Name);
 				LOUP_ALCHIMISTE alchi1 = (LOUP_ALCHIMISTE) declencher.roleIn;
+				if (alchi1.powerUsed) {
+					sender.sendMessage("Pouvoir déjà utilisé");
+					return true;
+				}
+				virus = new Virus(VirusType.EPIDEMIE	, target, declencher, 12000);
+				declencher.sendMessage(ChatColor.AQUA+"Vous avez mis une épidémie sur "+target.Name);
 				alchi1.powerUsed = true;
 				break;
 			case "parasit":
+				LOUP_ALCHIMISTE alchi2 = (LOUP_ALCHIMISTE) declencher.roleIn;
+
+				if (alchi2.powerUsed) {
+					sender.sendMessage("Pouvoir déjà utilisé");
+					return true;
+				}
 				virus = new Virus(VirusType.PARASITE, target, declencher, 0);
 				target.sendMessage(ChatColor.AQUA+"Vous avez mis un parasite sur "+target.Name);
-				LOUP_ALCHIMISTE alchi2 = (LOUP_ALCHIMISTE) declencher.roleIn;
 				alchi2.powerUsed = true;
 				break;
 			case "pois":
-				virus = new Virus(VirusType.POISON, target, declencher, 0);
-				target.sendMessage(ChatColor.AQUA+"Vous avez empoisonné "+target.Name);
 				LOUP_ALCHIMISTE alchi3 = (LOUP_ALCHIMISTE) declencher.roleIn;
+
+				if (alchi3.powerUsed) {
+					sender.sendMessage("Pouvoir déjà utilisé");
+					return true;
+				}
+				virus = new Virus(VirusType.POISON, target, declencher, 0);
+				sender.sendMessage(ChatColor.AQUA+"Vous avez empoisonné "+target.Name);
 				alchi3.powerUsed = true;
 				break;
+			
+				
+				
+			} 
+		}else if (args[0].equals("info")) {
+				if (args.length == 1) {
+					
+					
+					for (RolesLg role:RoleUtilLg.existingRoles) {
+						TextComponent text = new TextComponent();
+						text.setText("Clicquez ici pour avoir des infos sur: " + role.getCampOfRole().getColor()+ role.getName());
+						text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg inforole "+ role.getName()));
+						((Player) sender).spigot().sendMessage(text);
+					}
+					
+					return true;
+				}
+				
+				GameLg gm = GameLgUtil.searchGame(args[1]);
+				
+				Player player = (Player) sender;
+				 
+				
+				gm.config.open(player, false);
+				
+				
+				
+				
+				
+			} else if (args[0].equals("inforole")) {
+				String name = args[1];
+				int x = 2;
+				while (x != args.length) {
+					x++;
+					name = name + " " + args[x-1];
+					
+				}
+				System.out.println("command runned");
+				for (RolesLg role: RoleUtilLg.existingRoles) {
+					if (name.equals(role.getName()) ) {
+						sender.sendMessage(role.getCampOfRole().getColor()+ role.getName() + ChatColor.GOLD + role.getDescription() );
+						System.out.println(name + " equals "+ role.getName());
+
+						break;
+					} else {
+						System.out.println(name + " doesn't equal "+ role.getName());
+					}
+				}
 			}
-		}
+		
 		
 		
 		

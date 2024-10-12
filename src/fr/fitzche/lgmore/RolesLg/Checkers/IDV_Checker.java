@@ -20,8 +20,8 @@ public class IDV_Checker implements ResCheck{
 		if (e.getEntity().getKiller() == null || PlayerUtil.getDataOfPlayer(e.getEntity().getKiller(), "at idv checker death").camp != Camp.Villager || idv.powerUsed ) {
 			return false;
 		}else {
-			idv.playerWithRole.sendMessage("Vous avez été tué, vous bénéfiviez cependant d'une 2e chance car votre assassin est un membre du village");
-			idv.playerWithRole.player.setMaxHealth(idv.playerWithRole.player.getMaxHealth() - 4);
+			idv.playerWithRole.sendMessage("Vous avez été tué, vous bénéficiez cependant d'une 2e chance car votre assassin est un membre du village");
+			idv.playerWithRole.setMaxHealth(idv.playerWithRole.getMaxHealth() - 4);
 			idv.powerUsed= true;
 			return true;
 		}

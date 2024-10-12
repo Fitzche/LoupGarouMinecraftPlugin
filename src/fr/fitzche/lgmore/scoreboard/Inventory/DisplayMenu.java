@@ -26,12 +26,13 @@ public class DisplayMenu implements Listener{
 	public GameLg game;
 	public String name;
 	public Inventory before;
+	public boolean isOp;
 	ArrayList<ItemStack> itemsOfInventory = new ArrayList<ItemStack>();
 	
-	public DisplayMenu(ArrayList<ItemStack> itemsOfInventory, String name, GameLg game, Inventory inventoryBefore) {
+	public DisplayMenu(ArrayList<ItemStack> itemsOfInventory, String name, GameLg game, Inventory inventoryBefore, boolean isOp) {
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		
-		
+		this.isOp = isOp;
 		//copie de itemsOfInventory vers this.itemsOfInventory pour éviter de supprimer this... après
 		
 		for (ItemStack itemToAdd: itemsOfInventory) {
@@ -109,7 +110,9 @@ public class DisplayMenu implements Listener{
 			
 			}
 		}
-		
+		if (!isOp) {
+			return;
+		}
 		
 		
 		if (event.getInventory().getName().equals("Solo et Hybrides")) {
@@ -186,7 +189,7 @@ public class DisplayMenu implements Listener{
 	}
 	public void refresh(Player player, Camp camp) {
 		//ici prendre les items à la racine,
-		DisplayMenu newMenu = new DisplayMenu(RoleUtilLg.getItemOfCamp(game, camp), name, game, before);
+		DisplayMenu newMenu = new DisplayMenu(RoleUtilLg.getItemOfCamp(game, camp), name, game, before, isOp);
 		player.closeInventory();
 		player.openInventory(newMenu.invs.get(0));
 	}

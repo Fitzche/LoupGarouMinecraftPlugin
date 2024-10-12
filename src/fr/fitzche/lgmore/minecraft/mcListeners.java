@@ -49,6 +49,7 @@ import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
+import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
@@ -165,7 +166,10 @@ public class mcListeners implements Listener {
 				    	//DROP STUFF
 						player1.player.getInventory().setContents(items);
 			    		for (ItemStack item: items) {
-			    			Main.server.getWorld("world").dropItemNaturally(loc, item);
+			    			if (item != null) {
+			    				Main.server.getWorld("world").dropItemNaturally(loc, item);
+
+			    			}
 			    		}
 						//REMOVE PLAYER DEAD
 			    		player1.player.teleport(loc);
@@ -173,7 +177,7 @@ public class mcListeners implements Listener {
 						
 						player1.player.setGameMode(GameMode.SPECTATOR);
 						
-			    		GameLgUtil.getGameOfPlayer(player1.player, " at 174 of Main").removeDiedPlayer(player1);
+			    		GameLgUtil.getGameOfPlayer(player1, " at 174 of Main").removeDiedPlayer(player1);
 
 			    	
 			    	}
@@ -351,10 +355,18 @@ public class mcListeners implements Listener {
 
 			//chasseur Strenght against wolf
 			if (damager.role.equals(RolesLg.CHASSEUR) && PlayerUtil.getDataOfPlayer((Player) e.getEntity(), " at onDamageByEntity in mcListener 2").role.getCampOfRole().equals(Camp.Wolf) ) {
-				more += 0.3;
+				more += 0.2;
 				System.out.println("TEMP//augmented ");
 			}
 
+			if (damager.role.equals(RolesLg.LOUP_BARBARE)) {
+				LOUP_BARBARE lg = (LOUP_BARBARE) damager.roleIn;
+				System.out.println("test barbare jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+				if (MathUtil.pourcentage(lg.sup)) {
+					System.out.println("DAAAAAAAAAAAAAAAAAAAAMMMMMMMMMMMMMMMMAAAAAAAAAAGGGGGGGGGEEEEEEEEEE");
+					e.setDamage(e.getDamage()+1);
+				}
+			}
 
 			//SET DAMAGE WITH MORE
 			e.setDamage(e.getDamage() * (1+more));

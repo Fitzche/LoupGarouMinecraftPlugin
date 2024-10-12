@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.scoreboard.Inventory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -25,7 +26,7 @@ import net.md_5.bungee.api.ChatColor;
 public class EventDisplay implements Listener{
 	ArrayList<Inventory> invs = new ArrayList<Inventory>();
 	public GameLg gm;
-	
+	public HashMap<String, Boolean> areOp = new HashMap<String, Boolean>();
 	public EventDisplay(GameLg gm) {
 		
 	this.gm = gm;
@@ -39,7 +40,8 @@ public class EventDisplay implements Listener{
 	int done =Main.eventsNames.size();
 
     for (int i = Main.eventsNames.size(); i>0; i =- 9) {
-        Inventory inv = Bukkit.createInventory(null, 36);
+        Inventory inv = Bukkit.createInventory(null, 45, "Events");
+        
        
         int end = 8+(done-i);
         List<String> firstEventsNames;
@@ -92,24 +94,29 @@ public class EventDisplay implements Listener{
 
     }
 	
-	public void open(Player ply) {
+	public void open(Player ply, boolean isOp) {
+		areOp.put(ply.getName(), isOp);
 		ply.closeInventory();
 		ply.openInventory(invs.get(0));
 	}
 	
 	
 	public void refresh(Player ply) {
-		PlayerDisplay ag = new PlayerDisplay(this.gm);
-		ply.closeInventory();
-		ag.open(ply);
+		
+		
+		this.gm.events.open(ply, areOp.get(ply.getName()));
 	}
 	
 	@Deprecated
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
             for (Inventory inv: this.invs) {
-                if (e.getInventory().equals(inv)); {
+                if (e.getInventory().getName().equals("Events")) {
                     e.setCancelled(true);
+                    
+                    if (!areOp.get(e.getWhoClicked().getName())) {
+        				return;
+        			}
                     
                     for (String str: Main.eventsNames) {
                     	System.out.println("egal ???");
@@ -141,6 +148,7 @@ public class EventDisplay implements Listener{
                                     }
                                     break;
                                 case "clicquez ici pour avoir un description":
+                                	
                                 	e.getWhoClicked().sendMessage(ChatColor.GOLD+ str + ChatColor.AQUA +"\n"+ Main.descriptionsEvent.get(str));
                                 	break;
                                 	
@@ -171,7 +179,7 @@ public class EventDisplay implements Listener{
                         e.getWhoClicked().openInventory(this.invs.get(this.invs.indexOf(e.getInventory()) - 1));
                     } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals("retour")) {
                         ConfigDisplay config = new ConfigDisplay(gm);
-                        config.open((Player) e.getWhoClicked());
+                        config.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
                     }
                 } 
             }

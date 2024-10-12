@@ -25,7 +25,6 @@ public class ScoreboardLg {
 	}
 	
 	public void refresh() {
-		System.out.println("reload score at ScoreBoard lg setgameAgain");
 		for (String entry: objective.getScoreboard().getEntries()) {
 			objective.getScoreboard().resetScores(entry);
 		}
@@ -68,7 +67,7 @@ public class ScoreboardLg {
 	    
 	    
 	    for (PlayerData player: game.playerAlive) {
-	    	if (player.player != null) {
+	    	if (player.player != null && player.isOnline) {
 	    		player.player.setScoreboard(board);
 	    	}
 	    	

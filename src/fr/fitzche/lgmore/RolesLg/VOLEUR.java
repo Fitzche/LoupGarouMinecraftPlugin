@@ -49,7 +49,7 @@ public class VOLEUR implements RoleInstance{
 
 	@Override
 	public void giveRoleEffectAndItem(PlayerData player) {
-		playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3600, 0, false, false));
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3600, 0, false, false));
 		
 	}
 
@@ -115,6 +115,18 @@ public class VOLEUR implements RoleInstance{
 				p.sendMessage(ChatColor.RED+"Le Joueur "+ playerWithRole.Name+ " a rejoint votre camp");
 			}
 		}
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

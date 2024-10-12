@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.scoreboard.Inventory;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,6 +19,7 @@ import fr.fitzche.lgmore.Util.CommandUtil;
 public class ConfigDisplay implements Listener{
 	public Inventory inv;
 	public GameLg game;
+	HashMap<String, Boolean> areOp = new HashMap<String, Boolean>();
 	
 	public ConfigDisplay(GameLg game) {
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
@@ -53,7 +56,8 @@ public class ConfigDisplay implements Listener{
 		this.inv = config;
 	}
 	
-	public void open(Player p) {
+	public void open(Player p, boolean isOp) {
+		areOp.put(p.getName(), isOp);
 		p.openInventory(this.inv);
 	}
 	
@@ -64,19 +68,23 @@ public class ConfigDisplay implements Listener{
 		if (e.getInventory().equals(this.inv)) {
 			e.setCancelled(true);
 			if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE +"Compo")) {
-				CompoDisplay compoDisplay = new CompoDisplay(this.game);
-				compoDisplay.open((Player) e.getWhoClicked());
+				
+				this.game.compo.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Joueur")) {
-				PlayerDisplay p = new PlayerDisplay(this.game);
-				p.open((Player) e.getWhoClicked());
+				
+				this.game.plys.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_BLUE + "Start")) {
+				if (!areOp.get(e.getWhoClicked().getName())) {
+					return;
+				}
+				
 				String[] args = new String[] {"Game", "start", game.name};
 				CommandUtil.runCommand("lga", (Player) e.getWhoClicked(), args);
 				e.getWhoClicked().closeInventory();
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Event")) {
-				EventDisplay eventDisplay = new EventDisplay(game);
-				eventDisplay.open((Player)e.getWhoClicked());
-				Main.server.getPluginManager().registerEvents(eventDisplay, Main.plug);
+				
+				this.game.events.open((Player)e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
+				
 			}
 			
 			

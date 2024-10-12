@@ -104,7 +104,7 @@ public class GameLgUtil {
 	}
 	
 	public static void tpAl(PlayerData player) {
-		player.player.addPotionEffect(PotionUtil.INVINCIBILITY);
+		player.addPotionEffect(PotionUtil.INVINCIBILITY);
 		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(0, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(0, 500));
 		player.player.teleport(loc);
 	}
@@ -193,22 +193,7 @@ public class GameLgUtil {
 		return x;
 	}
 	
-	public static void isEnded(GameLg game) {
-		Team isWinner = null;
-		for (Team team:game.teams) {
-			if (team.inGame) {
-				if (isWinner == null) {
-					isWinner = team;
-				} else {
-					return;
-				}
-			}
-		}
-		if (isWinner != null) {
-			isWinner.win();
-		}
-		
-	}
+	
 	
 	public static void askRes(GameLg game, PlayerData ply, PlayerData killer) {
 		//System.out.println("hg.1.1");

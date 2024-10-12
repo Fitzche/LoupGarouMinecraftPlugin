@@ -90,7 +90,7 @@ public class PETITE_FILLE implements RoleInstance{
 
 	@Override
 	public void startSpecialEvent() {
-		playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, false, false));
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, false, false));
 		powerUsed = false;
 		System.out.println("//temps at PETITE FILLE startSpecialEvent 2");
 		
@@ -102,6 +102,20 @@ public class PETITE_FILLE implements RoleInstance{
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Petite Fille, il ne pourra pas se rendre invisible lors de la prochaine nuit");
+		this.playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez été aveuglé, vous ne pourrez pas vous rendre invisible à la prochaine nuit ");
+		this.powerUsed = true;
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

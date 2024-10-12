@@ -25,6 +25,8 @@ import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
+import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
+import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
 import fr.fitzche.lgmore.RolesLg.MONTREUR;
@@ -208,6 +210,14 @@ public class RoleUtilLg {
 			return role;
 		}else if (player.role.equals(RolesLg.LOUP_ALCHIMISTE)) {
 			LOUP_ALCHIMISTE role = new LOUP_ALCHIMISTE(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.LOUP_BARBARE)) {
+			LOUP_BARBARE role = new LOUP_BARBARE(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.LOUP_MANIP)) {
+			LOUP_MANIPULATEUR role = new LOUP_MANIPULATEUR(player);
 			player.roleIn = role;
 			return role;
 		}else{

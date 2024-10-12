@@ -35,8 +35,13 @@ import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
+import fr.fitzche.lgmore.scoreboard.Inventory.CompoDisplay;
+import fr.fitzche.lgmore.scoreboard.Inventory.ConfigDisplay;
+import fr.fitzche.lgmore.scoreboard.Inventory.EventDisplay;
+import fr.fitzche.lgmore.scoreboard.Inventory.PlayerDisplay;
 import net.minecraft.server.v1_8_R1.Material;
 
 public class GameLg implements Listener{
@@ -73,17 +78,24 @@ public class GameLg implements Listener{
 	
 	
 	
-	public ArrayList<PlayerData> toAdd = new ArrayList<PlayerData>();
+	HashMap<String, PlayerDataLeft> playersLeft = new HashMap<String, PlayerDataLeft>();
 	
 	public ArrayList<RolesLg> dispoRoles = new ArrayList<RolesLg>();
 	
 	public boolean stopped;
 	
 	public ArrayList<ResCheck> resCheckers = new ArrayList<ResCheck>();
+	public CompoDisplay compo = new CompoDisplay(this);
+	public EventDisplay events = new EventDisplay(this);
+	public PlayerDisplay plys;
+	
+	public ConfigDisplay config = new ConfigDisplay(this);
 
 	
 	public GameLg(String name) {
+		
 		this.stopped = false;
+		Main.server.getPluginManager().registerEvents(events, Main.plug);
 		
 		for (String str: Main.eventsNames) {
 			this.probasEvents.put(str, 0);
@@ -112,8 +124,8 @@ public class GameLg implements Listener{
 		this.board = new ScoreboardLg(this);
 
 		this.dispoRoles.addAll(RoleUtilLg.existingRoles);
-		
-		
+		plys = new PlayerDisplay(this);
+		Main.server.getPluginManager().registerEvents(plys, Main.plug);
 		}
 	
 	public int getGroupe() {
@@ -123,7 +135,7 @@ public class GameLg implements Listener{
 	
 	
 	public void applyInvicibility(PlayerData joueur) {
-		joueur.player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 10, false, false));
+		joueur.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 10, false, false));
 
 	}
 	
@@ -205,6 +217,7 @@ public class GameLg implements Listener{
 		return string.toString();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void playEpisode() {
 		////System.out.println("eee1");
 		if (this.rolesIn == null) {
@@ -225,6 +238,17 @@ public class GameLg implements Listener{
 		this.setChat();
 		this.startVote();
 		this.decideTimeEvent();
+		
+		Main.server.getWorld("world").setTime(1000);
+		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				Main.server.getWorld("world").setTime(13000);
+				
+			}
+			
+		}, 24000);
 	}
 	
 	public void addPlayer(String name) {
@@ -325,8 +349,8 @@ public class GameLg implements Listener{
 		if (ply.role.equals(RolesLg.CHASSEUR)) {
 			CHASSEUR hunter = (CHASSEUR) ply.roleIn;
 			this.Hunter = hunter;
-			this.hunter = ply.player;
-			ply.sendMessage(ChatColor.GOLD+"Vous avez 25 secondes pour tirer sur un joueur de votre choix avec la commande lg tirer, celui perdra 5 coeurs de manière non permanente, ainsi que sa force s'il est loup");
+			
+			ply.sendMessage(ChatColor.GOLD+"Vous avez 25 secondes pour tirer sur un joueur de votre choix avec la commande /lg tirer [nomDuJoueur], celui perdra 5 coeurs de manière non permanente, ainsi que sa force s'il est loup");
 
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
@@ -380,8 +404,8 @@ public class GameLg implements Listener{
 						Bukkit.broadcastMessage(ChatColor.GOLD+"Une erreur s'est produite aux urnes...");
 						mostVoted = getPlayerAlive().get(MathUtil.generateAlInt(0, getPlayerAlive().size()  -1));
 					}
-					mostVoted.player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 1));
-					mostVoted.player.setMaxHealth(mostVoted.player.getMaxHealth() - 2);
+					mostVoted.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 1));
+					mostVoted.changeHealth(-2);
 					Bukkit.broadcastMessage(ChatColor.GOLD + "Le joueur " + ChatColor.DARK_AQUA + mostVoted.Name +ChatColor.GOLD+ "a été le plus voté" );
 					for (PlayerData player:playerAlive) {
 						
@@ -405,7 +429,7 @@ public class GameLg implements Listener{
 							CORBEAU corbeau = (CORBEAU) player.roleIn;
 							corbeau.addGoodVoted();
 						} else {
-							player.player.setMaxHealth(player.player.getMaxHealth()-2);
+							player.changeHealth(-2);
 						
 						} 
 					}
@@ -504,9 +528,7 @@ public class GameLg implements Listener{
 	
 	public void announceDeath(PlayerData player1) {
 		
-		for (Team team:teams) {
-			team.onPlayerDeath(player1);
-		}
+		
 		String moreInfo = "";
 		if (player1.infected) {
 			moreInfo = moreInfo+ (" (loup garou) ");
@@ -524,10 +546,12 @@ public class GameLg implements Listener{
 		}
 
 		Main.server.broadcastMessage(ChatColor.DARK_BLUE +"___________________________" + "\n" +
-							ChatColor.RED + player1.player.getName() + " est mort |"+ "\n"  +
+							ChatColor.RED + player1.getName() + " est mort |"+ "\n"  +
 								" il était "+ player1.camp.getColor() + 
 								player1.getLgRole() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
-
+		for (Team team:teams) {
+			team.onPlayerDeath(player1);
+		}
 	}
 	
 	

@@ -89,16 +89,18 @@ public class PYROMANE implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner tout seul, pour cela vous avez 15% de chance d'enflammer toute personne que vous taper ou toucher avec une flèche (pouvoir activable/desactivable avec /lg fireaspect), de plus vous pouvez 2 fois dans la partie recouvrir d'essence un joueur à moins de 20 blocs (avec la commande /lg recouvrir nomDuJoueur), puis enflammer tous les joueurs recouvert avec /lg enflammer, ce qui aura pour effet de mettre en feu le joueur pendant 20s ainsi que tous les joueurs se trouvant à moins de 20 blocs de celui-ci, vous possédez fire protection de manière permanente ");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner tout seul, pour cela vous avez 15% de chance d'enflammer toute personne que vous taper ou toucher avec une flèche (pouvoir activable/desactivable avec /lg switchfire), de plus vous pouvez 2 fois dans la partie recouvrir d'essence un joueur à moins de 20 blocs (avec la commande /lg recouvrir nomDuJoueur), puis enflammer tous les joueurs recouvert avec /lg enflammer, ce qui aura pour effet de mettre en feu le joueur pendant 20s ainsi que tous les joueurs se trouvant à moins de 20 blocs de celui-ci, vous possédez fire protection de manière permanente ");
 	}
 	
 
 	
 	public void giveEffectAllTime() {
-		playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 60, 60, false, false));
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 60, 60, false, false));
         if (inFire) {
             for (PlayerData player: filled) {
-                player.player.setFireTicks(40);
+            	if (player.isOnline){
+                	player.player.setFireTicks(40);
+            	}
             }
         }
 	}
@@ -159,5 +161,19 @@ public class PYROMANE implements RoleInstance {
 			giveNightEffect();
 		}
 		
+	}
+
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

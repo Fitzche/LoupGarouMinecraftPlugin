@@ -1,99 +1,98 @@
 package fr.fitzche.lgmore.RolesLg;
 
-import org.bukkit.ChatColor;
-
+import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
-import fr.fitzche.lgmore.RolesLg.Checkers.IDV_Checker;
+import fr.fitzche.lgmore.RolesLg.Checkers.LgBarbare_Checker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
-import fr.fitzche.lgmore.Util.PlayerUtil;
+import net.md_5.bungee.api.ChatColor;
 
-public class IDIOT_DU_VILLAGE implements RoleInstance {
-	public PlayerData playerWithRole;
-	public static Camp camp = Camp.Villager;
-	public boolean powerUsed = false;
-	public String name ="Idiot du village";
-	
-	public IDIOT_DU_VILLAGE(PlayerData ply) {
-		this.playerWithRole = ply;
-		GameLgUtil.getGameOfPlayer(ply, "at idv creation").resCheckers.add(new IDV_Checker(this, GameLgUtil.getGameOfPlayer(ply, "at idv creation")));
-	}
+public class LOUP_BARBARE implements RoleInstance {
 
-	@Override
-    public void changeTo(PlayerData player) {
-        playerWithRole = player;
-    }
 	
+	public PlayerData playerWithRole; 
+	public int sup = 5;
+	public GameLg game;
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return camp.getColor()+ name;
+		return Camp.Wolf.getColor()+"Loup Garou Barbare";
 	}
 
+	
+	public LOUP_BARBARE(PlayerData p) {
+		p.boostS5 += 3;
+		this.playerWithRole = p;
+		this.game = GameLgUtil.getGameOfPlayer(p, "at lg barbare creation");
+		this.game.resCheckers.add(new LgBarbare_Checker(p));
+		
+	}
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+ "Vous devez gagner avec le village, pour cela vous pourrez réssuciter une fois avec 2 coeur en moins si le village vous élimine par erreur.";
+		return ChatColor.DARK_AQUA+"Vous gagnez avec les loups garou, pour cela vous possédez force 0.5 de manière permanente, et vous avez 5% de chance d'infliger un dégat supplémentaire à chaque coup, pourcentage qui augmentera de 4% à chaque kill,  cependant vous perdrez 1 coeur permanent à chaque kill. Vous obtenez 2min de resistance à chaque kill.";
 	}
 
 	@Override
 	public void giveRoleEffectAndItem(PlayerData player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void giveEffectAllTime() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void giveNightEffectCheck() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void giveNightEffect() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void giveDayEffect() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void episodeEffect() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void changeTo(PlayerData player) {
+		this.playerWithRole = player;
+
 	}
 
 	@Override
 	public void setEpisodeTrue() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	public void respawn() {
-		playerWithRole.changeHealth(-4);
-		GameLgUtil.tpAl(playerWithRole);
-		powerUsed = false;
-	}
+
 
 	@Override
 	public void blind(PlayerData origin) {
 		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
 		
 	}
+
 
 	@Override
 	public boolean isInfoRole() {

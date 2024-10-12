@@ -61,7 +61,7 @@ public class RENARD implements RoleInstance{
 	}
 	
 	public void flairer(PlayerData player) {
-		if (players.get(player.Name) < 600) {
+		if (players.get(player.Name) < 9/*00 NBL*/) {
 			playerWithRole.sendMessage("Vous ne pouvez pas encore flairer ce joueur");
 			return;
 		} else {
@@ -81,7 +81,7 @@ public class RENARD implements RoleInstance{
 	public void getPlayerFlaire(String playerName) {
 			int x = players.get(playerName);
 			if (x < 600) {
-				players.remove(playerName);
+				
 				players.put(playerName, x+1);
 			}
 			
@@ -124,6 +124,23 @@ public class RENARD implements RoleInstance{
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Renard, tout ses flairages en court ont été remis à 0");
+		this.playerWithRole.sendMessage(ChatColor.GOLD+ "Vous avez été aveuglé, vos flairage ont été remis à 0");
+		for (PlayerData p:GameLgUtil.getGameOfPlayer(playerWithRole, "blind of renard").getPlayerAlive()) {
+			this.players.put(p.getName(), 0);
+		}
+	}
+
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

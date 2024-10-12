@@ -11,6 +11,7 @@ public class VOYANTE implements RoleInstance{
 	public PlayerData playerWithRole;
 	public boolean powerUsed;
 	public String name ="Voyante";
+	public boolean isBlind= false;
 
 	public VOYANTE(PlayerData player) {
 		this.playerWithRole = player;
@@ -81,8 +82,13 @@ public class VOYANTE implements RoleInstance{
 
 	@Override
 	public void setEpisodeTrue() {
-		this.powerUsed = false;
-		this.playerWithRole.player.sendMessage(ChatColor.AQUA +"Vous pouvez à nouveau utiliser votre pouvoir");
+		
+		if (isBlind) {
+			isBlind = false;
+		} else {
+			this.powerUsed = false;
+		}
+		this.playerWithRole.sendMessage(ChatColor.AQUA +"Vous pouvez à nouveau utiliser votre pouvoir");
 		
 	}
 
@@ -94,5 +100,22 @@ public class VOYANTE implements RoleInstance{
 			giveNightEffect();
 		}
 		
+	}
+
+
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Voyante, il ne pourra pas observer de joueur durant le prochain episode");
+		isBlind = true;
+		this.playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez été aveuglé, vous ne pourrez donc pas espionner un joueur au prochain épisode");
+	}
+
+
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

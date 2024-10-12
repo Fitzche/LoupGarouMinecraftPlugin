@@ -31,8 +31,8 @@ public class PARRAIN implements RoleInstance {
 
     public void setNexTarget(PlayerData playerD) {
         playersList = new ArrayList<>();
-        int x = 5;
-        if (GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size()<5) {
+        int x = 3;
+        if (GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size()<3) {
         	x = GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size();
         }
         
@@ -48,7 +48,7 @@ public class PARRAIN implements RoleInstance {
         	p.sendMessage("Vous obtiendrez une prime en tuant "+ this.target.Name);
         }
         playerWithRole.sendMessage("Vous mettez un prime sur "+ this.target.Name);
-        
+        this.target.sendMessage("Le parrain a mis une prime sur vous... Attention");
 
     }
 
@@ -59,7 +59,7 @@ public class PARRAIN implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez à chaque épisode mettre une prime sur la tête d'un joueur à chaque épisode, qui sera envoyé à 5 joueurs au hasard du camp adverse à ce joueur, si ce joueur est tué par un de ces 5 joueurs, vous ainsi que le tueur gagnerez 1/2 coeur et 5% de force");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez à chaque épisode mettre une prime sur la tête d'un joueur à chaque épisode, qui sera envoyé à 1 joueurs au hasard du camp adverse à ce joueur, si ce joueur est tué par un de cejoueur, vous ainsi que le tueur gagnerez 1/2 coeur et 5% de force");
 	}
 	public static ItemStack logo = new ItemStack(Material.STONE_SWORD);
 
@@ -134,13 +134,31 @@ public class PARRAIN implements RoleInstance {
         for (PlayerData player: this.playersList) {
             if (player.Name.equals(name)) {
                 player.sendMessage("Vous avez tué la cible d'une prime, vous gagner donc 5% de force et 1/2 coeur");
-                player.player.setMaxHealth(player.player.getMaxHealth() + 1);
+                player.setMaxHealth(player.getMaxHealth() + 1);
                 player.boostS5 ++;
             }
         }
-        playerWithRole.player.setMaxHealth(playerWithRole.player.getMaxHealth() + 1);
+        playerWithRole.setMaxHealth(playerWithRole.getMaxHealth() + 1);
         playerWithRole.boostS5 ++;
         playerWithRole.sendMessage("Votre cible est morte, vous gagner donc 1/2 coeur et 5% de force");
 
     }
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur est parrain, il ne pourra pas mettre de prime à cet épisode");
+		for (PlayerData p: this.playersList) {
+			p.sendMessage(ChatColor.GOLD+"La prime a été retirée");
+		}
+		this.playerWithRole.sendMessage(ChatColor.GOLD+ "Vous avez été aveuglé, vous ne pourrez pas mettre de prime à cet épisode, si cela est déjà fait, celle-ci sera retirée");
+		this.playersList = new ArrayList<PlayerData>();
+		this.target = null;
+		this.powerUsed = true;
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		
+		return true;
+	}
 }

@@ -85,8 +85,8 @@ public class SALVATEUR implements RoleInstance{
 
 	
 	public void proteger(PlayerData target) {
-		target.player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0, false, false));
-		target.player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 24000, 2, false, false));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0, false, false));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 24000, 2, false, false));
 		target.sendMessage(ChatColor.DARK_GREEN+ "Le Salvateur vous a protégé, vous obtenez donc résistance et no fall pendant 20 minutes");
 
 		this.playerWithRole.sendMessage(ChatColor.DARK_GREEN+"vous avez protégé "+ target.Name);
@@ -96,6 +96,18 @@ public class SALVATEUR implements RoleInstance{
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

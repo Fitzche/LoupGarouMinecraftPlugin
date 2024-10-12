@@ -88,9 +88,10 @@ public class CHASSEUR implements RoleInstance{
 	
 	
 	public void shoot(PlayerData target) {
-		target.player.damage(10);
+		
 		target.isShooted = true;
-		Bukkit.broadcastMessage("Le chasseur a tiré sur " + target.player.getName());
+		Bukkit.broadcastMessage("Le chasseur a tiré sur " + target.getName());
+		target.player.damage(10);
 	}
 
 	@Override
@@ -105,6 +106,18 @@ public class CHASSEUR implements RoleInstance{
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

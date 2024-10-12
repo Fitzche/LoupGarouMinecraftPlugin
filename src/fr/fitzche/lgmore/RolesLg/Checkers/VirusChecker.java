@@ -18,12 +18,14 @@ public class VirusChecker implements ResCheck {
 	@Override
 	public boolean checkRes(PlayerDeathEvent e) {
 		if (e.getEntity().getKiller().getName().equals(virus.owner.Name)) {
+			System.out.println("killer has virus");
 			switch (virus.type) {
 			case ENDED:
 				break;
 			case EPIDEMIE:
 				break;
 			case PARASITE:
+				System.out.println("killer has parasite");
 				PlayerData newOwner = PlayerUtil.getDataOfPlayer(e.getEntity(), "at virus checker");
 				virus.owner.sendMessage(ChatColor.DARK_GREEN+"Vous avez transmi le parasite");
 				

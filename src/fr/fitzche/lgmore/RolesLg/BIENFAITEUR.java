@@ -72,7 +72,7 @@ public class BIENFAITEUR implements RoleInstance{
 			return;
 
 		}
-		ply.player.setMaxHealth(ply.player.getMaxHealth()+2);
+		ply.setMaxHealth(ply.getMaxHealth()+2);
 		ply.sendMessage("Le bienfaiteur vous a conféré un coeur");
 		playerWithRole.sendMessage("Vous avez conférer un coeur à "+ ply.Name);
 		used++;
@@ -100,6 +100,18 @@ public class BIENFAITEUR implements RoleInstance{
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -149,4 +149,22 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 		
 	}
 
+
+
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+
+
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

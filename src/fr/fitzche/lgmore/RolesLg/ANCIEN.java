@@ -51,11 +51,13 @@ public class ANCIEN implements RoleInstance{
 	@Override
 	public void giveEffectAllTime() {
 		if (!isRes) {
-			playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 0, false , false));
+			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 0, false , false));
 		}
 		
 	}
 
+	
+	
 	@Override
 	public void giveNightEffectCheck() {
 		// TODO Auto-generated method stub
@@ -90,6 +92,20 @@ public class ANCIEN implements RoleInstance{
 	public void startSpecialEvent() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage("Ce joueur n'est pas un role à info...");
+		
+	}
+
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

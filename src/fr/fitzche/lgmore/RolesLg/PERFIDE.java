@@ -95,7 +95,7 @@ public class PERFIDE implements RoleInstance{
 
 	@Override
 	public void startSpecialEvent() {
-		playerWithRole.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, false, false));
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, false, false));
 		powerUsed = false;
 		System.out.println("//temps at PETITE FILLE startSpecialEvent 2");
 		
@@ -107,6 +107,18 @@ public class PERFIDE implements RoleInstance{
 			giveNightEffect();
 		}
 		
+	}
+
+	@Override
+	public void blind(PlayerData origin) {
+		origin.sendMessage(ChatColor.GREEN + "Ce joueur n'est pas un rôle à info");
+		
+	}
+
+	@Override
+	public boolean isInfoRole() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
