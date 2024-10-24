@@ -72,60 +72,49 @@ public class mcListeners implements Listener {
 	@EventHandler
 	@Deprecated
 	public void onPlayerDeath(PlayerDeathEvent e ) {
-		
-		
-		
-		System.out.println("death");
-		
-		
+		System.out.println("Player "+ e.getEntity().getName() + " killed by "+ e.getEntity().getKiller().getName());
 		
 		if (GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main") != null) {
+			
 			Location loc = e.getEntity().getPlayer().getLocation();
-			GameLg gamoth = GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main");
-			if (gamoth.statut.equals(GameStatut.NOT_STARTED)) {
+			GameLg game = GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main");
+			Player killer = e.getEntity().getKiller();
+			final ItemStack[] items = e.getEntity().getPlayer().getInventory().getContents();
+			
+			if (game.statut.equals(GameStatut.NOT_STARTED)) {
 				e.setKeepInventory(true);
 				Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 					
 					@Override
 					public void run() {
+						e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
+
 						e.getEntity().teleport(loc);
 						
 					}
 				}, 20);
+				return;
 			}
 			
-			Player killer = e.getEntity().getKiller();
 			
-			System.out.println("ffff");
+			
 			e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
 
-			
-			final ItemStack[] items = e.getEntity().getPlayer().getInventory().getContents();
 			e.setKeepInventory(true);
 			e.setDeathMessage("");
 			
 			
+
 			
+			if (killer != null &&game.timer.temps > 1200) {
 			
-			
-			
-			
-			GameLg gm1 =GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at Main 93");
-			System.out.println("hg.1");
-			if (e.getEntity().getPlayer().getKiller() != null&&GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), "at 95 Main").timer.temps > 1200) {
-				System.out.println("ask res");
-				GameLgUtil.askRes(GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), "at 96 Main 1"), GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), "at 96 Main 2").getPlayer(e.getEntity().getPlayer().getName()), (GameLgUtil.getGameOfPlayer(e.getEntity().getKiller(),  "at 96 Main 3")).getPlayer(e.getEntity().getKiller().getName()));
+				GameLgUtil.askRes(game, game.getPlayer(e.getEntity().getPlayer().getName()), game.getPlayer(e.getEntity().getKiller().getName()));
 
 			}
 			
 			
 			int k = 300;
 			
-			
-			System.out.println("hg.2");
-			e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
-
-			Player killerOfPlayer = e.getEntity().getKiller();
 			
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
@@ -134,20 +123,20 @@ public class mcListeners implements Listener {
 			
 					
 			    	
-			    	System.out.println("revive?");
 			    	
-			    	PlayerData player1 = (PlayerData) GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 116 Main").getPlayer(e.getEntity().getName());
+			    	
+			    	PlayerData player1 = (PlayerData) game.getPlayer(e.getEntity().getName());
 			    	if (!player1.inLife) {
 			    		return;
 			    	}
 			    	
-			    	for (ResCheck checker: gm1.resCheckers) {
+			    	for (ResCheck checker: game.resCheckers) {
 		    			if (checker.checkRes(e)) {
 		    				player1.relive = true;
 		    			}
 		    		}
 			    	
-			    	player1.player.getInventory().setContents(items);
+			    	
 			    	if (player1.relive) {
 			    		if (player1.infected) {
 			    			player1.player.sendMessage(ChatColor.AQUA +"Vous avez été infecté, vous devez maintenant gagner avec les loups, vous possédez également force de nuit");
@@ -162,23 +151,22 @@ public class mcListeners implements Listener {
 							}
 			    			
 			    		}, 1200);
-			    		System.out.println("l1");
-			    		e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
-			    		System.out.println("l2");
-			    		GameLgUtil.tpAl(e.getEntity().getPlayer());
+			    
+			    	e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
+			    	GameLgUtil.tpAl(e.getEntity().getPlayer());
 			    		
 			    		
 			    	} else { 
 			    		
-			    		for (ResCheck checker: gm1.resCheckers) {
-			    			checker.runDeathAction(e, killerOfPlayer);
+			    		for (ResCheck checker: game.resCheckers) {
+			    			checker.runDeathAction(e, killer);
 			    		}
 
 				    	
 				    	//ANNOUNCE DEATH
-				    	gm1.announceDeath(player1);
+				    	game.announceDeath(player1);
 				    	//DROP STUFF
-						player1.player.getInventory().setContents(items);
+						
 			    		for (ItemStack item: items) {
 			    			if (item != null) {
 			    				Main.server.getWorld("world").dropItemNaturally(loc, item);
@@ -191,7 +179,7 @@ public class mcListeners implements Listener {
 						
 						player1.player.setGameMode(GameMode.SPECTATOR);
 						
-			    		GameLgUtil.getGameOfPlayer(player1, " at 174 of Main").removeDiedPlayer(player1);
+			    		game.removeDiedPlayer(player1);
 
 			    	
 			    	}
@@ -205,27 +193,7 @@ public class mcListeners implements Listener {
 			    }
 			}, k); 
 			
-			/*sch.schedule( new Runnable() {
-
-				@Override
-				public void run() {
-					if (GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer()).getPlayer(e.getEntity().getPlayer().getName()).relive) {
-						//Error GameLgUtil.tpAl(e.getEntity().getPlayer());
-						//setInventory
-						//tp lobby pour eviter changement mode
-					} else {
-						//announce, drop stuff à loc , set Spec
-					}
-				}
-				
-			}, 15, TimeUnit.SECONDS);*/
 			
-	
-			/*
-			
-        
-		
-		passer en spec, après 15s sauf si variable set sur true avec soso ou IPDL(annoncer la mort et drops)*/
 		
 		} else {
 			e.setKeepInventory(false);

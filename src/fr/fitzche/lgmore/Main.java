@@ -176,16 +176,11 @@ public class Main extends JavaPlugin implements Listener {
 	@Deprecated
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		/*
-		if (alreadyCo.get(e.getPlayer().getName()) == null) {
-			e.getPlayer().teleport(new Location(Main.plug.getServer().getWorld("world"), 1,156,1));
-			alreadyCo.put(e.getPlayer().getName(), true);
-		}
-		*/
+		
 		e.getPlayer().sendMessage(ChatColor.GOLD + ""+ ChatColor.ITALIC+ "Faites /lg help et /lg info pour avoir plus d'info sur le plugin lgmore, /lg whisper [message] pour envoyer un message non anonyme aux joueurs op. Les description de roles n'indiquent pas forcement qu'il faut mettre un nom derrière la commande si la commande vise un joueur à choisir, les seules commandes ne necessitant pas de nom mais demandant un choix de joueur sont /color et /lg couple (pour cupidon). ");
 		
 		
-		//System.out.println("join");
+		
 		e.getPlayer().setScoreboard(Main.scoreboardLg);
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" joined");
 		if (e.getPlayer().getName().equals("TheGuill84")) {
@@ -211,23 +206,16 @@ public class Main extends JavaPlugin implements Listener {
 
 		e.getPlayer().setScoreboard(Main.scoreboardLg);
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" left");
-		
-		Location leftLocation = e.getPlayer().getLocation();
+	
 		if (GameLgUtil.getGameOfPlayer(e.getPlayer(), " at 300 of Main") == null) {
 			System.out.println("Main -> l.301, yes");
 			return;
 		}
 		
 		PlayerData player = PlayerUtil.getDataOfPlayer(e.getPlayer(), " in Main, in onPlayerQuit ");
-		
 
-		
-		
 		GameLg gm1 = GameLgUtil.getGameOfPlayer(player, "at l.311 of Main");
 		System.out.println(gm1.name + " is the game ");
-		
-		
-		System.out.println("removed fot left 307 of Main, and added at list");
 
 		gm1.playersLeft.put(player.Name, new PlayerDataLeft(player));
 		

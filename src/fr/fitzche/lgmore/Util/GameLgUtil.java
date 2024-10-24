@@ -196,29 +196,24 @@ public class GameLgUtil {
 	
 	
 	public static void askRes(GameLg game, PlayerData ply, PlayerData killer) {
-		//System.out.println("hg.1.1");
+		
 		if (RoleUtilLg.isRoleIn(game, RolesLg.INFECT_PERE_DES_LOUPS) || RoleUtilLg.isRoleIn(game, RolesLg.SORCIERE)) {
-			//System.out.println("hg.1.2");
+			
 			ArrayList<PlayerData> plys = RoleUtilLg.getPlayersWithRole(game, RolesLg.INFECT_PERE_DES_LOUPS);
-			//System.out.println("hg.1.3");
+			
 			for (PlayerData ply1: plys) {
-				//System.out.println("hg.1.mixte.4.1");
-				
 				INFECT_PERE_DES_LOUPS role = (INFECT_PERE_DES_LOUPS) ply1.roleIn;
-				//System.out.println("hg.1.mixte.4.2");
 				role.infect(ply, killer);
-				//System.out.println("hg.1.mixte.4.3");
-				System.out.println("demande de résurrection 1");
-
 			}
+			
 			ArrayList<PlayerData> plys1 = RoleUtilLg.getPlayersWithRole(game, RolesLg.SORCIERE);
 			for (PlayerData ply1: plys1) {
 				SORCIERE role = (SORCIERE) ply1.roleIn;
 				role.lifePotion(ply);
-				System.out.println("demande de résurrection 2");
+				
 			}
 		}
-		System.out.println("demande de résurrection");
+		
 	}
 	//TODO: corriger searchGame car game pas ajoutée au games de Main quand créée
 }

@@ -35,6 +35,7 @@ import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
@@ -70,6 +71,7 @@ public class GameLg implements Listener{
 	public ArrayList<RoleInstance> rolesIn;
 	public boolean isInVote;
 	public boolean isInDisc;
+	public ArrayList<FutureAction> futuresActions = new ArrayList<FutureAction>();
 	
 	public HashMap<String, Integer> probasEvents = new HashMap<String, Integer>();
 	
@@ -107,6 +109,8 @@ public class GameLg implements Listener{
 		
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		
+		
+		
 		this.isInDisc = false;
 		rolesIn = new ArrayList<RoleInstance>();
 		this.name = name;
@@ -142,13 +146,21 @@ public class GameLg implements Listener{
 	}
 	
 	
+	public void askRunFuturesActions() {
+		for (FutureAction fut: this.futuresActions) {
+			fut.timeBeforeRun --;
+			if (fut.timeBeforeRun < 1) {
+				fut.action.run();
+			}
+		}
+	}
 	public PlayerData getPlayer(String name) {
 		for (PlayerData ply:this.playerAlive ) {
 			if (ply.Name.equals(name)) {
 				return ply;
 			}
 		}
-		//System.out.println("joueur non trouvé dans la partie");
+		
 		return null;
 	}
 	
@@ -160,6 +172,7 @@ public class GameLg implements Listener{
 	public void setChat() {
 		this.isInDisc = true;
 		GameLgUtil.broadcoastTargeted(this, Camp.Wolf, ChatColor.RED + "Vous pouvez à présent discuter sur le chat des loups-garous");
+		
 		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
 			@Override
@@ -170,29 +183,47 @@ public class GameLg implements Listener{
 			}
 			
 		}, 800);
+		
+		
 	}
 	
 	public void attributeRoleToAll() {
 		if (this.roles.size() == this.playerAlive.size()) {
-			Random random = new Random(); 
-			ArrayList<RolesLg> conserv = new ArrayList<RolesLg>();
-			ArrayList<RolesLg> exe = new ArrayList<RolesLg>();
-			exe = this.getRoles();
+			
+			
+			ArrayList<RolesLg> exe = this.getRoles();
+			this.roles = new ArrayList<RolesLg>();
 			for (PlayerData player : this.playerAlive) {
 				
-				int number = random.nextInt(exe.size());
+				int number = MathUtil.generateAlInt(0, exe.size()-1);
 				RolesLg role = exe.get(number);
 				player.applyLgRole(role);
 				
 				
 				
-				conserv.add(role);
+				this.roles.add(role);
 				exe.remove(role);
 				
 			}
 			
-			this.roles = conserv;
+			
 		}
+		
+		
+		for (PlayerData player: this.getPlayerAlive()) {
+			
+			player.roleIn = RoleUtilLg.createRoleOfPlayerRoles(player);
+			player.sendMessage("Vous êtes "+player.roleIn.getName());
+			player.sendMessage(player.roleIn.getDescription());
+			player.sendMessage(ChatColor.GOLD+"Aura: "+ player.role.aura.getName());
+			this.rolesIn.add(player.roleIn);
+			player.roleIn.giveRoleEffectAndItem(player);
+		}
+		
+		this.lgTeam = new Team("Loups Garou", Camp.Wolf, this, this.getRealWolfAlive(), null, "at wolf team creating at == 1200", null, null, true, false, false, false);
+		this.villTeam = new Team("Village", Camp.Villager, this, this.getRealVillagerAlive(), null, "at village team creating at == 1200", null, null, true, false, false, false);
+		this.teams.add(this.lgTeam);
+		this.teams.add(this.villTeam);
 	}
 	
 	
@@ -221,70 +252,49 @@ public class GameLg implements Listener{
 	
 	@SuppressWarnings("deprecation")
 	public void playEpisode() {
-		////System.out.println("eee1");
-		if (this.rolesIn == null) {
-		//	//System.out.println("eeeX");
-		}
-		//System.out.println(this.rolesIn.get(0));
+		System.out.println("Play new Episode");
 		for (RoleInstance roles: this.rolesIn) {
-			////System.out.println("eee2");
-
 			roles.episodeEffect();
-			////System.out.println("eee3");
-
-			roles.setEpisodeTrue();
-			System.out.println("TEMP/// playEpisode of GameLg eee4");
-
+			roles.setEpisodeTrue();	
 		}
 		
 		this.setChat();
 		this.startVote();
 		this.decideTimeEvent();
+		this.setEpisodeTime();
 		
-		Main.server.getWorld("world").setTime(1000);
+	}
+	
+	@Deprecated
+	public void setEpisodeTime() {
 		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
-
 			@Override
 			public void run() {
 				Main.server.getWorld("world").setTime(13000);
-				
 			}
-			
 		}, 6000);
-		
 		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
-
 			@Override
 			public void run() {
-				Main.server.getWorld("world").setTime(1000);
-				
-			}
-			
+				Main.server.getWorld("world").setTime(1000);			
+			}		
 		}, 12000);
 		
 		Main.server.getWorld("world").setTime(1000);
 		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
-
 			@Override
 			public void run() {
-				Main.server.getWorld("world").setTime(13000);
-				
+				Main.server.getWorld("world").setTime(13000);	
 			}
-			
 		}, 18000);
 	}
 	
 	public void addPlayer(String name) {
-		//System.out.println("le joueur va etre ajouté");
 		Player playerToAdd = PlayerUtil.getPlayer(name);
 		if (playerToAdd != null) {
-			//System.out.println("joueur " + name + "ajoutée à " + this.name);
 			PlayerData player = new PlayerData(playerToAdd);
 			this.playerAlive.add(player);
 			this.players.add(player);
-			
-			
-			////System.out.println("fait");
 			
 		} else {
 			System.out.println("joueur " + name + " non existant ou connecté");
@@ -357,7 +367,7 @@ public class GameLg implements Listener{
 				return player;
 			}
 		}
-		//System.out.println("joueur non intégré dans la partie");
+		
 		return null;
 	}
 	
@@ -373,8 +383,7 @@ public class GameLg implements Listener{
 			CHASSEUR hunter = (CHASSEUR) ply.roleIn;
 			this.Hunter = hunter;
 			
-			ply.sendMessage(ChatColor.GOLD+"Vous avez 25 secondes pour tirer sur un joueur de votre choix avec la commande /lg tirer [nomDuJoueur], celui perdra 5 coeurs de manière non permanente, ainsi que sa force s'il est loup");
-
+			ply.sendMessage(ChatColor.GOLD+"Vous avez 25 secondes pour tirer sur un joueur de votre choix avec la commande /lg tirer [nomDuJoueur], celui perdra 3 coeurs de manière non permanente, ainsi que sa force s'il est loup");
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
 				@Override
@@ -388,11 +397,13 @@ public class GameLg implements Listener{
 				}
 				
 			}, 500);
-		} 
-		playerAlive.remove(ply);
-		roles.remove(ply.role);
-		rolesIn.remove(ply.roleIn);
-		ply.inLife = false;
+		}  else {
+			playerAlive.remove(ply);
+			roles.remove(ply.role);
+			rolesIn.remove(ply.roleIn);
+			ply.inLife = false;
+		}
+	
 		
 		
 	}
@@ -575,6 +586,34 @@ public class GameLg implements Listener{
 							ChatColor.RED + player1.getName() + " est mort |"+ "\n"  +
 								" il était "+ player1.camp.getColor() + 
 								player1.getLgRole() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
+		for (Team team:teams) {
+			team.onPlayerDeath(player1);
+		}
+	}
+	
+	public void announceDeath(PlayerData player1, RolesLg role) {
+		
+		
+		String moreInfo = "";
+		if (player1.infected) {
+			moreInfo = moreInfo+ (" (loup garou) ");
+		} 
+		if (player1.inLove) {
+			moreInfo = moreInfo+ (" (en couple) ");
+		} 
+
+		GameLg gm1 =GameLgUtil.getGameOfPlayer(player1, " at 152 Main");
+		if (gm1.name != this.name) {
+			return;
+		}
+		if (MathUtil.pourcentage(probasEvents.get("Brume"))) {
+			return;
+		}
+
+		Main.server.broadcastMessage(ChatColor.DARK_BLUE +"___________________________" + "\n" +
+							ChatColor.RED + player1.getName() + " est mort |"+ "\n"  +
+								" il était "+ role.getCampOfRole().getColor() + 
+								role.getName() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
 		for (Team team:teams) {
 			team.onPlayerDeath(player1);
 		}

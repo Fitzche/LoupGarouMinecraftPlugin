@@ -59,11 +59,6 @@ public class Lga implements CommandExecutor  {
 	@Deprecated
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		//System.out.println("tried");
-		// TODO Auto-generated method stub
-		//GameCommands
-		//System.out.println(args[0] + args[1] + args[2]);
-		
 		
 		if (!sender.isOp()) {
 			sender.sendMessage(ChatColor.RED+"Vous n'avez pas cette permission");
@@ -155,7 +150,6 @@ public class Lga implements CommandExecutor  {
 			}
 			
 			if (args[1] == null) {
-				//System.out.println("Error manque de contenu");
 
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
@@ -165,14 +159,9 @@ public class Lga implements CommandExecutor  {
 			}
 			
 			if (args[1].equals("addTime")) {
-				
-				
-				//System.out.println("recherche de " + args[2]);
 				GameLg game = GameLgUtil.searchGame(args[2]);
 				
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -190,13 +179,9 @@ public class Lga implements CommandExecutor  {
 			
 			//ICI
 			if (args[1].equals("start")) {
-				
-				//System.out.println("recherche de " + args[2]);
 				GameLg game = GameLgUtil.searchGame(args[2]);
 				
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -205,15 +190,12 @@ public class Lga implements CommandExecutor  {
 				}
 				
 				if (game.playerAlive.size() != game.roles.size()) {
-					//System.out.println("nombre de joueur non égal au nombre de roles");
 					if (sender instanceof Player || (GameLgUtil.getHowManyRole(game, RolesLg.SOEUR) == 0 || GameLgUtil.getHowManyRole(game, RolesLg.SOEUR) == 1)) {
 						Player player = (Player) sender;
 						player.sendMessage("Mauvais nombre de roles");
 					}
 					return true;
 				}
-				
-				
 				if (Main.games == null) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
@@ -221,12 +203,7 @@ public class Lga implements CommandExecutor  {
 						
 					}
 					return true;
-				} else {
-					//System.out.println(Main.games.get(0).name);
 				}
-				
-				
-				
 				game.statut = GameStatut.NOT_STARTED;
 				Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
 					@Override
@@ -244,13 +221,11 @@ public class Lga implements CommandExecutor  {
 		        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
 		        	@Override
 		        	public void run() {
-		        		
-		        		//System.out.println("runned");
 		        		if (game.stopped) {
 		        			
 		        			return;
 		        		}
-		        		
+		        		game.askRunFuturesActions();
 		        		
 		        		if (game.board.istimeRunned == false) {
 		        			game.board.istimeRunned = true;
@@ -263,11 +238,12 @@ public class Lga implements CommandExecutor  {
 		        		int x2 = game.timer.getEpisode();
 		        		
 		        		if (game.timer.temps == -10) {
+		        			System.out.println("gived start kit Lga l.163");
+		        			
 		        			for (PlayerData ply:game.players) {
 		        				ply.setMaxHealth(20);
 		        				ply.player.setHealth(20);
 		    					GameLgUtil.tpAl(ply);
-		    					System.out.println("gived start kit Lga l.163");
 		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
 		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
 		    					ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
@@ -283,6 +259,7 @@ public class Lga implements CommandExecutor  {
 								}
 							}
 							game.statut = GameStatut.BEFORE_ROLE;
+							
 							if (game.isMeetup) {
 								for (PlayerData p:game.getPlayerAlive()) {
 									ItemStack legging = new ItemStack(Material.IRON_LEGGINGS);
@@ -325,51 +302,11 @@ public class Lga implements CommandExecutor  {
 		        		
 		        		
 		        		if (game.timer.temps == 1200) {
-		        			
-		        			//KIT de depart + tp aleatoire
-		        			
-		        			
 		        			game.statut = GameStatut.IN_GAME;
-		        			////System.out.println("marquage g19.1");
 		        			game.attributeRoleToAll();
-		        			////System.out.println("marquage g19.2");
-		        			for (PlayerData player: game.getPlayerAlive()) {
-		        				////System.out.println("marquage g19.2.mixte.1");
-		        				player.roleIn = RoleUtilLg.createRoleOfPlayerRoles(player);
-		        				player.sendMessage("Vous êtes "+player.roleIn.getName());
-		        				player.player.sendMessage(player.roleIn.getDescription());
-		        				game.rolesIn.add(player.roleIn);
-		        				////System.out.println("marquage g19.2.mixte.2");
-		        				player.roleIn.giveRoleEffectAndItem(player);
-		        				////System.out.println("marquage g19.2.mixte.3");
-		        			}
-		        			
-		        			game.lgTeam = new Team("Loups Garou", Camp.Wolf, game, game.getRealWolfAlive(), null, "at wolf team creating at == 1200", null, null, true, false, false, false);
-			        		////System.out.println("marquage 1.5");
-			        		game.villTeam = new Team("Village", Camp.Villager, game, game.getRealVillagerAlive(), null, "at village team creating at == 1200", null, null, true, false, false, false);
-
-			        		
-			        		game.teams.add(game.lgTeam);
-			        		game.teams.add(game.villTeam);
-		        			////System.out.println("marquage g19.3");
 		        		}
-		        		////System.out.println("marquage 1.5");
-		        		
-		        		
-		        		////System.out.println("score updated");
-		        		
-		        		
-		        		
-		        		
 		        		
 		        		if (game.timer.temps > 1200) {
-
-		        			//System.out.println("k.1");
-		        			
-		        			
-		        			//FIN ????
-		        			
-		        			
 		        			for (PlayerData player: game.getPlayerAlive()) {
 		        				
 		        				if (player == null) {
@@ -377,21 +314,14 @@ public class Lga implements CommandExecutor  {
 		        					return;
 		        				}
 		        				player.roleIn.giveEffectAllTime();
-		        				//System.out.println("k.1.ser.2");
 		        			}
 		        			if (WorldUtil.getTime(Main.server.getWorld("world")).equals("DAY")) {
-		        				//System.out.println("k.2");
 		        				for (PlayerData player: game.getPlayerAlive()) {
-		        					//System.out.println("k.2.ser.1");
 		        					player.roleIn.giveDayEffect();
-		        					//System.out.println("k.2.ser.2");
 		        				}
 		        			} else if (WorldUtil.getTime(Main.server.getWorld("world")).equals("NIGHT")) {
-		        				//System.out.println("k.3");
 		        				for (PlayerData player: game.getPlayerAlive()) {
-		        					//System.out.println("k.3.ser.1");
 		        					player.roleIn.giveNightEffectCheck();
-		        					//System.out.println("k.3.ser.2");
 		        				}
 		        			}
 		        			
@@ -406,9 +336,7 @@ public class Lga implements CommandExecutor  {
 		        		
 		        		if (x1 != x2) {
 		        			game.playEpisode();
-		        		//	System.out.println("nouvel episode");
 		        		} else {
-		        		//	System.out.println("nothing of new");
 		        		}
 		        		
 		        		game.board.refresh();
@@ -462,15 +390,10 @@ public class Lga implements CommandExecutor  {
 						
 					}
 					return true;
-				} else {
-					//System.out.println(Main.games.get(0).name);
-				}
-				//System.out.println("recherche de " + args[2]);
+				} 
 				GameLg game = GameLgUtil.searchGame(args[2]);
 				
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -481,7 +404,6 @@ public class Lga implements CommandExecutor  {
 				for (GameLg game1: Main.games) {
 					for (PlayerData ply: game1.playerAlive) {
 						if (ply.Name.equals(args[3])) {
-							//System.out.println("player already in Game");
 							if (sender instanceof Player) {
 								Player player = (Player) sender;
 								player.sendMessage("ce joueur est déjà dans une partie");
@@ -492,7 +414,6 @@ public class Lga implements CommandExecutor  {
 				}
 				Player playerToAdd = PlayerUtil.getPlayer(args[3]);
 				if (playerToAdd == null) {
-					//System.out.println("error playerNotFound");
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("Le joueur " + args[3] + " n'existe pas");
@@ -506,10 +427,6 @@ public class Lga implements CommandExecutor  {
 				game.addPlayer(args[3]);
 				Player joueur = PlayerUtil.getPlayer(args[3]);
 				joueur.sendMessage("vous avez été ajouté à " +ChatColor.RED+ game.name);
-				//System.out.println("done");
-				
-				//System.out.println("marquage 1.4");
-				
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					player.sendMessage("joueur ajouté" + ChatColor.DARK_AQUA + args[3]);
@@ -529,16 +446,12 @@ public class Lga implements CommandExecutor  {
 				GameLg game = GameLgUtil.searchGame(args[2]);
 				
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
 						
 					}return true;
 				}
-				
-				//System.out.println("marquage 1.2");
 				RoleDisplay.setDisplayed(game);
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
@@ -570,8 +483,6 @@ public class Lga implements CommandExecutor  {
 				GameLg game = GameLgUtil.searchGame(args[2]);
 				
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -591,7 +502,6 @@ public class Lga implements CommandExecutor  {
 					}return true;
 				}
 				game.playerAlive.remove(game.getPlayerDataWithName(args[3]));
-				//System.out.println("player removed");
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					player.sendMessage("Joueur removed: "+ playerToRemove.getDisplayName());
@@ -606,22 +516,17 @@ public class Lga implements CommandExecutor  {
 			}
 			
 			if (args[1].equals("addRole")) {
-				//System.out.println("started to add player");
-				
 				if (args[2] == null || args[3]==null) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
-						player.sendMessage("il manque du contenue");
+						player.sendMessage("il manque du contenue à la commande");
 						
 					}return true;
 				}
 				
 				
 				GameLg game = GameLgUtil.searchGame(args[2]);
-				//System.out.println("marquage 1.1");
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -636,9 +541,6 @@ public class Lga implements CommandExecutor  {
 					player.sendMessage("role ajouté: " +args[3] );
 					
 				}
-				
-				
-				//System.out.println("marquage 1.2");
 				return true;
 			}
 
@@ -656,8 +558,6 @@ public class Lga implements CommandExecutor  {
 							
 							GameLg game = GameLgUtil.searchGame(args[2]);
 							if (game == null) {
-								//System.out.println("error GameNotFound");
-								//System.out.println(Main.games.get(0));
 								if (sender instanceof Player) {
 									Player player = (Player) sender;
 									player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -684,8 +584,6 @@ public class Lga implements CommandExecutor  {
 				}
 				GameLg game = GameLgUtil.searchGame(args[2]);
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -693,24 +591,14 @@ public class Lga implements CommandExecutor  {
 					}
 				}
 				Main.games.remove(game);
-				//System.out.println("game removed");
 				
 			}
 			
 			
 			
 			if (args[1].equals("listPlayer")) {
-				
-				
-				
-				
-				//System.out.println("1");
 				GameLg game = GameLgUtil.searchGame(args[2]);
-				//System.out.println("2");
-
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -727,13 +615,9 @@ public class Lga implements CommandExecutor  {
 			
 			
 			if (args[1].equals("listRole")) {
-				//System.out.println("1");
 				GameLg game = GameLgUtil.searchGame(args[2]);
-				//System.out.println("2");
 
 				if (game == null) {
-					//System.out.println("error GameNotFound");
-					//System.out.println(Main.games.get(0));
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("La partie " + args[2] + " n'existe pas");
@@ -775,12 +659,6 @@ public class Lga implements CommandExecutor  {
 				
 			}
 		}
-		
-		
-		
-		
-		
-		//System.out.println("not command");
 		return false;
 	}
 	
