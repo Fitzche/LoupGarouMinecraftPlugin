@@ -42,6 +42,7 @@ public class PlayerData {
 	public int boostR5;
 	public Aura aura;
 	public boolean instantDeath;
+	public boolean grimed = false;
 	
 	public PlayerData(Player player) {
 		

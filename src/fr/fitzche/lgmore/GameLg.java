@@ -581,6 +581,7 @@ public class GameLg implements Listener{
 		if (MathUtil.pourcentage(probasEvents.get("Brume"))) {
 			return;
 		}
+		
 
 		Main.server.broadcastMessage(ChatColor.DARK_BLUE +"___________________________" + "\n" +
 							ChatColor.RED + player1.getName() + " est mort |"+ "\n"  +

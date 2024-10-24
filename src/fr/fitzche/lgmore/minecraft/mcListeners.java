@@ -164,7 +164,12 @@ public class mcListeners implements Listener {
 
 				    	
 				    	//ANNOUNCE DEATH
-				    	game.announceDeath(player1);
+			    		if (player1.grimed) {
+			    			game.announceDeath(player1, RolesLg.SIMPLE_WOLF);
+			    		} else {
+			    			game.announceDeath(player1);
+			    		}
+				    	
 				    	//DROP STUFF
 						
 			    		for (ItemStack item: items) {

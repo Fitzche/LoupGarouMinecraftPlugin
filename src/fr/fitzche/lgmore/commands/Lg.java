@@ -23,6 +23,7 @@ import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
+import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
@@ -130,7 +131,7 @@ public class Lg implements CommandExecutor {
 			
 			if (ply.camp.equals(Camp.Villager)) {
 				player.damage(10);
-				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1, false, false));
+				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 6000, 1, false, false));
 		
 				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role);
 			}  else {
@@ -692,6 +693,14 @@ public class Lg implements CommandExecutor {
 					if (p.isOp()) {
 						p.sendMessage(ChatColor.RED + sender.getName() + ChatColor.ITALIC + " >> "+ mess);
 					}
+				}
+			} else if (args[0].equals("grimmer")) {
+				
+				PlayerData senderPlD = PlayerUtil.getDataPlayer(args[2], " at grimmer command");
+				if (senderPlD.role != null && senderPlD.role.equals(RolesLg.LOUP_GRIMEUR)) {
+					
+					PlayerData p = PlayerUtil.getDataPlayer(args[1], " at grimmer command");
+					p.grimed = true;
 				}
 			}
 	

@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -111,39 +112,46 @@ public class Main extends JavaPlugin implements Listener {
 	    
 
 	    
-	    RoleUtilLg.existingRoles.add(RolesLg.ANCIEN);
-	    RoleUtilLg.existingRoles.add(RolesLg.BIENFAITEUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.CHASSEUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.CORBEAU);
-	    RoleUtilLg.existingRoles.add(RolesLg.CUPIDON);
-	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.DISCIPLE);
-	    RoleUtilLg.existingRoles.add(RolesLg.ENFANT_SAUVAGE);
-	    RoleUtilLg.existingRoles.add(RolesLg.IDIOT_DU_VILLAGE);
-	    RoleUtilLg.existingRoles.add(RolesLg.INFECT_PERE_DES_LOUPS);
-	    RoleUtilLg.existingRoles.add(RolesLg.INTERPRETE);
-	    RoleUtilLg.existingRoles.add(RolesLg.LOUP_METAMORPHE);
-	    RoleUtilLg.existingRoles.add(RolesLg.LOUP_MYSTIQUE);
-	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.MONTREUR);
-	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.PETITE_FILLE);
-	    RoleUtilLg.existingRoles.add(RolesLg.PYROMANE);
-	    /*ROLE INFO*/ RoleUtilLg.existingRoles.add(RolesLg.RENARD);
-	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.SAGE);
-	    RoleUtilLg.existingRoles.add(RolesLg.SALVATEUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.SIMPLE_VILLAGER);
-	    RoleUtilLg.existingRoles.add(RolesLg.SIMPLE_WOLF);
-	    RoleUtilLg.existingRoles.add(RolesLg.SOEUR);
-	    RoleUtilLg.existingRoles.add(RolesLg.SORCIERE);
-	    RoleUtilLg.existingRoles.add(RolesLg.VOLEUR);
-	    /*ROLE INFO*/ RoleUtilLg.existingRoles.add(RolesLg.VOYANTE);
-	    RoleUtilLg.existingRoles.add(RolesLg.PERFIDE);
-	    RoleUtilLg.existingRoles.add(RolesLg.ASSASSIN);
-	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.ALLUMEUR);
-	    /*ROLE INFO*/RoleUtilLg.existingRoles.add(RolesLg.PARRAIN);
-		RoleUtilLg.existingRoles.add(RolesLg.ANGE);
-		RoleUtilLg.existingRoles.add(RolesLg.LOUP_ALCHIMISTE);
-		RoleUtilLg.existingRoles.add(RolesLg.LOUP_BARBARE);
-		RoleUtilLg.existingRoles.add(RolesLg.LOUP_MANIP);
-
+	    
+	   
+		ArrayList<RolesLg> list = new ArrayList<RolesLg>(Arrays.asList(
+				RolesLg.ALLUMEUR,
+				RolesLg.ANCIEN,
+				RolesLg.ANGE,
+				RolesLg.ASSASSIN,
+				RolesLg.BIENFAITEUR,
+				RolesLg.CHASSEUR,
+				RolesLg.CORBEAU,
+				RolesLg.CUPIDON,
+				RolesLg.DISCIPLE,
+				RolesLg.ENFANT_SAUVAGE,
+				RolesLg.IDIOT_DU_VILLAGE,
+				RolesLg.INFECT_PERE_DES_LOUPS,
+				RolesLg.INTERPRETE,
+				RolesLg.LOUP_ALCHIMISTE,
+				RolesLg.LOUP_BARBARE,
+				RolesLg.LOUP_GRIMEUR, 
+				RolesLg.LOUP_MANIP,
+				RolesLg.LOUP_METAMORPHE, 
+				RolesLg.LOUP_MYSTIQUE, 
+				RolesLg.MONTREUR, 
+				RolesLg.PARRAIN,
+				RolesLg.PERFIDE, 
+				RolesLg.PETITE_FILLE,
+				RolesLg.PYROMANE, 
+				RolesLg.PYROMANE, 
+				RolesLg.RENARD, 
+				RolesLg.SAGE, 
+				RolesLg.SALVATEUR, 
+				RolesLg.SERVANT_DES_LOUPS, 
+				RolesLg.SIMPLE_VILLAGER, 
+				RolesLg.SIMPLE_WOLF,
+				RolesLg.SOEUR,
+				RolesLg.SORCIERE, 
+				RolesLg.VOLEUR,
+				RolesLg.VOYANTE
+				));
+		RoleUtilLg.existingRoles.addAll(list);
 
 		eventsNames.add("Brume");
 		descriptionsEvent.put("Brume", "Probabilité à la mort d'un joueur, que le message de mort soit caché au village");
