@@ -37,7 +37,7 @@ public class SOEUR implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, à la mort d'une de vos soeur vous obtiendrez le nom de son tueur, vous NE CONNAISSEZ PAS vo(s)(tre) soeur(s), le seul moyen de connaitre leurs/son identité(s) est la réperer grâce à l'effet force quand vous etes à moins de 20 blocs d'une de vos soeurs / de votre soeur";
+		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, à la mort d'une de vos soeur vous obtiendrez le nom de son tueur, vous possédez l'effet force quand vous etes à moins de 20 blocs d'une de vos soeurs / de votre soeur, vous connaissez une de vos soeurs.";
 	}
 
 	@Override

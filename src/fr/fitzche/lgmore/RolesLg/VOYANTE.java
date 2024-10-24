@@ -34,7 +34,7 @@ public class VOYANTE implements RoleInstance{
 	
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez connaitre un role de joueur par épisode avec la commande /lg voir [nomDuJoueur], votre écoperez cependant d'un malus si vous faites erreur et que vous espionnez un villageois");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez connaitre un role de joueur par épisode avec la commande /lg voir [nomDuJoueur], votre écoperez cependant d'un malus (5 coeurs de dégat et 5min de faiblesse) si vous faites erreur et que vous espionnez un villageois");
 	}
 	
 	public void giveEffectAllTime() {

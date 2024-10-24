@@ -34,7 +34,7 @@ public class CHASSEUR implements RoleInstance{
 	public String getDescription() {
 		
 		
-		return ChatColor.DARK_BLUE + "Vous êtes Chasseur, vous devez gagner avec le village, pour cela vous posseder un arc power IV ainsi que 64 flèche, de plus à votre mort vous pourrez tirer sur un joueur de votre choix avec la commande /lg tirer nomDuJoueur, si celui-ci est un loup il perdra 3 coeurs ainsi que sa force de nuit, vous posséder également 30% de force contre les loups";
+		return ChatColor.DARK_BLUE + "Vous êtes Chasseur, vous devez gagner avec le village, pour cela vous posseder un arc power IV ainsi que 64 flèche, de plus à votre mort vous pourrez tirer sur un joueur de votre choix avec la commande /lg tirer [nomDuJoueur], si celui-ci perdra 3 coeurs non permanents et s'il est un loup il perdra sa force de nuit, vous posséder également 30% de force contre les loups";
 	}
 	
 	public CHASSEUR(PlayerData player) {
@@ -91,7 +91,7 @@ public class CHASSEUR implements RoleInstance{
 		
 		target.isShooted = true;
 		Bukkit.broadcastMessage("Le chasseur a tiré sur " + target.getName());
-		target.player.damage(10);
+		target.player.damage(6);
 	}
 
 	@Override

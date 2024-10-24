@@ -35,17 +35,19 @@ public class BIENFAITEUR implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour cela vous pouvez 4 fois conférer 1 coeur à un joueur de votre choix avec la commande /conferer, de plus vous posséder 2 livre protection 2";
+		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour cela vous pouvez 4 fois conférer 1 coeur à un joueur de votre choix avec la commande /lg conferer [nomDuJoueur], de plus vous posséder 2 livre protection 2";
 	}
 
 	@Override
 	public void giveRoleEffectAndItem(PlayerData player) {
-		ItemStack book = new ItemStack(Material.ENCHANTED_BOOK, 2);
+		ItemStack book = new ItemStack(Material.ENCHANTED_BOOK, 1);
+		ItemStack book2 = new ItemStack(Material.ENCHANTED_BOOK, 1);
 		EnchantmentStorageMeta meta1 = (EnchantmentStorageMeta) book.getItemMeta();
 		meta1.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, false);
 		book.setItemMeta(meta1);
+		book2.setItemMeta(meta1);
 		player.player.getInventory().addItem(new ItemStack(book));
-		
+		player.player.getInventory().addItem(new ItemStack(book2));
 	}
 
 	@Override

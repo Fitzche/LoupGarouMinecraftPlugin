@@ -39,7 +39,7 @@ public class PERFIDE implements RoleInstance{
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return ChatColor.DARK_BLUE+
-				" Vous devez gagner avec les loups, pour cela vous pourvez devenir invisible 5 minutes par nuit en enlevant votre armure"+ "\n"+" vous possédez également force ";
+				" Vous devez gagner avec les loups, pour cela vous pourvez devenir invisible 5 minutes par nuit en enlevant votre armure"+ "\n"+" vous possédez également force de nuit";
 	}
 
 	@Override

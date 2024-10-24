@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.ChatColor;
+
 import fr.fitzche.lgmore.PlayerData;
 
 public class LOUP_MANIPULATEUR implements RoleInstance {
@@ -22,7 +24,7 @@ public class LOUP_MANIPULATEUR implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return null;
+		return ChatColor.DARK_BLUE+"Vous devez gagner avec les loups-garou, vous ne possédez pas force I de nuit. Vous pourrez 3 fois dans la partie aveugler un joueur avec la commande /lg aveugler [nomDuJoueur], si le joueur aveuglé possède un role \"à info\", vous connaitrez son rôle et son pouvoir sera mis en pause pour l'épisode.";
 	}
 
 	@Override

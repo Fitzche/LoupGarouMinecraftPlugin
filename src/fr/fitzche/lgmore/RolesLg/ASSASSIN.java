@@ -39,7 +39,7 @@ public class ASSASSIN implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous êtes ASSASSIN !!! (Royal) Vous devez gagner tout seul, vous possédez les livre efficency III, sharpness III, et protection III, vous pouvez également crafter une épée tranchant IV, et vous possédez force le jour");
+		return (ChatColor.DARK_BLUE+"Vous êtes ASSASSIN !!! (Royal) Vous devez gagner tout seul, vous possédez les livre efficency III, sharpness III, et protection III, vous pouvez également fabriquer une épée tranchant IV, et vous possédez force le jour");
 	}
 	public static ItemStack logo = new ItemStack(Material.GOLD_SWORD);
 

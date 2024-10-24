@@ -8,6 +8,8 @@ import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
+import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
 public class EnfantChecker implements ResCheck {
@@ -36,6 +38,9 @@ public class EnfantChecker implements ResCheck {
 				p.sendMessage(ChatColor.DARK_RED+"Un joueur a rejoint les loups-garou, faites /lg role pour voir la liste");
 				es.playerWithRole.camp = Camp.Wolf;
 				es.playerWithRole.sendMessage(ChatColor.DARK_RED+"Votre modèle est mort, vous rejoignez donc les loups garou");
+				es.playerWithRole.role = RolesLg.SIMPLE_WOLF;
+				es.playerWithRole.roleIn = RoleUtilLg.createRoleOfPlayerRoles(es.playerWithRole);
+				es.playerWithRole = null;
 			}
 		}
 

@@ -120,7 +120,7 @@ public class playersDisplay implements Listener{
 							return;
 						}else if (this.Lo2 == null) {
 							
-							if (Lo1.equals(Lo2)) {
+							if (Lo1.getName().equals(Lo2.getName())) {
 								cupi.sendMessage("Vous ne pouvez pas mettre deux fois le même joueur");
 								cupi.closeInventory();
 								return;
@@ -136,7 +136,11 @@ public class playersDisplay implements Listener{
 								e.getWhoClicked().sendMessage("Erreur, veuillez recommencer (ligne136 de playersDisplay)");
 								return;
 							}
-							
+							if (Lo1.getName().equals(Lo2.getName())) {
+								cupi.sendMessage("Vous ne pouvez pas mettre deux fois le même joueur, Veuillez choisir un autre couple");
+								cupi.closeInventory();
+								return;
+							}
 							
 							CUPIDON cupidon = (CUPIDON) PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 3").roleIn;
 							cupidon.createCouple(Lo1, Lo2, PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 4"));

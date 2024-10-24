@@ -37,8 +37,7 @@ public class PETITE_FILLE implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.WHITE+"Vous êtes "+ChatColor.GREEN + " Petite Fille: " + ChatColor.WHITE + "\n" +
-				" Vous devez gagner avec le village, pour cela vous pourvez devenir invisible 5 minutes par nuit en enlevant votre armure"+ "\n"+" vous pouvez également consulter le chat des loups-garou";
+		return ChatColor.DARK_BLUE +"Vous devez gagner avec le village, pour cela vous pourvez devenir invisible 5 minutes par nuit en enlevant votre armure"+ "\n"+" vous pouvez également consulter le chat des loups-garou";
 	}
 
 	@Override

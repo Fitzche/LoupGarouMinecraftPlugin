@@ -4,10 +4,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
+import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.minecraft.ResCheck;
+import net.md_5.bungee.api.ChatColor;
 
 public class IDV_Checker implements ResCheck{
 	public IDIOT_DU_VILLAGE idv;
@@ -22,6 +24,9 @@ public class IDV_Checker implements ResCheck{
 			return false;
 		}else {
 			idv.playerWithRole.sendMessage("Vous avez été tué, vous bénéficiez cependant d'une 2e chance car votre assassin est un membre du village");
+			for (PlayerData p: game.getPlayerAlive()) {
+				p.sendMessage(ChatColor.GREEN+"Le joueur "+ idv.playerWithRole.Name + " a été tué par un villageois, il est cependant réssucité car il était Idiot Du Village");
+			}
 			idv.playerWithRole.setMaxHealth(idv.playerWithRole.getMaxHealth() - 4);
 			idv.powerUsed= true;
 			return true;

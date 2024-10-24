@@ -97,6 +97,11 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	}
 	
 	public void steal(PlayerData stealed) {
+		if (stealed.isOnline) {
+			for (PotionEffect effect:stealed.player.getActivePotionEffects()) {
+				playerWithRole.addPotionEffect(effect);
+			}
+		}
 		stealed.player = playerWithRole.player;
         
 		stealed.Name = playerWithRole.Name;

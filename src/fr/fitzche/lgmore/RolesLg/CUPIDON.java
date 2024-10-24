@@ -42,7 +42,7 @@ public class CUPIDON implements RoleInstance{
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return ChatColor.DARK_BLUE+"Vous etes Cupidon, "
-				+ "\n"+ "Vous devez gagner tous seul ou avec le couple, que vous choisirez avant 25minutes avec la commande /lg couple . Vous possédez également un arc enchanté "+ChatColor.UNDERLINE+" Punch I PowerII";
+				+ "\n"+ "Vous devez gagner tous seul ou avec le couple, que vous choisirez avant 25minutes avec la commande /lg couple (choisissez ensuite les membres du couple un par un) . Vous possédez également un arc enchanté "+ChatColor.UNDERLINE+" Punch I PowerII";
 	}
 	
 	public CUPIDON(PlayerData player) {

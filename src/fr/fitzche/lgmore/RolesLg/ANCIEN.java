@@ -40,7 +40,7 @@ public class ANCIEN implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous êtes ancien "+"\n"+ "Vous devez gagner avce le village, vous possédez l'effet résistance permanent, si vous mourrez de la main des loups garou, vous réssuciterez sans votre résistance";
+		return ChatColor.DARK_BLUE+ "Vous devez gagner avce le village, vous possédez l'effet résistance permanent, si vous mourrez de la main des loups garou, vous réssuciterez sans votre résistance";
 	}
 
 	@Override

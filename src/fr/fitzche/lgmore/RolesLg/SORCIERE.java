@@ -34,7 +34,7 @@ public class SORCIERE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, pour cela vous pouvez une fois dans la partie ressuciter un joueur en cliquant sur un message, vous posédez également une potion de instant heal, une potion de regeneration, et une potion de instant damage";
+		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, pour cela vous pouvez une fois dans la partie ressuciter un joueur en cliquant sur un message qui vous sera envoyé, vous posédez également une potion de instant heal, une potion de regeneration, et une potion de instant damage";
 	}
 
 

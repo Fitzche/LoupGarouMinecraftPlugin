@@ -59,7 +59,7 @@ public class PARRAIN implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez à chaque épisode mettre une prime sur la tête d'un joueur à chaque épisode, qui sera envoyé à 1 joueurs au hasard du camp adverse à ce joueur, si ce joueur est tué par un de cejoueur, vous ainsi que le tueur gagnerez 1/2 coeur et 5% de force");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez avec la commande /lg prime [nomDuJoueur], la prime sera envoyé à 1 joueurs au hasard du camp adverse à celui du joueur visé, si la cible est tué par ce joueur, vous et le tueur gagnerez chacun 1/2 coeur et 5% de force");
 	}
 	public static ItemStack logo = new ItemStack(Material.STONE_SWORD);
 
