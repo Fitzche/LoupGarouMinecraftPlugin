@@ -15,14 +15,15 @@ import net.md_5.bungee.api.ChatColor;
 
 public class LOUP_MYSTIQUE implements RoleInstance {
 	public PlayerData playerWithRole;
-	public PotionEffect STRENGTH;
+	
 	public static Camp camp = Camp.Wolf;
 	public GameLg game;
 	public String name ="Loup-Garou Mystique";
+	public int wait = 0;
 	
 	public LOUP_MYSTIQUE (PlayerData player) {
 		this.playerWithRole = player;
-		this.STRENGTH = PotionUtil.STRENGTH;
+		
 		this.game = GameLgUtil.getGameOfPlayer(player, "at mystic lg location ");
 		this.game.resCheckers.add(new MysticChecker(this, game));
 		
@@ -70,7 +71,13 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 		if (playerWithRole == null) {
 			System.out.println("effect can't be gived at null player");
 		}
-		PotionUtil.giveIncreaseDamage(playerWithRole);
+		if (wait > 0) {
+			wait --;
+			return;
+		}
+		wait = 3;
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+		
 		
 		//VOIR SCHEDULER + EFFECT = ERROR ???
 		System.out.println("nk.2");

@@ -24,7 +24,7 @@ import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.commands.Lg;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
-import net.minecraft.server.v1_8_R1.CommandDispatcher;
+
 
 public class playersDisplay implements Listener{
 	private Inventory playersInv;
@@ -132,7 +132,10 @@ public class playersDisplay implements Listener{
 							cupi.sendMessage(ChatColor.LIGHT_PURPLE+"Vous avez choisi " + item.getItemMeta().getDisplayName() + " en deuxième");
 							
 							
-							
+							if (this.Lo1 == null || this.Lo2 == null) {
+								e.getWhoClicked().sendMessage("Erreur, veuillez recommencer (ligne136 de playersDisplay)");
+								return;
+							}
 							
 							
 							CUPIDON cupidon = (CUPIDON) PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 3").roleIn;

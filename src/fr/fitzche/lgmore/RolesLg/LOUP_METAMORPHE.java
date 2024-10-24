@@ -15,6 +15,7 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	public PlayerData playerWithRole;
     public Camp camp = Camp.Wolf;
     public GameLg game;
+    public int wait = 0;
 	
 	
 	public LOUP_METAMORPHE(PlayerData player) {
@@ -49,13 +50,25 @@ public class LOUP_METAMORPHE implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+			giveNightEffect();
+		}
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (playerWithRole == null) {
+			System.out.println("effect can't be gived at null player");
+		}
+		
+		if (wait > 0) {
+			wait --;
+			return;
+		}
+		wait = 3;
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+		
 		
 	}
 

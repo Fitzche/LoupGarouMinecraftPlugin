@@ -17,6 +17,7 @@ public class ANCIEN implements RoleInstance{
 	public PlayerData playerWithRole;
 	public String name = "Ancien";
 	public GameLg game;
+	public int wait = 0;
 	
 	public ANCIEN(PlayerData player) {
 		playerWithRole = player;
@@ -51,7 +52,12 @@ public class ANCIEN implements RoleInstance{
 	@Override
 	public void giveEffectAllTime() {
 		if (!isRes) {
-			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 0, false , false));
+			if (wait >0) {
+				wait --;
+				return;
+			}
+			wait = 3;
+			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 79, 0, false , false));
 		}
 		
 	}

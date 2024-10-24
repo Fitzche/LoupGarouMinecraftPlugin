@@ -36,33 +36,34 @@ public class ScoreboardLg {
 		
 		
 		////System.out.println("LgScoreboard 1");
-	    Score score = objective.getScore(game.timer.getStringTime());
+	    Score score = objective.getScore("  "+game.timer.getStringTime());
 	    ////System.out.println(game.timer.getStringTime());
 	    ////System.out.println(Integer.toString(game.timer.temps));
-	    score.setScore(1);
+	    score.setScore(4);
 	   // //System.out.println("LgScoreboard 2");
 	   // //System.out.println("Episode: "+Integer.toString(game.timer.getEpisode()));
-	    
-	    Score score1 = objective.getScore("épisode: "+ 		Integer.toString(game.timer.getEpisode()));
-	    score1.setScore(2);
+	    Score scoreBase = objective.getScore(ChatColor.DARK_BLUE+ "     INFORMATION:");
+	    scoreBase.setScore(6);
+	    Score score1 = objective.getScore(ChatColor.GOLD+"  Episode: "+ChatColor.AQUA+ 		Integer.toString(game.timer.getEpisode()));
+	    score1.setScore(3);
 	    
 	    String nJoueur = Integer.toString(game.getNumberOfPlayer());
 	    ////System.out.println("LgScoreboard 3");
-	    Score score2 = objective.getScore("Nombres de Joueurs: " + nJoueur);
-	    score2.setScore(3);
+	    Score score2 = objective.getScore(ChatColor.GOLD+"  Joueurs: "+ChatColor.AQUA + nJoueur);
+	    score2.setScore(5);
 	    ////System.out.println("LgScoreboard 4");
 	    
 	    
 	    String groupe = Integer.toString(game.groupe);
-	    Score score3 = objective.getScore("Groupe de: "+ groupe);
-	    score3.setScore(4);
+	    Score score3 = objective.getScore(ChatColor.GOLD+"  Groupes: "+ChatColor.AQUA+ groupe);
+	    score3.setScore(1);
 	    ////System.out.println("LgScoreboard 5");  /**/
 	    
 	    
 	    
 	    String time = WorldUtil.getTime(Main.server.getWorld("world"));
-	    Score score4 = objective.getScore("temps: " + time);
-	    score4.setScore(5);
+	    Score score4 = objective.getScore(ChatColor.GOLD+"  Horaire: "+ChatColor.AQUA + time);
+	    score4.setScore(2);
 	    ////System.out.println("LgScoreboard 6");
 	    
 	    
@@ -86,22 +87,8 @@ public class ScoreboardLg {
 		
 		//System.out.println("marquage 2.1");
 		istimeRunned = false;
-		game = game;
-		Score score = objective.getScore(game.timer.getStringTime());
-	    score.setScore(1);
-		//System.out.println("marquage 2.2");
-
-	    Score score1 = objective.getScore(" Game: " + game.name + "\n" 		+"épisode: " + game.timer.getEpisode());
-	    score1.setScore(0);
-		//System.out.println("marquage 2.3");
-
-	    Score score2 = objective.getScore("Nombres de Joueurs: " 		+Integer.toString(game.getNumberOfPlayer()) );
-	    score2.setScore(2);
-		//System.out.println("marquage 2.4");
-
-	    Score score3 = objective.getScore("Groupe de: " + game.groupe);
-	    score3.setScore(4);
-		//System.out.println("marquage 2.5");
+		
+		
 
 	}
 	

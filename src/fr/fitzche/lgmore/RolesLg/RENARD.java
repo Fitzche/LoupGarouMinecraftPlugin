@@ -61,7 +61,7 @@ public class RENARD implements RoleInstance{
 	}
 	
 	public void flairer(PlayerData player) {
-		if (players.get(player.Name) < 9/*00 NBL*/) {
+		if (players.get(player.Name) < 900 ) {
 			playerWithRole.sendMessage("Vous ne pouvez pas encore flairer ce joueur");
 			return;
 		} else {

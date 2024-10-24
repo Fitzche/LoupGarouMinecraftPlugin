@@ -43,7 +43,10 @@ public class ALLUMEUR implements RoleInstance {
             	}
                 this.tauxConversion.put(player, x + 1);
             }
-            if (this.tauxConversion.get(player) > /*600 NBL*/ 20) {
+            if (this.tauxConversion.get(player) ==null) {
+            	this.tauxConversion.put(player, 0);
+            }
+            if (this.tauxConversion.get(player) > 600) {
                 switch (player.camp) {
                     case Love:
                         player.aura = Aura.DANGEROUS;
@@ -81,7 +84,9 @@ public class ALLUMEUR implements RoleInstance {
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");

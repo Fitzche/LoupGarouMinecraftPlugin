@@ -17,8 +17,7 @@ import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_8_R1.ItemBook;
-import net.minecraft.server.v1_8_R1.ItemEnchantedBook;
+
 
 public class ASSASSIN implements RoleInstance {
 	public PlayerData playerWithRole;
@@ -84,7 +83,9 @@ public class ASSASSIN implements RoleInstance {
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");

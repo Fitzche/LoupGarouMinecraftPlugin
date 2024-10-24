@@ -79,14 +79,14 @@ public class DISCIPLE implements RoleInstance {
             playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 0, false, false));
         } else if (LocationUtil.getDistanceBetween(playerWithRole, sage) < 30) {
             time += 1;
-            if (time == 12/*00 NBL*/) {
+            if (time == 1200 ) {
                 sage.sendMessage(ChatColor.GOLD+"Votre Disciple est "+ playerWithRole.Name);
 				playerWithRole.sendMessage("Le vieux sage a reçu votre nom");
                 firstUnlock = true;
-            } else if (time == 18/*00 NBL*/) {
+            } else if (time == 1800) {
 				playerWithRole.sendMessage("Vous pouvez utiliser la commande /lg aura");
                 secondUnlock = true;
-            } else if (time == 36/*00 NBL*/) {
+            } else if (time == 3600) {
 				playerWithRole.sendMessage("Vous obtenez speed de manière permanente");
                 thirdUnlock = true;
             }
@@ -125,7 +125,9 @@ public class DISCIPLE implements RoleInstance {
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");

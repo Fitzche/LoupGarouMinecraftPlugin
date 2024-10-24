@@ -8,9 +8,10 @@ public class PlayerDataLeft {
 	
 	
 	public PlayerDataLeft(PlayerData p) {
+		this.playerD = p;
 		playerD.isOnline = false;
 		this.life = p.player.getMaxHealth();
-		this.playerD = p;
+		
 	}
 	
 	public void end() {

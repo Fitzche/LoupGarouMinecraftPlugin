@@ -14,18 +14,19 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 	public PlayerData playerWithRole;
-	public PotionEffect STRENGTH;
+	
 	public boolean powerUsed;
 	public Camp camp;
 	public String name ="Infect Père des loups";
-	
+	public int wait = 0;
 	public static ItemStack logo = new ItemStack(Material.SPIDER_EYE);
 
 	public INFECT_PERE_DES_LOUPS(PlayerData player) {
 		this.playerWithRole = player;
 		
-		this.STRENGTH = PotionUtil.STRENGTH;
-		this.powerUsed = false;
+		
+		this.powerUsed = true;
+		
 		this.playerWithRole = player;
 		this.camp = Camp.Wolf;
 		
@@ -71,7 +72,9 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 		if (playerWithRole == null) {
 			System.out.println("effect can't be gived at null player");
 		}
-		PotionUtil.giveIncreaseDamage(playerWithRole);
+		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+			giveNightEffect();
+		}
 		
 		//VOIR SCHEDULER + EFFECT = ERROR ???
 		System.out.println("nk.2");
@@ -95,7 +98,7 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 	public void infect(PlayerData player, PlayerData killer) {
 		System.out.println("*1*1*1*0");
 		
-		if (player.equals(this.playerWithRole)) {
+		if (player.getName().equals(this.playerWithRole.getName())) {
 			System.out.println("ne peut pas s'auto-rez");
 			return;
 		}

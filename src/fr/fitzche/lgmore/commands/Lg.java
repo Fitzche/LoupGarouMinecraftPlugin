@@ -1,6 +1,9 @@
 package fr.fitzche.lgmore.commands;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -50,10 +53,18 @@ public class Lg implements CommandExecutor {
 				Player ply = PlayerUtil.getPlayer(args[1]);
 				GameLg gm = GameLgUtil.getGameOfPlayer(ply, " at command revive of Lg 2");
 				PlayerData plyD = gm.getPlayer(ply.getName());
+				Player plyI = PlayerUtil.getPlayer(args[2]);
+				INFECT_PERE_DES_LOUPS role = (INFECT_PERE_DES_LOUPS) PlayerUtil.getDataOfPlayer(plyI, " at command revive of Lg, 3 ").roleIn;
+
+				if (role.powerUsed) {
+					sender.sendMessage(ChatColor.RED +"" +ChatColor.ITALIC +"Vous ne pouvez pas infecter à nouveau");
+					return true;
+				}
 				if (plyD.inLife==false) {
 					sender.sendMessage(ChatColor.BLUE + "Ce joueur est mort, il est trop tard pour l'infecter");
 					return true;
 				} 
+
 				plyD.relive = true;
 				plyD.infected = true;
 				plyD.camp = Camp.Wolf;
@@ -64,9 +75,8 @@ public class Lg implements CommandExecutor {
 					plyD.team = gm.lgTeam;
 				}
 				
-				Player plyI = PlayerUtil.getPlayer(args[2]);
 				
-				INFECT_PERE_DES_LOUPS role = (INFECT_PERE_DES_LOUPS) PlayerUtil.getDataOfPlayer(plyI, " at command revive of Lg, 3 ").roleIn;
+				
 				role.powerUsed = true;
 				for (PlayerData loup:gm.getFalseWolfAlive()) {
 					loup.sendMessage(ChatColor.GOLD+"Le joueur "+ plyI.getName() + " a rejoint votre camp");
@@ -124,7 +134,8 @@ public class Lg implements CommandExecutor {
 		
 				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role);
 			}  else {
-				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role+ ", il se trouve en "+ply.getLocation().getBlockX()+ ", "+ply.getLocation().getBlockY() + ", " + ply.getLocation().getBlockZ());
+				Location loc = ply.getLocation();
+				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role+ ", il se trouve en "+loc.getBlockX()+ ", "+loc.getBlockY() + ", " + loc.getBlockZ()+ "; (x/y/z)");
 
 			}
 			
@@ -566,7 +577,9 @@ public class Lg implements CommandExecutor {
 					+ "\n"+"\n"+"/lga Game start [nomDeLaGame] ---> "+ChatColor.RED+"(commande op) "+ ChatColor.AQUA+ "lance la partie"+ "\n"
 					+ "\n"+"\n"+"/lga say [message] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" annonce un message à tout le monde"+ "\n"
 					+ "\n"+"\n"+"/lg role ---> affiche le role du joueur, et d'autre infos supplémentaires comme la liste des loups s'il est loup"+ "\n"
-					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n");
+					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n"
+							+ "/color ---> permet de colorer des pseudo "+ ChatColor.RED + "(plugin externe)"+ ChatColor.AQUA + "."+ "\n"
+							+ "/lg info ---> documentation roles, clicquable");
 		} else if (args[0].equals("virus")) {
 			if (args[1]== null) {
 				sender.sendMessage("Il manque du contenu");
@@ -667,8 +680,21 @@ public class Lg implements CommandExecutor {
 						System.out.println(name + " doesn't equal "+ role.getName());
 					}
 				}
+			} else if (args[0].equals("whisper")) {
+				ArrayList<String> args2 = new ArrayList<String>();
+				for (String str: args) {
+					args2.add(str);
+				}
+				args2.remove(0);
+				
+				String mess = String.join(" ", args2);
+				for (Player p: Main.plug.getServer().getOnlinePlayers()) {
+					if (p.isOp()) {
+						p.sendMessage(ChatColor.RED + sender.getName() + ChatColor.ITALIC + " >> "+ mess);
+					}
+				}
 			}
-		
+	
 		
 		
 		

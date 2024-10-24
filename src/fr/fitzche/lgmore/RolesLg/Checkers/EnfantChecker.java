@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
@@ -25,7 +26,7 @@ public class EnfantChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		if (e.getEntity().getName().equals(es.model.Name)) {
 			for (PlayerData p:game.getFalseWolfAlive()) {
 				if (!es.playerWithRole.inLove) {

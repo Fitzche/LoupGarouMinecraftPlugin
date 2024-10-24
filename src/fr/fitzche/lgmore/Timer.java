@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 public class Timer {
 	public int temps = 0;
@@ -34,6 +35,10 @@ public class Timer {
 		for (long i = ex; i >= 3600; i=i-3600) {
 			hours++;
 		}
-		return ("temps: " + String.valueOf(hours) + "heures " + String.valueOf(min - 60*hours) + " minutes " + String.valueOf((sec-60*min) + " secondes"));
+		if (this.temps < 3600) {
+			return (ChatColor.GOLD+"Horloge: " +ChatColor.AQUA+ String.valueOf(min - 60*hours) + " min " + String.valueOf((sec-60*min) + " s"));
+
+		}
+		return (ChatColor.GOLD+"Horloge: " +ChatColor.AQUA+ String.valueOf(hours) + "H " + String.valueOf(min - 60*hours) + " min " + String.valueOf((sec-60*min) + " s"));
 	}
 }

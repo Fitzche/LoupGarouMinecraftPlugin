@@ -17,6 +17,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 	public PlayerData model;
 	public boolean transfo = false;
 	public GameLg game;
+	public int wait = 0;
 	public String name ="Enfant Sauvage";
 	@Deprecated
 	public ENFANT_SAUVAGE(PlayerData player) {
@@ -84,7 +85,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+		if (this.transfo && !(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
 			giveNightEffect();
 		}
 		
@@ -92,7 +93,9 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+			giveNightEffect();
+		}
 		
 	}
 

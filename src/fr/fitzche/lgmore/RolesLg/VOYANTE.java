@@ -34,7 +34,7 @@ public class VOYANTE implements RoleInstance{
 	
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez connaitre un role de joueur par épisode, votre écoperez cependant d'un malus si vous faites erreur et que vous espionnez un villageois");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez connaitre un role de joueur par épisode avec la commande /lg voir [nomDuJoueur], votre écoperez cependant d'un malus si vous faites erreur et que vous espionnez un villageois");
 	}
 	
 	public void giveEffectAllTime() {
@@ -53,7 +53,9 @@ public class VOYANTE implements RoleInstance{
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");
@@ -85,10 +87,13 @@ public class VOYANTE implements RoleInstance{
 		
 		if (isBlind) {
 			isBlind = false;
+			this.playerWithRole.sendMessage(ChatColor.AQUA +"Vous ne pouvez pas utiliser votre pouvoir à cet épisode à cause de votre aveuglement");
+			return;
 		} else {
 			this.powerUsed = false;
+			this.playerWithRole.sendMessage(ChatColor.AQUA +"Vous pouvez à nouveau utiliser votre pouvoir");
+
 		}
-		this.playerWithRole.sendMessage(ChatColor.AQUA +"Vous pouvez à nouveau utiliser votre pouvoir");
 		
 	}
 

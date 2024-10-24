@@ -53,6 +53,12 @@ public class ConfigDisplay implements Listener{
 		start.setItemMeta(metaStart);
 		config.setItem(27, start);
 		
+		ItemStack meetup = new ItemStack(org.bukkit.Material.FEATHER);
+		ItemMeta metaMeetup = start.getItemMeta();
+		metaMeetup.setDisplayName(ChatColor.DARK_BLUE + "Meetup");
+		meetup.setItemMeta(metaMeetup);
+		config.setItem(29, meetup);
+		
 		this.inv = config;
 	}
 	
@@ -85,6 +91,14 @@ public class ConfigDisplay implements Listener{
 				
 				this.game.events.open((Player)e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
 				
+			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_BLUE + "Meetup")) {
+				this.game.isMeetup = !this.game.isMeetup;
+				if (this.game.isMeetup) {
+					e.getWhoClicked().sendMessage("La game "+ this.game.name + " est réglé sur: meetup activé");
+				} else {
+					e.getWhoClicked().sendMessage("La game "+ this.game.name + " est réglé sur: meetup désactivé");
+
+				}
 			}
 			
 			

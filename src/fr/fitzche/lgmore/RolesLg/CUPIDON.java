@@ -18,7 +18,7 @@ import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
-import net.minecraft.server.v1_8_R1.EnchantmentArrowDamage;
+
 
 public class CUPIDON implements RoleInstance{
 	public PlayerData playerWithRole;
@@ -84,12 +84,13 @@ public class CUPIDON implements RoleInstance{
 		if (this.couple != null) {
 			return;
 		}
+		PlayerData playerTwo = player2;
 		GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating ");
 		ArrayList<PlayerData> members = new ArrayList<PlayerData>();
 		
 		if (MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating event mal visé").probasEvents.get("Mal visé"))) {
 			player = Cupidon;
-			player2 = GameLgUtil.getAlPlayerWithout(game, player);
+			playerTwo = GameLgUtil.getAlPlayerWithout(game, player);
 			Cupidon.sendMessage("Vous avez mal visé");
 
 		} else {
@@ -99,10 +100,17 @@ public class CUPIDON implements RoleInstance{
 		
 		//FOR 2 MEMBER OF COUPLE
 		
-		members.add(player2);
-		player2.team.remove(player2);
+		members.add(playerTwo);
+		if (playerTwo.team != null) {
+			playerTwo.team.remove(player2);
+		}
+		
 		members.add(player);
-		player.team.remove(player);
+		if (player.team != null) {
+			player.team.remove(player);
+		}
+		
+		
 		
 		
 		ArrayList<PlayerData> couple = new ArrayList<PlayerData>();

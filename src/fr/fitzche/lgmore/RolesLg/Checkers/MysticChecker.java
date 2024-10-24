@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
@@ -25,7 +26,7 @@ public class MysticChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		PlayerData p = PlayerUtil.getDataOfPlayer(e.getEntity(), "at mystic checker");
 		if (p.camp.equals(Camp.Wolf)) {
 			mystic.voir();

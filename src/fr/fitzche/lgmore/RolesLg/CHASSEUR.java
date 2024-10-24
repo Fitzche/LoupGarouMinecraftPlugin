@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.fitzche.lgmore.PlayerData;
-import net.minecraft.server.v1_8_R1.Item;
+
 
 public class CHASSEUR implements RoleInstance{
 

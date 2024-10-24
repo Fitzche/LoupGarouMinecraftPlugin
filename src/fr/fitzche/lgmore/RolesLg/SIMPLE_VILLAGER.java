@@ -47,7 +47,9 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");

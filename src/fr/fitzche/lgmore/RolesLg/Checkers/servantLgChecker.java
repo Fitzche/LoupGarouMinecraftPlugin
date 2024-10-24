@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -30,7 +31,7 @@ public class servantLgChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		// TODO Auto-generated method stub
 
 	}

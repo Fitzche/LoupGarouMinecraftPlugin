@@ -42,7 +42,7 @@ import fr.fitzche.lgmore.scoreboard.Inventory.CompoDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.ConfigDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.EventDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.PlayerDisplay;
-import net.minecraft.server.v1_8_R1.Material;
+
 
 public class GameLg implements Listener{
 	public GameStatut statut;
@@ -90,6 +90,8 @@ public class GameLg implements Listener{
 	public PlayerDisplay plys;
 	
 	public ConfigDisplay config = new ConfigDisplay(this);
+	
+	public boolean isMeetup = false;
 
 	
 	public GameLg(String name) {
@@ -248,7 +250,28 @@ public class GameLg implements Listener{
 				
 			}
 			
-		}, 24000);
+		}, 6000);
+		
+		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				Main.server.getWorld("world").setTime(1000);
+				
+			}
+			
+		}, 12000);
+		
+		Main.server.getWorld("world").setTime(1000);
+		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				Main.server.getWorld("world").setTime(13000);
+				
+			}
+			
+		}, 18000);
 	}
 	
 	public void addPlayer(String name) {
@@ -424,8 +447,11 @@ public class GameLg implements Listener{
 					Bukkit.broadcastMessage(ChatColor.GOLD +"Aucun joueur n'a été voté plus de 2 fois, ou il y a une égalité");
 				}
 				for (PlayerData player:playerAlive) {
-					if ( player.voted.camp != Camp.Villager) {
-						if (player.role.equals(RolesLg.CORBEAU)) {
+					if (player.voted == null) {
+						return;
+					}
+					if ( player.role.equals(RolesLg.CORBEAU)) {
+						if (player.voted.camp != Camp.Villager) {
 							CORBEAU corbeau = (CORBEAU) player.roleIn;
 							corbeau.addGoodVoted();
 						} else {

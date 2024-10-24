@@ -28,12 +28,13 @@ public class PYROMANE implements RoleInstance {
     public ArrayList<PlayerData> filled = new ArrayList<PlayerData>();
 
 	public PYROMANE(PlayerData player) {
+		this.playerWithRole = player;
 		GameLg game = GameLgUtil.getGameOfPlayer(player, "at pyromane creating");
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
 		playerWithRole.team = new Team("Pyromane", Camp.Other, game, players, null, "at wolf team creating at == 1200", null, null, true, false, false, false);
 		GameLgUtil.getGameOfPlayer(playerWithRole, "at pyromane creating").teams.add(playerWithRole.team);	
-		this.playerWithRole = player;
+		
 	}
 
 
@@ -122,7 +123,9 @@ public class PYROMANE implements RoleInstance {
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");

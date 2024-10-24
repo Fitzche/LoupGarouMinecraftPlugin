@@ -86,7 +86,7 @@ public class SALVATEUR implements RoleInstance{
 	
 	public void proteger(PlayerData target) {
 		target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0, false, false));
-		target.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 24000, 2, false, false));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 24000, 0, false, false));
 		target.sendMessage(ChatColor.DARK_GREEN+ "Le Salvateur vous a protégé, vous obtenez donc résistance et no fall pendant 20 minutes");
 
 		this.playerWithRole.sendMessage(ChatColor.DARK_GREEN+"vous avez protégé "+ target.Name);

@@ -23,7 +23,7 @@ public class LOUP_BARBARE implements RoleInstance {
 		p.boostS5 += 3;
 		this.playerWithRole = p;
 		this.game = GameLgUtil.getGameOfPlayer(p, "at lg barbare creation");
-		this.game.resCheckers.add(new LgBarbare_Checker(p));
+		this.game.resCheckers.add(new LgBarbare_Checker(p, this));
 		
 	}
 	@Override

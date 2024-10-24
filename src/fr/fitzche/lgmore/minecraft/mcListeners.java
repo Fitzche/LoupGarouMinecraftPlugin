@@ -17,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -30,6 +31,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -42,6 +44,7 @@ import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 import com.mysql.jdbc.Util;
 
 import fr.fitzche.lgmore.GameLg;
+import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
@@ -61,7 +64,7 @@ import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.Util.*;
 import fr.fitzche.lgmore.commands.Lga;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_8_R1.EntityTypes;
+
 
 public class mcListeners implements Listener {
 	
@@ -77,15 +80,26 @@ public class mcListeners implements Listener {
 		
 		
 		if (GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main") != null) {
-			
-			
+			Location loc = e.getEntity().getPlayer().getLocation();
+			GameLg gamoth = GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main");
+			if (gamoth.statut.equals(GameStatut.NOT_STARTED)) {
+				e.setKeepInventory(true);
+				Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+					
+					@Override
+					public void run() {
+						e.getEntity().teleport(loc);
+						
+					}
+				}, 20);
+			}
 			
 			Player killer = e.getEntity().getKiller();
 			
 			System.out.println("ffff");
 			e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
 
-			Location loc = e.getEntity().getPlayer().getLocation();
+			
 			final ItemStack[] items = e.getEntity().getPlayer().getInventory().getContents();
 			e.setKeepInventory(true);
 			e.setDeathMessage("");
@@ -111,7 +125,7 @@ public class mcListeners implements Listener {
 			System.out.println("hg.2");
 			e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
 
-			
+			Player killerOfPlayer = e.getEntity().getKiller();
 			
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
@@ -155,9 +169,9 @@ public class mcListeners implements Listener {
 			    		
 			    		
 			    	} else { 
-			    		//RUN ACTION OF DEATH
+			    		
 			    		for (ResCheck checker: gm1.resCheckers) {
-			    			checker.runDeathAction(e);
+			    			checker.runDeathAction(e, killerOfPlayer);
 			    		}
 
 				    	
@@ -285,6 +299,11 @@ public class mcListeners implements Listener {
 			return;
 		}
 		
+		
+		if (e.getEntity() instanceof Player &&GameLgUtil.getGameOfPlayer((Player) e.getEntity(), "at damageByEntityEvent 1") == null || GameLgUtil.getGameOfPlayer((Player) e.getDamager(), "at damageByEntityEvent 2") == null ) {
+			return;
+		}
+		
 		//VERIFIE SI LA FLECHE QUI A TUé EST TIRée PAR JOUEUR, si tué par flèche, met le tireur en attacker si oui
 
 		if (e.getDamager() instanceof Arrow) {
@@ -307,13 +326,17 @@ public class mcListeners implements Listener {
 
 
 		//CHECK IF PLAYER IG
-		if (PlayerUtil.getDataOfPlayer(attacker, "at damage by entity config") == null) {
+		if (PlayerUtil.getDataOfPlayer(attacker, "at damage by entity config") == null || PlayerUtil.getDataOfPlayer((Player) e.getEntity(), "at damage event") == null) {
 			return;
 		}
 
 		PlayerData damager = PlayerUtil.getDataOfPlayer(attacker, "at damage by entity config");
-		
+		GameLg gameDamager = GameLgUtil.getGameOfPlayer(damager, "at damage event");
+		GameLg gameDefencer = GameLgUtil.getGameOfPlayer((Player) e.getEntity(), "at damage event");
 
+		if (gameDefencer.statut.equals(GameStatut.NOT_STARTED) && gameDamager.statut.equals(GameStatut.NOT_STARTED)) {
+			e.setCancelled(true);
+		}
 		//CREATE LESS AND MORE
 		double less = 0;
 		double more = 0;
@@ -327,7 +350,7 @@ public class mcListeners implements Listener {
 
 			//CREATE BOOST R or S WITH PLAYERS BOOST
 			less += (0.05*PlayerUtil.getDataOfPlayer((Player) e.getEntity(), "  in DamageByEntityEvent in mcListener, 160-170, 2 ").boostR5);
-
+			System.out.println("less = "+ less);
 			more += (0.05*damager.boostS5);
 
 
@@ -348,10 +371,12 @@ public class mcListeners implements Listener {
 
 			//ADD AT MORE IF STRENGHT
 			if (hasStrenght) {
-				more += 0.3;
+				more += 0.2;
 			}
 
-			
+			if (damager.role == null) {
+				return;	
+			}
 
 			//chasseur Strenght against wolf
 			if (damager.role.equals(RolesLg.CHASSEUR) && PlayerUtil.getDataOfPlayer((Player) e.getEntity(), " at onDamageByEntity in mcListener 2").role.getCampOfRole().equals(Camp.Wolf) ) {
@@ -400,9 +425,9 @@ public class mcListeners implements Listener {
 			if (ef.getType().equals(PotionEffectType.DAMAGE_RESISTANCE)) {
 				
 				System.out.println("has resistance");
-				
+				e.setDamage((e.getDamage() * 1.25));
 				hasRes = true;
-				System.out.println(e.getDamage());
+				System.out.println(e.getFinalDamage());
 				
 			}
 			
@@ -411,11 +436,11 @@ public class mcListeners implements Listener {
 
 		//ADD IF RESIS at More
 		if (hasRes) {
-			less += 0.3;
+			less += 0.2;
 		}
 
 		//SET DAMAGE WITH LESS
-		e.setDamage(e.getDamage()/(1+less));
+		e.setDamage(e.getDamage()/(1 +less));
 		System.out.println("resis damage: " + e.getDamage());
 		
 		
@@ -424,4 +449,88 @@ public class mcListeners implements Listener {
 	
 	
 	
+
+	@EventHandler 
+	public void onCraftItem(CraftItemEvent e) {
+		
+		
+		switch (e.getRecipe().getResult().getType()) {
+		
+		case DIAMOND_AXE:
+			e.setCancelled(true);
+			ItemStack item = new ItemStack(e.getRecipe().getResult().getType());
+			item.addEnchantment(Enchantment.DIG_SPEED, 3);
+			e.getWhoClicked().getInventory().addItem(item);
+			clearInv(e);
+			break;
+		
+		case DIAMOND_PICKAXE:
+			e.setCancelled(true);
+			ItemStack item1 = new ItemStack(e.getRecipe().getResult().getType());
+			item1.addEnchantment(Enchantment.DIG_SPEED, 3);
+			e.getWhoClicked().getInventory().addItem(item1);
+			clearInv(e);
+			break;
+		
+
+		
+		case IRON_AXE:
+			e.setCancelled(true);
+			ItemStack item3 = new ItemStack(e.getRecipe().getResult().getType());
+			item3.addEnchantment(Enchantment.DIG_SPEED, 3);
+			e.getWhoClicked().getInventory().addItem(item3);
+			clearInv(e);
+			break;
+		
+		
+		case IRON_PICKAXE:
+			e.setCancelled(true);
+			ItemStack item4 = new ItemStack(e.getRecipe().getResult().getType());
+			item4.addEnchantment(Enchantment.DIG_SPEED, 3);
+			e.getWhoClicked().getInventory().addItem(item4);
+			clearInv(e);
+			break;
+		
+		
+		
+		case STONE_AXE:
+			e.setCancelled(true);
+			ItemStack item6 = new ItemStack(e.getRecipe().getResult().getType());
+			item6.addEnchantment(Enchantment.DIG_SPEED, 3);
+			e.getWhoClicked().getInventory().addItem(item6);
+			clearInv(e);
+			break;
+		
+		case STONE_PICKAXE:
+			e.setCancelled(true);
+			ItemStack item7 = new ItemStack(e.getRecipe().getResult().getType());
+			item7.addEnchantment(Enchantment.DIG_SPEED, 3);
+			e.getWhoClicked().getInventory().addItem(item7);
+			clearInv(e);
+			break;
+		
+		
+		
+			
+		
+		
+		
+	}
+	
+	
+	
+	}
+	
+	public void clearInv(CraftItemEvent e) {
+		CraftingInventory inventory = e.getInventory();
+	    
+		// Vider les 9 slots de la table de craft
+		for (int i = 0; i <= 9; i++) {
+			if (inventory.getItem(i) != null && inventory.getItem(i).getAmount() != 1) {
+				e.getWhoClicked().getInventory().addItem(new ItemStack(inventory.getItem(i).getType(), inventory.getItem(i).getAmount() -1));
+			}
+			inventory.setItem(i, null);
+			
+		}
+	}
 }

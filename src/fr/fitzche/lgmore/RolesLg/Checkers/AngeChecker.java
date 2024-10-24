@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
@@ -27,11 +28,11 @@ public class AngeChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		if (!target.Name.equals(e.getEntity().getName())) {
 			return;
 		} else {
-			ange.targetDeath(e.getEntity().getKiller().getName());
+			ange.targetDeath(k.getName());
 		}
 		
 

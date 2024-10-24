@@ -2,6 +2,7 @@ package fr.fitzche.lgmore.RolesLg.Checkers;
 
 import java.util.ArrayList;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
@@ -24,9 +25,9 @@ public class ParrainChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		if (e.getEntity().getName().equals(parrain.target.Name) ) {
-			parrain.targetDeath(e.getEntity().getKiller().getName());
+			parrain.targetDeath(k.getName());
 		}
 
 	}

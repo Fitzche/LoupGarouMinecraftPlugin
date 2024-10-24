@@ -147,13 +147,14 @@ public class ANGE implements RoleInstance {
 		if (c) {
 			done = true;
 			this.version = true;
-			playerWithRole.sendMessage("Vous êtes l'ange gardien du joueur "+ p.Name + " dont le role est "+ p.role.getName()+", vous devez le protéger  sous peine de perdre 4 coeurs et de devoir gagner tout seul, pour cela vous obtenez 5 coeur, et vous ainsi que votre protégé régénérez 1/2 coeur toutes les 30 s à condition d'etre à moins de 20 blocs, ce message ne vous sera pas renvoyé, ne le perdez pas");
-			playerWithRole.setMaxHealth(playerWithRole.getMaxHealth() + 8);
+			playerWithRole.sendMessage(ChatColor.AQUA+"Vous êtes l'ange gardien du joueur "+ p.Name + " dont le role est "+ p.role.getName()+", vous devez le protéger  sous peine de perdre 4 coeurs et de devoir gagner tout seul, pour cela vous obtenez 5 coeur, et vous ainsi que votre protégé régénérez 1/2 coeur toutes les 30 s à condition d'etre à moins de 20 blocs, ce message ne vous sera pas renvoyé, ne le perdez pas");
+			playerWithRole.setMaxHealth(playerWithRole.getMaxHealth() + 10);
+			p.sendMessage(ChatColor.AQUA+"Vous êtes protégé par l'ange");
 
 		} else {
 			done = true;
 			this.version = false;
-			playerWithRole.sendMessage("Vous êtes ange déchu, vous devez donc tuer le joueur " + p.Name+ " pour gagner 3 coeurs et résistance 30% de manière permanente, pour cela vous posséder 2 coeur en plus, ce message ne vous sera pas renvoyé, ne le perdez pas");
+			playerWithRole.sendMessage("Vous êtes ange déchu, vous devez donc tuer le joueur " + p.Name+ " pour gagner 3 coeurs et résistance 1 de manière permanente, pour cela vous posséder 2 coeur en plus, ce message ne vous sera pas renvoyé, ne le perdez pas");
 			playerWithRole.changeHealth(4);
 		}
 
@@ -167,7 +168,9 @@ public class ANGE implements RoleInstance {
 			if (playerWithRole == null) {
 				System.out.println("effect can't be gived at null player");
 			}
-			PotionUtil.giveIncreaseDamage(playerWithRole);
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				giveNightEffect();
+			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???
 			System.out.println("nk.2");

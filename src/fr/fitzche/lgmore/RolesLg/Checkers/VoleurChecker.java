@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
@@ -34,10 +35,10 @@ public class VoleurChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
-		if (voleur != null&&e.getEntity().getKiller().getName().equals(voleur.playerWithRole.Name)) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
+		if (voleur != null&&k.getName().equals(voleur.playerWithRole.Name)) {
 			voleur.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker"));
-		} else if (lg != null&&e.getEntity().getKiller().getName().equals(lg.playerWithRole.Name)) {
+		} else if (lg != null&&k.getName().equals(lg.playerWithRole.Name)) {
 			lg.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker for metamorphe"));
 		}
 

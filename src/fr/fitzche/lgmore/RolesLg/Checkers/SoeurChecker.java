@@ -2,6 +2,7 @@ package fr.fitzche.lgmore.RolesLg.Checkers;
 
 import java.util.ArrayList;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.GameLg;
@@ -24,12 +25,12 @@ public class SoeurChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		ArrayList<PlayerData> sToRemove = new ArrayList<PlayerData>();
 		for (PlayerData s:soeur.sisters) {
 			if (e.getEntity().getName().equals(s.Name)) {
 				sToRemove.add(s);
-				soeur.playerWithRole.sendMessage("Votre soeur a été tué par "+ e.getEntity().getKiller().getName());
+				soeur.playerWithRole.sendMessage("Votre soeur a été tué par "+ k.getName());
 			}
 		}
 		for (PlayerData p:sToRemove) {

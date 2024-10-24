@@ -8,10 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -44,7 +46,7 @@ import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import fr.fitzche.lgmore.scoreboard.Inventory.ConfigDisplay;
-import net.minecraft.server.v1_8_R1.Material;
+
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Lga implements CommandExecutor  {
@@ -78,6 +80,28 @@ public class Lga implements CommandExecutor  {
 			String mess = String.join(" ", args2);
 			Bukkit.broadcastMessage(ChatColor.ITALIC + mess);
 			return true;
+		}
+		if (args[0].equals("groupe")) {
+			if (args.length < 2) {
+				sender.sendMessage("Veuillez indiquer un nombre valide");
+				
+			} else {
+				int g = 5;
+				try {
+					g = Integer.valueOf(args[1]);
+					
+				}  catch  (NumberFormatException e){
+					sender.sendMessage("Veuillez indiquer un nombre valide");
+					return false;
+				}
+				GameLg game =GameLgUtil.getGameOfPlayer((Player) sender,	 "at group command");
+				if (game == null) {
+					sender.sendMessage("Vous devez etre dans une game pour effectuer cette commande");
+					return false;
+				}
+				
+				game.groupe = g;
+			}
 		}
 		
 		if (args[0].equals("transfer") ) {
@@ -203,7 +227,7 @@ public class Lga implements CommandExecutor  {
 				
 				
 				
-				game.statut = GameStatut.BEFORE_ROLE;
+				game.statut = GameStatut.NOT_STARTED;
 				Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
 					@Override
 		        	public void run() {
@@ -226,7 +250,7 @@ public class Lga implements CommandExecutor  {
 		        			
 		        			return;
 		        		}
-		        		game.board.refresh();
+		        		
 		        		
 		        		if (game.board.istimeRunned == false) {
 		        			game.board.istimeRunned = true;
@@ -246,6 +270,8 @@ public class Lga implements CommandExecutor  {
 		    					System.out.println("gived start kit Lga l.163");
 		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
 		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
+		    					ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
+		    					
 		    					
 		    				}
 		        		}
@@ -255,6 +281,42 @@ public class Lga implements CommandExecutor  {
 								if (player.Name.equals("FITZCHE")) {
 									Bukkit.broadcastMessage("Le développeur est dans la partie...");
 								}
+							}
+							game.statut = GameStatut.BEFORE_ROLE;
+							if (game.isMeetup) {
+								for (PlayerData p:game.getPlayerAlive()) {
+									ItemStack legging = new ItemStack(Material.IRON_LEGGINGS);
+		    						legging.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+		    						ItemStack boots = new ItemStack(Material.IRON_BOOTS);
+		    						boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+		    						ItemStack helmet = new ItemStack(Material.IRON_HELMET);
+		    						helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+		    						ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+		    						chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 2);
+		    						ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+		    						sword.addEnchantment(Enchantment.DAMAGE_ALL	, 3);
+		    						ItemStack gap = new ItemStack(Material.GOLDEN_APPLE, 15);
+		    						ItemStack bow = new ItemStack(Material.BOW);
+		    						bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+		    						ItemStack arrows = new ItemStack(Material.ARROW, 64);
+		    						
+		    						if (p.isOnline) {
+		    							p.player.getInventory().addItem(legging);
+		    							p.player.getInventory().addItem(boots);
+		    							p.player.getInventory().addItem(helmet);
+		    							p.player.getInventory().addItem(chestplate);
+		    							p.player.getInventory().addItem(sword);
+		    							p.player.getInventory().addItem(gap);
+		    							p.player.getInventory().addItem(bow);
+		    							p.player.getInventory().addItem(arrows);
+		    							p.player.getInventory().addItem(new ItemStack(Material.ANVIL));
+		    							p.player.giveExpLevels(1000);
+		    						}
+								}
+								for (int i = 0; i <= 1199; i++) {
+									game.timer.addOne();
+								}
+								
 							}
 
 		        		}
@@ -292,7 +354,7 @@ public class Lga implements CommandExecutor  {
 		        			////System.out.println("marquage g19.3");
 		        		}
 		        		////System.out.println("marquage 1.5");
-		        		game.board.refresh();
+		        		
 		        		
 		        		////System.out.println("score updated");
 		        		
@@ -332,6 +394,12 @@ public class Lga implements CommandExecutor  {
 		        					//System.out.println("k.3.ser.2");
 		        				}
 		        			}
+		        			
+		        			if (game.timer.temps == 1201) {
+		        				for (int i = 0; i <= 1198; i++) {
+									game.timer.addOne();
+								}
+		        			}
 							
 		        			
 		        		}
@@ -342,6 +410,8 @@ public class Lga implements CommandExecutor  {
 		        		} else {
 		        		//	System.out.println("nothing of new");
 		        		}
+		        		
+		        		game.board.refresh();
 		        		
 		        			
 
@@ -674,6 +744,33 @@ public class Lga implements CommandExecutor  {
 					Player player = (Player) sender;
 					player.sendMessage(game.getRolesAlive());
 					return true;
+				}
+				
+			} else if (args[1].equals("meetup")) {
+				if (args.length == 2) {
+					sender.sendMessage("Veuillez spécifier la game");
+					return true;
+				}
+				GameLg game = GameLgUtil.searchGame(args[2]);
+				if (game == null) {
+					sender.sendMessage("Veuillez indiquer un nom de partie valide");
+					return true;
+
+				}
+				if (args.length == 3) {
+					sender.sendMessage("Veuillez spécifier avec \"true\" ou \"false\"");
+					return true;
+				}
+				
+				if (args[3].equals("false")) {
+					game.isMeetup = false;
+					sender.sendMessage("La game "+ args[2] + " est réglé sur: meetup désactivé");
+				} else if (args[3].equals("true")) {
+					game.isMeetup = true;
+					sender.sendMessage("La game "+ args[2] + " est réglé sur: meetup activé");
+				} else {
+					sender.sendMessage("veuillez indiquer \"true\" ou \"false\"");
+
 				}
 				
 			}

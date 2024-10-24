@@ -10,6 +10,7 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Checkers.SoeurChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
+import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import net.md_5.bungee.api.ChatColor;
 
@@ -36,7 +37,7 @@ public class SOEUR implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, à la mort d'une de vos soeur vous obtiendrez le nom de son tueur, et vous posséder force quand vous etes à moins de 20 blocs d'une de vos soeur";
+		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, à la mort d'une de vos soeur vous obtiendrez le nom de son tueur, vous NE CONNAISSEZ PAS vo(s)(tre) soeur(s), le seul moyen de connaitre leurs/son identité(s) est la réperer grâce à l'effet force quand vous etes à moins de 20 blocs d'une de vos soeurs / de votre soeur";
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class SOEUR implements RoleInstance {
 		for (PlayerData ply:sisters) {
 			double distance = LocationUtil.getDistanceBetween(ply, playerWithRole);
 			if (distance < 21 && !ply.Name.equals(playerWithRole.Name)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0, false, false));
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
 				return;
 			}
 		}
@@ -91,7 +92,9 @@ public class SOEUR implements RoleInstance {
 
 	@Override
 	public void episodeEffect() {
-		// TODO Auto-generated method stub
+		if (GameLgUtil.getGameOfPlayer(playerWithRole, "at soeur episode effect").timer.temps > 1300) {
+			playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Votre soeur (ou une de vos soeur s'il y en a plus que 2)) est "+ sisters.get(MathUtil.generateAlInt(0, sisters.size() -1)).getName());
+		}
 		
 	}
 

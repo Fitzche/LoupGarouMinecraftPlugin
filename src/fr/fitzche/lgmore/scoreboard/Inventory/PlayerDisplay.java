@@ -95,11 +95,74 @@ public class PlayerDisplay implements Listener{
 	public void open(Player ply, boolean isOp) {
 		areOp.put(ply.getName(), isOp);
 		ply.closeInventory();
+		this.refresh();
 		ply.openInventory(inv);
+		
 	}
 	
 	
-	public void refresh(Player ply) {
+	public void refresh() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (Player pl: fr.fitzche.lgmore.Main.server.getOnlinePlayers()) {
+			players.add(pl);
+		}
+		
+		int x = 0;
+		this.inv = Bukkit.createInventory(null, 36, "Joueurs");
+		
+		//System.out.println("b.1.1");
+
+		for (Player player: players) {
+
+			 		//System.out.println("b.1.0");
+			
+					ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+					SkullMeta meta = (SkullMeta) head.getItemMeta();
+					
+					meta.setOwner(player.getName());
+					meta.setDisplayName(player.getName());
+					ArrayList<String> l = new ArrayList<String>();
+					
+					//System.out.println("mm3.0");
+					
+					boolean present = false;
+					if (gm.ListPlayer().contains(player.getName())) {
+						present = true;
+						//System.out.println(gm.ListPlayer() + " contain "+ player.getName());
+					} else {
+						//System.out.println(gm.ListPlayer() + " not contain "+ player.getName());
+
+					}
+					
+					if (gm.players.size() > 0) {
+						//System.out.println("aucun joueur");
+					}
+					//System.out.println("mm2");
+
+					
+					if (present) {
+						l.add("ce joueur est présent dans cette partie");
+						//System.out.println("present ici");
+					} else {
+						l.add("ce joueur n'est pas présent dans cette partie");
+						//System.out.println("no present ici");
+
+					}
+					//System.out.println("mm1");
+
+					meta.setLore(l);
+					head.setItemMeta(meta);
+					
+					this.inv.setItem(x, head);
+					x++;
+			}
+		
+			ItemStack returne = new ItemStack(Material.BARRIER) ;
+			ItemMeta returneM = returne.getItemMeta();
+			returneM.setDisplayName(ChatColor.ITALIC + "Retour");
+			returne.setItemMeta(returneM);
+			this.inv.setItem(35, returne);
+		/*
 		ArrayList<String> pPresent = new ArrayList<String>();
 		pPresent.add("ce joueur est présent dans cette partie");
 		ArrayList<String> pNoPresent = new ArrayList<String>();
@@ -125,8 +188,9 @@ public class PlayerDisplay implements Listener{
 			}
 			
 		}
-		
 		gm.plys.open(ply, areOp.get(ply.getName()));
+		*/
+		
 	}
 	
 	@Deprecated
@@ -171,9 +235,9 @@ public class PlayerDisplay implements Listener{
 				
 				
 			}
-			System.out.println("refresh before");
-			this.refresh((Player) e.getWhoClicked());
-			System.out.println("refresh after");
+			//System.out.println("refresh before");
+			this.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
+			//System.out.println("refresh after");
 			return;
 			
 		}

@@ -16,7 +16,7 @@ import org.bukkit.material.MaterialData;
 
 import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.commands.Lga;
-import net.minecraft.server.v1_8_R1.ItemDye;
+
 
 
 public class RoleDisplay {

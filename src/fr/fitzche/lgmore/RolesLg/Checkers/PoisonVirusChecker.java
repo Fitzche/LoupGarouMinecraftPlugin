@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
@@ -20,10 +21,10 @@ public class PoisonVirusChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
 		if (virus.type.equals(VirusType.POISON) ) {
 			if (e.getEntity().getName().equals(virus.infecter.Name)) {
-				if (e.getEntity().getKiller().getName().equals(virus.owner.Name)) {
+				if (k.getName().equals(virus.owner.Name)) {
 					virus.poisonGuerison = true;
 				}
 				virus.stopped = true;

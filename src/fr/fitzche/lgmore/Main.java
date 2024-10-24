@@ -15,7 +15,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,14 +56,6 @@ import fr.fitzche.lgmore.commands.LgTest;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.mcListeners;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_8_R1.BiomeBase;
-import net.minecraft.server.v1_8_R1.BiomeDecorator;
-import net.minecraft.server.v1_8_R1.BlockDataAbstract;
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.Blocks;
-import net.minecraft.server.v1_8_R1.IBlockData;
-import net.minecraft.server.v1_8_R1.WorldGenMinable;
-import net.minecraft.server.v1_8_R1.WorldGenerator;
 
 public class Main extends JavaPlugin implements Listener {
 	public static Server server;
@@ -72,6 +64,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static Objective objective;
 	public static JavaPlugin plug;
 	public static Permission lgop;
+	public HashMap<String, Boolean> alreadyCo = new HashMap<String, Boolean>();
 	public static mcListeners listeners;
 	public static ArrayList<String> eventsNames = new ArrayList<String>();
 	public static HashMap<String, String> descriptionsEvent = new HashMap<String, String>();
@@ -106,16 +99,7 @@ public class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getPluginManager().registerEvents(listener, this);
 		
-		CraftWorld cW = (CraftWorld) getServer().getWorld("world");
-		net.minecraft.server.v1_8_R1.World world = cW.getHandle();
 		
-		Random rD = new Random();
-		final WorldGenerator dMore = new WorldGenMinable(Blocks.DIAMOND_ORE.getBlockData(), 80);
-		dMore.generate(world, rD, new BlockPosition(0, 0, 0));
-		
-		Random rG = new Random();
-		final WorldGenerator gMore = new WorldGenMinable(Blocks.GOLD_ORE.getBlockData(), 80);
-		gMore.generate(world, rD, new BlockPosition(0, 0, 0));
 
 		
 		scoreboardLg = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -192,7 +176,16 @@ public class Main extends JavaPlugin implements Listener {
 	@Deprecated
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		System.out.println("join");
+		/*
+		if (alreadyCo.get(e.getPlayer().getName()) == null) {
+			e.getPlayer().teleport(new Location(Main.plug.getServer().getWorld("world"), 1,156,1));
+			alreadyCo.put(e.getPlayer().getName(), true);
+		}
+		*/
+		e.getPlayer().sendMessage(ChatColor.GOLD + ""+ ChatColor.ITALIC+ "Faites /lg help et /lg info pour avoir plus d'info sur le plugin lgmore, /lg whisper [message] pour envoyer un message non anonyme aux joueurs op. Les description de roles n'indiquent pas forcement qu'il faut mettre un nom derrière la commande si la commande vise un joueur à choisir, les seules commandes ne necessitant pas de nom mais demandant un choix de joueur sont /color et /lg couple (pour cupidon). ");
+		
+		
+		//System.out.println("join");
 		e.getPlayer().setScoreboard(Main.scoreboardLg);
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" joined");
 		if (e.getPlayer().getName().equals("TheGuill84")) {
@@ -228,10 +221,7 @@ public class Main extends JavaPlugin implements Listener {
 		PlayerData player = PlayerUtil.getDataOfPlayer(e.getPlayer(), " in Main, in onPlayerQuit ");
 		
 
-		if (GameLgUtil.getGameOfPlayer(player, "at l.307 of Main") == null) {
-			System.out.println("l.309 of Main");
-			return;
-		}
+		
 		
 		GameLg gm1 = GameLgUtil.getGameOfPlayer(player, "at l.311 of Main");
 		System.out.println(gm1.name + " is the game ");

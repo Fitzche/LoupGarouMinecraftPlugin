@@ -17,7 +17,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class LOUP_ALCHIMISTE implements RoleInstance {
 	public PlayerData playerWithRole;
-	public PotionEffect STRENGTH;
+	
 	public static Camp camp = Camp.Wolf;
 	public GameLg game;
 	public boolean powerUsed = false;
@@ -26,7 +26,7 @@ public class LOUP_ALCHIMISTE implements RoleInstance {
 	
 	public LOUP_ALCHIMISTE(PlayerData player) {
 		this.playerWithRole = player;
-		this.STRENGTH = PotionUtil.STRENGTH;
+		
 		this.game = GameLgUtil.getGameOfPlayer(player, "at lg alchimiste creation");
 		for (PlayerData p:game.getPlayerAlive()) {
 			players.put(p, 0);
@@ -109,7 +109,7 @@ public class LOUP_ALCHIMISTE implements RoleInstance {
 	}
 	
 	public void choose(PlayerData p) {
-		if (players.get(p) < 10 /*900NBL*/ || powerUsed) {
+		if (players.get(p) < 900 || powerUsed) {
 			playerWithRole.sendMessage(ChatColor.AQUA+ "Vous n'avez pas passé assez de temps à coté de ce joueur, ou vous avez déjà utilisé votre pouvoir");
 			return;
 		} 

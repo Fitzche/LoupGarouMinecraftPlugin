@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -15,9 +16,10 @@ public class LgBarbare_Checker implements ResCheck {
 	public LOUP_BARBARE lg;
 	
 	
-	public LgBarbare_Checker(PlayerData p) {
+	public LgBarbare_Checker(PlayerData p, LOUP_BARBARE lg) {
 		this.owner = p;
-		this.lg = (LOUP_BARBARE) p.roleIn;
+		this.lg = lg;
+		
 	}
 	@Override
 	public boolean checkRes(PlayerDeathEvent e) {
@@ -26,8 +28,9 @@ public class LgBarbare_Checker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e) {
-		if (e.getEntity().getKiller().getName().equals(owner.getName())) {
+	public void runDeathAction(PlayerDeathEvent e, Player k) {
+		
+		if (k.getName().equals(owner.getName())) {
 			owner.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 2400, 0, false, false));
 		}
 		
