@@ -7,7 +7,7 @@ import javax.management.relation.Role;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.ALLUMEUR;

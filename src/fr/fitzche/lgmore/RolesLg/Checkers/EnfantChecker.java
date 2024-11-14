@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;

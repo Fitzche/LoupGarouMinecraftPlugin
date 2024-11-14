@@ -31,10 +31,10 @@ import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 
 import org.bukkit.command.TabCompleter.*;
 
-import fr.fitzche.lgmore.GameLg;
-import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.LG.GameLg;
+import fr.fitzche.lgmore.LG.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
@@ -60,10 +60,7 @@ public class Lga implements CommandExecutor  {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 		
-		if (!sender.isOp()) {
-			sender.sendMessage(ChatColor.RED+"Vous n'avez pas cette permission");
-			return true;
-		}
+		
 		if (args[0].equals("say")) {
 			
 			ArrayList<String> args2 = new ArrayList<String>();
@@ -73,7 +70,9 @@ public class Lga implements CommandExecutor  {
 			args2.remove(0);
 			
 			String mess = String.join(" ", args2);
-			Bukkit.broadcastMessage(ChatColor.ITALIC + mess);
+			GameLg game = GameLgUtil.getGameOfPlayer(((Player) sender), "at command lga say");
+			
+			game.broadcoast(ChatColor.ITALIC + mess);
 			return true;
 		}
 		if (args[0].equals("groupe")) {
@@ -208,147 +207,17 @@ public class Lga implements CommandExecutor  {
 				Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
 					@Override
 		        	public void run() {
-						for (PlayerData ply:game.playerAlive) {
-							for (PlayerData ply1:game.playerAlive) {
-								if (!ply.equals(ply1) && !ply.canVoted.contains(ply1) && ply.getLocation().distance(ply1.getLocation()) < 20 && ply1.inLife && ply.inLife) {
-									ply.canVoted.add(ply1);
-								}
-							}
-						}
-					}
-				}, 0, 100);
-				
-		        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
-		        	@Override
-		        	public void run() {
-		        		if (game.stopped) {
-		        			
-		        			return;
-		        		}
-		        		game.askRunFuturesActions();
-		        		
-		        		if (game.board.istimeRunned == false) {
-		        			game.board.istimeRunned = true;
-		        			game.timer.temps = -20;
-		        			Bukkit.broadcastMessage(ChatColor.UNDERLINE + "La partie va commencer dans 20 secondes");
-		        			
-		        		}
-		        		int x1 = game.timer.getEpisode();
-		        		game.timer.addOne();
-		        		int x2 = game.timer.getEpisode();
-		        		
-		        		if (game.timer.temps == -10) {
-		        			System.out.println("gived start kit Lga l.163");
-		        			
-		        			for (PlayerData ply:game.players) {
-		        				ply.setMaxHealth(20);
-		        				ply.player.setHealth(20);
-		    					GameLgUtil.tpAl(ply);
-		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
-		    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
-		    					ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
-		    					
-		    					
-		    				}
-		        		}
-		        		if (game.timer.temps==0) {
-		        			Bukkit.broadcastMessage(ChatColor.UNDERLINE + "La partie commence");
-							for (PlayerData player: game.getPlayerAlive()) {
-								if (player.Name.equals("FITZCHE")) {
-									Bukkit.broadcastMessage("Le développeur est dans la partie...");
-								}
-							}
-							game.statut = GameStatut.BEFORE_ROLE;
-							
-							if (game.isMeetup) {
-								for (PlayerData p:game.getPlayerAlive()) {
-									ItemStack legging = new ItemStack(Material.IRON_LEGGINGS);
-		    						legging.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
-		    						ItemStack boots = new ItemStack(Material.IRON_BOOTS);
-		    						boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
-		    						ItemStack helmet = new ItemStack(Material.IRON_HELMET);
-		    						helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
-		    						ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
-		    						chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 2);
-		    						ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-		    						sword.addEnchantment(Enchantment.DAMAGE_ALL	, 3);
-		    						ItemStack gap = new ItemStack(Material.GOLDEN_APPLE, 15);
-		    						ItemStack bow = new ItemStack(Material.BOW);
-		    						bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
-		    						ItemStack arrows = new ItemStack(Material.ARROW, 64);
-		    						
-		    						if (p.isOnline) {
-		    							p.player.getInventory().addItem(legging);
-		    							p.player.getInventory().addItem(boots);
-		    							p.player.getInventory().addItem(helmet);
-		    							p.player.getInventory().addItem(chestplate);
-		    							p.player.getInventory().addItem(sword);
-		    							p.player.getInventory().addItem(gap);
-		    							p.player.getInventory().addItem(bow);
-		    							p.player.getInventory().addItem(arrows);
-		    							p.player.getInventory().addItem(new ItemStack(Material.ANVIL));
-		    							p.player.giveExpLevels(1000);
-		    						}
-								}
-								for (int i = 0; i <= 1199; i++) {
-									game.timer.addOne();
-								}
-								
-							}
-
-		        		}
-		        		
-		        		
-		        		
-		        		
-		        		if (game.timer.temps == 1200) {
-		        			game.statut = GameStatut.IN_GAME;
-		        			game.attributeRoleToAll();
-		        		}
-		        		
-		        		if (game.timer.temps > 1200) {
-		        			for (PlayerData player: game.getPlayerAlive()) {
-		        				
-		        				if (player == null) {
-		        					System.out.println("temp hear in time ?> 1200 ");
-		        					return;
-		        				}
-		        				player.roleIn.giveEffectAllTime();
-		        			}
-		        			if (WorldUtil.getTime(Main.server.getWorld("world")).equals("DAY")) {
-		        				for (PlayerData player: game.getPlayerAlive()) {
-		        					player.roleIn.giveDayEffect();
-		        				}
-		        			} else if (WorldUtil.getTime(Main.server.getWorld("world")).equals("NIGHT")) {
-		        				for (PlayerData player: game.getPlayerAlive()) {
-		        					player.roleIn.giveNightEffectCheck();
-		        				}
-		        			}
-		        			
-		        			if (game.timer.temps == 1201) {
-		        				for (int i = 0; i <= 1198; i++) {
-									game.timer.addOne();
-								}
-		        			}
-							
-		        			
-		        		}
-		        		
-		        		if (x1 != x2) {
+						int x1 = game.timer.getEpisode();
+						game.everySec();
+						int x2 = game.timer.getEpisode();
+						if (x1 != x2) {
+		        			System.out.println("play ep");
 		        			game.playEpisode();
-		        		} else {
 		        		}
-		        		
-		        		game.board.refresh();
-		        		
-		        			
-
-		        		
-		        	}
-		        }
-		        		
-		        		
-		        		, 0, 20);
+					}
+				}, 0, 20);
+				
+		        
 		        
 		        
 		        
@@ -374,6 +243,7 @@ public class Lga implements CommandExecutor  {
 				Player playerd = (Player )sender;
 				playerd.sendMessage(ChatColor.DARK_BLUE +"game created: " + ChatColor.DARK_RED+ args[2]);
 				game.board.setgame(game);
+				
 				String[] args1 = new String[] {"Game" , "config" , args[2]};
 				CommandUtil.runCommand("lga", playerd, args1);
 			

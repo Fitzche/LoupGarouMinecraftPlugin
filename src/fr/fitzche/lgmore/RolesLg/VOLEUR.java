@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.Checkers.VoleurChecker;
@@ -20,12 +20,13 @@ public class VOLEUR implements RoleInstance{
 	public Camp camp = Camp.Other;
 	
 	public VOLEUR(PlayerData player) {
+		this.playerWithRole = player;
 		GameLg game = GameLgUtil.getGameOfPlayer(player, "at voleur creating");
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
 		playerWithRole.team = new Team("Voleur", Camp.Other, game, players, null, "at voleur team creating", null, null, true, false, false, false);
 		GameLgUtil.getGameOfPlayer(playerWithRole, "at voleur creating").teams.add(playerWithRole.team);	
-		this.playerWithRole = player;
+		
 		game.resCheckers.add(new VoleurChecker(this, game, null));
 	}
 	
@@ -61,13 +62,17 @@ public class VOLEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		giveNightEffect();
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+			}
+		}
 		
 	}
 

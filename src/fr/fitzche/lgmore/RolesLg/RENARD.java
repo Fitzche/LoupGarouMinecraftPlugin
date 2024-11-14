@@ -4,6 +4,9 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
@@ -90,13 +93,17 @@ public class RENARD implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		giveNightEffect();
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+			}
+		}
 		
 	}
 	

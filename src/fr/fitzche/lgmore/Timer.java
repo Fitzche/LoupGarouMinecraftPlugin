@@ -3,10 +3,14 @@ package fr.fitzche.lgmore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import Lg.GameLg;
+
 public class Timer {
 	public int temps = 0;
-	public Timer() {
+	GameLg game;
+	public Timer(GameLg game) {
 		Bukkit.getWorld("world").setFullTime(0);
+		this.game = game;
 	}
 	public int getEpisode() {
 		int ep = 0;
@@ -20,6 +24,14 @@ public class Timer {
 	
 	public void addOne() {
 		temps ++;
+		this.game.askRunFuturesActions(); 
+		int i = this.temps - ((this.getEpisode()-1) * 1200);
+		if (i == 0 || i==600) {
+			Main.server.getWorld("world").setTime(1000);
+		} else if (i==300||i==900) {
+			Main.server.getWorld("world").setTime(13000);
+		}
+		
 	}
 	public String getStringTime() {
 		int hours = 0;

@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.Util.CommandUtil;
 

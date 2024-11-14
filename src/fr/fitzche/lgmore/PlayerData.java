@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import Lg.GameLg;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.Camp;
@@ -17,6 +18,7 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
+import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerData {
@@ -43,6 +45,8 @@ public class PlayerData {
 	public Aura aura;
 	public boolean instantDeath;
 	public boolean grimed = false;
+	public int numberOfKill = 0;
+	public ScoreboardLg board;
 	
 	public PlayerData(Player player) {
 		

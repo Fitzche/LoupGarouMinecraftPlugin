@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import fr.fitzche.lgmore.GameLg;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.LG.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.ParrainChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -31,8 +33,8 @@ public class PARRAIN implements RoleInstance {
 
     public void setNexTarget(PlayerData playerD) {
         playersList = new ArrayList<>();
-        int x = 3;
-        if (GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size()<3) {
+        int x = 1;
+        if (GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size()<1) {
         	x = GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size();
         }
         
@@ -86,7 +88,8 @@ public class PARRAIN implements RoleInstance {
 				System.out.println("effect can't be gived at null player");
 			}
 			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				giveNightEffect();
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
 			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???

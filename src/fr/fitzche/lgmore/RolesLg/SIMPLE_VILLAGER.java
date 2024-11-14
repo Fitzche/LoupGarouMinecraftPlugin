@@ -2,6 +2,8 @@ package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -43,16 +45,12 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	@Override
 	public void giveNightEffect() {
 		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
+			
+			
 			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				giveNightEffect();
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
 			}
 			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
 		}
 		
 		

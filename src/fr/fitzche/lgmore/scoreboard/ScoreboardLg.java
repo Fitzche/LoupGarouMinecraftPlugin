@@ -6,7 +6,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.WorldUtil;
@@ -14,14 +14,21 @@ import net.md_5.bungee.api.ChatColor;
 
 public class ScoreboardLg {
 	public GameLg game;
-	public boolean istimeRunned;
+	public boolean istimeRunned = false;
+	public PlayerData player;
 
 	public Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 	public Objective objective;
 
-	public ScoreboardLg(GameLg game) {
+	public ScoreboardLg(GameLg game, PlayerData player) {
 		this.game = game;
+		
 		objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
+		if (player != null ) {
+			this.player = player;
+			this.refresh();
+		}
+		
 	}
 	
 	public void refresh() {
@@ -64,15 +71,11 @@ public class ScoreboardLg {
 	    String time = WorldUtil.getTime(Main.server.getWorld("world"));
 	    Score score4 = objective.getScore(ChatColor.GOLD+"  Horaire: "+ChatColor.AQUA + time);
 	    score4.setScore(2);
-	    ////System.out.println("LgScoreboard 6");
 	    
-	    
-	    for (PlayerData player: game.playerAlive) {
-	    	if (player.player != null && player.isOnline) {
-	    		player.player.setScoreboard(board);
-	    	}
-	    	
-	    }
+	    Score score5 = objective.getScore(ChatColor.GOLD+ "Kills: "+player.numberOfKill);
+	    if (player!=null&&player.player != null && player.isOnline) {
+		    player.player.setScoreboard(board);
+		}
 	    
 	    
 	}
@@ -80,7 +83,7 @@ public class ScoreboardLg {
 	
 	
 	public void setgame(GameLg game) {
-		
+		this.game = game;
 		for (String entry: objective.getScoreboard().getEntries()) {
 			objective.getScoreboard().resetScores(entry);
 		}

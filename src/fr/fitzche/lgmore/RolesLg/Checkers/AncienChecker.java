@@ -3,7 +3,7 @@ package fr.fitzche.lgmore.RolesLg.Checkers;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.Util.PlayerUtil;

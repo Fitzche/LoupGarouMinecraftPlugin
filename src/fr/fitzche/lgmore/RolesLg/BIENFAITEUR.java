@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.PlayerData;
 import net.md_5.bungee.api.ChatColor;
@@ -58,13 +60,18 @@ public class BIENFAITEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		giveNightEffect();
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
+			}
+		}
 		
 	}
 

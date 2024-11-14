@@ -25,7 +25,7 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 		this.playerWithRole = player;
 		
 		
-		this.powerUsed = true;
+		this.powerUsed = false;
 		
 		this.playerWithRole = player;
 		this.camp = Camp.Wolf;
@@ -71,13 +71,14 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 		System.out.println("nk.1");
 		if (playerWithRole == null) {
 			System.out.println("effect can't be gived at null player");
+			return;
 		}
-		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-			giveNightEffect();
+		if (wait > 0) {
+			wait --;
+			return;
 		}
-		
-		//VOIR SCHEDULER + EFFECT = ERROR ???
-		System.out.println("nk.2");
+		wait = 3;
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
 		
 	}
 

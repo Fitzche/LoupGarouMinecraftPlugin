@@ -68,13 +68,18 @@ public class CORBEAU implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		giveNightEffect();
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
+			}
+		}
 		
 	}
 

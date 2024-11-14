@@ -54,7 +54,11 @@ public class PETITE_FILLE implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+			}
+		}
 		
 	}
 

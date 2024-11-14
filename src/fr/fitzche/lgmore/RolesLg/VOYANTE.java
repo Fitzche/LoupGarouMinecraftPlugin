@@ -2,6 +2,8 @@ package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -54,7 +56,8 @@ public class VOYANTE implements RoleInstance{
 				System.out.println("effect can't be gived at null player");
 			}
 			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				giveNightEffect();
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
 			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???

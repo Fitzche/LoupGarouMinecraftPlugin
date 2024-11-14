@@ -1,9 +1,11 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Bukkit;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Checkers.EnfantChecker;
@@ -85,17 +87,17 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		if (this.transfo && !(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+		if ((playerWithRole.infected||this.transfo) && !(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
 			giveNightEffect();
 		}
+		
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-			giveNightEffect();
-		}
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
 		
 	}
 

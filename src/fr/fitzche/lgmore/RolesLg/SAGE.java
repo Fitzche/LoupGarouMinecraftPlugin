@@ -1,6 +1,9 @@
 package fr.fitzche.lgmore.RolesLg;
 
-import fr.fitzche.lgmore.GameLg;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import Lg.GameLg;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -67,13 +70,16 @@ public class SAGE implements RoleInstance {
 
 	@Override
 	public void giveNightEffectCheck() {
-		// 
-
+		giveNightEffect();
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// 
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+			}
+		}
 
 	}
 

@@ -1,6 +1,8 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Checkers.IDV_Checker;
@@ -49,13 +51,17 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		giveNightEffect();
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (this.playerWithRole.infected) {
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+			}
+		}
 		
 	}
 

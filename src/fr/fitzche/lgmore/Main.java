@@ -39,6 +39,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
@@ -53,6 +54,7 @@ import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.commands.Lg;
+import fr.fitzche.lgmore.commands.LgTab;
 import fr.fitzche.lgmore.commands.LgTest;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.mcListeners;
@@ -67,8 +69,8 @@ public class Main extends JavaPlugin implements Listener {
 	public static Permission lgop;
 	public HashMap<String, Boolean> alreadyCo = new HashMap<String, Boolean>();
 	public static mcListeners listeners;
-	public static ArrayList<String> eventsNames = new ArrayList<String>();
-	public static HashMap<String, String> descriptionsEvent = new HashMap<String, String>();
+	public static ArrayList<String> eventsLgNames = new ArrayList<String>();
+	public static HashMap<String, String> descriptionsLgEvent = new HashMap<String, String>();
 	
 
 	public JavaPlugin getPlugin() {
@@ -139,7 +141,6 @@ public class Main extends JavaPlugin implements Listener {
 				RolesLg.PERFIDE, 
 				RolesLg.PETITE_FILLE,
 				RolesLg.PYROMANE, 
-				RolesLg.PYROMANE, 
 				RolesLg.RENARD, 
 				RolesLg.SAGE, 
 				RolesLg.SALVATEUR, 
@@ -153,20 +154,20 @@ public class Main extends JavaPlugin implements Listener {
 				));
 		RoleUtilLg.existingRoles.addAll(list);
 
-		eventsNames.add("Brume");
-		descriptionsEvent.put("Brume", "Probabilité à la mort d'un joueur, que le message de mort soit caché au village");
+		eventsLgNames.add("Brume");
+		descriptionsLgEvent.put("Brume", "Probabilité à la mort d'un joueur, que le message de mort soit caché au village");
 
-		eventsNames.add("Premonition");
-		descriptionsEvent.put("Premonition", "Probabilité que dans un épisode, un joueur obtienne un présentiment sur son entourage");
+		eventsLgNames.add("Premonition");
+		descriptionsLgEvent.put("Premonition", "Probabilité que dans un épisode, un joueur obtienne un présentiment sur son entourage");
 
-		eventsNames.add("Trouple");
-		descriptionsEvent.put("Trouple", "Chance que le couple soit...un trouple");
+		eventsLgNames.add("Trouple");
+		descriptionsLgEvent.put("Trouple", "Chance que le couple soit...un trouple");
 
-		eventsNames.add("Erreur aux Urnes");
-		descriptionsEvent.put("Erreur aux Urnes", "Probabilité qu'à un vote, le résultat ne soit pas le bon.");
+		eventsLgNames.add("Erreur aux Urnes");
+		descriptionsLgEvent.put("Erreur aux Urnes", "Probabilité qu'à un vote, le résultat ne soit pas le bon.");
 
-		eventsNames.add("Mal visé");
-		descriptionsEvent.put("Mal visé", "probabilité que le cupidon vise mal et se mette en couple avec un joueur aléatoire");
+		eventsLgNames.add("Mal visé");
+		descriptionsLgEvent.put("Mal visé", "probabilité que le cupidon vise mal et se mette en couple avec un joueur aléatoire");
 
 	}
 	

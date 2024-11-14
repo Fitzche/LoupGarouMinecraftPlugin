@@ -90,8 +90,8 @@ public class INTERPRETE implements RoleInstance{
 	@Override
 	public void giveNightEffectCheck() {
 		if (roleAct != null) {
-				roleAct.giveNightEffectCheck();
-			}
+			roleAct.giveNightEffectCheck();
+		}
 		
 	}
 

@@ -61,7 +61,8 @@ public class PERFIDE implements RoleInstance{
 			System.out.println("effect can't be gived at null player");
 		}
 		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-			giveNightEffect();
+			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
 		}
 		
 	}

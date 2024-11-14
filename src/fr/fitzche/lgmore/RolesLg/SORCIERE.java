@@ -3,6 +3,8 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.Potion.Tier;
 import org.bukkit.potion.PotionType;
 
@@ -74,7 +76,8 @@ public class SORCIERE implements RoleInstance {
 				System.out.println("effect can't be gived at null player");
 			}
 			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				giveNightEffect();
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
 			}
 			
 			//VOIR SCHEDULER + EFFECT = ERROR ???

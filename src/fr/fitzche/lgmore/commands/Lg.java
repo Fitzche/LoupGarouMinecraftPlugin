@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import fr.fitzche.lgmore.GameLg;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.ANGE;
@@ -321,7 +321,7 @@ public class Lg implements CommandExecutor {
 				ply.sendMessage(ChatColor.RED+"Infecté");
 			}
 			
-			if (ply.camp.equals(Camp.Wolf) || ply.role.getCampOfRole().equals(Camp.Wolf)) {
+			if (ply.role.getCampOfRole().equals(Camp.Wolf) || ply.camp.equals(Camp.Wolf) || ply.role.getCampOfRole().equals(Camp.Wolf)) {
 				ply.sendMessage(ChatColor.RED+"Liste:" + "\n");
 				if (game.timer.temps > 2699) {
 					for (PlayerData loup: game.getFalseWolfAlive()) {
@@ -701,6 +701,7 @@ public class Lg implements CommandExecutor {
 					
 					PlayerData p = PlayerUtil.getDataPlayer(args[1], " at grimmer command");
 					p.grimed = true;
+					sender.sendMessage(ChatColor.GOLD+"Vous avez grimmé "+ args[1]);
 				}
 			}
 	

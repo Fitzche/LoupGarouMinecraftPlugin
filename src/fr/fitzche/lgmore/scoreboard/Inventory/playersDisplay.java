@@ -120,18 +120,18 @@ public class playersDisplay implements Listener{
 							return;
 						}else if (this.Lo2 == null) {
 							
+							
+							
+							
+							this.Lo2 = PlayerUtil.getDataOfPlayer(PlayerUtil.getPlayer(item.getItemMeta().getDisplayName()), " at onInventoryClick of PlayerDisplay, 2");
+							cupi.sendMessage(ChatColor.LIGHT_PURPLE+"Vous avez choisi " + item.getItemMeta().getDisplayName() + " en deuxième");
+							
 							if (Lo1.getName().equals(Lo2.getName())) {
 								cupi.sendMessage("Vous ne pouvez pas mettre deux fois le même joueur");
 								cupi.closeInventory();
 								return;
 									
 							}
-							
-							
-							this.Lo2 = PlayerUtil.getDataOfPlayer(PlayerUtil.getPlayer(item.getItemMeta().getDisplayName()), " at onInventoryClick of PlayerDisplay, 2");
-							cupi.sendMessage(ChatColor.LIGHT_PURPLE+"Vous avez choisi " + item.getItemMeta().getDisplayName() + " en deuxième");
-							
-							
 							if (this.Lo1 == null || this.Lo2 == null) {
 								e.getWhoClicked().sendMessage("Erreur, veuillez recommencer (ligne136 de playersDisplay)");
 								return;

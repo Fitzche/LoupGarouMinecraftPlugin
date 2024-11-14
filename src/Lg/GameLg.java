@@ -1,4 +1,4 @@
-package fr.fitzche.lgmore;
+package Lg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +21,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
-
+import fr.fitzche.lgmore.GameStatut;
+import fr.fitzche.lgmore.Main;
+import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Timer;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
@@ -35,6 +40,7 @@ import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.ResCheck;
@@ -80,7 +86,7 @@ public class GameLg implements Listener{
 	
 	
 	
-	HashMap<String, PlayerDataLeft> playersLeft = new HashMap<String, PlayerDataLeft>();
+	public HashMap<String, PlayerDataLeft> playersLeft = new HashMap<String, PlayerDataLeft>();
 	
 	public ArrayList<RolesLg> dispoRoles = new ArrayList<RolesLg>();
 	
@@ -90,6 +96,7 @@ public class GameLg implements Listener{
 	public CompoDisplay compo = new CompoDisplay(this);
 	public EventDisplay events = new EventDisplay(this);
 	public PlayerDisplay plys;
+	
 	
 	public ConfigDisplay config = new ConfigDisplay(this);
 	
@@ -115,7 +122,7 @@ public class GameLg implements Listener{
 		rolesIn = new ArrayList<RoleInstance>();
 		this.name = name;
 		this.inGame = false;
-		this.timer = new Timer();
+		this.timer = new Timer(this);
 		this.statut = GameStatut.NOT_STARTED;
 		playerAlive = new ArrayList<PlayerData>();
 		RealvillagerAlive = new ArrayList<PlayerData>();
@@ -126,8 +133,10 @@ public class GameLg implements Listener{
 		roles = new ArrayList<RolesLg>();
 		groupe = 0;
 		players = new ArrayList<PlayerData>();
-		
-		this.board = new ScoreboardLg(this);
+		this.board = new ScoreboardLg(this, null);
+		for (PlayerData p:getPlayerAlive()) {
+			p.board = new ScoreboardLg(this, p);
+		}
 
 		this.dispoRoles.addAll(RoleUtilLg.existingRoles);
 		plys = new PlayerDisplay(this);
@@ -147,10 +156,12 @@ public class GameLg implements Listener{
 	
 	
 	public void askRunFuturesActions() {
+		
 		for (FutureAction fut: this.futuresActions) {
 			fut.timeBeforeRun --;
 			if (fut.timeBeforeRun < 1) {
 				fut.action.run();
+				
 			}
 		}
 	}
@@ -162,6 +173,164 @@ public class GameLg implements Listener{
 		}
 		
 		return null;
+	}
+	
+	@Deprecated
+	public void everySec() {
+		GameLg game = this;
+		
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
+        	@Override
+        	public void run() {
+        		if (stopped) {
+        			
+        			return;
+        		}
+        		
+        		
+        		if (board.istimeRunned == false) {
+        			board.istimeRunned = true;
+        			timer.temps = -20;
+        			broadcoast(ChatColor.UNDERLINE + "La partie va commencer dans 20 secondes");
+        			for (PlayerData p:getPlayerAlive()) {
+    					p.board = new ScoreboardLg(game, p);
+    					p.board.setgame(game);
+    					p.board.refresh();
+    				}
+        		}
+        		int x1 = timer.getEpisode();
+        		timer.addOne();
+        		int x2 = timer.getEpisode();
+        		
+        		
+        		
+        		
+        		
+        		if (game.timer.temps == -10) {
+        			System.out.println("gived start kit Lga l.163");
+        			for (PlayerData ply:game.players) {
+        				ply.setMaxHealth(20);
+        				ply.player.setHealth(20);
+    					GameLgUtil.tpAl(ply);
+    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
+    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
+    					ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
+    				}
+        		}
+        		if (game.timer.temps==0) {
+        			game.broadcoast(ChatColor.UNDERLINE + "La partie commence");
+					for (PlayerData player: game.getPlayerAlive()) {
+						if (player.Name.equals("FITZCHE")) {
+							game.broadcoast("Le développeur est dans la partie...");
+						}
+					}
+					
+					//STATUT
+					game.statut = GameStatut.BEFORE_ROLE;
+					//FIN STATUT
+					
+					if (game.isMeetup) {
+						for (PlayerData p:game.getPlayerAlive()) {
+							ItemStack legging = new ItemStack(Material.IRON_LEGGINGS);
+    						legging.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+    						ItemStack boots = new ItemStack(Material.IRON_BOOTS);
+    						boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+    						ItemStack helmet = new ItemStack(Material.IRON_HELMET);
+    						helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+    						ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+    						chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 2);
+    						ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+    						sword.addEnchantment(Enchantment.DAMAGE_ALL	, 3);
+    						ItemStack gap = new ItemStack(Material.GOLDEN_APPLE, 15);
+    						ItemStack bow = new ItemStack(Material.BOW);
+    						bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+    						ItemStack arrows = new ItemStack(Material.ARROW, 64);
+    						
+    						if (p.isOnline) {
+    							p.player.getInventory().addItem(legging);
+    							p.player.getInventory().addItem(boots);
+    							p.player.getInventory().addItem(helmet);
+    							p.player.getInventory().addItem(chestplate);
+    							p.player.getInventory().addItem(sword);
+    							p.player.getInventory().addItem(gap);
+    							p.player.getInventory().addItem(bow);
+    							p.player.getInventory().addItem(arrows);
+    							p.player.getInventory().addItem(new ItemStack(Material.ANVIL));
+    							p.player.giveExpLevels(1000);
+    						}
+						}
+						for (int i = 0; i <= 1199; i++) {
+							game.timer.addOne();
+						}
+					}
+        		}
+        		
+        		
+        		if (game.timer.temps == 1200) {
+        			game.statut = GameStatut.IN_GAME;
+        			game.attributeRoleToAll();
+        			
+        		}
+        		
+        		if (game.timer.temps > 1200) {
+        			
+        			for (PlayerData player: game.getPlayerAlive()) {
+        				
+        				if (player == null) {
+        					System.out.println("temp hear in time ?> 1200 ");
+        					
+        				}else {
+        					player.roleIn.giveEffectAllTime();
+        				}
+        				
+        			}
+        			if (WorldUtil.getTime(Main.server.getWorld("world")).equals("day")) {
+        				
+        				for (PlayerData player: game.getPlayerAlive()) {
+        					player.roleIn.giveDayEffect();
+        				}
+        			} else if (WorldUtil.getTime(Main.server.getWorld("world")).equals("night")) {
+        				
+        				for (PlayerData player: game.getPlayerAlive()) {
+        					player.roleIn.giveNightEffectCheck();
+        				}
+        			}
+        			if (game.isMeetup) {
+        				if (game.timer.temps == 1201) {
+        					for (int i = 0; i <= 1197; i++) {
+        						game.timer.addOne();
+							}
+        				}
+        			}
+        		}
+        		
+        		
+        	}
+        }
+        		, 0, 20);
+	}
+	
+	public void playersRefresh() {
+		for (PlayerData ply:this.playerAlive) {
+			for (PlayerData ply1:this.playerAlive) {
+				if (!ply.equals(ply1) && !ply.canVoted.contains(ply1) && ply.getLocation().distance(ply1.getLocation()) < 20 && ply1.inLife && ply.inLife) {
+					ply.canVoted.add(ply1);
+				}
+			}
+		}
+		 
+		for (PlayerData p:this.getPlayerAlive()) {
+			p.board.refresh();
+		}
+		
+	}
+	
+	public void broadcoast(String message ) {
+		
+		for (PlayerData p:this.getPlayerAlive()) {
+			p.sendMessage(message);
+			
+		}
 	}
 	
 	public ArrayList<RolesLg> getRoles() {
@@ -267,26 +436,9 @@ public class GameLg implements Listener{
 	
 	@Deprecated
 	public void setEpisodeTime() {
-		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
-			@Override
-			public void run() {
-				Main.server.getWorld("world").setTime(13000);
-			}
-		}, 6000);
-		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
-			@Override
-			public void run() {
-				Main.server.getWorld("world").setTime(1000);			
-			}		
-		}, 12000);
 		
-		Main.server.getWorld("world").setTime(1000);
-		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
-			@Override
-			public void run() {
-				Main.server.getWorld("world").setTime(13000);	
-			}
-		}, 18000);
+		
+		
 	}
 	
 	public void addPlayer(String name) {

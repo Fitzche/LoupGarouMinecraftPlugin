@@ -1,6 +1,9 @@
 package fr.fitzche.lgmore.RolesLg;
 
-import fr.fitzche.lgmore.GameLg;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import Lg.GameLg;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Checkers.servantLgChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -53,13 +56,17 @@ public class Servant_des_loups implements RoleInstance {
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		if (playerWithRole.isShooted) {
+			return;
+		}
+		giveNightEffect();
 
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+
 
 	}
 

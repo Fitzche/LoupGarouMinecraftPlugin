@@ -26,7 +26,7 @@ public class SALVATEUR implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+ "Vous devez gagner avec le village, pour ce faire vous posséder 2 potion de instant heal, et, à chaque épisode vous pourrez protéger un joueur pendant 20 minutes, celui-ci obtiendra resistance I";
+		return ChatColor.DARK_BLUE+ "Vous devez gagner avec le village, pour ce faire vous posséder 2 potion de instant heal, et, à chaque épisode vous pourrez protéger un joueur pendant 20 minutes avec la commande /lg proteger [nomDuJoueur], celui-ci obtiendra resistance I";
 	}
 
 	@Override
@@ -55,13 +55,23 @@ public class SALVATEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		// TODO Auto-generated method stub
+		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+			giveNightEffect();
+		}
 		
 	}
 
 	@Override
 	public void giveNightEffect() {
-		// TODO Auto-generated method stub
+		if (this.playerWithRole.infected) {
+			
+			
+			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+			}
+			
+		}
+		
 		
 	}
 

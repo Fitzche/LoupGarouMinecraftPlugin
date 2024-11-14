@@ -8,12 +8,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import fr.fitzche.lgmore.GameLg;
-import fr.fitzche.lgmore.GameStatut;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
+import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
 
@@ -105,12 +106,12 @@ public class GameLgUtil {
 	
 	public static void tpAl(PlayerData player) {
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(0, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(0, 500));
+		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(-500, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(-500, 500));
 		player.player.teleport(loc);
 	}
 	public static void tpAl(Player player) {
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(0, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(0, 500));
+		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(-500, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(-500, 500));
 		player.teleport(loc);
 	}
 	
@@ -197,7 +198,7 @@ public class GameLgUtil {
 	
 	public static void askRes(GameLg game, PlayerData ply, PlayerData killer) {
 		
-		if (RoleUtilLg.isRoleIn(game, RolesLg.INFECT_PERE_DES_LOUPS) || RoleUtilLg.isRoleIn(game, RolesLg.SORCIERE)) {
+		if (RoleUtilLg.isRoleIn(game, RolesLg.INFECT_PERE_DES_LOUPS) || RoleUtilLg.isRoleIn(game, RolesLg.SORCIERE) || RoleUtilLg.isRoleIn(game, RolesLg.LOUP_GRIMEUR)) {
 			
 			ArrayList<PlayerData> plys = RoleUtilLg.getPlayersWithRole(game, RolesLg.INFECT_PERE_DES_LOUPS);
 			
@@ -210,6 +211,16 @@ public class GameLgUtil {
 			for (PlayerData ply1: plys1) {
 				SORCIERE role = (SORCIERE) ply1.roleIn;
 				role.lifePotion(ply);
+				
+			}
+			
+			ArrayList<PlayerData> plys2 = RoleUtilLg.getPlayersWithRole(game, RolesLg.LOUP_GRIMEUR);
+			for (PlayerData plyh:plys2) {
+				System.out.println("ask grim in ask res in gamelguti");
+				if (plyh.getName().equals(killer.getName())) {
+					LOUP_GRIMEUR role = (LOUP_GRIMEUR) plyh.roleIn;
+					role.grim(ply);
+				}
 				
 			}
 		}

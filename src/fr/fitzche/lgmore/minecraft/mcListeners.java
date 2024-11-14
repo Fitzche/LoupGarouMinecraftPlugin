@@ -43,10 +43,10 @@ import com.avaje.ebeaninternal.server.deploy.BeanDescriptor.EntityType;
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 import com.mysql.jdbc.Util;
 
-import fr.fitzche.lgmore.GameLg;
-import fr.fitzche.lgmore.GameStatut;
+import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.Camp;
@@ -75,13 +75,14 @@ public class mcListeners implements Listener {
 		System.out.println("Player "+ e.getEntity().getName() + " killed by "+ e.getEntity().getKiller().getName());
 		
 		if (GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main") != null) {
-			
+			System.out.println("game not null");
 			Location loc = e.getEntity().getPlayer().getLocation();
 			GameLg game = GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main");
 			Player killer = e.getEntity().getKiller();
 			final ItemStack[] items = e.getEntity().getPlayer().getInventory().getContents();
 			
 			if (game.statut.equals(GameStatut.NOT_STARTED)) {
+				System.out.println("game not started");
 				e.setKeepInventory(true);
 				Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 					
@@ -103,11 +104,13 @@ public class mcListeners implements Listener {
 			e.setKeepInventory(true);
 			e.setDeathMessage("");
 			
-			
+			if (killer == null) {
+				System.out.println("killer null");
+			}
 
 			
 			if (killer != null &&game.timer.temps > 1200) {
-			
+				System.out.println("ask res");
 				GameLgUtil.askRes(game, game.getPlayer(e.getEntity().getPlayer().getName()), game.getPlayer(e.getEntity().getKiller().getName()));
 
 			}
@@ -141,7 +144,7 @@ public class mcListeners implements Listener {
 			    		if (player1.infected) {
 			    			player1.player.sendMessage(ChatColor.AQUA +"Vous avez été infecté, vous devez maintenant gagner avec les loups, vous possédez également force de nuit");
 			    		}
-			    		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+			    		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {
 
 							@Override
 							public void run() {
@@ -152,11 +155,13 @@ public class mcListeners implements Listener {
 			    			
 			    		}, 1200);
 			    
-			    	e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
-			    	GameLgUtil.tpAl(e.getEntity().getPlayer());
+			    		e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
+			    		GameLgUtil.tpAl(e.getEntity().getPlayer());
 			    		
 			    		
 			    	} else { 
+			    		PlayerData killerData = PlayerUtil.getDataOfPlayer(killer, "at death announce");
+			    		killerData.numberOfKill ++;
 			    		
 			    		for (ResCheck checker: game.resCheckers) {
 			    			checker.runDeathAction(e, killer);
@@ -333,9 +338,10 @@ public class mcListeners implements Listener {
 				
 				if (ef.getType().equals(PotionEffectType.INCREASE_DAMAGE)) {
 
-					System.out.println("has strenght");
+					System.out.println("has strenght: "+ e.getDamage());
 					hasStrenght = true;
-					e.setDamage((e.getDamage() / 2.29));
+					e.setDamage((e.getDamage() / 1.884));
+					System.out.println("has strenght annulated: "+ e.getDamage());
 					System.out.println(e.getDamage());
 				
 				} 
@@ -368,13 +374,13 @@ public class mcListeners implements Listener {
 
 			//SET DAMAGE WITH MORE
 			e.setDamage(e.getDamage() * (1+more));
-			System.out.println("strenght damage: " + e.getDamage());
+			System.out.println("strenght final damage: " + e.getDamage());
 
 			//Pyromane fire
 			if (damager.role.equals(RolesLg.PYROMANE)) {
 				PYROMANE pyro = (PYROMANE) damager.roleIn;
 				if (pyro.fireAspect) {
-					if (MathUtil.pourcentage(23)) {
+					if (MathUtil.pourcentage(35)) {
 						e.getEntity().setFireTicks(60);
 					}
 				}
@@ -400,7 +406,7 @@ public class mcListeners implements Listener {
 				System.out.println("has resistance");
 				e.setDamage((e.getDamage() * 1.25));
 				hasRes = true;
-				System.out.println(e.getFinalDamage());
+				System.out.println("correct resis"+e.getDamage());
 				
 			}
 			
@@ -417,7 +423,7 @@ public class mcListeners implements Listener {
 		System.out.println("resis damage: " + e.getDamage());
 		
 		
-		
+		e.setDamage(e.getDamage() * 0.89);
 	}
 	
 	
