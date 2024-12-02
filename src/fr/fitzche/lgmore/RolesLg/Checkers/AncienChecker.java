@@ -3,9 +3,9 @@ package fr.fitzche.lgmore.RolesLg.Checkers;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 

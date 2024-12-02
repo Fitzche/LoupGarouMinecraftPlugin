@@ -4,7 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.Checkers.IDV_Checker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;

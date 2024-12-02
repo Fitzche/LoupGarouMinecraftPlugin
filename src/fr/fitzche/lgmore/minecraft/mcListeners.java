@@ -43,13 +43,13 @@ import com.avaje.ebeaninternal.server.deploy.BeanDescriptor.EntityType;
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 import com.mysql.jdbc.Util;
 
-import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ANGE;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
@@ -250,7 +250,7 @@ public class mcListeners implements Listener {
 				
 				ArrayList<PlayerData> receiver = new ArrayList<PlayerData>();
 				receiver.addAll(game.getRealWolfAlive());
-				receiver.addAll(RoleUtilLg.getPlayersWithRole(game, RolesLg.PETITE_FILLE));
+				receiver.addAll(RoleUtil.getPlayersWithRole(game, RolesLg.PETITE_FILLE));
 				
 				for (PlayerData player: receiver) {
 					player.sendMessage(ChatColor.RED+e.getMessage());

@@ -10,14 +10,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class DISCIPLE implements RoleInstance {
@@ -107,7 +109,7 @@ public class DISCIPLE implements RoleInstance {
             @Override
             public void run() {
                 GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at giveRoleAndEffect of Disciple");
-                ArrayList<PlayerData> sages = RoleUtilLg.getPlayersWithRole(game, RolesLg.SAGE);
+                ArrayList<PlayerData> sages = RoleUtil.getPlayersWithRole(game, RolesLg.SAGE);
                 if (sages.size() != 0) {
                     sage = sages.get(MathUtil.generateAlInt(0, sages.size() -1));
                     playerWithRole.sendMessage(ChatColor.ITALIC + "Le Vieux sage est "+ sage.Name);

@@ -8,7 +8,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.Potion.Tier;
 import org.bukkit.potion.PotionType;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;

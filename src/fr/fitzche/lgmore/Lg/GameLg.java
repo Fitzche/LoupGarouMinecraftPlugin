@@ -1,4 +1,4 @@
-package Lg;
+package fr.fitzche.lgmore.Lg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,16 +21,17 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
+import fr.fitzche.lgmore.Camp;
+
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Timer;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
-import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Checkers.TimeresCheck;
@@ -39,7 +40,7 @@ import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
@@ -108,7 +109,7 @@ public class GameLg implements Listener{
 		this.stopped = false;
 		Main.server.getPluginManager().registerEvents(events, Main.plug);
 		
-		for (String str: Main.eventsNames) {
+		for (String str: Main.eventsLgNames) {
 			this.probasEvents.put(str, 0);
 		}
 		this.resCheckers.add(new TimeresCheck(this));
@@ -138,7 +139,7 @@ public class GameLg implements Listener{
 			p.board = new ScoreboardLg(this, p);
 		}
 
-		this.dispoRoles.addAll(RoleUtilLg.existingRoles);
+		this.dispoRoles.addAll(RoleUtil.existingRoles);
 		plys = new PlayerDisplay(this);
 		Main.server.getPluginManager().registerEvents(plys, Main.plug);
 		}
@@ -175,6 +176,7 @@ public class GameLg implements Listener{
 		return null;
 	}
 	
+
 	@Deprecated
 	public void everySec() {
 		GameLg game = this;
@@ -381,7 +383,7 @@ public class GameLg implements Listener{
 		
 		for (PlayerData player: this.getPlayerAlive()) {
 			
-			player.roleIn = RoleUtilLg.createRoleOfPlayerRoles(player);
+			player.roleIn = RoleUtil.createRoleOfPlayerRoles(player);
 			player.sendMessage("Vous êtes "+player.roleIn.getName());
 			player.sendMessage(player.roleIn.getDescription());
 			player.sendMessage(ChatColor.GOLD+"Aura: "+ player.role.aura.getName());

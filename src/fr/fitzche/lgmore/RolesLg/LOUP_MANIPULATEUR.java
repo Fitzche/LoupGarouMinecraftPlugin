@@ -3,6 +3,7 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.ChatColor;
 
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
 
 public class LOUP_MANIPULATEUR implements RoleInstance {
 

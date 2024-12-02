@@ -8,11 +8,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.GameStatut;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 
 public class Team implements Listener{

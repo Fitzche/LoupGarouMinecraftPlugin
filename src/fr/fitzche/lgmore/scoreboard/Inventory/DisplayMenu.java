@@ -12,12 +12,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
-import fr.fitzche.lgmore.RolesLg.Camp;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.InventoryUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
+import net.md_5.bungee.api.ChatColor;
 
 public class DisplayMenu implements Listener{
 
@@ -113,21 +114,21 @@ public class DisplayMenu implements Listener{
 		if (!isOp) {
 			return;
 		}
+		String commandBase = "lga";
 		
-		
-		if (event.getInventory().getName().equals("Solo et Hybrides")) {
+		if (event.getInventory().getName().equals(ChatColor.GOLD +"Solo et Hybrides")) {
 			
-			if (InventoryUtil.IsRoleCase(RoleUtilLg.getRoleofCamp(RoleUtilLg.existingRoles, Camp.Other, " at DisplayMenu check for Other"), event.getCurrentItem()) ||InventoryUtil.IsRoleCase(RoleUtilLg.getRoleofCamp(RoleUtilLg.existingRoles, Camp.Love, " at DisplayMenu check for Love"), event.getCurrentItem())) {
+			if (InventoryUtil.IsRoleCase(RoleUtil.getRoleofCamp(RoleUtil.existingRoles, Camp.Other, " at DisplayMenu check for Other"), event.getCurrentItem()) ||InventoryUtil.IsRoleCase(RoleUtil.getRoleofCamp(RoleUtil.existingRoles, Camp.Love, " at DisplayMenu check for Love"), event.getCurrentItem())) {
 				if (event.getClick().equals(ClickType.LEFT)) {
 					String[] list = new String[] {"Game", "addRole", this.game.name, event.getCurrentItem().getItemMeta().getDisplayName()};
 					System.out.println(event.getCurrentItem().getItemMeta().getDisplayName()+ " added at onInventoryClick of DisplayMenu ");
 
-					CommandUtil.runCommand("lga", (Player) event.getWhoClicked(), list);
+					CommandUtil.runCommand(commandBase, (Player) event.getWhoClicked(), list);
 					this.refresh((Player) event.getWhoClicked(), Camp.Other);
 					
 				} else if (event.getClick().equals(ClickType.RIGHT)) {
 					String[] list = new String[] {"Game", "removeRole",this.game.name,  event.getCurrentItem().getItemMeta().getDisplayName()};
-					CommandUtil.runCommand("lga", (Player) event.getWhoClicked(), list);
+					CommandUtil.runCommand(commandBase, (Player) event.getWhoClicked(), list);
 					System.out.println(event.getCurrentItem().getItemMeta().getDisplayName()+ " removed at onInventoryClick of DisplayMenu ");
 
 					this.refresh((Player) event.getWhoClicked(), Camp.Other);
@@ -136,13 +137,13 @@ public class DisplayMenu implements Listener{
 			
 			
 			
-		} else if (event.getInventory().getName().equals("Villageois")) {
-			if (InventoryUtil.IsRoleCase(RoleUtilLg.getRoleofCamp(RoleUtilLg.existingRoles, Camp.Villager, " at DisplayMenu check for Village"), event.getCurrentItem())) {
+		} else if (event.getInventory().getName().equals(ChatColor.GREEN +"Villageois")) {
+			if (InventoryUtil.IsRoleCase(RoleUtil.getRoleofCamp(RoleUtil.existingRoles, Camp.Villager, " at DisplayMenu check for Village"), event.getCurrentItem())) {
 				if (event.getClick().equals(ClickType.LEFT)) {
 					String[] list = new String[] {"Game", "addRole", this.game.name, event.getCurrentItem().getItemMeta().getDisplayName()};
 
 
-					CommandUtil.runCommand("lga", (Player) event.getWhoClicked(), list);
+					CommandUtil.runCommand(commandBase, (Player) event.getWhoClicked(), list);
 					
 					this.refresh((Player) event.getWhoClicked(), Camp.Villager);
 				} else if (event.getClick().equals(ClickType.RIGHT)) {
@@ -154,19 +155,19 @@ public class DisplayMenu implements Listener{
 			}
 			
 			
-		} else if (event.getInventory().getName().equals("Loups-Garou")){
-			if (RoleUtilLg.existingRoles.size() == 0 || RoleUtilLg.existingRoles.get(0) == null || RoleUtilLg.existingRoles==null) {
+		} else if (event.getInventory().getName().equals(ChatColor.DARK_RED+"Loups-Garou")){
+			if (RoleUtil.existingRoles.size() == 0 || RoleUtil.existingRoles.get(0) == null || RoleUtil.existingRoles==null) {
 				System.out.println("existing role is null");
 			}
 			
-			if (InventoryUtil.IsRoleCase(RoleUtilLg.getRoleofCamp(RoleUtilLg.existingRoles, Camp.Wolf, " at DisplayMenu check for Wolf"), event.getCurrentItem())) {
+			if (InventoryUtil.IsRoleCase(RoleUtil.getRoleofCamp(RoleUtil.existingRoles, Camp.Wolf, " at DisplayMenu check for Wolf"), event.getCurrentItem())) {
 				
 				if (event.getClick().equals(ClickType.LEFT)) {
 					
 					String[] list = new String[] {"Game", "addRole", this.game.name, event.getCurrentItem().getItemMeta().getDisplayName()};
 
 
-					CommandUtil.runCommand("lga", (Player) event.getWhoClicked(), list);
+					CommandUtil.runCommand(commandBase, (Player) event.getWhoClicked(), list);
 					
 					
 					this.refresh((Player) event.getWhoClicked(), Camp.Wolf);
@@ -174,7 +175,7 @@ public class DisplayMenu implements Listener{
 				} else if (event.getClick().equals(ClickType.RIGHT)) {
 					
 					String[] list = new String[] {"Game", "removeRole",this.game.name,  event.getCurrentItem().getItemMeta().getDisplayName()};
-					CommandUtil.runCommand("lga", (Player) event.getWhoClicked(), list);
+					CommandUtil.runCommand(commandBase, (Player) event.getWhoClicked(), list);
 					
 					this.refresh((Player) event.getWhoClicked(), Camp.Wolf);
 				}
@@ -189,7 +190,7 @@ public class DisplayMenu implements Listener{
 	}
 	public void refresh(Player player, Camp camp) {
 		//ici prendre les items à la racine,
-		DisplayMenu newMenu = new DisplayMenu(RoleUtilLg.getItemOfCamp(game, camp), name, game, before, isOp);
+		DisplayMenu newMenu = new DisplayMenu(RoleUtil.getItemOfCamp(game, camp), name, game, before, isOp);
 		player.closeInventory();
 		player.openInventory(newMenu.invs.get(0));
 	}

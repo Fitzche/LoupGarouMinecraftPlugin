@@ -11,13 +11,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
@@ -28,7 +29,6 @@ import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
 import fr.fitzche.lgmore.RolesLg.RENARD;
-import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SALVATEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
@@ -38,7 +38,7 @@ import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.scoreboard.Inventory.playersDisplay;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -348,7 +348,7 @@ public class Lg implements CommandExecutor {
 			PlayerData player = PlayerUtil.getDataPlayer(args[2], "at Command interpreter/choose");
 			
 			INTERPRETE role = (INTERPRETE) player.roleIn;
-			role.choosen = RoleUtilLg.RoleofString(args[1]);
+			role.choosen = RoleUtil.RoleofString(args[1]);
 			role.playerWithRole.sendMessage("Vous avez choisi: "+ args[1]);
 		}else if (args[0].equals("aura")) {
 			
@@ -641,7 +641,7 @@ public class Lg implements CommandExecutor {
 				if (args.length == 1) {
 					
 					
-					for (RolesLg role:RoleUtilLg.existingRoles) {
+					for (RolesLg role:RoleUtil.existingRoles) {
 						TextComponent text = new TextComponent();
 						text.setText("Clicquez ici pour avoir des infos sur: " + role.getCampOfRole().getColor()+ role.getName());
 						text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lg inforole "+ role.getName()));
@@ -671,7 +671,7 @@ public class Lg implements CommandExecutor {
 					
 				}
 				System.out.println("command runned");
-				for (RolesLg role: RoleUtilLg.existingRoles) {
+				for (RolesLg role: RoleUtil.existingRoles) {
 					if (name.equals(role.getName()) ) {
 						sender.sendMessage(role.getCampOfRole().getColor()+ role.getName() + ChatColor.GOLD + role.getDescription() );
 						System.out.println(name + " equals "+ role.getName());

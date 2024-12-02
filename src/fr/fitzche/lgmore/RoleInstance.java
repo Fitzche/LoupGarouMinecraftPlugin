@@ -1,8 +1,6 @@
-package fr.fitzche.lgmore.RolesLg;
+package fr.fitzche.lgmore;
 
 import org.bukkit.inventory.ItemStack;
-
-import fr.fitzche.lgmore.PlayerData;
 
 public interface RoleInstance {
 	public static ItemStack logo = null;

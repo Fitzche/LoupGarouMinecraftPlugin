@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
@@ -34,7 +36,7 @@ public class INTERPRETE implements RoleInstance{
 	public void interpreter(RolesLg role) {
 		
 		roles.remove(role);
-		playerWithRole.roleIn = RoleUtilLg.createRole(role, playerWithRole.player);
+		playerWithRole.roleIn = RoleUtil.createRole(role, playerWithRole.player);
 		playerWithRole.sendMessage("Vous interprétez: "+ roleAct.getName());
 		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
@@ -122,7 +124,7 @@ public class INTERPRETE implements RoleInstance{
 	public void setEpisodeTrue() {
 		
 		if (roles.size()==0 && !created) {
-			ArrayList<RolesLg> rol = RoleUtilLg.getRoleofCamp(RoleUtilLg.existingRoles, camp, "feur");
+			ArrayList<RolesLg> rol = RoleUtil.getRoleofCamp(RoleUtil.existingRoles, camp, "feur");
 
 			int one = MathUtil.generateAlInt(0, rol.size() - 1);
 			int  two = MathUtil.generateAlInt(0, rol.size() - 1);

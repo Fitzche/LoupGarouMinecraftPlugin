@@ -7,9 +7,11 @@ import javax.management.relation.Role;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ALLUMEUR;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ANGE;
@@ -18,7 +20,6 @@ import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
@@ -36,7 +37,6 @@ import fr.fitzche.lgmore.RolesLg.PERFIDE;
 import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
 import fr.fitzche.lgmore.RolesLg.PYROMANE;
 import fr.fitzche.lgmore.RolesLg.RENARD;
-import fr.fitzche.lgmore.RolesLg.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SAGE;
 import fr.fitzche.lgmore.RolesLg.SALVATEUR;
@@ -47,7 +47,7 @@ import fr.fitzche.lgmore.RolesLg.SORCIERE;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 
-public class RoleUtilLg {
+public class RoleUtil {
 	public static  ArrayList<RolesLg> existingRoles = new ArrayList<RolesLg>();
 	
 	
@@ -241,7 +241,7 @@ public class RoleUtilLg {
 	}
 	
 	public static RolesLg RoleofString(String str) {
-		for (RolesLg role: RoleUtilLg.existingRoles) {
+		for (RolesLg role: RoleUtil.existingRoles) {
 			if (isStringRole(str, role)) {
 				return role;
 			}
@@ -314,7 +314,7 @@ public class RoleUtilLg {
 			
 		}
 		if (items.size() == 0){
-			System.out.println("items is null in getItemOfCamp in RoleUtilLg");
+			System.out.println("items is null in getItemOfCamp in RoleUtil");
 		}
 		return items;
 		
@@ -325,7 +325,7 @@ public class RoleUtilLg {
 		ArrayList<RolesLg> roleList = new ArrayList<RolesLg>();
 		
 		if (roles.size() == 0) {
-			System.out.println("No role in List roles at getRoleofCamp at RoleUtilLg "+ spec );
+			System.out.println("No role in List roles at getRoleofCamp at RoleUtil "+ spec );
 		}
 		
 

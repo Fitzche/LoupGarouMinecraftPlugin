@@ -10,8 +10,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.MyStringUtil;
 
 public class LgTab implements TabCompleter {

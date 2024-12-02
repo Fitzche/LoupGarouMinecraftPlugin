@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.SoeurChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class SOEUR implements RoleInstance {
@@ -54,7 +56,7 @@ public class SOEUR implements RoleInstance {
 	@Override
 	public void giveEffectAllTime() {
 		if (sisters == null||sisters.size()<2) {
-			sisters = RoleUtilLg.getPlayersWithRole(GameLgUtil.getGameOfPlayer(playerWithRole, "at giveEffectAllTime of Soeur"), RolesLg.SOEUR);
+			sisters = RoleUtil.getPlayersWithRole(GameLgUtil.getGameOfPlayer(playerWithRole, "at giveEffectAllTime of Soeur"), RolesLg.SOEUR);
 		}
 		for (PlayerData ply:sisters) {
 			double distance = LocationUtil.getDistanceBetween(ply, playerWithRole);

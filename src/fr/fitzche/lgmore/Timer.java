@@ -3,7 +3,7 @@ package fr.fitzche.lgmore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Lg.GameLg;
 
 public class Timer {
 	public int temps = 0;

@@ -16,9 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -37,19 +37,19 @@ public class EventDisplay implements Listener{
 	
 	
 	//System.out.println("b.1.");
-	int done =Main.eventsNames.size();
+	int done =Main.eventsLgNames.size();
 
-    for (int i = Main.eventsNames.size(); i>0; i =- 9) {
+    for (int i = Main.eventsLgNames.size(); i>0; i =- 9) {
         Inventory inv = Bukkit.createInventory(null, 45, "Events");
         
        
         int end = 8+(done-i);
         List<String> firstEventsNames;
-        if (Main.eventsNames.size()< end +1) {
-            firstEventsNames = Main.eventsNames.subList(0 + (done -i), Main.eventsNames.size() - 1);
+        if (Main.eventsLgNames.size()< end +1) {
+            firstEventsNames = Main.eventsLgNames.subList(0 + (done -i), Main.eventsLgNames.size() - 1);
 
         } else {
-        	firstEventsNames = Main.eventsNames.subList(0 + (done -i), 8+(done-i));
+        	firstEventsNames = Main.eventsLgNames.subList(0 + (done -i), 8+(done-i));
 
         }
         for (String eName:firstEventsNames) {
@@ -118,7 +118,7 @@ public class EventDisplay implements Listener{
         				return;
         			}
                     
-                    for (String str: Main.eventsNames) {
+                    for (String str: Main.eventsLgNames) {
                     	System.out.println("egal ???");
                         if (e.getCurrentItem().getItemMeta().getDisplayName().equals(str)) {
                         	System.out.println("event correspondant");
@@ -149,7 +149,7 @@ public class EventDisplay implements Listener{
                                     break;
                                 case "clicquez ici pour avoir un description":
                                 	
-                                	e.getWhoClicked().sendMessage(ChatColor.GOLD+ str + ChatColor.AQUA +"\n"+ Main.descriptionsEvent.get(str));
+                                	e.getWhoClicked().sendMessage(ChatColor.GOLD+ str + ChatColor.AQUA +"\n"+ Main.descriptionsLgEvent.get(str));
                                 	break;
                                 	
                             }

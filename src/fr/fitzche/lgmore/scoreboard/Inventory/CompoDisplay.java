@@ -13,11 +13,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
-import fr.fitzche.lgmore.RolesLg.Camp;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class CompoDisplay implements Listener{
@@ -95,17 +95,17 @@ public class CompoDisplay implements Listener{
 				config.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
 				
 				
-			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Villageois")) {
-				
-				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Villager), "Villageois", gm, inv, areOp.get(e.getWhoClicked().getName()));
-				e.getWhoClicked().openInventory(menu.invs.get(0));
-			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_RED+ "Loups-Garou")) {
-				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Wolf), "Loups-Garou", gm, inv, areOp.get(e.getWhoClicked().getName()));
-				e.getWhoClicked().openInventory(menu.invs.get(0));
-			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Solo et Hybrides"))  {
-				DisplayMenu menu = new DisplayMenu(RoleUtilLg.getItemOfCamp(gm, Camp.Other), "Solo et Hybrides", gm, inv, areOp.get(e.getWhoClicked().getName()));
-				e.getWhoClicked().openInventory(menu.invs.get(0));
 			}
+			
+			for (Camp camp: Camp.allCamps) {
+				
+				if (camp.getName().equals(e.getCurrentItem().getItemMeta().getDisplayName())) {
+					DisplayMenu menu = new DisplayMenu(RoleUtil.getItemOfCamp(gm, camp), camp.getName(), gm, inv, areOp.get(e.getWhoClicked().getName()));
+					e.getWhoClicked().openInventory(menu.invs.get(0));
+					
+				}
+			}
+			
 			
 			
 			

@@ -3,7 +3,7 @@ package fr.fitzche.lgmore.Util;
 import java.util.Random;
 
 import fr.fitzche.lgmore.PlayerData;
-import fr.fitzche.lgmore.LG.GameLg;
+import fr.fitzche.lgmore.Lg.GameLg;
 
 public class MathUtil {
 	public static int generateAlInt(int min, int max) {

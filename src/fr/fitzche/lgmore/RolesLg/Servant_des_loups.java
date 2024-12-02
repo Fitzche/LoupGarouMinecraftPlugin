@@ -3,8 +3,10 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.servantLgChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import net.md_5.bungee.api.ChatColor;

@@ -1,16 +1,16 @@
 package fr.fitzche.lgmore.Util;
 
 import java.util.ArrayList;
-import fr.fitzche.lgmore.RolesLg.Camp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import Lg.GameLg;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
@@ -198,23 +198,23 @@ public class GameLgUtil {
 	
 	public static void askRes(GameLg game, PlayerData ply, PlayerData killer) {
 		
-		if (RoleUtilLg.isRoleIn(game, RolesLg.INFECT_PERE_DES_LOUPS) || RoleUtilLg.isRoleIn(game, RolesLg.SORCIERE) || RoleUtilLg.isRoleIn(game, RolesLg.LOUP_GRIMEUR)) {
+		if (RoleUtil.isRoleIn(game, RolesLg.INFECT_PERE_DES_LOUPS) || RoleUtil.isRoleIn(game, RolesLg.SORCIERE) || RoleUtil.isRoleIn(game, RolesLg.LOUP_GRIMEUR)) {
 			
-			ArrayList<PlayerData> plys = RoleUtilLg.getPlayersWithRole(game, RolesLg.INFECT_PERE_DES_LOUPS);
+			ArrayList<PlayerData> plys = RoleUtil.getPlayersWithRole(game, RolesLg.INFECT_PERE_DES_LOUPS);
 			
 			for (PlayerData ply1: plys) {
 				INFECT_PERE_DES_LOUPS role = (INFECT_PERE_DES_LOUPS) ply1.roleIn;
 				role.infect(ply, killer);
 			}
 			
-			ArrayList<PlayerData> plys1 = RoleUtilLg.getPlayersWithRole(game, RolesLg.SORCIERE);
+			ArrayList<PlayerData> plys1 = RoleUtil.getPlayersWithRole(game, RolesLg.SORCIERE);
 			for (PlayerData ply1: plys1) {
 				SORCIERE role = (SORCIERE) ply1.roleIn;
 				role.lifePotion(ply);
 				
 			}
 			
-			ArrayList<PlayerData> plys2 = RoleUtilLg.getPlayersWithRole(game, RolesLg.LOUP_GRIMEUR);
+			ArrayList<PlayerData> plys2 = RoleUtil.getPlayersWithRole(game, RolesLg.LOUP_GRIMEUR);
 			for (PlayerData plyh:plys2) {
 				System.out.println("ask grim in ask res in gamelguti");
 				if (plyh.getName().equals(killer.getName())) {

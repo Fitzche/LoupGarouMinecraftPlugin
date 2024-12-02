@@ -39,9 +39,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
@@ -51,7 +50,7 @@ import fr.fitzche.lgmore.RolesLg.SOEUR;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.LgTab;
@@ -63,8 +62,7 @@ import net.md_5.bungee.api.ChatColor;
 public class Main extends JavaPlugin implements Listener {
 	public static Server server;
 	public static ArrayList<GameLg> games = new ArrayList<GameLg>();
-	public static Scoreboard scoreboardLg;
-	public static Objective objective;
+	
 	public static JavaPlugin plug;
 	public static Permission lgop;
 	public HashMap<String, Boolean> alreadyCo = new HashMap<String, Boolean>();
@@ -105,10 +103,7 @@ public class Main extends JavaPlugin implements Listener {
 		
 
 		
-		scoreboardLg = Bukkit.getScoreboardManager().getNewScoreboard();
-		objective = scoreboardLg.registerNewObjective((ChatColor.RED +"UhcM" + ChatColor.RED.ITALIC + "by Fitz"  ), "dummy");
-	    System.out.println("score created");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		
 		
 	    
 	    
@@ -152,7 +147,7 @@ public class Main extends JavaPlugin implements Listener {
 				RolesLg.VOLEUR,
 				RolesLg.VOYANTE
 				));
-		RoleUtilLg.existingRoles.addAll(list);
+		RoleUtil.existingRoles.addAll(list);
 
 		eventsLgNames.add("Brume");
 		descriptionsLgEvent.put("Brume", "Probabilité à la mort d'un joueur, que le message de mort soit caché au village");
@@ -190,7 +185,7 @@ public class Main extends JavaPlugin implements Listener {
 		
 		
 		
-		e.getPlayer().setScoreboard(Main.scoreboardLg);
+		
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" joined");
 		if (e.getPlayer().getName().equals("TheGuill84")) {
 			e.getPlayer().sendMessage("Hey, tu as rejoint un serveur avec le plugin de lg de Fitzche, fais /lga Game create [nomDeLaGame] pour créer un game, puis /lga Game config [nomDeLaGame] pour la config puis la start... ");
@@ -213,7 +208,7 @@ public class Main extends JavaPlugin implements Listener {
 		
 		System.out.println("left");
 
-		e.getPlayer().setScoreboard(Main.scoreboardLg);
+		
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" left");
 	
 		if (GameLgUtil.getGameOfPlayer(e.getPlayer(), " at 300 of Main") == null) {

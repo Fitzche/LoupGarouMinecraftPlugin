@@ -4,12 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
-import fr.fitzche.lgmore.RolesLg.Camp;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
 public class EnfantChecker implements ResCheck {
@@ -39,7 +39,7 @@ public class EnfantChecker implements ResCheck {
 				es.playerWithRole.camp = Camp.Wolf;
 				es.playerWithRole.sendMessage(ChatColor.DARK_RED+"Votre modèle est mort, vous rejoignez donc les loups garou");
 				es.playerWithRole.role = RolesLg.SIMPLE_WOLF;
-				es.playerWithRole.roleIn = RoleUtilLg.createRoleOfPlayerRoles(es.playerWithRole);
+				es.playerWithRole.roleIn = RoleUtil.createRoleOfPlayerRoles(es.playerWithRole);
 				es.playerWithRole = null;
 			}
 		}

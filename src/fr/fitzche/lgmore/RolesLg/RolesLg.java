@@ -7,11 +7,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import fr.fitzche.lgmore.LG.GameLg;
+import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Role;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 
-public enum RolesLg {
+public enum RolesLg implements Role{
 	SIMPLE_VILLAGER(Camp.Villager, "Simple Villageois", Material.WHEAT, Aura.LUMINOUS, "Le simple villageois gagne avec les villageois sans aucun pouvoir hormis son droit de vote et son épée. Aura = lumineuse"),//correspondant
 	VOYANTE(Camp.Villager, "Voyante", Material.ENCHANTMENT_TABLE, Aura.LUMINOUS, "La voyante peut espionner un joueur à chaque épisode, mais gare à elle si elle se trompe. Aura = lumineuse"),//correspondant
 	INFECT_PERE_DES_LOUPS(Camp.Wolf, "Infect Père Des Loups", Material.FERMENTED_SPIDER_EYE, Aura.DANGEROUS, "L'infect père des loups (ou IPDL) possède force de nuit, de plus il peut choisir une fois dans la partie de réssuciter un joueur victime des loups garou en clicquant sur un message, celui-ci sera infecté et devra gagner avec les loups. Aura = Dangereuse" ),//correspondant
@@ -95,7 +97,7 @@ public enum RolesLg {
 		ItemMeta meta = this.item.getItemMeta();
 		meta.setDisplayName(this.roleCamp.getColor()+ this.name);
 		ArrayList<String> lores = new ArrayList<String>();
-		lores.add(String.valueOf( RoleUtilLg.getPlayersWithRole(gameScore, this).size()));
+		lores.add(String.valueOf( RoleUtil.getPlayersWithRole(gameScore, this).size()));
 		meta.setLore(lores);
 	}
 }

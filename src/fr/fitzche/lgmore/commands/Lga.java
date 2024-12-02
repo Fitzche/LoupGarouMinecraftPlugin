@@ -31,18 +31,18 @@ import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 
 import org.bukkit.command.TabCompleter.*;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
-import fr.fitzche.lgmore.LG.GameLg;
-import fr.fitzche.lgmore.LG.GameStatut;
+import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
-import fr.fitzche.lgmore.RolesLg.Camp;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
-import fr.fitzche.lgmore.Util.RoleUtilLg;
+import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import fr.fitzche.lgmore.scoreboard.Inventory.ConfigDisplay;
@@ -405,7 +405,7 @@ public class Lga implements CommandExecutor  {
 					return true;
 				}
 				
-				game.roles.add(RoleUtilLg.RoleofString(args[3]));
+				game.roles.add(RoleUtil.RoleofString(args[3]));
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					player.sendMessage("role ajouté: " +args[3] );
@@ -436,7 +436,7 @@ public class Lga implements CommandExecutor  {
 							}
 							
 							
-							GameLgUtil.searchGame(args[2]).roles.remove(RoleUtilLg.RoleofString(args[3]));
+							GameLgUtil.searchGame(args[2]).roles.remove(RoleUtil.RoleofString(args[3]));
 
 							System.out.println(args[3] + " retiré");
 							sender.sendMessage(args[3] + " retiré");

@@ -14,7 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
-import Lg.GameLg;
+import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.commands.Lga;
 
 
