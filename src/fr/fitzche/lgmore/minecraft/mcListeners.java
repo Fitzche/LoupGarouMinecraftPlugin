@@ -17,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -62,8 +64,12 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SOEUR;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.Util.*;
+import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.Lga;
+import fr.fitzche.lgmore.scoreboard.Inventory.VoteInv;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 public class mcListeners implements Listener {
@@ -73,13 +79,29 @@ public class mcListeners implements Listener {
 	@Deprecated
 	public void onPlayerDeath(PlayerDeathEvent e ) {
 		System.out.println("Player "+ e.getEntity().getName() + " killed by "+ e.getEntity().getKiller().getName());
-		
+		final Player killer;
+		if (e.getEntity().getKiller() instanceof Player) {
+			killer = e.getEntity().getKiller();
+		} else if (e.getEntity().getKiller() instanceof Arrow && ((Arrow) e.getEntity().getKiller()).getShooter() instanceof Player) {
+			killer = (Player) ((Arrow) e.getEntity().getKiller()).getShooter();
+		} else {
+			killer = null;
+		}
 		if (GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main") != null) {
 			System.out.println("game not null");
 			Location loc = e.getEntity().getPlayer().getLocation();
 			GameLg game = GameLgUtil.getGameOfPlayer(e.getEntity().getPlayer(), " at 73 Main");
-			Player killer = e.getEntity().getKiller();
-			final ItemStack[] items = e.getEntity().getPlayer().getInventory().getContents();
+			
+			
+			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+			for (ItemStack item:e.getEntity().getPlayer().getInventory().getArmorContents()) {
+				items.add(item);
+			}
+			for (ItemStack item:e.getEntity().getPlayer().getInventory().getContents()) {
+				items.add(item);
+			}
+			
+			
 			
 			if (game.statut.equals(GameStatut.NOT_STARTED)) {
 				System.out.println("game not started");
@@ -89,7 +111,7 @@ public class mcListeners implements Listener {
 					@Override
 					public void run() {
 						e.getEntity().getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 100, false, false));
-
+						
 						e.getEntity().teleport(loc);
 						
 					}
@@ -115,8 +137,17 @@ public class mcListeners implements Listener {
 
 			}
 			
+			for (ResCheck checker:game.resCheckers) {
+				checker.beforeDie(e);
+			}
+			
 			
 			int k = 300;
+			
+			
+			
+			
+			
 			
 			
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
@@ -160,20 +191,30 @@ public class mcListeners implements Listener {
 			    		
 			    		
 			    	} else { 
-			    		PlayerData killerData = PlayerUtil.getDataOfPlayer(killer, "at death announce");
-			    		killerData.numberOfKill ++;
 			    		
-			    		for (ResCheck checker: game.resCheckers) {
-			    			checker.runDeathAction(e, killer);
+			    		boolean hidden = false;
+			    		if (killer != null) {
+			    			PlayerData killerData = PlayerUtil.getDataOfPlayer(killer, "at death announce");
+			    			killerData.numberOfKill ++;
+			    			
+			    			for (ResCheck checker: game.resCheckers) {
+			    				checker.runDeathAction(e, killer);
+			    				if (checker.hide(e)) {
+			    				hidden = true;
+			    				}
+			    			}
 			    		}
+			    		
 
+				    	if (!hidden) {
+				    		//ANNOUNCE DEATH
+				    		if (player1.grimed) {
+				    			game.announceDeath(player1, RolesLg.SIMPLE_WOLF);
+				    		} else {
+				    			game.announceDeath(player1);
+				    		}
+				    	}
 				    	
-				    	//ANNOUNCE DEATH
-			    		if (player1.grimed) {
-			    			game.announceDeath(player1, RolesLg.SIMPLE_WOLF);
-			    		} else {
-			    			game.announceDeath(player1);
-			    		}
 				    	
 				    	//DROP STUFF
 						
@@ -211,14 +252,7 @@ public class mcListeners implements Listener {
 		}
 	
 	}
-	@EventHandler
-	public void onInventoryInteract(InventoryInteractEvent event) {
-		//System.out.println("interact");
-		if ( event.getInventory() != null && event.getInventory().equals(RoleDisplay.myInventory)) {
-			event.setCancelled(true);
-			System.out.println("player can't do that");
-		}
-	}
+	
 	
 	@EventHandler 
 	public void InventoryClickEvent(InventoryClickEvent event) {
@@ -250,6 +284,8 @@ public class mcListeners implements Listener {
 				
 				ArrayList<PlayerData> receiver = new ArrayList<PlayerData>();
 				receiver.addAll(game.getRealWolfAlive());
+				
+				//Add de la pf au chat des loups
 				receiver.addAll(RoleUtil.getPlayersWithRole(game, RolesLg.PETITE_FILLE));
 				
 				for (PlayerData player: receiver) {
@@ -278,9 +314,7 @@ public class mcListeners implements Listener {
 		}
 		
 		
-		if (e.getEntity() instanceof Player &&GameLgUtil.getGameOfPlayer((Player) e.getEntity(), "at damageByEntityEvent 1") == null || GameLgUtil.getGameOfPlayer((Player) e.getDamager(), "at damageByEntityEvent 2") == null ) {
-			return;
-		}
+		
 		
 		//VERIFIE SI LA FLECHE QUI A TUé EST TIRée PAR JOUEUR, si tué par flèche, met le tireur en attacker si oui
 
@@ -299,6 +333,10 @@ public class mcListeners implements Listener {
 		} else {
 			attacker = (Player) e.getDamager();
 			byPlayer = true;
+		}
+		
+		if (e.getEntity() instanceof Player &&GameLgUtil.getGameOfPlayer((Player) e.getEntity(), "at damageByEntityEvent 1") == null || GameLgUtil.getGameOfPlayer(attacker, "at damageByEntityEvent 2") == null ) {
+			return;
 		}
 		System.out.println("base damage: " + e.getDamage());
 
@@ -355,6 +393,9 @@ public class mcListeners implements Listener {
 
 			if (damager.role == null) {
 				return;	
+			}
+			if (damager.hasStrenghtAgainst.getOrDefault(e.getEntity(), false)) {
+				more += 0.2;
 			}
 
 			//chasseur Strenght against wolf
@@ -495,6 +536,8 @@ public class mcListeners implements Listener {
 		
 		
 	}
+		
+		
 	
 	
 	
@@ -510,6 +553,82 @@ public class mcListeners implements Listener {
 			}
 			inventory.setItem(i, null);
 			
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent e) {
+		System.out.println("interact onPlayerInteract");
+		if (e.getClickedBlock() != null && e.getClickedBlock().hasMetadata("interactBlockVote")) {
+			System.out.println("interact true onPlayerInteract");
+			e.getPlayer().openInventory(GameLgUtil.getGameOfPlayer((Player) e.getPlayer(), "interactBlockVote").invVote);
+		}
+		if (e.getClickedBlock() != null && e.getClickedBlock().hasMetadata("interactBlockAccuse")) {
+			e.getPlayer().sendMessage(ChatColor.RED+"Vous avez 30sec pour accuser un joueur avec la commande /lg accuse [nom du joueur], votre accusation sera rendu publique au prochain épisode.");
+			PlayerData p = PlayerUtil.getDataOfPlayer(e.getPlayer(), "on player interact bloc accuse");
+			p.canAccuse = true;
+			
+			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					p.canAccuse = false;
+					
+				}
+				
+			}, 600);
+		}
+	}
+	
+	public boolean onPlayerInteract(Block bloc, Player p) {
+		System.out.println("interact onPlayerInteract");
+		if (bloc != null && bloc.hasMetadata("interactBlockVote")) {
+			System.out.println("interact true onPlayerInteract");
+			p.openInventory(GameLgUtil.getGameOfPlayer((Player) p, "interactBlockVote").invVote);
+		}else if (bloc != null && bloc.hasMetadata("interactBlockAccuse")) {
+			p.sendMessage(ChatColor.RED+"Vous avez 30sec pour accuser un joueur avec la commande /lg accuse [nom du joueur], votre accusation sera rendu publique au prochain épisode.");
+			PlayerData ply = PlayerUtil.getDataOfPlayer(p, "on player interact bloc accuse");
+			ply.canAccuse = true;
+			
+			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					ply.canAccuse = false;
+					
+				}
+				
+			}, 600);
+		} else {
+			return false;
+		}
+		return true;
+	}
+	
+	@EventHandler
+	public void onInventoryOpen(InventoryOpenEvent e) {
+		
+		
+	}
+	
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent e) {
+		System.out.println("vote1");
+		if (e.getInventory().equals(GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), "click").invVote)) {
+			System.out.println("vote2");
+			e.setCancelled(true);
+			if (e.getCurrentItem().getItemMeta().hasLore()) {
+				if (e.getCurrentItem().getItemMeta().getLore().contains("utilisé")) {
+					return;
+				}
+			}
+			if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta() != null && e.getCurrentItem().getItemMeta().getDisplayName().equals("Voter") ) {
+				
+				
+				System.out.println("vote3");
+				VoteInv inv = new VoteInv((Player) e.getWhoClicked(), GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), ""), e.getSlot());
+				
+			}
 		}
 	}
 }

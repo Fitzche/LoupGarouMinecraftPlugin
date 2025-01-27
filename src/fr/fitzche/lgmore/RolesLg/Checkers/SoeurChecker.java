@@ -38,5 +38,20 @@ public class SoeurChecker implements ResCheck {
 		}
 
 	}
+	@Override
+	public boolean hide(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void beforeDie(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

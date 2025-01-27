@@ -4,16 +4,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.PlayerData;
-import fr.fitzche.lgmore.RolesLg.Infections.Virus;
-import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
+import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
-public class PoisonVirusChecker implements ResCheck {
-
-	public Virus virus;
+public class thierceAnge_Checker implements ResCheck {
+	THIERCE_ANGE ange;
 	
-	public PoisonVirusChecker(Virus virus) {
-		this.virus = virus;
+	public thierceAnge_Checker(THIERCE_ANGE ange) {
+		this.ange = ange;
 	}
 	@Override
 	public boolean checkRes(PlayerDeathEvent e) {
@@ -23,21 +22,20 @@ public class PoisonVirusChecker implements ResCheck {
 
 	@Override
 	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (virus.type.equals(VirusType.POISON) ) {
-			if (e.getEntity().getName().equals(virus.infecter.Name)) {
-				if (k.getName().equals(virus.owner.Name)) {
-					virus.poisonGuerison = true;
-				}
-				virus.stopped = true;
-			}
-			
+		if (k.getName().equals(ange.playerWithRole.getName()) && ange.wantNotAnnounced.contains(PlayerUtil.getDataOfPlayer(e.getEntity(), "at t ange checker 3"))) {
+			ange.notAnnounced.add(PlayerUtil.getDataOfPlayer(e.getEntity(), "at t ange checker 3*2"));
 		}
 
 	}
+
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
-		// TODO Auto-generated method stub
-		return false;
+		if (this.ange.notAnnounced.contains(PlayerUtil.getDataOfPlayer(e.getEntity(), "at T ange checker"))) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	@Override
 	public void beforeDie(PlayerDeathEvent e) {

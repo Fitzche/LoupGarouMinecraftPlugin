@@ -6,8 +6,8 @@ import org.bukkit.ChatColor;
 
 public enum Camp {
 	Villager(ChatColor.GREEN, "Villageois"),
-	Wolf(ChatColor.RED, "Loup"),
-	Other(ChatColor.YELLOW, "Solo ou Hybride"),
+	Wolf(ChatColor.DARK_RED, "Loups-Garou"),
+	Other(ChatColor.GOLD, "Solo et Hybride"),
 	TEAM(ChatColor.GOLD, "Team"),
 	Love(ChatColor.LIGHT_PURPLE, "Amoureux");
 	

@@ -207,13 +207,7 @@ public class Lga implements CommandExecutor  {
 				Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
 					@Override
 		        	public void run() {
-						int x1 = game.timer.getEpisode();
 						game.everySec();
-						int x2 = game.timer.getEpisode();
-						if (x1 != x2) {
-		        			System.out.println("play ep");
-		        			game.playEpisode();
-		        		}
 					}
 				}, 0, 20);
 				
@@ -527,6 +521,10 @@ public class Lga implements CommandExecutor  {
 
 				}
 				
+			} else if (args[1].equals("placeVote")) {
+				GameLgUtil.getGameOfPlayer((Player) sender, "at placeVote command").placeVoteBlock((Player) sender);
+			}else if (args[1].equals("placeAccuse")) {
+				GameLgUtil.getGameOfPlayer((Player) sender, "at placeVote command").placeAccuseBlock((Player) sender);
 			}
 		}
 		return false;

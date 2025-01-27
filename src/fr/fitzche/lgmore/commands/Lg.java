@@ -2,14 +2,17 @@ package fr.fitzche.lgmore.commands;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
@@ -24,6 +27,7 @@ import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
+import fr.fitzche.lgmore.RolesLg.LOUP_BRUMEUX;
 import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
@@ -32,10 +36,12 @@ import fr.fitzche.lgmore.RolesLg.RENARD;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SALVATEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
+import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
 import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
@@ -224,18 +230,31 @@ public class Lg implements CommandExecutor {
 			
 			System.out.println(args[1]);
 			
-		} else if (args[0].equals("vote")){
+		} else if (args[0].equals("voteCmd")){
+			if (args.length < 3) {
+				return true;
+			}
 			
 			
 			PlayerData player = PlayerUtil.getDataPlayer(sender.getName(), "at command ''vote'' of Lg, 1 ");
+			ItemStack item = GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").invVote.getItem(Integer.valueOf(args[2]));
+			if (item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().contains("utilisé")) {
+				player.sendMessage(ChatColor.GOLD+"Cette enveloppe à vote est déjà utilisée");
+				return true;
+			}
 			if (!GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").isInVote) {
 				player.sendMessage(ChatColor.GOLD +"Ce n'est pas l'heure du vote");
+				return true;
 			} 
 			
 			
 			PlayerData voted = PlayerUtil.getDataPlayer(args[1], "at command ''vote'' of Lg,  3");
+			if (GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").cannotBeVoted.contains(player)) {
+				player.sendMessage(ChatColor.RED+"Vous ne pouvez pas voter");
+				return true;
+			}
 			
-			if (!player.canVoted.contains(voted)) {
+			if (player.timeWithPlayers.getOrDefault(voted.getName(), 0) < 1) {
 				player.sendMessage(ChatColor.GOLD +"Vous n'avez pas croisé ce joueur, vous ne pouvez donc pas voter pour celui-ci");
 				return true;
 
@@ -246,8 +265,11 @@ public class Lg implements CommandExecutor {
 			}
 			
 			player.voted = voted;
-			player.sendMessage("Vous avez voté pour "+ voted.Name +", pour changer, faites /lg vote");
+			player.sendMessage("Vous avez voté pour "+ voted.Name +"");
 			voted.vote ++;
+			ArrayList<String> str = new ArrayList<String>();
+			str.add("utilisé");
+			ItemUtil.setLore(GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 3 ").invVote.getItem(Integer.valueOf(args[2])), str);
 		} else if (args[0].equals("tirer")) {
 			if (PlayerUtil.getPlayer(args[1]) != null && GameLgUtil.getGameOfPlayer(PlayerUtil.getPlayer(args[1]), "at command tirer of Lg commander") != null && PlayerUtil.getDataPlayer(args[1], "at command tirer of Lg commander 2").inLife) {
 				
@@ -577,6 +599,9 @@ public class Lg implements CommandExecutor {
 					+ "\n"+"\n"+"/lga Game config [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+ "ouvre le menu de configuration de la game [nomDeLaGame]"+ "\n"
 					+ "\n"+"\n"+"/lga Game start [nomDeLaGame] ---> "+ChatColor.RED+"(commande op) "+ ChatColor.AQUA+ "lance la partie"+ "\n"
 					+ "\n"+"\n"+"/lga say [message] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" annonce un message à tout le monde"+ "\n"
+					+ "\n" + "/lg vote [nomDuJoueur] ---> permet de voter contre un joueur pendant la phase des votes"
+					+ "\n" + "/lg accuse [nomDuJoueur] ---> permet d'accuser un joueur, l'executeur de la commande aura alors 5min pour tuer l'accusé sous peine de perdre de la vie "
+					+ "\n" + "/lg escape  ---> permet d'échapper à la justice du village, cependant au su et vu de tous, le joueur ne pourra alors ni voter ni etre voté."
 					+ "\n"+"\n"+"/lg role ---> affiche le role du joueur, et d'autre infos supplémentaires comme la liste des loups s'il est loup"+ "\n"
 					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n"
 							+ "/color ---> permet de colorer des pseudo "+ ChatColor.RED + "(plugin externe)"+ ChatColor.AQUA + "."+ "\n"
@@ -703,6 +728,85 @@ public class Lg implements CommandExecutor {
 					p.grimed = true;
 					sender.sendMessage(ChatColor.GOLD+"Vous avez grimmé "+ args[1]);
 				}
+			} else if (args[0].equals("escape")) {
+				GameLg game = GameLgUtil.getGameOfPlayer((Player) sender, "at the lg escape command");
+				game.removeFromVote(PlayerUtil.getDataOfPlayer((Player) sender, "at lg escape command 2"));
+				
+			} else if (args[0].equals("accuse")) {
+				GameLg game = GameLgUtil.getGameOfPlayer((Player) sender, "at the lg accuse command");
+				PlayerData accuser = PlayerUtil.getDataOfPlayer((Player) sender, "at lg accuse command");
+				PlayerData accused = PlayerUtil.getDataPlayer(args[1], "at lg accuse command");
+				
+				if (accused == null || accuser == null) {
+					return true;
+				}
+				
+				if (!accuser.canAccuse) {
+					accuser.sendMessage(ChatColor.RED+"Vous ne pouvez pas accuser un joueur sans passer par la borne de justice représenté pas un jukebox");
+					return true;
+				}
+				
+				if (accuser.timeWithPlayers.getOrDefault(accused.getName(), 0) < 30) {
+					sender.sendMessage(ChatColor.GOLD+ "Vous devez passer au moins 5 min à moins de 20 blocs du joueur visé");
+					sender.sendMessage(Integer.toString(accuser.timeWithPlayers.getOrDefault(accused.getName(),0)));
+					return true;
+				}
+				
+				
+				if (accuser.getLocation().distance(accused.getLocation()) > 50) {
+					sender.sendMessage(ChatColor.GOLD+ "Vous devez être à maximum 50 blocs du joueur visé");
+					return true;
+				}
+				if (game.cannotBeVoted.contains(accused)) {
+					sender.sendMessage(ChatColor.GOLD+ "Le joueur visé a fuit la justice du village");
+					return true;
+				}
+				
+				
+				
+				game.futureAcc.put(accuser.getName(), accused);
+				accuser.sendMessage(ChatColor.RED+"Votre accusation aura lieu au prochain épisode");
+				
+			} else if (args[0].equals("hideDeath")) {
+				if (args.length < 2) {
+					sender.sendMessage("pas assez d'arguments");
+					return false;
+				}
+				PlayerData target = PlayerUtil.getDataPlayer(args[1], "at hideDeath command");
+				if (target == null) {
+					sender.sendMessage("Veuillez entrer un nom de joueur valide");
+					return true;
+				}
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at hideDeath command");
+				if (p.role.equals(RolesLg.ANGE_THIERCE)) {
+					((THIERCE_ANGE) p.roleIn).wantNotAnnounced.add(target);
+					p.sendMessage(ChatColor.GOLD+"La mort du joueur "+ target.getName() + " ne sera pas annoncée si vous le tuez.");
+					
+				} else {
+					p.sendMessage(ChatColor.GOLD+"Votre role ne vous permet pas cette commande");
+				}
+			} else if (args[0].equals("hidelgbr")) {
+				PlayerData commander = PlayerUtil.getDataPlayer(args[2], "at hidelgbr command 1");
+				PlayerData target = PlayerUtil.getDataPlayer(args[1], "at hidelgbr command 2");
+				
+				if (commander == null || target == null) {
+					sender.sendMessage("commande invalide");
+					return true;
+				}
+				
+				if (!commander.role.equals(RolesLg.LOUP_BRUMEUX)) {
+					sender.sendMessage("Votre joueur ne vous permet pas cette commande");
+					return true;
+					
+				}
+				if (((LOUP_BRUMEUX) commander.roleIn).Using < 1) {
+					sender.sendMessage(ChatColor.GOLD + "Vous avez déjà utilisé votre pouvoir 2 fois");
+					return true;
+				}
+				((LOUP_BRUMEUX) commander.roleIn).toHide.add(target);
+				((LOUP_BRUMEUX) commander.roleIn).Using --;
+				commander.sendMessage("Vous utilisez votre pouvoir et la mort du joueur "+target.getName()+" ne sera pas annoncée.");
+				
 			}
 	
 		

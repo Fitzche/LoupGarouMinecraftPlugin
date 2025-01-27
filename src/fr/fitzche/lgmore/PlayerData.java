@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -45,6 +46,9 @@ public class PlayerData {
 	public boolean grimed = false;
 	public int numberOfKill = 0;
 	public ScoreboardLg board;
+	public HashMap<String, Integer> timeWithPlayers = new HashMap<String, Integer>();
+	public HashMap<Player, Boolean> hasStrenghtAgainst = new HashMap<Player, Boolean>();
+	public boolean canAccuse = false;
 	
 	public PlayerData(Player player) {
 		
@@ -143,7 +147,7 @@ public class PlayerData {
 	
 	public void askVoted() {
 		
-		this.player.sendMessage(ChatColor.GOLD+"Vous pouvez voter pour le joueur de votre choix"+ "\n"+ " Le joueur le plus voté subira 15s de poison et perdra 1 coeur de façon permanente");
+		this.player.sendMessage(ChatColor.GOLD+"Vous pouvez voter pour le joueur de votre choix en tapant sur une urne de vote comportant encore des votes"+ "\n"+ " Le joueur le plus voté subira 15s de poison et perdra 1 coeur de façon permanente");
 		this.vote = 0;
 		this.voted = null;
 	}

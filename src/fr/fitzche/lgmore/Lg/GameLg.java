@@ -15,7 +15,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,10 +35,12 @@ import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
 import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Checkers.TimeresCheck;
 import fr.fitzche.lgmore.RolesLg.Checkers.VoteChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -57,6 +61,10 @@ public class GameLg implements Listener{
 	public Timer timer;
 	public String name;
 	
+	
+	private int epicTaux = 0;
+	private int oratTaux = 0;
+	private int tragicTaux = 0;
 	
 	
 	public Player hunter = null;
@@ -79,6 +87,7 @@ public class GameLg implements Listener{
 	public boolean isInVote;
 	public boolean isInDisc;
 	public ArrayList<FutureAction> futuresActions = new ArrayList<FutureAction>();
+	public HashMap<String, PlayerData> futureAcc = new HashMap<String, PlayerData>();
 	
 	public HashMap<String, Integer> probasEvents = new HashMap<String, Integer>();
 	
@@ -94,14 +103,23 @@ public class GameLg implements Listener{
 	public boolean stopped;
 	
 	public ArrayList<ResCheck> resCheckers = new ArrayList<ResCheck>();
+	public ArrayList<PlayerData> cannotBeVoted = new ArrayList<PlayerData>();
 	public CompoDisplay compo = new CompoDisplay(this);
 	public EventDisplay events = new EventDisplay(this);
 	public PlayerDisplay plys;
+	public int voteForce = 1;
+	
+	
 	
 	
 	public ConfigDisplay config = new ConfigDisplay(this);
 	
 	public boolean isMeetup = false;
+	
+	public Inventory invVote;
+	
+	
+	
 
 	
 	public GameLg(String name) {
@@ -181,141 +199,149 @@ public class GameLg implements Listener{
 	public void everySec() {
 		GameLg game = this;
 		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plug, new BukkitRunnable() {
-        	@Override
-        	public void run() {
-        		if (stopped) {
-        			
-        			return;
-        		}
-        		
-        		
-        		if (board.istimeRunned == false) {
-        			board.istimeRunned = true;
-        			timer.temps = -20;
-        			broadcoast(ChatColor.UNDERLINE + "La partie va commencer dans 20 secondes");
-        			for (PlayerData p:getPlayerAlive()) {
-    					p.board = new ScoreboardLg(game, p);
-    					p.board.setgame(game);
-    					p.board.refresh();
-    				}
-        		}
-        		int x1 = timer.getEpisode();
-        		timer.addOne();
-        		int x2 = timer.getEpisode();
-        		
-        		
-        		
-        		
-        		
-        		if (game.timer.temps == -10) {
-        			System.out.println("gived start kit Lga l.163");
-        			for (PlayerData ply:game.players) {
-        				ply.setMaxHealth(20);
-        				ply.player.setHealth(20);
-    					GameLgUtil.tpAl(ply);
-    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
-    					ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
-    					ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
-    				}
-        		}
-        		if (game.timer.temps==0) {
-        			game.broadcoast(ChatColor.UNDERLINE + "La partie commence");
-					for (PlayerData player: game.getPlayerAlive()) {
-						if (player.Name.equals("FITZCHE")) {
-							game.broadcoast("Le développeur est dans la partie...");
-						}
-					}
+		if (stopped) {
+			
+			return;
+		}
+		
+		
+		if (board.istimeRunned == false) {
+			board.istimeRunned = true;
+			timer.temps = -20;
+			broadcoast(ChatColor.UNDERLINE + "La partie va commencer dans 20 secondes");
+			for (PlayerData p:getPlayerAlive()) {
+				p.board = new ScoreboardLg(game, p);
+				p.board.setgame(game);
+				p.board.refresh();
+			}
+			
+		}
+		
+		boolean x = timer.addOne();
+		if (x) {
+			playEpisode();
+		}
+		
+		
+		
+		
+		
+		
+		if (game.timer.temps == -10) {
+			System.out.println("gived start kit Lga l.163");
+			for (PlayerData ply:game.players) {
+				ply.setMaxHealth(20);
+				ply.player.setHealth(20);
+				GameLgUtil.tpAl(ply);
+				ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
+				ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
+				ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
+			}
+		}
+		if (game.timer.temps==0) {
+			game.broadcoast(ChatColor.UNDERLINE + "La partie commence");
+			for (PlayerData player: game.getPlayerAlive()) {
+				if (player.Name.equals("FITZCHE")) {
+					game.broadcoast("Le développeur est dans la partie...");
+				}
+			}
+			
+			//STATUT
+			game.statut = GameStatut.BEFORE_ROLE;
+			//FIN STATUT
+			
+			if (game.isMeetup) {
+				for (PlayerData p:game.getPlayerAlive()) {
+					ItemStack legging = new ItemStack(Material.IRON_LEGGINGS);
+					legging.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+					ItemStack boots = new ItemStack(Material.IRON_BOOTS);
+					boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+					ItemStack helmet = new ItemStack(Material.IRON_HELMET);
+					helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
+					ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+					chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 2);
+					ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+					sword.addEnchantment(Enchantment.DAMAGE_ALL	, 3);
+					ItemStack gap = new ItemStack(Material.GOLDEN_APPLE, 15);
+					ItemStack bow = new ItemStack(Material.BOW);
+					bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+					ItemStack arrows = new ItemStack(Material.ARROW, 64);
 					
-					//STATUT
-					game.statut = GameStatut.BEFORE_ROLE;
-					//FIN STATUT
-					
-					if (game.isMeetup) {
-						for (PlayerData p:game.getPlayerAlive()) {
-							ItemStack legging = new ItemStack(Material.IRON_LEGGINGS);
-    						legging.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
-    						ItemStack boots = new ItemStack(Material.IRON_BOOTS);
-    						boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
-    						ItemStack helmet = new ItemStack(Material.IRON_HELMET);
-    						helmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 3);
-    						ItemStack chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
-    						chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL	, 2);
-    						ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
-    						sword.addEnchantment(Enchantment.DAMAGE_ALL	, 3);
-    						ItemStack gap = new ItemStack(Material.GOLDEN_APPLE, 15);
-    						ItemStack bow = new ItemStack(Material.BOW);
-    						bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
-    						ItemStack arrows = new ItemStack(Material.ARROW, 64);
-    						
-    						if (p.isOnline) {
-    							p.player.getInventory().addItem(legging);
-    							p.player.getInventory().addItem(boots);
-    							p.player.getInventory().addItem(helmet);
-    							p.player.getInventory().addItem(chestplate);
-    							p.player.getInventory().addItem(sword);
-    							p.player.getInventory().addItem(gap);
-    							p.player.getInventory().addItem(bow);
-    							p.player.getInventory().addItem(arrows);
-    							p.player.getInventory().addItem(new ItemStack(Material.ANVIL));
-    							p.player.giveExpLevels(1000);
-    						}
-						}
-						for (int i = 0; i <= 1199; i++) {
-							game.timer.addOne();
-						}
+					if (p.isOnline) {
+						p.player.getInventory().addItem(legging);
+						p.player.getInventory().addItem(boots);
+						p.player.getInventory().addItem(helmet);
+						p.player.getInventory().addItem(chestplate);
+						p.player.getInventory().addItem(sword);
+						p.player.getInventory().addItem(gap);
+						p.player.getInventory().addItem(bow);
+						p.player.getInventory().addItem(arrows);
+						p.player.getInventory().addItem(new ItemStack(Material.ANVIL));
+						p.player.giveExpLevels(1000);
 					}
-        		}
-        		
-        		
-        		if (game.timer.temps == 1200) {
-        			game.statut = GameStatut.IN_GAME;
-        			game.attributeRoleToAll();
-        			
-        		}
-        		
-        		if (game.timer.temps > 1200) {
-        			
-        			for (PlayerData player: game.getPlayerAlive()) {
-        				
-        				if (player == null) {
-        					System.out.println("temp hear in time ?> 1200 ");
-        					
-        				}else {
-        					player.roleIn.giveEffectAllTime();
-        				}
-        				
-        			}
-        			if (WorldUtil.getTime(Main.server.getWorld("world")).equals("day")) {
-        				
-        				for (PlayerData player: game.getPlayerAlive()) {
-        					player.roleIn.giveDayEffect();
-        				}
-        			} else if (WorldUtil.getTime(Main.server.getWorld("world")).equals("night")) {
-        				
-        				for (PlayerData player: game.getPlayerAlive()) {
-        					player.roleIn.giveNightEffectCheck();
-        				}
-        			}
-        			if (game.isMeetup) {
-        				if (game.timer.temps == 1201) {
-        					for (int i = 0; i <= 1197; i++) {
-        						game.timer.addOne();
-							}
-        				}
-        			}
-        		}
-        		
-        		
-        	}
-        }
-        		, 0, 20);
+				}
+				for (int i = 0; i <= 1199; i++) {
+					game.timer.addOne();
+				}
+			}
+		}
+		
+		
+		if (game.timer.temps == 1200) {
+			game.statut = GameStatut.IN_GAME;
+			game.attributeRoleToAll();
+			
+		}
+		
+		if (game.timer.temps > 1200) {
+			
+			
+			for (PlayerData player: game.getPlayerAlive()) {
+				
+				if (player == null) {
+					System.out.println("temp hear in time ?> 1200 ");
+					
+				}else {
+					player.roleIn.giveEffectAllTime();
+					for (PlayerData p : getPlayerAlive()) {
+						
+						if (player.getLocation().distance(p.getLocation()) < 20) {
+							
+							player.timeWithPlayers.put(p.getName(), player.timeWithPlayers.getOrDefault(p.getName(), 0) + 1);
+						}
+						
+					}
+				}
+				
+			}
+			if (WorldUtil.getTime(Main.server.getWorld("world")).equals("day")) {
+				
+				for (PlayerData player: game.getPlayerAlive()) {
+					player.roleIn.giveDayEffect();
+				}
+			} else if (WorldUtil.getTime(Main.server.getWorld("world")).equals("night")) {
+				
+				for (PlayerData player: game.getPlayerAlive()) {
+					player.roleIn.giveNightEffectCheck();
+				}
+			}
+			if (game.isMeetup) {
+				if (game.timer.temps == 1201) {
+					for (int i = 0; i <= 1197; i++) {
+						game.timer.addOne();
+					}
+				}
+			}
+		}
+		
+		
 	}
+	
 	
 	public void playersRefresh() {
 		for (PlayerData ply:this.playerAlive) {
 			for (PlayerData ply1:this.playerAlive) {
-				if (!ply.equals(ply1) && !ply.canVoted.contains(ply1) && ply.getLocation().distance(ply1.getLocation()) < 20 && ply1.inLife && ply.inLife) {
+				if (!ply.equals(ply1) && !ply.canVoted.contains(ply1) && ply.getLocation().distance(ply1.getLocation()) < 20 && ply1.inLife && ply.inLife && !cannotBeVoted.contains(ply1)) {
 					ply.canVoted.add(ply1);
 				}
 			}
@@ -325,6 +351,58 @@ public class GameLg implements Listener{
 			p.board.refresh();
 		}
 		
+	}
+	@Deprecated
+	public void accusation(PlayerData accuser, PlayerData accused) {
+		
+		Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " accuse le joueur "+ accused.getName() + " publiquement, il a 10 minutes pour prouver sa culpabilité sous peine de perdre 1.5 coeurs permanents, si celui-ci se révèle innocent, il perdra 3 coeurs permanents et son droit de vote.");
+		
+		if (accused.role.equals(RolesLg.ANGE_THIERCE)) {
+			accused.hasStrenghtAgainst.put(accuser.player, true);
+			accused.setMaxHealth(accused.getMaxHealth()+2);
+			accused.boostS5++;
+			
+			accused.sendMessage(ChatColor.GOLD+"Vous avez été accusé, le role du joueur vous accusant est "+ accuser.role.getName()+", vous gagnez 20% de force contre celui-ci ainsi que 1 coeur permanent, si vous venez à le tuer, sa mort ne sera pas annoncée.");
+		} else {
+			accuser.hasStrenghtAgainst.put(accused.player, true);
+		}
+		
+		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				
+				accuser.hasStrenghtAgainst.put(accused.player, false);
+				if (accused.inLife) {
+					accuser.setMaxHealth(accuser.getMaxHealth() - 1.5);
+					Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " n'a pas pu prouver la culpabilité du joueur "+ accused.getName() + " à temps, il perd donc 1.5 coeurs permanents");
+				} else {
+					if (accused.team.equals(villTeam)) {
+						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + ", il perd donc 3 coeurs permanents et son droit de vote.");
+						accuser.setMaxHealth(accuser.getMaxHealth() - 3);
+						cannotBeVoted.add(accuser);
+					} else {
+						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + " à raison, il gagne donc 10% de force supplémentaires.");
+						accuser.boostS5 += 2;
+					}
+				}
+			}
+			
+		}, 12000);
+	}
+	
+	public void removeFromVote(PlayerData p) {
+		for (PlayerData player:this.getPlayerAlive()) {
+			if (p.canVoted.contains(player)) {
+				player.canVoted.remove(p);
+				
+			}
+			
+		}
+		Bukkit.broadcastMessage(ChatColor.RED+"Le joueur "+ p.getName() + " a fuit la justice des villageois. Il ne pourra alors ni être voté ni voter.");
+		for (PlayerData ply: this.getPlayerAlive()) {
+			ply.sendMessage(ChatColor.RED+"Le joueur fuyard se trouve à " + ply.getLocation().distance(p.getLocation()) + " blocs de vous.");
+		}
 	}
 	
 	public void broadcoast(String message ) {
@@ -423,6 +501,7 @@ public class GameLg implements Listener{
 	
 	@SuppressWarnings("deprecation")
 	public void playEpisode() {
+		
 		System.out.println("Play new Episode");
 		for (RoleInstance roles: this.rolesIn) {
 			roles.episodeEffect();
@@ -434,7 +513,28 @@ public class GameLg implements Listener{
 		this.decideTimeEvent();
 		this.setEpisodeTime();
 		
+		this.invVote = Bukkit.createInventory(null, 36);
+		
+		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
+		if (getPlayerAlive().size() < 5) {
+			nbVoter = getPlayerAlive().size();
+		}
+		for (int i = 0; i < nbVoter; i++) {
+			ItemStack item = new ItemStack(Material.EMERALD);
+			ItemUtil.setName(item, "Voter");
+			this.invVote.setItem(i, item);
+		}
+		
+		for (PlayerData p:getPlayerAlive()) {
+			if (futureAcc.getOrDefault(p.getName(), null) != null) {
+				accusation(p, futureAcc.getOrDefault(p.getName(), null));
+			}
+		}
+		
+		
 	}
+	
+	
 	
 	@Deprecated
 	public void setEpisodeTime() {
@@ -575,7 +675,9 @@ public class GameLg implements Listener{
 			public void run() {
 				isInVote = false;
 				
+				
 				PlayerData mostVoted = null;
+				
 				boolean equal = false;
 				for (PlayerData ply:playerAlive) {
 					if (mostVoted == null||ply.vote > mostVoted.vote) {
@@ -587,13 +689,21 @@ public class GameLg implements Listener{
 					
 				}
 				
-				if (mostVoted.vote > 2 && !equal) {
+				if (mostVoted.vote > 0 && !equal) {
 					if (MathUtil.pourcentage(probasEvents.get("Erreur aux Urnes"))) {
 						Bukkit.broadcastMessage(ChatColor.GOLD+"Une erreur s'est produite aux urnes...");
 						mostVoted = getPlayerAlive().get(MathUtil.generateAlInt(0, getPlayerAlive().size()  -1));
+						return;
 					}
-					mostVoted.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 300, 1));
-					mostVoted.changeHealth(-2);
+					
+					mostVoted.changeHealth(-voteForce);
+					exposed(mostVoted, 6-voteForce);
+					
+					if (voteForce < 5) {
+						voteForce ++;
+					}
+					
+					
 					Bukkit.broadcastMessage(ChatColor.GOLD + "Le joueur " + ChatColor.DARK_AQUA + mostVoted.Name +ChatColor.GOLD+ "a été le plus voté" );
 					for (PlayerData player:playerAlive) {
 						
@@ -603,6 +713,8 @@ public class GameLg implements Listener{
 							
 							if (player.role.equals(RolesLg.CORBEAU)) {
 								Bukkit.broadcastMessage(ChatColor.BLACK+"Le corbeau a voté avec le village");
+								CORBEAU corbeau = (CORBEAU) player.roleIn;
+								corbeau.addGoodVoted();
 							}
 						}
 					}
@@ -615,15 +727,7 @@ public class GameLg implements Listener{
 					if (player.voted == null) {
 						return;
 					}
-					if ( player.role.equals(RolesLg.CORBEAU)) {
-						if (player.voted.camp != Camp.Villager) {
-							CORBEAU corbeau = (CORBEAU) player.roleIn;
-							corbeau.addGoodVoted();
-						} else {
-							player.changeHealth(-2);
-						
-						} 
-					}
+					
 				}
 			}
 			
@@ -796,6 +900,22 @@ public class GameLg implements Listener{
 		return returned;
 	}
 	
+	public void placeVoteBlock(Player p) {
+		System.out.println("bloc vote placé");
+		Main.server.getWorld("world").getBlockAt(p.getLocation()).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(p.getLocation()).setMetadata("interactBlockVote", new FixedMetadataValue(Main.plug, true));
+		
+		
+	}
+	
+	public void placeAccuseBlock(Player p) {
+		Main.server.getWorld("world").getBlockAt(p.getLocation()).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(p.getLocation()).setMetadata("interactBlockAccuse", new FixedMetadataValue(Main.plug, true));
+		
+		
+	}
+	
+	
 	@EventHandler
 	public void onPlayerClick(InventoryClickEvent e) {
 		
@@ -885,10 +1005,104 @@ public class GameLg implements Listener{
 			
 			
 			
-		}
+			}
 		}
 		
 		
+	}
+	
+	public void exposed(PlayerData player, int nbOfRole) {
+		
+		ArrayList<String> rolesStr = new ArrayList<String>();
+		int x = MathUtil.generateAlInt(1, nbOfRole);
+		
+		for (int i = 0; i < nbOfRole; i++) {
+			if (i==x) {
+				rolesStr.add(player.getLgRole().getName());
+				
+			} else {
+				rolesStr.add(getRoles().get(MathUtil.generateAlInt(0, getRoles().size() - 1)).getName());
+			}
+			
+			
+		}
+		
+		Bukkit.broadcastMessage(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Le Role du joueur "+ player.getName() + " se trouve parmi les suivant: ");
+		for (String str:rolesStr) {
+			Bukkit.broadcastMessage(ChatColor.GOLD+"-"+str);
+		}
+		
+		
+	}
+	
+	public void addTragic(int toAdd) {
+		if (this.oratTaux < 1 && this.epicTaux < 1) {
+			this.tragicTaux += toAdd;
+		} else if (this.oratTaux > 0) {
+			if (this.oratTaux > toAdd) {
+				this.oratTaux -= toAdd;
+			} else {
+				this.tragicTaux = toAdd - this.oratTaux;
+				this.oratTaux = 0;
+			}
+		}else if (this.epicTaux > 0) {
+			if (this.epicTaux > toAdd) {
+				this.epicTaux -= toAdd;
+			} else {
+				this.tragicTaux = toAdd - this.epicTaux;
+				this.epicTaux = 0;
+			}
+		}
+	}
+	
+	public void addorat(int toAdd) {
+		if (this.tragicTaux < 1 && this.epicTaux < 1) {
+			this.oratTaux += toAdd;
+		} else if (this.tragicTaux > 0) {
+			if (this.tragicTaux > toAdd) {
+				this.tragicTaux -= toAdd;
+			} else {
+				this.oratTaux = toAdd - this.tragicTaux;
+				this.tragicTaux = 0;
+			}
+		}else if (this.epicTaux > 0) {
+			if (this.epicTaux > toAdd) {
+				this.epicTaux -= toAdd;
+			} else {
+				this.oratTaux = toAdd - this.epicTaux;
+				this.epicTaux = 0;
+			}
+		}
+	}
+	
+	public void addEpic(int toAdd) {
+		if (this.tragicTaux < 1 && this.oratTaux < 1) {
+			this.epicTaux += toAdd;
+		} else if (this.tragicTaux > 0) {
+			if (this.tragicTaux > toAdd) {
+				this.tragicTaux -= toAdd;
+			} else {
+				this.epicTaux = toAdd - this.tragicTaux;
+				this.tragicTaux = 0;
+			}
+		}else if (this.oratTaux > 0) {
+			if (this.oratTaux > toAdd) {
+				this.oratTaux -= toAdd;
+			} else {
+				this.epicTaux = toAdd - this.epicTaux;
+				this.oratTaux = 0;
+			}
+		}
+	}
+	
+	public void checkRegistr() {
+		if (oratTaux > 1000) {
+			oratTaux = 1000;
+		}else if (epicTaux > 1000) {
+			epicTaux = 1000;
+		}else if (tragicTaux > 1000) {
+			tragicTaux = 1000;
+		}
 	}
 	
 	

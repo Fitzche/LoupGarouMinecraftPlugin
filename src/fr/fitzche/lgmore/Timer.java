@@ -22,8 +22,10 @@ public class Timer {
 		return ep+1;
 	}
 	
-	public void addOne() {
+	public boolean addOne() {
+		int x = getEpisode();
 		temps ++;
+		
 		this.game.askRunFuturesActions(); 
 		int i = this.temps - ((this.getEpisode()-1) * 1200);
 		if (i == 0 || i==600) {
@@ -31,6 +33,11 @@ public class Timer {
 		} else if (i==300||i==900) {
 			Main.server.getWorld("world").setTime(13000);
 		}
+		for (PlayerData p: this.game.getPlayerAlive()) {
+			p.board.refresh();
+		}
+		return x != getEpisode();
+		
 		
 	}
 	public String getStringTime() {

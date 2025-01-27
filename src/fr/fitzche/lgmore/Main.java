@@ -54,7 +54,7 @@ import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.LgTab;
-import fr.fitzche.lgmore.commands.LgTest;
+
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.mcListeners;
 import net.md_5.bungee.api.ChatColor;
@@ -88,7 +88,7 @@ public class Main extends JavaPlugin implements Listener {
 		
 		Main.server = this.getServer();
 		Main.plug = this.getPlugin();
-		getCommand("lgop").setExecutor(new LgTest());
+		
 		getCommand("lga").setExecutor(new Lga());
 		getCommand("lga").setTabCompleter(new LgTab());
 		getCommand("lg").setExecutor(new Lg());
@@ -145,7 +145,10 @@ public class Main extends JavaPlugin implements Listener {
 				RolesLg.SOEUR,
 				RolesLg.SORCIERE, 
 				RolesLg.VOLEUR,
+				RolesLg.ANGE_THIERCE,
+				RolesLg.LOUP_BRUMEUX,
 				RolesLg.VOYANTE
+				
 				));
 		RoleUtil.existingRoles.addAll(list);
 

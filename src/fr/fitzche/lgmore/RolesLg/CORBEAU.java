@@ -33,7 +33,7 @@ public class CORBEAU implements RoleInstance{
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour ce faire votre vote vous octroyera un bonus à chaque fois que voterez pour le joueur le + voté, de cette manière: "+ "\n" + "1 vote bien choisi vous donnera 2 pommes dorées" + "\n" + "Un 2e vote judicieux vous octroira 4 pommes dorées" +
-				"\n" + "3 bons votes vous donnerons 2 coeurs permanents  "+ "\n"+ "Un quatrième vote correct vous octroira resistance 0.5;"+"\n"+"Tout le monde saura pour qui vous avez voté";
+				"\n" + "3 bons votes vous donnerons 2 coeurs permanents  "+ "\n"+ "Un quatrième vote correct vous octroira resistance 0.5;"+"\n"+"Dans ce cas, votre vote sera rendu publique.";
 	}
 
 	@Override

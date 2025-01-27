@@ -116,9 +116,9 @@ public class DisplayMenu implements Listener{
 		}
 		String commandBase = "lga";
 		
-		if (event.getInventory().getName().equals(ChatColor.GOLD +"Solo et Hybrides")) {
+		if (event.getInventory().getName().equals(ChatColor.GOLD +"Solo et Hybride")) {
 			
-			if (InventoryUtil.IsRoleCase(RoleUtil.getRoleofCamp(RoleUtil.existingRoles, Camp.Other, " at DisplayMenu check for Other"), event.getCurrentItem()) ||InventoryUtil.IsRoleCase(RoleUtil.getRoleofCamp(RoleUtil.existingRoles, Camp.Love, " at DisplayMenu check for Love"), event.getCurrentItem())) {
+			if (event.getCurrentItem() != null && !event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.ITALIC+"Retour") &&!event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.ITALIC+"Précédent") &&!event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.ITALIC+"Suivant")) {
 				if (event.getClick().equals(ClickType.LEFT)) {
 					String[] list = new String[] {"Game", "addRole", this.game.name, event.getCurrentItem().getItemMeta().getDisplayName()};
 					System.out.println(event.getCurrentItem().getItemMeta().getDisplayName()+ " added at onInventoryClick of DisplayMenu ");
@@ -183,7 +183,7 @@ public class DisplayMenu implements Listener{
 			
 			
 		} else {
-			System.out.println(event.getInventory().getName()+ " doesn't equal ''Loups-Garou'', ''Villageois'', or ''Solo et Hybrides''");
+			System.out.println(event.getInventory().getName()+ " doesn't equal ''Loups-Garou'', ''Villageois'', or ''Solo et Hybride''");
 		}
 		
 		

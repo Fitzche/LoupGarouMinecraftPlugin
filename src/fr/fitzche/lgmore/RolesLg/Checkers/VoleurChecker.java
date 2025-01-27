@@ -3,6 +3,7 @@ package fr.fitzche.lgmore.RolesLg.Checkers;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
@@ -42,6 +43,21 @@ public class VoleurChecker implements ResCheck {
 			lg.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker for metamorphe"));
 		}
 
+	}
+	@Override
+	public boolean hide(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void beforeDie(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

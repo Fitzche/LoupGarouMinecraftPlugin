@@ -121,7 +121,6 @@ public class Team implements Listener{
 				}
 			}
 		}*/
-		System.out.println(this.members.size()+ " members in game, "+ (game.getPlayerAlive().size() -1) + " in game");
 		if (this.winOnlyPlayer && this.members.size() == (game.getPlayerAlive().size()-1) ) {
 			System.out.println(this.members.size()+ " equals "+ (game.getPlayerAlive().size() -1) );
 

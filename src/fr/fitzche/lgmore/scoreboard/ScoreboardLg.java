@@ -72,8 +72,9 @@ public class ScoreboardLg {
 	    Score score4 = objective.getScore(ChatColor.GOLD+"  Horaire: "+ChatColor.AQUA + time);
 	    score4.setScore(2);
 	    
-	    Score score5 = objective.getScore(ChatColor.GOLD+ "Kills: "+player.numberOfKill);
+	    
 	    if (player!=null&&player.player != null && player.isOnline) {
+	    	Score score5 = objective.getScore(ChatColor.GOLD+ "Kills: "+player.numberOfKill);
 		    player.player.setScoreboard(board);
 		}
 	    

@@ -62,7 +62,7 @@ public class CompoDisplay implements Listener{
 		
 		ItemStack feather = new ItemStack(Material.FEATHER) ;
 		ItemMeta featherM = feather.getItemMeta();
-		featherM.setDisplayName(ChatColor.GOLD + "Solo et Hybrides");
+		featherM.setDisplayName(ChatColor.GOLD + "Solo et Hybride");
 		feather.setItemMeta(featherM);
 		compo.setItem(16, feather);
 		

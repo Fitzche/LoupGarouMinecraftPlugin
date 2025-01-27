@@ -27,6 +27,7 @@ import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
 import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
+import fr.fitzche.lgmore.RolesLg.LOUP_BRUMEUX;
 import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
@@ -44,6 +45,7 @@ import fr.fitzche.lgmore.RolesLg.SIMPLE_VILLAGER;
 import fr.fitzche.lgmore.RolesLg.SIMPLE_WOLF;
 import fr.fitzche.lgmore.RolesLg.SOEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
+import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 
@@ -223,6 +225,14 @@ public class RoleUtil {
 			return role;
 		}else if (player.role.equals(RolesLg.LOUP_GRIMEUR)) {
 			LOUP_GRIMEUR role = new LOUP_GRIMEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.ANGE_THIERCE)) {
+			THIERCE_ANGE role = new THIERCE_ANGE(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.LOUP_BRUMEUX)) {
+			LOUP_BRUMEUX role = new LOUP_BRUMEUX(player);
 			player.roleIn = role;
 			return role;
 		}else{
