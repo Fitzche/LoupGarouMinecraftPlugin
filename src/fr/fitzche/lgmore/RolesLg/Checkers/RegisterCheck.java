@@ -4,32 +4,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.PlayerData;
-import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
-import fr.fitzche.lgmore.RolesLg.VOLEUR;
-import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
-public class VoleurChecker implements ResCheck {
+public class RegisterCheck implements ResCheck{
 
-	
-	public GameLg game;
-	public VOLEUR voleur;
-	public LOUP_METAMORPHE lg;
-	
-	public VoleurChecker(VOLEUR voleur, GameLg game, LOUP_METAMORPHE lg) {
-		if (voleur != null) {
-			this.voleur = voleur;
-		}
-		
-		this.game = game;
-		
-		if (lg != null) {
-			this.lg = lg;
-		}
-		
-	}
 	@Override
 	public boolean checkRes(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
@@ -38,43 +17,46 @@ public class VoleurChecker implements ResCheck {
 
 	@Override
 	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (voleur != null&&k.getName().equals(voleur.playerWithRole.Name)) {
-			voleur.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker"));
-		} else if (lg != null&&k.getName().equals(lg.playerWithRole.Name)) {
-			lg.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker for metamorphe"));
-		}
-
+		// TODO Auto-generated method stub
+		
 	}
+
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 	@Override
 	public void beforeDie(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
+
 	@Override
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	@Override
 	public void onVoteEvent(VoteEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
+
 	@Override
 	public void onAddTragic() {
 		// TODO Auto-generated method stub
 		
 	}
+
 	@Override
 	public void onAddEpic() {
 		// TODO Auto-generated method stub
 		
 	}
+
 	@Override
 	public void onAddOrat() {
 		// TODO Auto-generated method stub

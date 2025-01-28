@@ -76,6 +76,7 @@ public class MONTREUR implements RoleInstance {
 		for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole, " at renifle() in MONTREUR, at listing of player for test them").playerAlive) {
 			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
+				GameLgUtil.getGameOfPlayer(playerWithRole,"at montreur renifler").addorat(5);
 			}
 		}
 	}
@@ -102,9 +103,9 @@ public class MONTREUR implements RoleInstance {
 
 	@Override
 	public void blind(PlayerData origin) {
-		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Montreur D'ours, cependant il ne subira aucun malus car modifier cette mécanique c'est trop galère à coder (bonjour de la part du dev !), je le ferai plus tard, cependant vous avez son role et vous obtenez 5min de speed parce que heu... parce que vous fuyez l'ours");
+		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Montreur D'ours, cependant il ne subira aucun malus car modifier cette mécanique c'est trop galère à coder et en + ça désiquilibre un peu trop le jeu, je le ferai plus tard, cependant vous avez son role et vous obtenez 5min de force parce que heu... parce que vous fuyez l'ours");
 		this.playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez été aveuglé, un loup sait donc qui vous etes mais il n'a pas pu vous nuire");
-		origin.addPotionEffect(new PotionEffect(PotionEffectType.SPEED	, 6000, 0, false, false));
+		origin.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE	, 6000, 0, false, false));
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANGE;
+import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
 public class AngeChecker implements ResCheck {
@@ -51,6 +52,26 @@ public class AngeChecker implements ResCheck {
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public void onVoteEvent(VoteEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddTragic() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddEpic() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddOrat() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

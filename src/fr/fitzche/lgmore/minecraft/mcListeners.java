@@ -172,6 +172,7 @@ public class mcListeners implements Listener {
 			    	
 			    	
 			    	if (player1.relive) {
+			    		game.addorat(10);
 			    		if (player1.infected) {
 			    			player1.player.sendMessage(ChatColor.AQUA +"Vous avez été infecté, vous devez maintenant gagner avec les loups, vous possédez également force de nuit");
 			    		}
@@ -191,27 +192,50 @@ public class mcListeners implements Listener {
 			    		
 			    		
 			    	} else { 
-			    		
+			    		boolean brumed = false;
 			    		boolean hidden = false;
 			    		if (killer != null) {
 			    			PlayerData killerData = PlayerUtil.getDataOfPlayer(killer, "at death announce");
 			    			killerData.numberOfKill ++;
 			    			
+			    			
 			    			for (ResCheck checker: game.resCheckers) {
 			    				checker.runDeathAction(e, killer);
+			    				
 			    				if (checker.hide(e)) {
-			    				hidden = true;
+			    					hidden = true;
+			    					
+			    				}
+			    				if (checker.brume(e)) {
+			    					brumed = true;
 			    				}
 			    			}
+			    			if (brumed) {
+			    				game.addEpic(10);
+			    			}
+			    			if (hidden) {
+			    				game.addTragic(5);
+			    			}
+			    			if (!player1.roleIn.isInfoRole()) {
+		    					game.addTragic(5);
+		    				} else {
+		    					game.addEpic(5);
+		    				}
+		    				
+		    				if (player1.camp == Camp.Other || player1.camp == Camp.TEAM) {
+		    					game.addEpic(10);
+		    				}
 			    		}
 			    		
 
 				    	if (!hidden) {
 				    		//ANNOUNCE DEATH
 				    		if (player1.grimed) {
-				    			game.announceDeath(player1, RolesLg.SIMPLE_WOLF);
+				    			game.announceDeath(player1, RolesLg.SIMPLE_WOLF, false);
+				    		} else if (brumed){
+				    			game.announceDeath(player1, true);
 				    		} else {
-				    			game.announceDeath(player1);
+				    			game.announceDeath(player1, false);
 				    		}
 				    	}
 				    	

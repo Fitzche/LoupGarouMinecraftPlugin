@@ -10,6 +10,7 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
+import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -57,6 +58,26 @@ public class Brume_Checker implements ResCheck {
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public void onVoteEvent(VoteEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddTragic() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddEpic() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddOrat() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

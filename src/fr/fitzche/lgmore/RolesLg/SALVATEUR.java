@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionType;
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -103,6 +104,10 @@ public class SALVATEUR implements RoleInstance{
 
 		this.playerWithRole.sendMessage(ChatColor.DARK_GREEN+"vous avez protégé "+ target.Name);
 		this.powerUsed = true;
+		
+		if (this.playerWithRole.getName().equals(target.Name)) {
+			GameLgUtil.getGameOfPlayer(playerWithRole, " at salvateur protection").addEpic(10);
+		}
 	}
 	@Override
 	public void startSpecialEvent() {

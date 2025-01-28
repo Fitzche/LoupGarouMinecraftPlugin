@@ -7,6 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
+import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
 public class LgBarbare_Checker implements ResCheck {
@@ -54,6 +55,26 @@ public class LgBarbare_Checker implements ResCheck {
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public void onVoteEvent(VoteEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddTragic() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddEpic() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAddOrat() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

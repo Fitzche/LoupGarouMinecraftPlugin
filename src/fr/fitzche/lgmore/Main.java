@@ -236,7 +236,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 				if (!player.isOnline && gm1.timer.temps > 1199) {
 					System.out.println(player.Name+ " not online");
-					gm1.announceDeath(player);
+					gm1.announceDeath(player, false);
 				}
 				
 				

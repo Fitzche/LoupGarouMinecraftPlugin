@@ -25,6 +25,10 @@ public interface RoleInstance {
 	public void startSpecialEvent();
 	public void blind(PlayerData origin);
 	public boolean isInfoRole();
+	public void malusForceI();
+	public void malusForceII();
+	public void malusForceIII();
+	public void malusForceIV();
 	
 	
 	

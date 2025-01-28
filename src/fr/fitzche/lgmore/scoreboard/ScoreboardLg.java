@@ -72,6 +72,22 @@ public class ScoreboardLg {
 	    Score score4 = objective.getScore(ChatColor.GOLD+"  Horaire: "+ChatColor.AQUA + time);
 	    score4.setScore(2);
 	    
+	    String register = WorldUtil.getTime(Main.server.getWorld("world"));
+	    int registrPoint = 0;
+	    String str = "nul --> ";
+	    if (game.getTragic() > 0) {
+	    	registrPoint = game.getTragic();
+	    	str = "Tragique -- > ";
+	    } else if (game.getOrat() > 0) {
+	    	registrPoint = game.getOrat();
+	    	str = "Oratoire -- > ";
+	    } else if (game.getEpic() > 0) {
+	    	registrPoint = game.getEpic();
+	    	str = "Epique -- > ";
+	    }
+	    Score scoreReg = objective.getScore(ChatColor.GOLD+"  Registre: "+ChatColor.AQUA + str + Integer.toString(registrPoint));
+	    scoreReg.setScore(2);
+	    
 	    
 	    if (player!=null&&player.player != null && player.isOnline) {
 	    	Score score5 = objective.getScore(ChatColor.GOLD+ "Kills: "+player.numberOfKill);

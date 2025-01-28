@@ -141,6 +141,7 @@ public class Virus {
 				public void run() {
 					owner.sendMessage("Vous avez été infecté, vous serez contagieux pendant 5 minutes (moins de 15 blocs)");
 					owner.contamined = true;
+					game.addTragic(3);
 				}
 				
 			}, 1200);

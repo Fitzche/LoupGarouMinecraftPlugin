@@ -7,6 +7,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Servant_des_loups;
+import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import net.md_5.bungee.api.ChatColor;
 
@@ -53,6 +54,30 @@ public class servantLgChecker implements ResCheck {
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void onVoteEvent(VoteEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAddTragic() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAddEpic() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAddOrat() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

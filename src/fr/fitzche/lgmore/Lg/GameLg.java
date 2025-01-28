@@ -44,6 +44,7 @@ import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
+import fr.fitzche.lgmore.Util.Registre;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
@@ -356,7 +357,7 @@ public class GameLg implements Listener{
 	public void accusation(PlayerData accuser, PlayerData accused) {
 		
 		Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " accuse le joueur "+ accused.getName() + " publiquement, il a 10 minutes pour prouver sa culpabilité sous peine de perdre 1.5 coeurs permanents, si celui-ci se révèle innocent, il perdra 3 coeurs permanents et son droit de vote.");
-		
+		this.addorat(10);
 		if (accused.role.equals(RolesLg.ANGE_THIERCE)) {
 			accused.hasStrenghtAgainst.put(accuser.player, true);
 			accused.setMaxHealth(accused.getMaxHealth()+2);
@@ -376,6 +377,7 @@ public class GameLg implements Listener{
 				if (accused.inLife) {
 					accuser.setMaxHealth(accuser.getMaxHealth() - 1.5);
 					Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " n'a pas pu prouver la culpabilité du joueur "+ accused.getName() + " à temps, il perd donc 1.5 coeurs permanents");
+					addTragic(10);
 				} else {
 					if (accused.team.equals(villTeam)) {
 						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + ", il perd donc 3 coeurs permanents et son droit de vote.");
@@ -384,6 +386,7 @@ public class GameLg implements Listener{
 					} else {
 						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + " à raison, il gagne donc 10% de force supplémentaires.");
 						accuser.boostS5 += 2;
+						addEpic(15);
 					}
 				}
 			}
@@ -689,6 +692,8 @@ public class GameLg implements Listener{
 					
 				}
 				
+				addorat(3*mostVoted.vote);
+				
 				if (mostVoted.vote > 0 && !equal) {
 					if (MathUtil.pourcentage(probasEvents.get("Erreur aux Urnes"))) {
 						Bukkit.broadcastMessage(ChatColor.GOLD+"Une erreur s'est produite aux urnes...");
@@ -713,6 +718,7 @@ public class GameLg implements Listener{
 							
 							if (player.role.equals(RolesLg.CORBEAU)) {
 								Bukkit.broadcastMessage(ChatColor.BLACK+"Le corbeau a voté avec le village");
+								addorat(5);
 								CORBEAU corbeau = (CORBEAU) player.roleIn;
 								corbeau.addGoodVoted();
 							}
@@ -821,15 +827,19 @@ public class GameLg implements Listener{
 		} , x*20);
 	}
 	
-	public void announceDeath(PlayerData player1) {
+	public void announceDeath(PlayerData player1, boolean brumed) {
 		
-		
+		ChatColor color = ChatColor.RED;
+		if (brumed) {
+			color = ChatColor.MAGIC;
+		}
 		String moreInfo = "";
 		if (player1.infected) {
 			moreInfo = moreInfo+ (" (loup garou) ");
 		} 
 		if (player1.inLove) {
 			moreInfo = moreInfo+ (" (en couple) ");
+			addTragic(8);
 		} 
 
 		GameLg gm1 =GameLgUtil.getGameOfPlayer(player1, " at 152 Main");
@@ -842,7 +852,7 @@ public class GameLg implements Listener{
 		
 
 		Main.server.broadcastMessage(ChatColor.DARK_BLUE +"___________________________" + "\n" +
-							ChatColor.RED + player1.getName() + " est mort |"+ "\n"  +
+							color + player1.getName() + " est mort |"+ "\n"  +
 								" il était "+ player1.camp.getColor() + 
 								player1.getLgRole() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
 		for (Team team:teams) {
@@ -850,8 +860,11 @@ public class GameLg implements Listener{
 		}
 	}
 	
-	public void announceDeath(PlayerData player1, RolesLg role) {
-		
+	public void announceDeath(PlayerData player1, RolesLg role, boolean brumed) {
+		ChatColor color = ChatColor.RED;
+		if (brumed) {
+			color = ChatColor.MAGIC;
+		}
 		
 		String moreInfo = "";
 		if (player1.infected) {
@@ -870,7 +883,7 @@ public class GameLg implements Listener{
 		}
 
 		Main.server.broadcastMessage(ChatColor.DARK_BLUE +"___________________________" + "\n" +
-							ChatColor.RED + player1.getName() + " est mort |"+ "\n"  +
+							color + player1.getName() + " est mort |"+ "\n"  +
 								" il était "+ role.getCampOfRole().getColor() + 
 								role.getName() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
 		for (Team team:teams) {
@@ -1096,13 +1109,34 @@ public class GameLg implements Listener{
 	}
 	
 	public void checkRegistr() {
-		if (oratTaux > 1000) {
-			oratTaux = 1000;
-		}else if (epicTaux > 1000) {
-			epicTaux = 1000;
-		}else if (tragicTaux > 1000) {
-			tragicTaux = 1000;
+		if (oratTaux > 100) {
+			oratTaux = 100;
+		}else if (epicTaux > 100) {
+			epicTaux = 100;
+		}else if (tragicTaux > 100) {
+			tragicTaux = 100;
 		}
+	}
+	
+	public int getTragic() {
+		return this.tragicTaux;
+	}
+	public int getOrat() {
+		return this.oratTaux;
+	}
+	public int getEpic() {
+		return this.epicTaux;
+	}
+	public Registre getRegister() {
+		if (epicTaux > 0) {
+			return new Registre(epicTaux, RegisterType.Epic);
+		} else if (tragicTaux > 0) {
+			return new Registre(tragicTaux, RegisterType.Tragic);
+		} else if (oratTaux > 0) {
+			return new Registre(oratTaux, RegisterType.Oratoire);
+		}
+		return new Registre(0, null);
+		
 	}
 	
 	

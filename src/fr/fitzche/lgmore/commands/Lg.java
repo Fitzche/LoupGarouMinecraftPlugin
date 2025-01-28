@@ -504,6 +504,7 @@ public class Lg implements CommandExecutor {
 							}
 							PlayerUtil.getDataPlayer(args[1], "at /lg aveugler in lg").roleIn.blind(senderPlayerData);
 							manip.powerUsed --;
+							gameOfSender.addorat(5);
 							return true;
 						}
 					} else {
