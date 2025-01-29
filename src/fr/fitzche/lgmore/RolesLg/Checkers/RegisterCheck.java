@@ -96,8 +96,9 @@ public class RegisterCheck implements ResCheck{
 	@Override
 	public void onAddOrat(int i, Location loc) {
 		if (game.getTragic()  < 80 && game.getTragic() + i > 80) {
-			if ((game.timer.temps - (game.timer.getEpisode() - 1) * 1200)>80) {
+			if ((game.timer.temps - (game.timer.getEpisode() - 1) * 1200)>80 && !game.hasMoreVote) {
 				game.broadcoast(ChatColor.AQUA+"Un vote Supplémentaire se déclenche");
+				game.hasMoreVote = true;
 				game.startVote();
 			} else {
 				game.broadcoast(ChatColor.AQUA+"Un vote Supplémentaire se déclenchera dans 10min car un vote approche déjà");
@@ -106,6 +107,7 @@ public class RegisterCheck implements ResCheck{
 					@Override
 					public void run() {
 						game.broadcoast(ChatColor.AQUA+"Un vote Supplémentaire se déclenche");
+						game.hasMoreVote = true;
 						game.startVote();
 						
 					}

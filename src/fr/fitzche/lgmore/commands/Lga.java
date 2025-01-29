@@ -47,7 +47,7 @@ import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import fr.fitzche.lgmore.scoreboard.Inventory.ConfigDisplay;
 
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+
 
 public class Lga implements CommandExecutor  {
 	

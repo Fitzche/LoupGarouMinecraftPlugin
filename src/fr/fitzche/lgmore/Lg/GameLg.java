@@ -117,6 +117,7 @@ public class GameLg implements Listener{
 	public ConfigDisplay config = new ConfigDisplay(this);
 	
 	public boolean isMeetup = false;
+	public boolean hasMoreVote = false;
 	
 	public Inventory invVote;
 	
