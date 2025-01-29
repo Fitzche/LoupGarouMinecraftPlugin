@@ -106,7 +106,7 @@ public class SALVATEUR implements RoleInstance{
 		this.powerUsed = true;
 		
 		if (this.playerWithRole.getName().equals(target.Name)) {
-			GameLgUtil.getGameOfPlayer(playerWithRole, " at salvateur protection").addEpic(10);
+			GameLgUtil.getGameOfPlayer(playerWithRole, " at salvateur protection").addEpic(10, playerWithRole.getLocation());
 		}
 	}
 	@Override

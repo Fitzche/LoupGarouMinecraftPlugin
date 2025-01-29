@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.minecraft;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -17,8 +18,8 @@ public interface ResCheck {
 	public boolean brume(PlayerDeathEvent e);
 	
 	public void onVoteEvent(VoteEvent e);
-	public void onAddTragic();
-	public void onAddEpic();
-	public void onAddOrat();
+	public void onAddTragic(int i, Location loc);
+	public void onAddEpic(int i, Location loc);
+	public void onAddOrat(int i, Location loc);
 
 }

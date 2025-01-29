@@ -76,7 +76,7 @@ public class MONTREUR implements RoleInstance {
 		for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole, " at renifle() in MONTREUR, at listing of player for test them").playerAlive) {
 			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
-				GameLgUtil.getGameOfPlayer(playerWithRole,"at montreur renifler").addorat(5);
+				GameLgUtil.getGameOfPlayer(playerWithRole,"at montreur renifler").addorat(5, playerWithRole.getLocation());
 			}
 		}
 	}

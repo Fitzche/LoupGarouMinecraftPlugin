@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.RolesLg.Checkers;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -63,21 +64,24 @@ public class servantLgChecker implements ResCheck {
 	}
 
 	@Override
-	public void onAddTragic() {
+	public void onAddTragic(int i, Location loc) {
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
-	public void onAddEpic() {
+	public void onAddEpic(int i, Location loc) {
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
-	public void onAddOrat() {
+	public void onAddOrat(int i, Location loc) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public boolean brume(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

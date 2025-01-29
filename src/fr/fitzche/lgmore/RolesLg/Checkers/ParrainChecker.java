@@ -2,6 +2,7 @@ package fr.fitzche.lgmore.RolesLg.Checkers;
 
 import java.util.ArrayList;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -30,7 +31,7 @@ public class ParrainChecker implements ResCheck {
 		if (e.getEntity().getName().equals(parrain.target.Name) ) {
 			parrain.targetDeath(k.getName());
 			if (parrain.target.team.equals(game.villTeam)) {
-				game.addEpic(10);
+				game.addEpic(10, e.getEntity().getLocation());
 			}
 		}
 
@@ -56,17 +57,17 @@ public class ParrainChecker implements ResCheck {
 		
 	}
 	@Override
-	public void onAddTragic() {
+	public void onAddTragic(int i, Location loc) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void onAddEpic() {
+	public void onAddEpic(int i, Location loc) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void onAddOrat() {
+	public void onAddOrat(int i, Location loc) {
 		// TODO Auto-generated method stub
 		
 	}

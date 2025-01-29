@@ -161,11 +161,11 @@ public class Main extends JavaPlugin implements Listener {
 		eventsLgNames.add("Trouple");
 		descriptionsLgEvent.put("Trouple", "Chance que le couple soit...un trouple");
 
-		eventsLgNames.add("Erreur aux Urnes");
-		descriptionsLgEvent.put("Erreur aux Urnes", "Probabilité qu'à un vote, le résultat ne soit pas le bon.");
-
 		eventsLgNames.add("Mal visé");
 		descriptionsLgEvent.put("Mal visé", "probabilité que le cupidon vise mal et se mette en couple avec un joueur aléatoire");
+
+		eventsLgNames.add("Exposed");
+		descriptionsLgEvent.put("Exposed","A chaque épisode, un exposed de 4 role a un pourcentagede chance de se produire en fonction du taux de tragique (exemple: 20pts de tragique = 20% de chance), ce pourcentage est la chance que l'exposed se produise ou pas, passe avant la probabilité du taux de targique (ex: event à 20%, et 60 pts de tragique = 60% de 20% = 12% de chance) L'exposed affiche 4 role dans le chat dont le nom du joueur choisi au hasard pour l'exposed.");
 
 	}
 	

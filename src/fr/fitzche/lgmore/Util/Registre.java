@@ -12,4 +12,11 @@ public class Registre {
 		this.type = type;
 	}
 	
+	public RegisterType getType() {
+		return this.type;
+	}
+	public int getTaux() {
+		return this.taux;
+	}
+	
 }

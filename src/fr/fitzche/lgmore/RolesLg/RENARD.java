@@ -70,7 +70,7 @@ public class RENARD implements RoleInstance{
 			playerWithRole.sendMessage("Vous ne pouvez pas encore flairer ce joueur");
 			return;
 		} else {
-			GameLgUtil.getGameOfPlayer(playerWithRole, "at renard").addEpic(3);
+			GameLgUtil.getGameOfPlayer(playerWithRole, "at renard").addEpic(3, playerWithRole.getLocation());
 			if (MathUtil.pourcentage(80 - (5*flaired))) {
 				System.out.println("80% yes");
 				playerWithRole.sendMessage(player.Name + " est probablement " + player.role.name());

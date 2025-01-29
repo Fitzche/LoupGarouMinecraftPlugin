@@ -172,7 +172,12 @@ public class mcListeners implements Listener {
 			    	
 			    	
 			    	if (player1.relive) {
-			    		game.addorat(10);
+			    		//REGISTER CAUSE
+			    		game.addorat(10, e.getEntity().getLocation());
+			    		//REGISTER EFFECT EPIC
+			    		if (MathUtil.pourcentage(game.getEpic() / 5)) {
+			    			game.broadcoast(ChatColor.DARK_PURPLE + "Le joueur "+ player1.getName() + " a réssucité");
+			    		}
 			    		if (player1.infected) {
 			    			player1.player.sendMessage(ChatColor.AQUA +"Vous avez été infecté, vous devez maintenant gagner avec les loups, vous possédez également force de nuit");
 			    		}
@@ -202,29 +207,45 @@ public class mcListeners implements Listener {
 			    			for (ResCheck checker: game.resCheckers) {
 			    				checker.runDeathAction(e, killer);
 			    				
+			    				//CHECK MORT CACHée
 			    				if (checker.hide(e)) {
 			    					hidden = true;
 			    					
 			    				}
+			    				
+			    				//EFFET TRAGIC
+			    				if (MathUtil.pourcentage(game.getTragic()/10)) {
+			    					hidden = true;
+			    				}
+			    				
+			    				//CHECK MORT BROUILLéE
 			    				if (checker.brume(e)) {
 			    					brumed = true;
 			    				}
+			    				
+			    				//EFFET EPIC
+			    				if (MathUtil.pourcentage(game.getEpic()/5)) {
+			    					brumed = true;
+			    				}
 			    			}
+			    			
+			    			//REGISTER CAUSES
 			    			if (brumed) {
-			    				game.addEpic(10);
+			    				game.addEpic(10, e.getEntity().getLocation());
 			    			}
 			    			if (hidden) {
-			    				game.addTragic(5);
+			    				game.addTragic(5, e.getEntity().getLocation());
 			    			}
 			    			if (!player1.roleIn.isInfoRole()) {
-		    					game.addTragic(5);
+		    					game.addTragic(5, e.getEntity().getLocation());
 		    				} else {
-		    					game.addEpic(5);
+		    					game.addEpic(5, e.getEntity().getLocation());
 		    				}
 		    				
 		    				if (player1.camp == Camp.Other || player1.camp == Camp.TEAM) {
-		    					game.addEpic(10);
+		    					game.addEpic(10, e.getEntity().getLocation());
 		    				}
+		    				
 			    		}
 			    		
 

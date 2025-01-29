@@ -94,7 +94,7 @@ public class Lga implements CommandExecutor  {
 					return false;
 				}
 				
-				game.groupe = g;
+				game.setGroupsTo(g);
 			}
 		}
 		

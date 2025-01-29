@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -185,6 +186,11 @@ public class GameLg implements Listener{
 			}
 		}
 	}
+	
+	public void setGroupsTo(int g) {
+		this.groupe = g;
+		this.broadcoast(ChatColor.ITALIC+"Groupes à "+ Integer.toString(g));
+	}
 	public PlayerData getPlayer(String name) {
 		for (PlayerData ply:this.playerAlive ) {
 			if (ply.Name.equals(name)) {
@@ -357,7 +363,13 @@ public class GameLg implements Listener{
 	public void accusation(PlayerData accuser, PlayerData accused) {
 		
 		Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " accuse le joueur "+ accused.getName() + " publiquement, il a 10 minutes pour prouver sa culpabilité sous peine de perdre 1.5 coeurs permanents, si celui-ci se révèle innocent, il perdra 3 coeurs permanents et son droit de vote.");
-		this.addorat(10);
+		//CAUSE ORAT
+		
+		this.addorat(10, accuser.getLocation());
+		//CONSEqUENCE orAT
+		if (getOrat() > 50) {
+			broadcoast("Ses Coordonnée sont "+String.valueOf(accused.getLocation().getBlockX())+ "; "+String.valueOf(accused.getLocation().getBlockY()) + "; "+ String.valueOf(accused.getLocation().getBlockZ()));
+		}
 		if (accused.role.equals(RolesLg.ANGE_THIERCE)) {
 			accused.hasStrenghtAgainst.put(accuser.player, true);
 			accused.setMaxHealth(accused.getMaxHealth()+2);
@@ -377,7 +389,7 @@ public class GameLg implements Listener{
 				if (accused.inLife) {
 					accuser.setMaxHealth(accuser.getMaxHealth() - 1.5);
 					Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " n'a pas pu prouver la culpabilité du joueur "+ accused.getName() + " à temps, il perd donc 1.5 coeurs permanents");
-					addTragic(10);
+					addTragic(10, accuser.getLocation());
 				} else {
 					if (accused.team.equals(villTeam)) {
 						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + ", il perd donc 3 coeurs permanents et son droit de vote.");
@@ -386,7 +398,7 @@ public class GameLg implements Listener{
 					} else {
 						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + " à raison, il gagne donc 10% de force supplémentaires.");
 						accuser.boostS5 += 2;
-						addEpic(15);
+						addEpic(15, accuser.getLocation());
 					}
 				}
 			}
@@ -516,21 +528,33 @@ public class GameLg implements Listener{
 		this.decideTimeEvent();
 		this.setEpisodeTime();
 		
-		this.invVote = Bukkit.createInventory(null, 36);
+		setGroupsTo(getNumberOfPlayer() / 5);
 		
-		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
-		if (getPlayerAlive().size() < 5) {
-			nbVoter = getPlayerAlive().size();
+		Registre r = getRegister();
+		if (r.getType().equals(RegisterType.Tragic)) {
+			if (MathUtil.pourcentage(r.getTaux()) && getGroupe() > 2) {
+				setGroupsTo(getGroupe() - 1);
+			}
+			if (MathUtil.pourcentage(probasEvents.get("Exposed"))&&MathUtil.pourcentage(r.getTaux())) {
+				exposed(GameLgUtil.getAlPlayer(this), 4);
+			}
 		}
-		for (int i = 0; i < nbVoter; i++) {
-			ItemStack item = new ItemStack(Material.EMERALD);
-			ItemUtil.setName(item, "Voter");
-			this.invVote.setItem(i, item);
+		if (r.getType().equals(RegisterType.Oratoire)) {
+			if (MathUtil.pourcentage(r.getTaux()) && getGroupe() < 6) {
+				setGroupsTo(getGroupe() + 1);
+			}
 		}
+		
+		
 		
 		for (PlayerData p:getPlayerAlive()) {
 			if (futureAcc.getOrDefault(p.getName(), null) != null) {
 				accusation(p, futureAcc.getOrDefault(p.getName(), null));
+				//EFFET (et cause exceptionnelement) REGISTRE
+				if (getRegister().getType().equals(RegisterType.Tragic)) {
+					addTragic(10, p.getLocation());
+				}
+				
 			}
 		}
 		
@@ -667,6 +691,18 @@ public class GameLg implements Listener{
 
 	@Deprecated
 	public void startVote() {
+		this.invVote = Bukkit.createInventory(null, 36);
+		
+		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
+		if (getPlayerAlive().size() < 5) {
+			nbVoter = getPlayerAlive().size();
+		}
+		for (int i = 0; i < nbVoter; i++) {
+			ItemStack item = new ItemStack(Material.EMERALD);
+			ItemUtil.setName(item, "Voter");
+			this.invVote.setItem(i, item);
+		}
+		
 		for (PlayerData player: this.playerAlive) {
 			player.askVoted();
 			
@@ -692,17 +728,54 @@ public class GameLg implements Listener{
 					
 				}
 				
-				addorat(3*mostVoted.vote);
+				addorat(3*mostVoted.vote, mostVoted.getLocation());
 				
 				if (mostVoted.vote > 0 && !equal) {
-					if (MathUtil.pourcentage(probasEvents.get("Erreur aux Urnes"))) {
-						Bukkit.broadcastMessage(ChatColor.GOLD+"Une erreur s'est produite aux urnes...");
-						mostVoted = getPlayerAlive().get(MathUtil.generateAlInt(0, getPlayerAlive().size()  -1));
-						return;
+					
+					//CONSESQUENCE EPIC
+					int plus = 0;
+					int exposedPlus = 0;
+					if (getOrat() > 70) {
+						plus++;
+					}
+					if (getTragic() > 40 || getOrat() > 40) {
+						plus++;
+					} else if (getEpic() > 90) {
+						plus-= 3;
+						if (MathUtil.pourcentage(70)) {
+							exposedPlus ++;
+						}
+						
+					}else if (getEpic() > 60) {
+						plus-= 2;
+						if (MathUtil.pourcentage(45)) {
+							exposedPlus ++;
+						}
+						
+					}else if (getEpic() > 30) {
+						plus-= 1;
+						if (MathUtil.pourcentage(20)) {
+							exposedPlus ++;
+						}
+						
+					}
+					//CONSEQUENCE ORAT
+					if (getOrat() > 20 && MathUtil.pourcentage(40)) {
+						exposedPlus --;
+					}
+					if (plus < 0) {
+						plus = 0;
 					}
 					
-					mostVoted.changeHealth(-voteForce);
-					exposed(mostVoted, 6-voteForce);
+					
+					
+					mostVoted.changeHealth(-(voteForce + plus));
+					if (6-voteForce+ exposedPlus < 1) {
+						exposed(mostVoted, 1);
+					} else {
+						exposed(mostVoted, 6-voteForce+ exposedPlus);
+					}
+					
 					
 					if (voteForce < 5) {
 						voteForce ++;
@@ -718,7 +791,7 @@ public class GameLg implements Listener{
 							
 							if (player.role.equals(RolesLg.CORBEAU)) {
 								Bukkit.broadcastMessage(ChatColor.BLACK+"Le corbeau a voté avec le village");
-								addorat(5);
+								addorat(5, player.getLocation());
 								CORBEAU corbeau = (CORBEAU) player.roleIn;
 								corbeau.addGoodVoted();
 							}
@@ -839,7 +912,7 @@ public class GameLg implements Listener{
 		} 
 		if (player1.inLove) {
 			moreInfo = moreInfo+ (" (en couple) ");
-			addTragic(8);
+			addTragic(8, null);
 		} 
 
 		GameLg gm1 =GameLgUtil.getGameOfPlayer(player1, " at 152 Main");
@@ -1047,8 +1120,39 @@ public class GameLg implements Listener{
 		
 		
 	}
+	public void exposedMulti(ArrayList<PlayerData> players, int nbOfRoleSup) {
+		
+		ArrayList<String> rolesStr = new ArrayList<String>();
+		for (PlayerData p:players) {
+			rolesStr.add(p.getLgRole().getName());
+		}
+		for (int i = 0; i<nbOfRoleSup; i++) {
+			rolesStr.add(getRoles().get(MathUtil.generateAlInt(0, getRoles().size() - 1)).getName());
+
+		}
+
+		
+		Bukkit.broadcastMessage(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Les Roles des joueurs:se trouvent parmis les suivants: ");
+		for (PlayerData p:players) {
+			Bukkit.broadcastMessage(ChatColor.DARK_GREEN+"-"+p.getName() );
+		}
+		Bukkit.broadcastMessage(ChatColor.DARK_GREEN+"se trouvent parmis les suivants: ");
+
+		int x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
+		do {
+			String str = rolesStr.get(x);
+			Bukkit.broadcastMessage(ChatColor.GOLD+"-"+str);
+			x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
+		}while (rolesStr.size() > 0);
+		
+		
+		
+	}
 	
-	public void addTragic(int toAdd) {
+	public void addTragic(int toAdd, Location loc) {
+		for (ResCheck res:this.resCheckers) {
+			res.onAddTragic(toAdd, loc);
+		}
 		if (this.oratTaux < 1 && this.epicTaux < 1) {
 			this.tragicTaux += toAdd;
 		} else if (this.oratTaux > 0) {
@@ -1066,9 +1170,13 @@ public class GameLg implements Listener{
 				this.epicTaux = 0;
 			}
 		}
+		
 	}
 	
-	public void addorat(int toAdd) {
+	public void addorat(int toAdd, Location loc) {
+		for (ResCheck res:this.resCheckers) {
+			res.onAddOrat(toAdd, loc);
+		}
 		if (this.tragicTaux < 1 && this.epicTaux < 1) {
 			this.oratTaux += toAdd;
 		} else if (this.tragicTaux > 0) {
@@ -1088,7 +1196,10 @@ public class GameLg implements Listener{
 		}
 	}
 	
-	public void addEpic(int toAdd) {
+	public void addEpic(int toAdd, Location loc) {
+		for (ResCheck res:this.resCheckers) {
+			res.onAddEpic(toAdd, loc);
+		}
 		if (this.tragicTaux < 1 && this.oratTaux < 1) {
 			this.epicTaux += toAdd;
 		} else if (this.tragicTaux > 0) {
