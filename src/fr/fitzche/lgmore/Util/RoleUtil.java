@@ -18,16 +18,19 @@ import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.ASSASSIN;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
+import fr.fitzche.lgmore.RolesLg.COMEDIEN;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
+import fr.fitzche.lgmore.RolesLg.ERMITE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
 import fr.fitzche.lgmore.RolesLg.LOUP_ALCHIMISTE;
 import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
 import fr.fitzche.lgmore.RolesLg.LOUP_BRUMEUX;
+import fr.fitzche.lgmore.RolesLg.LOUP_CRAINTIF;
 import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
@@ -233,6 +236,18 @@ public class RoleUtil {
 			return role;
 		}else if (player.role.equals(RolesLg.LOUP_BRUMEUX)) {
 			LOUP_BRUMEUX role = new LOUP_BRUMEUX(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.ERMITE)) {
+			ERMITE role = new ERMITE(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.LOUP_CRAINTIF)) {
+			LOUP_CRAINTIF role = new LOUP_CRAINTIF(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.COMEDIEN)) {
+			COMEDIEN role = new COMEDIEN(player);
 			player.roleIn = role;
 			return role;
 		}else{

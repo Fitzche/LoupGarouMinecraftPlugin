@@ -503,6 +503,9 @@ public class Lg implements CommandExecutor {
 								return true;
 							}
 							PlayerUtil.getDataPlayer(args[1], "at /lg aveugler in lg").roleIn.blind(senderPlayerData);
+							if (!PlayerUtil.getDataPlayer(args[1], "at /lg aveugler in lg").roleIn.isInfoRole()) {
+								manip.playerWithRole.sendMessage("Ce n'est pas un role à info");
+							}
 							manip.powerUsed --;
 							gameOfSender.addorat(5, manip.playerWithRole.getLocation());
 							return true;

@@ -1251,5 +1251,13 @@ public class GameLg implements Listener{
 		
 	}
 	
+	public boolean isDay() {
+		if (WorldUtil.getTime(Main.server.getWorld("world")).equals("day")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 }

@@ -74,7 +74,23 @@ public class Lga implements CommandExecutor  {
 			
 			game.broadcoast(ChatColor.ITALIC + mess);
 			return true;
-		}
+		} else if (args[0].equals("epic")) {
+			if (args.length > 1) {
+				GameLg game = GameLgUtil.getGameOfPlayer(((Player) sender), "at command lga say");
+				game.addEpic(Integer.valueOf(args[1]), ((Player) sender).getLocation());
+			}
+			
+		}else if (args[0].equals("tragic")) {
+			if (args.length > 1) {
+				GameLg game = GameLgUtil.getGameOfPlayer(((Player) sender), "at command lga say");
+				game.addTragic(Integer.valueOf(args[1]), ((Player) sender).getLocation());
+			}
+		}else if (args[0].equals("oratoire")) {
+			if (args.length > 1) {
+				GameLg game = GameLgUtil.getGameOfPlayer(((Player) sender), "at command lga say");
+				game.addorat(Integer.valueOf(args[1]), ((Player) sender).getLocation());
+			}
+		}		
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {
 				sender.sendMessage("Veuillez indiquer un nombre valide");

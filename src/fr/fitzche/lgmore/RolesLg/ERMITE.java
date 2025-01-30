@@ -9,19 +9,23 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.RolesLg.Checkers.ErmiteChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class SIMPLE_VILLAGER implements RoleInstance {
+public class ERMITE implements RoleInstance {
 	public PlayerData playerWithRole;
-	public String name ="Simple Villageois";
+	public String name ="Ermite";
 	public Camp camp = Camp.Villager;
 	public GameLg game;
+	public int nbOfPlayerAround = 0;
+	int tempo = 0;
 	
-	public SIMPLE_VILLAGER(PlayerData player) {
+	public ERMITE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at role creation: ");
+		this.game = GameLgUtil.getGameOfPlayer(player, "at ermite creation");
+		game.resCheckers.add(new ErmiteChecker(this));
 	}
 	
 	@Override
@@ -30,13 +34,23 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, vous ne possédez aucun pouvoir");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, vous possédez 30% de force le jour et 20% de résistance la nuit, mais pour chaque joueur autour de vous, vous perdez 5% de force, le jour et 3% de resistance la nuit, vous pouvez donc avoir un malus. Si le registre est tragique, vous gagnez 10% de résistance, s'il est oratoire, vous perdez 10% de force. Votre mort ne sera pas annoncée.");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 
 	
 	public void giveEffectAllTime() {
-		//null
+		if (tempo > 4) {
+			tempo = 0;
+			this.nbOfPlayerAround = 0;
+			for (PlayerData p:game.getPlayerAlive()) {
+				if (playerWithRole.getLocation().distance(p.getLocation()) <= 20 && !playerWithRole.getName().equals(p.getName())) {
+					nbOfPlayerAround ++;
+				}
+			}
+		} else {
+			tempo ++;
+		}
 	}
 	
 

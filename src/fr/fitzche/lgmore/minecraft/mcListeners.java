@@ -508,6 +508,11 @@ public class mcListeners implements Listener {
 		e.setDamage(e.getDamage()/(1 +less));
 		System.out.println("resis damage: " + e.getDamage());
 		
+		double modifier = 0;
+		for (ResCheck checker:gameDamager.resCheckers) {
+			modifier += checker.onPlayerDamage(damager, PlayerUtil.getDataOfPlayer((Player) e.getEntity(), "  in DamageByEntityEvent in mcListener, 513, 3 "));
+		}
+		e.setDamage(e.getDamage() * (1+(modifier/100)));		
 		
 		e.setDamage(e.getDamage() * 0.89);
 	}
