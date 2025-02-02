@@ -77,8 +77,8 @@ public class RegisterCheck implements ResCheck{
 	}
 
 	@Override
-	public void onAddTragic(int i, Location loc) {
-		if (game.getTragic()  < 100 && game.getTragic() + i > 100) {
+	public void onAddTragic(int before, int after, Location loc) {
+		if (before  < 100 && after >= 100) {
 			for (PlayerData p:game.getPlayerAlive()) {
 				GameLgUtil.tpAl(p);
 			}
@@ -87,20 +87,20 @@ public class RegisterCheck implements ResCheck{
 	}
 
 	@Override
-	public void onAddEpic(int i, Location loc) {
+	public void onAddEpic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Deprecated
 	@Override
-	public void onAddOrat(int i, Location loc) {
-		if (game.getTragic()  < 80 && game.getTragic() + i > 80) {
-			if ((game.timer.temps - (game.timer.getEpisode() - 1) * 1200)>80 && !game.hasMoreVote) {
+	public void onAddOrat(int before, int after, Location loc) {
+		if (before  < 80 && after >= 80) {
+			if ((game.timer.temps - (game.timer.getEpisode() - 1) * 1200)>80 && (game.timer.temps - (game.timer.getEpisode() - 1) * 1200) < 1120 && !game.hasMoreVote) {
 				game.broadcoast(ChatColor.AQUA+"Un vote Supplémentaire se déclenche");
 				game.hasMoreVote = true;
 				game.startVote();
-			} else {
+			} else if (!game.hasMoreVote){
 				game.broadcoast(ChatColor.AQUA+"Un vote Supplémentaire se déclenchera dans 10min car un vote approche déjà");
 				Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
@@ -115,13 +115,13 @@ public class RegisterCheck implements ResCheck{
 				},	12000);
 			}
 		}
-		if (game.getTragic() < 100 && game.getTragic() + i >= 100) {
+		if (before < 100 && after >= 100) {
 			ArrayList<PlayerData> choosen = new ArrayList<PlayerData>();
 			choosen.add(GameLgUtil.getAlPlayer(game));
 			choosen.add(GameLgUtil.getAlPlayer(game));
 			choosen.add(GameLgUtil.getAlPlayer(game));
 
-			game.exposedMulti(null, i);
+			game.exposedMulti(choosen, 0);
 		}
 		
 	}

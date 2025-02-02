@@ -253,10 +253,12 @@ public class mcListeners implements Listener {
 				    		//ANNOUNCE DEATH
 				    		if (player1.grimed) {
 				    			game.announceDeath(player1, RolesLg.SIMPLE_WOLF, false);
+				    		} else if (hidden){
+				    			game.announceDeath(player1, false, true);
 				    		} else if (brumed){
-				    			game.announceDeath(player1, true);
+				    			game.announceDeath(player1, true, false);
 				    		} else {
-				    			game.announceDeath(player1, false);
+				    			game.announceDeath(player1, false, false);
 				    		}
 				    	}
 				    	
@@ -512,7 +514,10 @@ public class mcListeners implements Listener {
 		for (ResCheck checker:gameDamager.resCheckers) {
 			modifier += checker.onPlayerDamage(damager, PlayerUtil.getDataOfPlayer((Player) e.getEntity(), "  in DamageByEntityEvent in mcListener, 513, 3 "));
 		}
-		e.setDamage(e.getDamage() * (1+(modifier/100)));		
+		
+		System.out.println(e.getDamage()+" * "+(1+(modifier/100)) + " = "+ (e.getDamage() * (1+(modifier/100))));
+		e.setDamage(e.getDamage() * (1+(modifier/100)));
+		
 		
 		e.setDamage(e.getDamage() * 0.89);
 	}
@@ -606,54 +611,9 @@ public class mcListeners implements Listener {
 		}
 	}
 	
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-		System.out.println("interact onPlayerInteract");
-		if (e.getClickedBlock() != null && e.getClickedBlock().hasMetadata("interactBlockVote")) {
-			System.out.println("interact true onPlayerInteract");
-			e.getPlayer().openInventory(GameLgUtil.getGameOfPlayer((Player) e.getPlayer(), "interactBlockVote").invVote);
-		}
-		if (e.getClickedBlock() != null && e.getClickedBlock().hasMetadata("interactBlockAccuse")) {
-			e.getPlayer().sendMessage(ChatColor.RED+"Vous avez 30sec pour accuser un joueur avec la commande /lg accuse [nom du joueur], votre accusation sera rendu publique au prochain épisode.");
-			PlayerData p = PlayerUtil.getDataOfPlayer(e.getPlayer(), "on player interact bloc accuse");
-			p.canAccuse = true;
-			
-			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
-
-				@Override
-				public void run() {
-					p.canAccuse = false;
-					
-				}
-				
-			}, 600);
-		}
-	}
 	
-	public boolean onPlayerInteract(Block bloc, Player p) {
-		System.out.println("interact onPlayerInteract");
-		if (bloc != null && bloc.hasMetadata("interactBlockVote")) {
-			System.out.println("interact true onPlayerInteract");
-			p.openInventory(GameLgUtil.getGameOfPlayer((Player) p, "interactBlockVote").invVote);
-		}else if (bloc != null && bloc.hasMetadata("interactBlockAccuse")) {
-			p.sendMessage(ChatColor.RED+"Vous avez 30sec pour accuser un joueur avec la commande /lg accuse [nom du joueur], votre accusation sera rendu publique au prochain épisode.");
-			PlayerData ply = PlayerUtil.getDataOfPlayer(p, "on player interact bloc accuse");
-			ply.canAccuse = true;
-			
-			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
-
-				@Override
-				public void run() {
-					ply.canAccuse = false;
-					
-				}
-				
-			}, 600);
-		} else {
-			return false;
-		}
-		return true;
-	}
+	
+	
 	
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent e) {
@@ -664,7 +624,7 @@ public class mcListeners implements Listener {
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
 		System.out.println("vote1");
-		if (e.getInventory().equals(GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), "click").invVote)) {
+		if (Main.game != null&&GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), "click") != null && e.getInventory().equals(GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), "click").invVote)) {
 			System.out.println("vote2");
 			e.setCancelled(true);
 			if (e.getCurrentItem().getItemMeta().hasLore()) {

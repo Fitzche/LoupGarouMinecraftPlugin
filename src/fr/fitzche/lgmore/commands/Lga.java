@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.commands;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -35,6 +36,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
+
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
@@ -90,7 +92,7 @@ public class Lga implements CommandExecutor  {
 				GameLg game = GameLgUtil.getGameOfPlayer(((Player) sender), "at command lga say");
 				game.addorat(Integer.valueOf(args[1]), ((Player) sender).getLocation());
 			}
-		}		
+		}	
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {
 				sender.sendMessage("Veuillez indiquer un nombre valide");
@@ -112,6 +114,10 @@ public class Lga implements CommandExecutor  {
 				
 				game.setGroupsTo(g);
 			}
+		}else if (args[0].equals("placeVote")) {
+			Main.placeVoteBlock(((Player) sender).getLocation());
+		}else if (args[0].equals("placeAccuse")) {
+			Main.placeAccuseBlock(((Player) sender).getLocation());
 		}
 		
 		if (args[0].equals("transfer") ) {
@@ -211,7 +217,7 @@ public class Lga implements CommandExecutor  {
 					}
 					return true;
 				}
-				if (Main.games == null) {
+				if (Main.game == null) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("Aucune partie n'existe");
@@ -249,7 +255,7 @@ public class Lga implements CommandExecutor  {
 				}
 				
 				GameLg game = new GameLg(args[2]);
-				Main.games.add(game);
+				Main.game = game;
 				Player playerd = (Player )sender;
 				playerd.sendMessage(ChatColor.DARK_BLUE +"game created: " + ChatColor.DARK_RED+ args[2]);
 				game.board.setgame(game);
@@ -263,7 +269,7 @@ public class Lga implements CommandExecutor  {
 			
 			
 			if (args[1].equals("addPlayer")) {
-				if (Main.games == null) {
+				if (Main.game == null) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.sendMessage("Aucune partie n'existe");
@@ -281,15 +287,13 @@ public class Lga implements CommandExecutor  {
 					}return true;
 				}
 				
-				for (GameLg game1: Main.games) {
-					for (PlayerData ply: game1.playerAlive) {
-						if (ply.Name.equals(args[3])) {
-							if (sender instanceof Player) {
-								Player player = (Player) sender;
-								player.sendMessage("ce joueur est déjà dans une partie");
-								
-							}return true;
-						}
+				for (PlayerData ply: Main.game.playerAlive) {
+					if (ply.Name.equals(args[3])) {
+						if (sender instanceof Player) {
+							Player player = (Player) sender;
+							player.sendMessage("ce joueur est déjà dans une partie");
+							
+						}return true;
 					}
 				}
 				Player playerToAdd = PlayerUtil.getPlayer(args[3]);
@@ -470,7 +474,7 @@ public class Lga implements CommandExecutor  {
 						return true;
 					}
 				}
-				Main.games.remove(game);
+				Main.game = null;
 				
 			}
 			
@@ -537,11 +541,7 @@ public class Lga implements CommandExecutor  {
 
 				}
 				
-			} else if (args[1].equals("placeVote")) {
-				GameLgUtil.getGameOfPlayer((Player) sender, "at placeVote command").placeVoteBlock((Player) sender);
-			}else if (args[1].equals("placeAccuse")) {
-				GameLgUtil.getGameOfPlayer((Player) sender, "at placeVote command").placeAccuseBlock((Player) sender);
-			}
+			} 
 		}
 		return false;
 	}

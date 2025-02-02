@@ -49,10 +49,10 @@ public class ComedienChecker implements ResCheck {
 	@Override
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
 		int returned = 0;
-		 if (game.getRegister().equals(RegisterType.Epic) && attacked.getName().equals(comedien.playerWithRole.getName())) {
+		 if (game.getRegister().getType().equals(RegisterType.Epic) && attacked.getName().equals(comedien.playerWithRole.getName())) {
 			 returned -= (game.getEpic() / 5);
 		 }
-		return 0;
+		return returned;
 	}
 
 	@Override
@@ -63,7 +63,9 @@ public class ComedienChecker implements ResCheck {
 
 	@Override
 	public void onVoteEvent(VoteEvent e) {
+		System.out.println("on vote event checker: "+game.getOrat());
 		if (game.getRegister().getType().equals(RegisterType.Oratoire) && MathUtil.pourcentage(game.getOrat())) {
+			System.out.println("on vote event checker 2");
 			comedien.playerWithRole.sendMessage("Voici les joueurs qui ont voté pour "+ e.getVoted().getName()+": ");
 			for (PlayerData p:game.getPlayerAlive()) {
 				if (p.voted != null && p.voted.getName().equals(e.getVoted().getName())) {
@@ -76,19 +78,19 @@ public class ComedienChecker implements ResCheck {
 	}
 
 	@Override
-	public void onAddTragic(int i, Location loc) {
+	public void onAddTragic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onAddEpic(int i, Location loc) {
+	public void onAddEpic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onAddOrat(int i, Location loc) {
+	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}

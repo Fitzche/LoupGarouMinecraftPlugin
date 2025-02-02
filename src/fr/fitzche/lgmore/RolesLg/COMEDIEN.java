@@ -81,6 +81,9 @@ public class COMEDIEN implements RoleInstance {
 
 	@Override
 	public void episodeEffect() {
+		if (game.getRegister() == null || game.getRegister().getType() == null) {
+			return;
+		}
 		if (game.getRegister().getType().equals(RegisterType.Tragic)) {
 			
 			PlayerData p = GameLgUtil.getAlPlayer(game);

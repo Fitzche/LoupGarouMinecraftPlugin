@@ -124,7 +124,7 @@ public class Team implements Listener{
 		if (this.winOnlyPlayer && this.members.size() == (game.getPlayerAlive().size()-1) ) {
 			System.out.println(this.members.size()+ " equals "+ (game.getPlayerAlive().size() -1) );
 
-			win();
+			win(player);
 			
 		}
 		
@@ -158,13 +158,13 @@ public class Team implements Listener{
 	}
 	
 	
-	public void win() {
+	public void win(PlayerData without) {
 		/*if (true) {
 			return;
 		}*/
 		Bukkit.broadcastMessage("Le camp ''" + camp.getColor() + this.name + "'' a gagné la partie");
 		for (PlayerData ply:game.players) {
-			if (ply.inLife) {
+			if (ply.inLife && !(without != null && without.getName().equals(ply.getName()))) {
 				Bukkit.broadcastMessage(ply.camp.getColor() + ply.Name + "--"+ " Vivant"+ply.getLgRole().getCampOfRole().getColor()+ply.getLgRole().getName() + "\n");
 			} else {
 				Bukkit.broadcastMessage(ply.camp.getColor() + ply.Name + "--"+ ChatColor.DARK_RED+" Mort" + ChatColor.WHITE+ply.getLgRole().getCampOfRole().getColor()+ply.getLgRole().getName()+ "\n");

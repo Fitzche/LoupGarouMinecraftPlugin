@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,6 +41,9 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
@@ -61,7 +65,12 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin implements Listener {
 	public static Server server;
-	public static ArrayList<GameLg> games = new ArrayList<GameLg>();
+	public static GameLg game;
+	
+	public static Location loc1;
+	public static Location loc2;
+	public static ArrayList<SpecialBlock> specialBlocks = new ArrayList<SpecialBlock>();
+	
 	
 	public static JavaPlugin plug;
 	public static Permission lgop;
@@ -155,6 +164,9 @@ public class Main extends JavaPlugin implements Listener {
 				));
 		RoleUtil.existingRoles.addAll(list);
 
+		eventsLgNames.add("Exposed");
+		descriptionsLgEvent.put("Exposed","A chaque épisode, un exposed de 4 role a un pourcentagede chance de se produire en fonction du taux de tragique (exemple: 20pts de tragique = 20% de chance), ce pourcentage est la chance que l'exposed se produise ou pas, passe avant la probabilité du taux de targique (ex: event à 20%, et 60 pts de tragique = 60% de 20% = 12% de chance) L'exposed affiche 4 role dans le chat dont le nom du joueur choisi au hasard pour l'exposed.");
+
 		eventsLgNames.add("Brume");
 		descriptionsLgEvent.put("Brume", "Probabilité à la mort d'un joueur, que le message de mort soit caché au village");
 
@@ -167,9 +179,7 @@ public class Main extends JavaPlugin implements Listener {
 		eventsLgNames.add("Mal visé");
 		descriptionsLgEvent.put("Mal visé", "probabilité que le cupidon vise mal et se mette en couple avec un joueur aléatoire");
 
-		eventsLgNames.add("Exposed");
-		descriptionsLgEvent.put("Exposed","A chaque épisode, un exposed de 4 role a un pourcentagede chance de se produire en fonction du taux de tragique (exemple: 20pts de tragique = 20% de chance), ce pourcentage est la chance que l'exposed se produise ou pas, passe avant la probabilité du taux de targique (ex: event à 20%, et 60 pts de tragique = 60% de 20% = 12% de chance) L'exposed affiche 4 role dans le chat dont le nom du joueur choisi au hasard pour l'exposed.");
-
+		
 	}
 	
 	
@@ -197,11 +207,8 @@ public class Main extends JavaPlugin implements Listener {
 			e.getPlayer().sendMessage("Hey, tu as rejoint un serveur avec le plugin de lg de Fitzche, fais /lga Game create [nomDeLaGame] pour créer un game, puis /lga Game config [nomDeLaGame] pour la config puis la start... ");
 		}
 		
-		for (GameLg gm: Main.games) {
-			System.out.println("tested for "+ gm.name +" at l.270 of Main");
-			if (gm.playersLeft.get(e.getPlayer().getName()) != null) {
-				gm.playersLeft.get(e.getPlayer().getName()).end();
-			}
+		if (game.playersLeft.get(e.getPlayer().getName()) != null) {
+			game.playersLeft.get(e.getPlayer().getName()).end();
 		}
 		
 		
@@ -239,7 +246,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 				if (!player.isOnline && gm1.timer.temps > 1199) {
 					System.out.println(player.Name+ " not online");
-					gm1.announceDeath(player, false);
+					gm1.announceDeath(player, false, false);
 				}
 				
 				
@@ -248,12 +255,29 @@ public class Main extends JavaPlugin implements Listener {
 			
 		}, 6000);
 	}
+	public static void placeVoteBlock(Location loc) {
+		System.out.println("bloc vote placé");
+		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Vote, new VoteBlockData(5)));
+		
+	}
+	public static void placeAccuseBlock(Location loc) {
+		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Accuse, null));
+		
+		
+	}
 	
 	
 	public static void setServer(Server server) {
 		Main.server = server;
 		}
 	}
+
+
 
 
 	

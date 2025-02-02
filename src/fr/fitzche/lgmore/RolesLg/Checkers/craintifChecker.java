@@ -34,7 +34,7 @@ public class craintifChecker implements ResCheck {
 
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
-		if (e.getEntity().getName().equals(player.getName())) {
+		if (e.getEntity().getName().equals(player.playerWithRole.getName())) {
 			System.out.println("mort craintif cachée: "+ e.getEntity().getName());
 			return true;
 		}
@@ -85,19 +85,19 @@ public class craintifChecker implements ResCheck {
 	}
 
 	@Override
-	public void onAddTragic(int i, Location loc) {
+	public void onAddTragic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onAddEpic(int i, Location loc) {
+	public void onAddEpic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onAddOrat(int i, Location loc) {
+	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}

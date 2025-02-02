@@ -19,6 +19,8 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
@@ -158,7 +160,7 @@ public class Lg implements CommandExecutor {
 		} else if (args[0].equals("list")) {
 			
 			
-			if (Main.games == null) {
+			if (Main.game == null) {
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					player.sendMessage("Aucune partie n'existe");
@@ -259,6 +261,15 @@ public class Lg implements CommandExecutor {
 				return true;
 
 			}
+			if (player.lastVoteOpen != null && player.lastVoteOpen.data.getType().equals(SpecialBlockType.Vote)) {
+				VoteBlockData data = (VoteBlockData) player.lastVoteOpen.data;
+				if (data.nbOfVote < 1) {
+					player.sendMessage(ChatColor.GOLD +"L'urne à vote que vous avez ouverte est pleine...");
+					return true;
+				}
+				data.hasVotedFor.put(player.getName(), voted.getName());
+				data.nbOfVote --;
+			}
 			
 			if (player.voted != null) {
 				player.voted.vote --;
@@ -267,6 +278,8 @@ public class Lg implements CommandExecutor {
 			player.voted = voted;
 			player.sendMessage("Vous avez voté pour "+ voted.Name +"");
 			voted.vote ++;
+			
+			
 			ArrayList<String> str = new ArrayList<String>();
 			str.add("utilisé");
 			ItemUtil.setLore(GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 3 ").invVote.getItem(Integer.valueOf(args[2])), str);

@@ -37,7 +37,7 @@ public class EventDisplay implements Listener{
 	
 	
 	//System.out.println("b.1.");
-	int done =Main.eventsLgNames.size();
+	int done = Main.eventsLgNames.size();
 
     for (int i = Main.eventsLgNames.size(); i>0; i =- 9) {
         Inventory inv = Bukkit.createInventory(null, 45, "Events");

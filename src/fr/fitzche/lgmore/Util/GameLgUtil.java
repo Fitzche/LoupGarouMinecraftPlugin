@@ -20,11 +20,8 @@ import fr.fitzche.lgmore.RolesLg.SORCIERE;
 
 public class GameLgUtil {
 	public static GameLg searchGame(String name) {
-		for (GameLg g: Main.games) {
-			if (g.name.equals(name)) {
-				System.out.println("correspondance");
-				return g;
-			}
+		if (Main.game != null) {
+			return Main.game;
 		}
 		System.out.println("la game n'existe pas");
 		return null;
@@ -118,11 +115,9 @@ public class GameLgUtil {
 	
 	
 	public static GameLg getGameOfPlayer(Player player, String location) {
-		for (GameLg game :Main.games) {
-			for (PlayerData ply:game.playerAlive) {
-				if (player.equals(ply.player)) {
-					return game;
-				}
+		for (PlayerData ply:Main.game.playerAlive) {
+			if (player.equals(ply.player)) {
+				return Main.game;
 			}
 		}
 		System.out.println("partie du joueur " + player.getName() + " non trouvée at "+ location);
@@ -161,22 +156,18 @@ public class GameLgUtil {
 	}
 	
 	public static GameLg getGameOfPlayer(Player player, String location, boolean x) {
-		for (GameLg game :Main.games) {
-			for (PlayerData ply:game.playerAlive) {
-				if (player.equals(ply.player)) {
-					return game;
-				}
+		for (PlayerData ply:Main.game.playerAlive) {
+			if (player.equals(ply.player)) {
+				return Main.game;
 			}
 		}
 		return null;
 	}
 	
 	public static GameLg getGameOfPlayer(PlayerData player, String location) {
-		for (GameLg game :Main.games) {
-			for (PlayerData ply:game.playerAlive) {
-				if (player.player.equals(ply.player)) {
-					return game;
-				}
+		for (PlayerData ply:Main.game.playerAlive) {
+			if (player.player.equals(ply.player)) {
+				return Main.game;
 			}
 		}
 		System.out.println("partie du joueur " + player.player.getName() + " non trouvée at "+location);

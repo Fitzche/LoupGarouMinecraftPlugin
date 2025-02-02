@@ -47,9 +47,7 @@ public class LgTab implements TabCompleter {
 		if (args.length == 3) { 
 			
 			ArrayList<String> gamesToAdd = new ArrayList<String>();
-			for (GameLg game: Main.games) {
-				gamesToAdd.add(game.name);
-			}
+			gamesToAdd.add(Main.game.name);
 			completions3.addAll(gamesToAdd);
 			completions = completions3;
 		}

@@ -64,19 +64,21 @@ public class servantLgChecker implements ResCheck {
 	}
 
 	@Override
-	public void onAddTragic(int i, Location loc) {
+	public void onAddTragic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
-	public void onAddEpic(int i, Location loc) {
+	public void onAddEpic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
-	public void onAddOrat(int i, Location loc) {
+	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public boolean brume(PlayerDeathEvent e) {

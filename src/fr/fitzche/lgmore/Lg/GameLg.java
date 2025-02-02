@@ -31,6 +31,9 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Timer;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
@@ -38,6 +41,7 @@ import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
+import fr.fitzche.lgmore.RolesLg.Checkers.RegisterCheck;
 import fr.fitzche.lgmore.RolesLg.Checkers.TimeresCheck;
 import fr.fitzche.lgmore.RolesLg.Checkers.VoteChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -47,6 +51,7 @@ import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.Registre;
 import fr.fitzche.lgmore.Util.RoleUtil;
+import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
@@ -78,6 +83,7 @@ public class GameLg implements Listener{
 	public ArrayList<PlayerData> soloAlive;
 	public ArrayList<PlayerData> FalseVillagerAlive;
 	public ArrayList<PlayerData> FalseWolfAlive;
+	
 	
 	public ArrayList<Team> teams = new ArrayList<Team>();
 	public ArrayList<RolesLg> roles;
@@ -163,7 +169,8 @@ public class GameLg implements Listener{
 		this.dispoRoles.addAll(RoleUtil.existingRoles);
 		plys = new PlayerDisplay(this);
 		Main.server.getPluginManager().registerEvents(plys, Main.plug);
-		}
+		this.resCheckers.add(new RegisterCheck(this));
+	}
 	
 	public int getGroupe() {
 		return groupe;
@@ -222,6 +229,10 @@ public class GameLg implements Listener{
 				p.board.setgame(game);
 				p.board.refresh();
 			}
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
 			
 		}
 		
@@ -695,6 +706,11 @@ public class GameLg implements Listener{
 		this.invVote = Bukkit.createInventory(null, 36);
 		
 		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
+		for (SpecialBlock bloc:Main.specialBlocks) {
+			if (bloc.getData().getType().equals(SpecialBlockType.Vote)) {
+				((VoteBlockData) bloc.getData()).nbOfVote = 5;
+			}
+		}
 		if (getPlayerAlive().size() < 5) {
 			nbVoter = getPlayerAlive().size();
 		}
@@ -709,6 +725,7 @@ public class GameLg implements Listener{
 			
 		}
 		this.isInVote = true;
+		GameLg game = this;
 		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
 			@Override
@@ -731,6 +748,7 @@ public class GameLg implements Listener{
 				
 				addorat(3*mostVoted.vote, mostVoted.getLocation());
 				
+				boolean corb = false;
 				if (mostVoted.vote > 0 && !equal) {
 					
 					//CONSESQUENCE EPIC
@@ -792,6 +810,7 @@ public class GameLg implements Listener{
 							
 							if (player.role.equals(RolesLg.CORBEAU)) {
 								Bukkit.broadcastMessage(ChatColor.BLACK+"Le corbeau a voté avec le village");
+								corb = true;
 								addorat(5, player.getLocation());
 								CORBEAU corbeau = (CORBEAU) player.roleIn;
 								corbeau.addGoodVoted();
@@ -803,6 +822,11 @@ public class GameLg implements Listener{
 				} else {
 					Bukkit.broadcastMessage(ChatColor.GOLD +"Aucun joueur n'a été voté plus de 2 fois, ou il y a une égalité");
 				}
+				VoteEvent event = new VoteEvent(game, mostVoted, mostVoted.vote, corb);
+				for (ResCheck checker:game.resCheckers) {
+					checker.onVoteEvent(event);
+				}
+				
 				for (PlayerData player:playerAlive) {
 					if (player.voted == null) {
 						return;
@@ -901,8 +925,15 @@ public class GameLg implements Listener{
 		} , x*20);
 	}
 	
-	public void announceDeath(PlayerData player1, boolean brumed) {
+	public void announceDeath(PlayerData player1, boolean brumed, boolean hidden) {
 		
+		
+		if (hidden) {
+			for (Team team:teams) {
+				team.onPlayerDeath(player1);
+			}
+			return;
+		}
 		ChatColor color = ChatColor.RED;
 		if (brumed) {
 			color = ChatColor.MAGIC;
@@ -987,20 +1018,9 @@ public class GameLg implements Listener{
 		return returned;
 	}
 	
-	public void placeVoteBlock(Player p) {
-		System.out.println("bloc vote placé");
-		Main.server.getWorld("world").getBlockAt(p.getLocation()).setType(Material.ENDER_CHEST);
-		Main.server.getWorld("world").getBlockAt(p.getLocation()).setMetadata("interactBlockVote", new FixedMetadataValue(Main.plug, true));
-		
-		
-	}
 	
-	public void placeAccuseBlock(Player p) {
-		Main.server.getWorld("world").getBlockAt(p.getLocation()).setType(Material.ENDER_CHEST);
-		Main.server.getWorld("world").getBlockAt(p.getLocation()).setMetadata("interactBlockAccuse", new FixedMetadataValue(Main.plug, true));
-		
-		
-	}
+	
+
 	
 	
 	@EventHandler
@@ -1143,7 +1163,11 @@ public class GameLg implements Listener{
 		do {
 			String str = rolesStr.get(x);
 			Bukkit.broadcastMessage(ChatColor.GOLD+"-"+str);
-			x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
+			rolesStr.remove(x);
+			if (rolesStr.size() > 0) {
+				x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
+			}
+			
 		}while (rolesStr.size() > 0);
 		
 		
@@ -1151,9 +1175,7 @@ public class GameLg implements Listener{
 	}
 	
 	public void addTragic(int toAdd, Location loc) {
-		for (ResCheck res:this.resCheckers) {
-			res.onAddTragic(toAdd, loc);
-		}
+		int before = this.tragicTaux;
 		if (this.oratTaux < 1 && this.epicTaux < 1) {
 			this.tragicTaux += toAdd;
 		} else if (this.oratTaux > 0) {
@@ -1171,13 +1193,15 @@ public class GameLg implements Listener{
 				this.epicTaux = 0;
 			}
 		}
+		checkRegistr();
+		for (ResCheck res:this.resCheckers) {
+			res.onAddTragic(before, this.tragicTaux, loc);
+		}
 		
 	}
 	
 	public void addorat(int toAdd, Location loc) {
-		for (ResCheck res:this.resCheckers) {
-			res.onAddOrat(toAdd, loc);
-		}
+		int before = this.oratTaux;
 		if (this.tragicTaux < 1 && this.epicTaux < 1) {
 			this.oratTaux += toAdd;
 		} else if (this.tragicTaux > 0) {
@@ -1195,12 +1219,14 @@ public class GameLg implements Listener{
 				this.epicTaux = 0;
 			}
 		}
+		checkRegistr();
+		for (ResCheck res:this.resCheckers) {
+			res.onAddOrat(before, this.oratTaux, loc);
+		}
 	}
 	
 	public void addEpic(int toAdd, Location loc) {
-		for (ResCheck res:this.resCheckers) {
-			res.onAddEpic(toAdd, loc);
-		}
+		int before = this.epicTaux;
 		if (this.tragicTaux < 1 && this.oratTaux < 1) {
 			this.epicTaux += toAdd;
 		} else if (this.tragicTaux > 0) {
@@ -1218,6 +1244,11 @@ public class GameLg implements Listener{
 				this.oratTaux = 0;
 			}
 		}
+		checkRegistr();
+		for (ResCheck res:this.resCheckers) {
+			res.onAddEpic(before, this.epicTaux, loc);
+		}
+		
 	}
 	
 	public void checkRegistr() {
@@ -1241,12 +1272,14 @@ public class GameLg implements Listener{
 	}
 	public Registre getRegister() {
 		if (epicTaux > 0) {
+			
 			return new Registre(epicTaux, RegisterType.Epic);
 		} else if (tragicTaux > 0) {
 			return new Registre(tragicTaux, RegisterType.Tragic);
 		} else if (oratTaux > 0) {
 			return new Registre(oratTaux, RegisterType.Oratoire);
 		}
+		System.out.println("taux nul");
 		return new Registre(0, null);
 		
 	}

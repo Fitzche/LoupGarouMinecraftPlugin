@@ -33,7 +33,7 @@ public class ErmiteChecker implements ResCheck {
 
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
-		if (e.getEntity().getName().equals(player.getName())) {
+		if (e.getEntity().getName().equals(player.playerWithRole.getName())) {
 			System.out.println("mort ermite cachée: "+ e.getEntity().getName());
 			return true;
 		}
@@ -53,8 +53,9 @@ public class ErmiteChecker implements ResCheck {
 		if (attacker.getName().equals(player.playerWithRole.getName())) {
 			if (game.isDay()) {
 				returned += 30;
+				returned -= (player.nbOfPlayerAround * 5);
 			} 
-			returned -= (player.nbOfPlayerAround * 5);
+			
 			if (game.getOrat() > 20) {
 				returned -= 10;
 			}
@@ -62,11 +63,12 @@ public class ErmiteChecker implements ResCheck {
 		} else if(attacked.getName().equals(player.playerWithRole.getName())) {
 			if (!game.isDay()) {
 				returned -= 20;
+				returned += (player.nbOfPlayerAround * 4);
 			}
 			if (game.getTragic() > 20) {
 				returned -= 10;
 			}
-			returned += (player.nbOfPlayerAround * 3);
+			
 		}
 		return returned;
 	}
@@ -84,19 +86,19 @@ public class ErmiteChecker implements ResCheck {
 	}
 
 	@Override
-	public void onAddTragic(int i, Location loc) {
+	public void onAddTragic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onAddEpic(int i, Location loc) {
+	public void onAddEpic(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onAddOrat(int i, Location loc) {
+	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
 	}

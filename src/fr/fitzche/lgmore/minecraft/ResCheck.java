@@ -18,8 +18,8 @@ public interface ResCheck {
 	public boolean brume(PlayerDeathEvent e);
 	
 	public void onVoteEvent(VoteEvent e);
-	public void onAddTragic(int i, Location loc);
-	public void onAddEpic(int i, Location loc);
-	public void onAddOrat(int i, Location loc);
+	public void onAddTragic(int before, int after, Location loc);
+	public void onAddEpic(int before, int after, Location loc);
+	public void onAddOrat(int before, int after, Location loc);
 
 }
