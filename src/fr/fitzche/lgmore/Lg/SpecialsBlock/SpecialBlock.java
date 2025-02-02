@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -89,6 +92,11 @@ public class SpecialBlock implements Listener{
 					}
 				
 				}, 600);
+			}
+			
+			if (this.type.equals(SpecialBlockType.Treasure)) {
+				ArrayList<PlayerData> ps = (ArrayList<PlayerData>) LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+				
 			}
 		} 
 		

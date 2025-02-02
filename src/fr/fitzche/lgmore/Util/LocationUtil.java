@@ -50,7 +50,7 @@ public class LocationUtil {
 		}
 	}
 	
-	public ArrayList<PlayerData> getClassByDistance( Location loc) {
+	public static ArrayList<PlayerData> getClassByDistance( Location loc) {
 		ArrayList<PlayerData> gameP = Main.game.getPlayerAlive();
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		

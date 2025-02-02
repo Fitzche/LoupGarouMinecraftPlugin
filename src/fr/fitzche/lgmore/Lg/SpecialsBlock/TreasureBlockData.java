@@ -3,11 +3,11 @@ package fr.fitzche.lgmore.Lg.SpecialsBlock;
 import java.util.HashMap;
 
 public class TreasureBlockData implements SpecialBlockData {
-
+	public TreasureBlockType type;
 	
 	
-	public TreasureBlockData(int nbOfVote) {
-		this.nbOfVote = nbOfVote;
+	public TreasureBlockData(TreasureBlockType type) {
+		this.type = type;
 	}
 	@Override
 	public SpecialBlockType getType() {
