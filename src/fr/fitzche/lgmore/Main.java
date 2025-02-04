@@ -40,6 +40,12 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.WorldEditAPI;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.bukkit.adapter.BukkitImplAdapter;
+import com.sk89q.worldedit.world.registry.WorldData;
+
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
@@ -78,7 +84,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static mcListeners listeners;
 	public static ArrayList<String> eventsLgNames = new ArrayList<String>();
 	public static HashMap<String, String> descriptionsLgEvent = new HashMap<String, String>();
-	
+	public static World world;
 
 	public JavaPlugin getPlugin() {
 		return this;
@@ -109,8 +115,8 @@ public class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getPluginManager().registerEvents(listener, this);
 		
+		Main.world = getServer().getWorld("world");
 		
-
 		
 		
 		

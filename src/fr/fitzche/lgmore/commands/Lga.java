@@ -92,7 +92,18 @@ public class Lga implements CommandExecutor  {
 				GameLg game = GameLgUtil.getGameOfPlayer(((Player) sender), "at command lga say");
 				game.addorat(Integer.valueOf(args[1]), ((Player) sender).getLocation());
 			}
-		}	
+		} else if (args[0].equals("loc1")) {
+			Player p = (Player) sender;
+			Main.loc1 = p.getLocation();
+		}else if (args[0].equals("loc2")) {
+			Player p = (Player) sender;
+			Main.loc2 = p.getLocation();
+		} else if (args[0].equals("saveStruct")) {
+			if (args.length < 2) {
+				System.out.println("lenght not enought big");
+				return true;
+			}
+		}
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {
 				sender.sendMessage("Veuillez indiquer un nombre valide");

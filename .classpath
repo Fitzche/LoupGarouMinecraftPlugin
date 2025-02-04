@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="C:/Users/Utilisateur/Documents/MyCodes/GitHub/LoupGarouMinecraftPlugin/spigot.jar"/>
 	<classpathentry kind="lib" path="C:/Users/fitz3/Documents/LoupGarouMinecraftPlugin/spigot.jar"/>
 	<classpathentry kind="lib" path="C:/Users/fitz3/Documents/LoupGarouMinecraftPlugin/worldedit-bukkit-6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilisateur/Documents/MyCodes/GitHub/LoupGarouMinecraftPlugin/worldedit-bukkit-6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
