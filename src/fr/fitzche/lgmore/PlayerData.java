@@ -53,6 +53,7 @@ public class PlayerData {
 	public boolean canAccuse = false;
 	public SpecialBlock lastVoteOpen;
 	public RegisterType favRegister;
+	public int bienfaisance = 0;
 	
 	public PlayerData(Player player) {
 		

@@ -179,6 +179,12 @@ public class Main extends JavaPlugin implements Listener {
 		eventsLgNames.add("Mal visé");
 		descriptionsLgEvent.put("Mal visé", "probabilité que le cupidon vise mal et se mette en couple avec un joueur aléatoire");
 
+		eventsLgNames.add("Loup Solitaire");
+		
+		descriptionsLgEvent.put("Loup Solitaire", "Probabilité à un épisode qu'un loup devienne solitaire, ne peut apparaitre qu'une seule fois");
+		
+		eventsLgNames.add("Couple aléatoire");
+		descriptionsLgEvent.put("Couple aléatoire", "Probabilité que le couple ne soit pas choisi par le cupidon mais de manière aléatoire");
 		
 	}
 	

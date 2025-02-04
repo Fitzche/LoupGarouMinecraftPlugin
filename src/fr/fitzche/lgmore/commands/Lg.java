@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.sk89q.worldedit.WorldEdit;
+
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
@@ -197,6 +199,9 @@ public class Lg implements CommandExecutor {
 			if (!PlayerUtil.getDataOfPlayer(cupi, " at command couple of Lg, 1").getLgRole().equals(RolesLg.CUPIDON)){
 				cupi.sendMessage("Vous n'etes pas cupidon !!");
 			}
+			if (Main.game.aleaCouple) {
+				cupi.sendMessage("Le couple est aléatoire");
+			}
 			
 			playersDisplay choose = new playersDisplay(GameLgUtil.getGameOfPlayer(cupi, " at command couple of Lg, 2").getPlayerAlive(), "/couple ");
 			Main.server.getPluginManager().registerEvents(choose, Main.plug);
@@ -316,10 +321,16 @@ public class Lg implements CommandExecutor {
 			if (target == null && target.inLife && !target.Name.equals(bienfaiteur.Name)) {
 				bienfaiteur.sendMessage("Veuillez spécifier un nom valide dans votre commande");
 				return true;
-			} else if (bienfaiteur.role != RolesLg.BIENFAITEUR){
+			} else if (bienfaiteur.role != RolesLg.BIENFAITEUR && bienfaiteur.bienfaisance > 0){
+				
 				bienfaiteur.sendMessage("Vous n'etes pas bienfaiteur");
 				return true;
 
+			} else if (bienfaiteur.bienfaisance > 0) {
+				bienfaiteur.sendMessage(ChatColor.DARK_PURPLE+ "Vous conférer un coeur au joueur "+ target.getName());
+				bienfaiteur.bienfaisance--;
+				target.changeHealth(2);
+				target.sendMessage(ChatColor.DARK_PURPLE+"Un joueur se prenant pour un bienfaiteur vous accorde un coeur supplémentaire");
 			} else {
 				BIENFAITEUR bft = (BIENFAITEUR) bienfaiteur.roleIn;
 				bft.conferer(target);
@@ -848,6 +859,7 @@ public class Lg implements CommandExecutor {
 	
 		return false;
 	}
+
 }
 
 

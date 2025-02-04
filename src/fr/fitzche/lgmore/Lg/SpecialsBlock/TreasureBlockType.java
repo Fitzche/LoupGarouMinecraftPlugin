@@ -1,5 +1,5 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
 public enum TreasureBlockType {
-	RegisterModifier;
+	RegisterModifier, AuraAnalyser, Bienfaisance;
 }

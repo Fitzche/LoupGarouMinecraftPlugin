@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,6 +34,8 @@ import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Timer;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
@@ -75,6 +78,8 @@ public class GameLg implements Listener{
 	private int oratTaux = 0;
 	private int tragicTaux = 0;
 	
+	public boolean aleaCouple = false;
+	
 	
 	public Player hunter = null;
 	public CHASSEUR Hunter = null;
@@ -85,6 +90,7 @@ public class GameLg implements Listener{
 	public ArrayList<PlayerData> soloAlive;
 	public ArrayList<PlayerData> FalseVillagerAlive;
 	public ArrayList<PlayerData> FalseWolfAlive;
+	public boolean hasLgSolo = false;
 	
 	
 	public ArrayList<Team> teams = new ArrayList<Team>();
@@ -231,10 +237,15 @@ public class GameLg implements Listener{
 				p.board.setgame(game);
 				p.board.refresh();
 			}
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(100, 0));
+			int rayon = 100;
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
+			if (MathUtil.pourcentage(probasEvents.getOrDefault("Couple aléatoire"	, 0))) {
+				System.out.println("couple aléatoire");
+				this.aleaCouple = true;
+			}
 			
 		}
 		
@@ -541,6 +552,16 @@ public class GameLg implements Listener{
 		this.startVote();
 		this.decideTimeEvent();
 		this.setEpisodeTime();
+		
+		if (!hasLgSolo &&getRealWolfAlive().size() > 0 && MathUtil.pourcentage(probasEvents.get("Loup Solitaire"))) {
+			PlayerData p = getRealWolfAlive().get(MathUtil.generateAlInt(0, getRealWolfAlive().size() - 1));
+			p.sendMessage(ChatColor.DARK_RED+"Vous devenez loup solitaire, vous devez maintenant gagner tout seul, pour cela vous gagnez 4 coeurs permanents, et 5% de résistance.");
+			p.team = new Team("Loup Solitaire", Camp.Other, this, players, null, "at wolf team creating at == 1200", null, null, true, false, false, false);
+			lgTeam.remove(p);
+			p.camp = Camp.Other;
+			p.changeHealth(8);
+			p.boostR5 ++;
+		}
 		
 		setGroupsTo(getNumberOfPlayer() / 5);
 		
@@ -1410,6 +1431,92 @@ public class GameLg implements Listener{
 			
 		}, 300);
 	
+	}
+	
+	public void groupAuraEstimation(ArrayList<PlayerData> ps) {
+		double taux = 0;
+		int diviseur = 0;
+		for (PlayerData p:ps) {
+			diviseur ++;
+			switch (p.aura)	 {
+			case DANGEROUS:
+				taux -= 10;
+				break;
+			case LUMINOUS:
+				taux += 100;
+				break;
+			case NEUTRAL:
+				taux += 50;
+				break;
+			case OBSCUR:
+				
+				break;
+			case UNKNOW:
+				taux -= 50;
+				taux *= 1.2;
+				taux+=50;
+				break;
+			default:
+				break;
+			
+			}	
+			if (taux < 0) {
+				taux = 0;
+			}
+			if (taux > 100) {
+				taux = 100;
+			}
+		}
+		double result = taux/diviseur;
+		for (PlayerData p2:ps) {
+			p2.sendMessage(ChatColor.DARK_PURPLE+ "le taux d'aura lumineuse contre obscur dans ce groupe est de "+ Double.toString(result)+ "%");
+		}
+	}
+	
+	
+	public void summonTreasure(TreasureBlockType type, Location loc) {
+		
+		int x = loc.getBlockX();
+		int y = loc.getBlockY();
+		int z = loc.getBlockZ();
+		World world = Main.server.getWorld("world");
+		world.getBlockAt(new Location(world, x, y, z)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x+1, y, z+1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x+1, y, z)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x+1, y, z-1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x, y, z-1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x-1, y, z-1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x-1, y, z)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x-1, y, z+1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x, y, z+1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x, y+1, z)).setType(Material.ENDER_CHEST);
+		TreasureBlockData data = new TreasureBlockData(type);
+		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data);
+		Main.specialBlocks.add(b);
+	}
+	public void summonAlTreasure(TreasureBlockType type, int rayon) {
+		
+		
+		Location loc = LocationUtil.getAlLocAround(rayon, 5);
+		
+		int x = loc.getBlockX();
+		int y = loc.getBlockY();
+		int z = loc.getBlockZ();
+		System.out.println("spawn loc in "+x + "; "+ y+ "; "+ z);
+		World world = Main.server.getWorld("world");
+		world.getBlockAt(new Location(world, x, y, z)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x+1, y, z+1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x+1, y, z)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x+1, y, z-1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x, y, z-1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x-1, y, z-1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x-1, y, z)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x-1, y, z+1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x, y, z+1)).setType(Material.BEDROCK);
+		world.getBlockAt(new Location(world, x, y+1, z)).setType(Material.ENDER_CHEST);
+		TreasureBlockData data = new TreasureBlockData(type);
+		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data);
+		Main.specialBlocks.add(b);
 	}
 	
 	

@@ -102,6 +102,12 @@ public class SpecialBlock implements Listener{
 				if (data.type.equals(TreasureBlockType.RegisterModifier)) {
 					ArrayList<PlayerData> ps = (ArrayList<PlayerData>) LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
 					boolean ann = false;
+					for (PlayerData p2:ps) {
+						if (p2.getLocation().distance(loc) > 5) {
+							e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+"Il faut plus de joueurs à moins de 5 blocs de ce camp pour l'activer,");
+							return;
+						}
+					}
 					for (PlayerData p:ps) {
 						for (PlayerData p2: ps) {
 							if (!p2.getName().equals(p.getName()) && p.timeWithPlayers.getOrDefault(p2.getName(), 0) < 500) {
@@ -123,6 +129,20 @@ public class SpecialBlock implements Listener{
 						
 						
 					}
+				} else if (data.type.equals(TreasureBlockType.AuraAnalyser)) {
+					ArrayList<PlayerData> ps = (ArrayList<PlayerData>) LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					for (PlayerData p2:ps) {
+						if (p2.getLocation().distance(loc) > 5) {
+							e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+"Il faut plus de joueurs à moins de 5 blocs de ce camp pour l'activer,");
+							return;
+						}
+					}
+					
+					Main.game.groupAuraEstimation(ps);
+					data.used = true;
+				} else if (data.type.equals(TreasureBlockType.Bienfaisance)) {
+					e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+ "Vous avez trouvé un coeur à conférer à un joueur avec la commande /lg conferer [nomDuJoueur], maintenant, à vous de temporairement prendre le role du bienfaiteur au bienfaiteur !!");
+					PlayerUtil.getDataOfPlayer(e.getPlayer(), "at bienfaiteur special block treasure block").bienfaisance ++;
 				}
 
 				
