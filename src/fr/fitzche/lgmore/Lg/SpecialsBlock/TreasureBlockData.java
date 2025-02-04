@@ -1,9 +1,12 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TreasureBlockData implements SpecialBlockData {
 	public TreasureBlockType type;
+	public ArrayList<String> playersClickedOne;
+	public boolean used = false;
 	
 	
 	public TreasureBlockData(TreasureBlockType type) {

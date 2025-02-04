@@ -61,6 +61,8 @@ import fr.fitzche.lgmore.scoreboard.Inventory.CompoDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.ConfigDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.EventDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.PlayerDisplay;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 public class GameLg implements Listener{
@@ -1290,6 +1292,124 @@ public class GameLg implements Listener{
 		} else {
 			return false;
 		}
+	}
+	
+	
+	@Deprecated
+	public void groupInfluenceRegistre(ArrayList<PlayerData> ps, Location loc) {
+		for (PlayerData player:ps) {
+			TextComponent text = new TextComponent();
+			text.setText("Clickez ici pour choisir le registre tragique");
+			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg tragicchooseevent "+player.Name)));
+			player.player.spigot().sendMessage(text);
+			TextComponent text2 = new TextComponent();
+			text.setText("Clickez ici pour choisir le registre epique");
+			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg epicchooseevent "+player.Name)));
+			player.player.spigot().sendMessage(text2);
+			TextComponent text3 = new TextComponent();
+			text.setText("Clickez ici pour choisir le registre oratoire");
+			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg oratchooseevent "+player.Name)));
+			player.player.spigot().sendMessage(text3);
+		}
+		
+		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				int t = 0;
+				int o = 0;
+				int e = 0;
+				for (PlayerData player:ps) {
+					switch (player.favRegister) {
+					case Epic:
+						if (player.team.equals(villTeam)) {
+							e++;
+						} else if (player.team.equals(lgTeam)) {
+							e += 10;
+						} else {
+							e+=100;
+						}
+						
+						break;
+					case Oratoire:
+						if (player.team.equals(villTeam)) {
+							o++;
+						} else if (player.team.equals(lgTeam)) {
+							o += 10;
+						} else {
+							o+=100;
+						}
+						break;
+					case Tragic:
+						if (player.team.equals(villTeam)) {
+							t++;
+						} else if (player.team.equals(lgTeam)) {
+							t += 10;
+						} else {
+							t+=100;
+						}
+						break;
+					
+					default:
+						break;
+					
+					}
+					player.favRegister = null;
+				}
+				
+				
+				boolean nul = false;
+				boolean eVict = false;
+				boolean tVict = false;
+				boolean oVict = false;
+				if (t==o) {
+					if (e>t) {
+						//e vict
+					} else {
+						//egal
+					}
+				} else if (t>o) {
+					if (e>t) {
+						//e vict
+					} else if (e==t) {
+						//egal
+					} else {
+						//T vict
+					}
+				} else if (t<o) {
+					if (e>o) {
+						//e vict
+					} else if (e < o) {
+						//o vict
+					} else {
+						//egal
+					}
+				}
+				String str = "Erreur, désolé jsp ce qui va pas, signalez moi le probleme et je règle ça (ce message est envoyé aux joueurs si le texte envoyé aux joueurs n'est pas correctement initialisé ?)";
+				
+				if (nul) {
+					str = "Il y a une égalité, par conséquent il n'y aura pas de changement de registre";
+					
+				} else if (eVict) {
+					str = "Le registre Epique l'emporte";
+					addEpic(20, loc);
+				}else if (oVict) {
+					str = "Le registre Oratoire l'emporte";
+					addorat(20, loc);
+				}else if (tVict) {
+					str = "Le registre Tragique l'emporte";
+					addTragic(20, loc);
+				}
+				
+				for (PlayerData p:ps) {
+					p.sendMessage(ChatColor.DARK_PURPLE+str);
+				}
+				
+				
+			}
+			
+		}, 300);
+	
 	}
 	
 	

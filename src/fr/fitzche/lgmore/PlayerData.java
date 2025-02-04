@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.RegisterType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.Aura;
@@ -51,6 +52,7 @@ public class PlayerData {
 	public HashMap<Player, Boolean> hasStrenghtAgainst = new HashMap<Player, Boolean>();
 	public boolean canAccuse = false;
 	public SpecialBlock lastVoteOpen;
+	public RegisterType favRegister;
 	
 	public PlayerData(Player player) {
 		

@@ -19,6 +19,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.RegisterType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.RolesLg.ANGE;
@@ -824,6 +825,15 @@ public class Lg implements CommandExecutor {
 				((LOUP_BRUMEUX) commander.roleIn).Using --;
 				commander.sendMessage("Vous utilisez votre pouvoir et la mort du joueur "+target.getName()+" ne sera pas annoncée.");
 				
+			} else if (args[0].equals("epicchooseevent")) {
+				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command epic choose event");
+				p.favRegister = RegisterType.Epic;
+			}else if (args[0].equals("tragicchooseevent")) {
+				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command tragic choose event");
+				p.favRegister = RegisterType.Tragic;
+			}else if (args[0].equals("oratchooseevent")) {
+				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command orat choose event");
+				p.favRegister = RegisterType.Oratoire;
 			}
 	
 		
