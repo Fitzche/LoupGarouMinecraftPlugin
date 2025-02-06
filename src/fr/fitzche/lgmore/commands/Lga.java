@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.commands;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,9 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+
+import WorldEditUtil.StructureLoader;
 
 import org.bukkit.command.TabCompleter.*;
 
@@ -101,8 +105,23 @@ public class Lga implements CommandExecutor  {
 		} else if (args[0].equals("saveStruct")) {
 			if (args.length < 2) {
 				System.out.println("lenght not enought big");
-				return true;
+				
+				
+			} else {
+				StructureLoader loader = new StructureLoader();
+				loader.save(Main.loc1, Main.loc2, new File(args[1]));
 			}
+		}else if (args[0].equals("loadStruct")) {
+			if (args.length < 2) {
+				
+				
+			} else {
+				StructureLoader loader = new StructureLoader();
+				Clipboard board = loader.load(Main.loc1, Main.loc2, new File(args[1]));
+				loader.place(Main.loc1, board);
+			
+			}
+			
 		}
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {

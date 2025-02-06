@@ -54,6 +54,7 @@ public class PlayerData {
 	public SpecialBlock lastVoteOpen;
 	public RegisterType favRegister;
 	public int bienfaisance = 0;
+	public boolean toEscape = false;
 	
 	public PlayerData(Player player) {
 		

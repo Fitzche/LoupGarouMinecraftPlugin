@@ -591,6 +591,11 @@ public class GameLg implements Listener{
 				}
 				
 			}
+			
+			if (p.toEscape) {
+				removeFromVote(p);
+
+			}
 		}
 		
 		

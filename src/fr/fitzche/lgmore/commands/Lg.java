@@ -612,7 +612,7 @@ public class Lg implements CommandExecutor {
 					+"\n"+ "\n"+ ChatColor.DARK_RED+"COUPLE"+ "\n"
 					+ ChatColor.AQUA+"Le cupidon peut mettre 2 personnes en couple, ces deux personnes doivent gagner ensemble quoi qu'il arrive, et éliminer tout les autres membres de la partie."
 					+"\n"+ "\n"+ ChatColor.DARK_RED+"VOTE"+ "\n"
-					+ ChatColor.AQUA+"A chaque épisode, donc toute les 20min, chaque joueur pourra voter pour une personne qu'il a croisé durant la partie, le joueur le plus voté, s'il est voté plus de 2 fois, subira l'effet poison et prendra quelques dégats."
+					+ ChatColor.AQUA+"A chaque épisode, donc toute les 20min, chaque joueur pourra voter pour une personne qu'il a croisé durant la partie en clicquant sur un enderchest dans une maison de vote, le nombre de vote par maison de vote est limité à 5, et le nombre de vote total est limité à 2/3 du nombre de joueurs dans la partie. Le joueur le plus voté, s'il est voté plus de 2 fois, sera exposed et perdra de la vie de manière permanente, la force du vote augmente au fur et à mesure du temps"
 							+ "\n"+ ChatColor.DARK_RED +"AURA: "
 							+ "\n"+ ChatColor.AQUA+"Chaque joueur a une aura, donnée par son role, qui peut changer au cours de la partie: "
 									+ "\n"+ "UNKNOW: possédé par très peu de roles comme l'ermite ou le loup craintif"
@@ -620,17 +620,24 @@ public class Lg implements CommandExecutor {
 									+ "\n"+ "LUMINEUSE: aura commune pour les rôles villageois"
 									+ "\n"+ "NEUTRE: aura pour les rolesles plus discret et pour certains solos"
 									+ "\n"+ "DANGEROUS: aura des rôles les plus mauvais comme l'infect père des loup. Agit comme une aura obscur mais de manière augmentée"
-					+"\n"+ "\n"+ ChatColor.DARK_RED+"JOUR ET NUIT" + "\n"
+					+  ChatColor.DARK_RED
+					+"\n"+"\n"+ "REGISTRES"+ "\n"
+					+ ChatColor.AQUA+"!!! Le Spectacle commence, une pièce où s'affrontent les terribles loup-garou et la justice du village. Et pour une fois le développeur... heu non le dramaturge, a décidé de laisser le choix du registre aux joueurs...enfin aux personnages, pardon. Les actions des différents joueurs avec ou sans leur role influenceront donc le registre de la partie dans 3 directions possibles: Epique, tragique et Oratoire, qui influenceront la partie, et c'est aux joueurs de choisir mais aussi d'en assumer les conséquences, bonnes ou mauvaises, sans savoir pour autant ce que font chaque registres."
+					+ ""
+					+ ""
+					+ ""
+					+ "\n"+ "\n"+ ChatColor.DARK_RED+"JOUR ET NUIT" + "\n"
 					+ ChatColor.AQUA+"Chaque épisode est constitué de 10min de jour puis 10min de nuit, le moment de la journée influe certains rôles, par exemple les loup-garou possèdent force I de nuit");
 			sender.sendMessage("\n"+ChatColor.GOLD+"||COMMANDE||"+ "\n"+"\n" + ChatColor.AQUA
 					+"\n"+"\n"+ "/lg help --> Vous voyez bien où cela vous a conduit"+ "\n"
 					+ "\n"+"\n"+"/lga Game create [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)+"+ ChatColor.AQUA+"crée une game et ouvre son menu de configuration"+ "\n"
-					+ "\n"+"\n"+"/lga Game config [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+ "ouvre le menu de configuration de la game [nomDeLaGame]"+ "\n"
+					+ "\n"+"\n"+"/lga Game config [nomDeLaGame] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+ "ouvre le menu de configuration de la game [nomDeLaGame], permet de start, ajouter/retirer des joueurs et changer la compo et les évents"+ "\n"
 					+ "\n"+"\n"+"/lga Game start [nomDeLaGame] ---> "+ChatColor.RED+"(commande op) "+ ChatColor.AQUA+ "lance la partie"+ "\n"
 					+ "\n"+"\n"+"/lga say [message] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" annonce un message à tout le monde"+ "\n"
+					+ "\n"+"\n"+"/lga transfer [joueur 1] [joueur 2] ---> "+ChatColor.RED+"(commande op)"+ ChatColor.AQUA+" tranfère toute les info (effet, inv, role) d'un joueur vers un autre, "+ ChatColor.DARK_RED+"commande peu fiable, n'utiliser qu'en cas de vrai neccesité (risque de casser la partie en cours)"+ChatColor.AQUA+ "\n"
 					+ "\n" + "/lg vote [nomDuJoueur] ---> permet de voter contre un joueur pendant la phase des votes"
 					+ "\n" + "/lg accuse [nomDuJoueur] ---> permet d'accuser un joueur, l'executeur de la commande aura alors 5min pour tuer l'accusé sous peine de perdre de la vie "
-					+ "\n" + "/lg escape  ---> permet d'échapper à la justice du village, cependant au su et vu de tous, le joueur ne pourra alors ni voter ni etre voté."
+					+ "\n" + "/lg escape  ---> permet d'échapper à la justice du village, cependant au su et vu de tous, le joueur ne pourra alors ni voter ni etre voté et sa position sera révélée dans le chat. Devient effectif au prochain épisode"
 					+ "\n"+"\n"+"/lg role ---> affiche le role du joueur, et d'autre infos supplémentaires comme la liste des loups s'il est loup"+ "\n"
 					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n"
 							+ "/color ---> permet de colorer des pseudo "+ ChatColor.RED + "(plugin externe)"+ ChatColor.AQUA + "."+ "\n"
@@ -759,8 +766,8 @@ public class Lg implements CommandExecutor {
 				}
 			} else if (args[0].equals("escape")) {
 				GameLg game = GameLgUtil.getGameOfPlayer((Player) sender, "at the lg escape command");
-				game.removeFromVote(PlayerUtil.getDataOfPlayer((Player) sender, "at lg escape command 2"));
-				
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at lg escape command");
+				p.toEscape = true;
 			} else if (args[0].equals("accuse")) {
 				GameLg game = GameLgUtil.getGameOfPlayer((Player) sender, "at the lg accuse command");
 				PlayerData accuser = PlayerUtil.getDataOfPlayer((Player) sender, "at lg accuse command");

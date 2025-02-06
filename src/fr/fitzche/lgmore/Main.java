@@ -41,6 +41,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.WorldEditAPI;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.adapter.BukkitImplAdapter;
@@ -77,6 +78,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static Location loc2;
 	public static ArrayList<SpecialBlock> specialBlocks = new ArrayList<SpecialBlock>();
 	
+	public static WorldData worldData;		
 	
 	public static JavaPlugin plug;
 	public static Permission lgop;
@@ -111,6 +113,8 @@ public class Main extends JavaPlugin implements Listener {
 		
 		mcListeners listener = new mcListeners();
 		this.listeners = listener;
+		
+		Main.worldData = BukkitUtil.getLocalWorld(Main.world).getWorldData();
 		
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getPluginManager().registerEvents(listener, this);
