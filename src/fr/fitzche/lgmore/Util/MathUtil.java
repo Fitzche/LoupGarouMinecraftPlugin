@@ -18,6 +18,7 @@ public class MathUtil {
 	public static int probasFivePossib(int a, int b, int c, int d, int e ) {
 		if (a+b+c+d+e != 100) {
 			System.out.println("erreur de paramètres");
+			
 			return 0;
 		} else {
 			int x = MathUtil.generateAlInt(0, 100);

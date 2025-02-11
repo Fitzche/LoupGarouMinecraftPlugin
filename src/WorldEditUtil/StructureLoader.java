@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.bukkit.Location;
 
@@ -17,6 +18,7 @@ import com.sk89q.worldedit.session.PasteBuilder;
 import com.sk89q.worldedit.world.registry.WorldData;
 
 import fr.fitzche.lgmore.Main;
+import fr.fitzche.lgmore.PlayerData;
 
 import com.sk89q.jnbt.NBTInputStream;
 import com.sk89q.jnbt.NBTOutputStream;
@@ -55,6 +57,7 @@ public class StructureLoader {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 		Region regionToSave = new CuboidRegion(locToVector(primary), locToVector(secondary));
 		
@@ -104,6 +107,11 @@ public class StructureLoader {
 			if (clip == null) {
 				System.out.println("null");
 			}
+			
+			
+			
+			
+			
 			
 		    Operation operation = new ClipboardHolder(clip, Main.worldData)
 		            .createPaste(editSession, Main.worldData)
