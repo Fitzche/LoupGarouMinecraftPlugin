@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -193,13 +195,17 @@ public class GameLg implements Listener{
 	
 	
 	public void askRunFuturesActions() {
+		ArrayList<FutureAction> toRemove = new ArrayList<FutureAction>();
 		
 		for (FutureAction fut: this.futuresActions) {
 			fut.timeBeforeRun --;
 			if (fut.timeBeforeRun < 1) {
 				fut.action.run();
-				
+				toRemove.add(fut);
 			}
+		}
+		for (FutureAction futur:toRemove) {
+			this.futuresActions.remove(futur);
 		}
 	}
 	
@@ -238,10 +244,10 @@ public class GameLg implements Listener{
 				p.board.refresh();
 			}
 			int rayon = 100;
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
-			Main.placeVoteBlock(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
 			if (MathUtil.pourcentage(probasEvents.getOrDefault("Couple aléatoire"	, 0))) {
 				System.out.println("couple aléatoire");
 				this.aleaCouple = true;
@@ -340,6 +346,36 @@ public class GameLg implements Listener{
 						if (player.getLocation().distance(p.getLocation()) < 20) {
 							
 							player.timeWithPlayers.put(p.getName(), player.timeWithPlayers.getOrDefault(p.getName(), 0) + 1);
+						}
+						
+						if (p.auraDiscoverEffetDuration > 0) {
+							Effect effect = Effect.CRIT;
+							Color color  = Color.YELLOW;
+							switch (p.aura) {
+							case DANGEROUS:
+								effect = Effect.EXPLOSION_LARGE;
+								color = Color.RED;
+								break;
+							case LUMINOUS:
+								effect = Effect.HEART;
+								color = Color.GREEN;
+								break;
+							case NEUTRAL:
+								
+								break;
+							case OBSCUR:
+								effect = Effect.EXPLOSION_LARGE;
+								color = Color.RED;
+								break;
+							case UNKNOW:
+								break;
+							default:
+								
+								break;
+							
+							}
+							PlayerUtil.particle(p.getLocation(), color);
+							p.auraDiscoverEffetDuration --;
 						}
 						
 					}
@@ -1007,7 +1043,7 @@ public class GameLg implements Listener{
 			moreInfo = moreInfo+ (" (en couple) ");
 		} 
 
-		GameLg gm1 =GameLgUtil.getGameOfPlayer(player1, " at 152 Main");
+		GameLg gm1 = Main.game;
 		if (gm1.name != this.name) {
 			return;
 		}
@@ -1323,18 +1359,24 @@ public class GameLg implements Listener{
 	
 	@Deprecated
 	public void groupInfluenceRegistre(ArrayList<PlayerData> ps, Location loc) {
+		System.out.println("groupInfluenceRegistre act");
+		if (ps.size() < 1) {
+			System.out.println("groupInfluenceRegistre null");
+		}
 		for (PlayerData player:ps) {
+			System.out.println("groupInfluenceRegistre send");
 			TextComponent text = new TextComponent();
 			text.setText("Clickez ici pour choisir le registre tragique");
 			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg tragicchooseevent "+player.Name)));
 			player.player.spigot().sendMessage(text);
+			
 			TextComponent text2 = new TextComponent();
-			text.setText("Clickez ici pour choisir le registre epique");
-			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg epicchooseevent "+player.Name)));
+			text2.setText("Clickez ici pour choisir le registre epique");
+			text2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg epicchooseevent "+player.Name)));
 			player.player.spigot().sendMessage(text2);
 			TextComponent text3 = new TextComponent();
-			text.setText("Clickez ici pour choisir le registre oratoire");
-			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg oratchooseevent "+player.Name)));
+			text3.setText("Clickez ici pour choisir le registre oratoire");
+			text3.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg oratchooseevent "+player.Name)));
 			player.player.spigot().sendMessage(text3);
 		}
 		
@@ -1390,25 +1432,25 @@ public class GameLg implements Listener{
 				boolean oVict = false;
 				if (t==o) {
 					if (e>t) {
-						//e vict
+						eVict = true;
 					} else {
-						//egal
+						nul = true;
 					}
 				} else if (t>o) {
 					if (e>t) {
-						//e vict
+						eVict = true;
 					} else if (e==t) {
-						//egal
+						nul = true;
 					} else {
-						//T vict
+						tVict = true;
 					}
 				} else if (t<o) {
 					if (e>o) {
-						//e vict
+						eVict = true;
 					} else if (e < o) {
-						//o vict
+						oVict = true;
 					} else {
-						//egal
+						nul = true;
 					}
 				}
 				String str = "Erreur, désolé jsp ce qui va pas, signalez moi le probleme et je règle ça (ce message est envoyé aux joueurs si le texte envoyé aux joueurs n'est pas correctement initialisé ?)";

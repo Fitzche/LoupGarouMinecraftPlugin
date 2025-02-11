@@ -44,6 +44,7 @@ public class PlayerData {
 	public int boostS5;
 	public int boostR5;
 	public Aura aura;
+	public int auraDiscoverEffetDuration = 0;
 	public boolean instantDeath;
 	public boolean grimed = false;
 	public int numberOfKill = 0;

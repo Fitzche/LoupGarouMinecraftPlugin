@@ -20,6 +20,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -271,11 +273,14 @@ public class mcListeners implements Listener {
 
 			    			}
 			    		}
-						//REMOVE PLAYER DEAD
-			    		player1.player.teleport(loc);
-						player1.instantDeath = true;
+			    		if (player1.isOnline) {
+			    			player1.player.teleport(loc);
+			    			
 						
-						player1.player.setGameMode(GameMode.SPECTATOR);
+			    			player1.player.setGameMode(GameMode.SPECTATOR);
+			    		}
+						//REMOVE PLAYER DEAD
+			    		player1.instantDeath = true;
 						
 			    		game.removeDiedPlayer(player1);
 
@@ -345,6 +350,23 @@ public class mcListeners implements Listener {
 			
 		}
 		
+	}
+	@EventHandler
+	public void onPotionSplash(PotionSplashEvent e) {
+		
+		if (e.getPotion().getItem().hasItemMeta() && e.getPotion().getItem().getItemMeta().hasLore()&& e.getPotion().getItem().getItemMeta().getLore().contains("Révéleur d'Aura")) {
+			e.setCancelled(true);
+			for (LivingEntity ent:e.getAffectedEntities()) {
+				if (ent instanceof Player) {
+					PlayerData p = PlayerUtil.getDataOfPlayer((Player) ent, "at onSplashEvent listener");
+					if (p == null) {
+						return;
+					} else {
+						p.auraDiscoverEffetDuration += 60;
+					}
+				}
+			}
+		}
 	}
 	
 	

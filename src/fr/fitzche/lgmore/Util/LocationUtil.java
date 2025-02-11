@@ -36,7 +36,7 @@ public class LocationUtil {
 		do {
 			
 			
-			if (new Location(Main.server.getWorld("world"), x, limit, z).getBlock().getType().equals(Material.AIR)) {
+			if (!new Location(Main.server.getWorld("world"), x, limit, z).getBlock().getType().equals(Material.AIR)) {
 				empty = false;
 			}
 			limit --;

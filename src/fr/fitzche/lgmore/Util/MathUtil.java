@@ -63,4 +63,14 @@ public class MathUtil {
 		return player;
 		
 	}
+	
+	
+	public static double betweenNegOneAndOne() {
+		double i = MathUtil.generateAlInt(0, 100);
+		if (pourcentage(50)) {
+			i *= -1;
+		}
+		i /= 100;
+		return i;
+	}
 }

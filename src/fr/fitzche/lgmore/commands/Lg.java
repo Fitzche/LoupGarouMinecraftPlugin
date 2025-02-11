@@ -321,7 +321,7 @@ public class Lg implements CommandExecutor {
 			if (target == null && target.inLife && !target.Name.equals(bienfaiteur.Name)) {
 				bienfaiteur.sendMessage("Veuillez spécifier un nom valide dans votre commande");
 				return true;
-			} else if (bienfaiteur.role != RolesLg.BIENFAITEUR && bienfaiteur.bienfaisance > 0){
+			} else if (bienfaiteur.role != RolesLg.BIENFAITEUR && bienfaiteur.bienfaisance < 1){
 				
 				bienfaiteur.sendMessage("Vous n'etes pas bienfaiteur");
 				return true;
@@ -845,12 +845,15 @@ public class Lg implements CommandExecutor {
 				
 			} else if (args[0].equals("epicchooseevent")) {
 				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command epic choose event");
+				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Epique");
 				p.favRegister = RegisterType.Epic;
 			}else if (args[0].equals("tragicchooseevent")) {
 				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command tragic choose event");
+				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Tragique");
 				p.favRegister = RegisterType.Tragic;
 			}else if (args[0].equals("oratchooseevent")) {
 				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command orat choose event");
+				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Oratoire");
 				p.favRegister = RegisterType.Oratoire;
 			}
 	

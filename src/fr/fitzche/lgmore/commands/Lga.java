@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.commands;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,17 +24,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permission;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
+import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 
 import WorldEditUtil.StructureLoader;
+import de.inventivegames.particle.ParticleEffect;
 
 import org.bukkit.command.TabCompleter.*;
 
@@ -40,13 +47,17 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
-
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.WorldUtil;
@@ -108,21 +119,32 @@ public class Lga implements CommandExecutor  {
 				
 				
 			} else {
-				StructureLoader loader = new StructureLoader();
-				loader.save(Main.loc1, Main.loc2, new File(args[1]));
+				
+				StructureLoader.save(Main.loc1, Main.loc2, new File("schems/"+args[1] + ".schematic"));
 			}
 		}else if (args[0].equals("loadStruct")) {
 			if (args.length < 2) {
 				
 				
 			} else {
-				StructureLoader loader = new StructureLoader();
-				Clipboard board = loader.load(Main.loc1, Main.loc2, new File(args[1]));
-				loader.place(Main.loc1, board);
+				
+				Clipboard clipboard;
+				try {
+					clipboard = StructureLoader.load(new File("schems/"+args[1]+".schematic"));
+					if (clipboard == null) {
+						System.out.println("clip null");
+						return true;
+					}
+					StructureLoader.place(Main.loc1, clipboard);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			
 			}
 			
-		}
+		} 
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {
 				sender.sendMessage("Veuillez indiquer un nombre valide");
@@ -145,9 +167,50 @@ public class Lga implements CommandExecutor  {
 				game.setGroupsTo(g);
 			}
 		}else if (args[0].equals("placeVote")) {
-			Main.placeVoteBlock(((Player) sender).getLocation());
+			Main.placeVoteStruct(((Player) sender).getLocation());
 		}else if (args[0].equals("placeAccuse")) {
 			Main.placeAccuseBlock(((Player) sender).getLocation());
+		} else if (args[0].equals("auraDisplay")) {
+			Main.game.futuresActions.add(new FutureAction(new BukkitRunnable() {
+				
+				@Override
+				public void run() {
+					PlayerUtil.getDataOfPlayer((Player) sender, "at auraDisplay command").auraDiscoverEffetDuration +=10;
+
+					
+				}
+			}, 5));
+		} else if (args[0].equals("auraDisplayPotion")) {
+			Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
+			ItemStack item = potion.toItemStack(1);
+			ArrayList<String> strs = new ArrayList<String>();
+			strs.add("Révéleur d'Aura");
+			ItemUtil.setLore(item, strs);
+			Player p = (Player) sender;
+			p.getInventory().addItem(item);
+		} else if (args[0].equals("placeSpecial")) {
+			if (args.length<2) {
+				sender.sendMessage("add argument please");
+				
+			} else {
+				Location locP = ((Player) sender).getLocation();
+				Location loc = new Location(locP.getWorld(), locP.getBlockX(), locP.getBlockY(), locP.getBlockZ());
+				switch (args[1]) {
+				case "RegisterModifier":
+					Main.placeTreasureBlock(loc, TreasureBlockType.RegisterModifier);
+					break;
+				case "AuraAnalyser":
+					Main.placeTreasureBlock(loc, TreasureBlockType.AuraAnalyser);
+					break;
+				case "Bienfaisance":
+					Main.placeTreasureBlock(loc, TreasureBlockType.Bienfaisance);
+					
+					break;
+				case "AuraPotion":
+					Main.placeTreasureBlock(loc, TreasureBlockType.AuraPotion);
+					break;
+				}
+			}
 		}
 		
 		if (args[0].equals("transfer") ) {

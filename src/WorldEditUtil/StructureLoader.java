@@ -1,7 +1,9 @@
 package WorldEditUtil;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -16,8 +18,12 @@ import com.sk89q.worldedit.world.registry.WorldData;
 
 import fr.fitzche.lgmore.Main;
 
+import com.sk89q.jnbt.NBTInputStream;
+import com.sk89q.jnbt.NBTOutputStream;
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.EditSessionBlockChangeDelegate;
@@ -30,66 +36,107 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardWriter;
 import com.sk89q.worldedit.extent.clipboard.io.SchematicReader;
 import com.sk89q.worldedit.extent.clipboard.io.SchematicWriter;
+import com.sk89q.worldedit.function.mask.Mask;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 
 public class StructureLoader {
 	
+	@Deprecated
 	public static void save(Location primary, Location secondary, File saveFile) {
-		
-		Region regionToSave = new CuboidRegion(locToVector(primary), locToVector(secondary));
-		Clipboard clip = new BlockArrayClipboard(regionToSave);
-		ClipboardWriter writer;
-		try {
-			writer = ClipboardFormat.SCHEMATIC.getWriter(new FileOutputStream(saveFile));
+		System.out.println("from "+primary.getBlockX()+ "; "+primary.getBlockY()+ "; "+primary.getBlockZ()+ " to "+ secondary.getBlockX()+ "; "+secondary.getBlockY()+ "; "+ secondary.getBlockZ());
+		if (!saveFile.exists()) {
+			System.out.println("file to create");
 			try {
-				EditSession editSession = new EditSession(BukkitUtil.getLocalWorld(Main.world), 1000);
-				
-				writer.write(clip, editSession.getWorld().getWorldData());
+				saveFile.createNewFile();
+				System.out.println("file created");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		Region regionToSave = new CuboidRegion(locToVector(primary), locToVector(secondary));
+		
+		Clipboard clip =new BlockArrayClipboard(regionToSave);
+		
+		SchematicWriter writer = null;
+		
+		try {
+			writer = new SchematicWriter(new NBTOutputStream(new FileOutputStream(saveFile)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		EditSession editSession = new EditSession(BukkitUtil.getLocalWorld(Main.world), 1000);
+		ForwardExtentCopy forw = new ForwardExtentCopy(editSession, regionToSave, clip, regionToSave.getMinimumPoint());
+		try {
+			Operations.complete(forw);
+		} catch (WorldEditException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+       
+            	
+		try {
+			writer.write(clip, Main.worldData);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		
 		
 	}
 	
 	public static void place(Location primary,  Clipboard clip) {
-		EditSession edit = new EditSession(BukkitUtil.getLocalWorld(Main.world), 1000);
-		ClipboardHolder holder = new ClipboardHolder(clip, Main.worldData);
-		PasteBuilder builder = holder.createPaste(edit, Main.worldData);
-		builder.ignoreAirBlocks(false)
-				.to(locToVector(primary));
-				
-		Operation op = builder.build();
 		try {
-			Operations.complete(op);
+			
+			
+			EditSession editSession = new EditSession(BukkitUtil.getLocalWorld(Main.world), 1000);
+			
+			editSession.enableQueue();
+			if (clip == null) {
+				System.out.println("null");
+			}
+			
+		    Operation operation = new ClipboardHolder(clip, Main.worldData)
+		            .createPaste(editSession, Main.worldData)
+		            .to(locToVector(primary))
+		            // configure here
+
+		            .build();
+		    
+		    Operations.complete(operation);
+		    
+		    Operations.complete(editSession.commit());
+		    editSession.flushQueue();
+		   
+		    
 		} catch (WorldEditException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
-		edit.commit();
 		
+		System.out.println("placed");
 	}
 
-	public static Clipboard load(Location primary, Location secondary, File sourceFile) {
-		try {
-			ClipboardReader reader = ClipboardFormat.SCHEMATIC.getReader(new FileInputStream(sourceFile));
-			Clipboard clip = reader.read(BukkitUtil.getLocalWorld(Main.world).getWorldData());
-			return clip;
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}//ClipboardFormats.findByFile(sourceFile).getReader(new FileInputStream(sourceFile));
-		return null;
+	public static Clipboard load(File sourceFile) throws IOException {
+		
+		
+		System.out.println("start reading");
+		
+		SchematicReader reader = new SchematicReader(new NBTInputStream(new FileInputStream(sourceFile)));
+		
+		Clipboard clip = reader.read(BukkitUtil.getLocalWorld(Main.world).getWorldData());
+		System.out.println("readed");
+		return clip;
 	}
 	public static BlockVector locToVector(Location loc) {
 		

@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.inventivetalent.particle.ParticlePlugin;
 
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
@@ -47,9 +50,13 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.adapter.BukkitImplAdapter;
 import com.sk89q.worldedit.world.registry.WorldData;
 
+import WorldEditUtil.StructureLoader;
+import de.inventivegames.particle.ParticleEffect;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
@@ -70,6 +77,7 @@ import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.mcListeners;
 import net.md_5.bungee.api.ChatColor;
 
+
 public class Main extends JavaPlugin implements Listener {
 	public static Server server;
 	public static GameLg game;
@@ -87,6 +95,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static ArrayList<String> eventsLgNames = new ArrayList<String>();
 	public static HashMap<String, String> descriptionsLgEvent = new HashMap<String, String>();
 	public static World world;
+	
 
 	public JavaPlugin getPlugin() {
 		return this;
@@ -126,7 +135,9 @@ public class Main extends JavaPlugin implements Listener {
 		
 	    
 	    
-
+		
+	    
+	    
 	    
 	    
 	   
@@ -195,6 +206,9 @@ public class Main extends JavaPlugin implements Listener {
 		
 		eventsLgNames.add("Couple aléatoire");
 		descriptionsLgEvent.put("Couple aléatoire", "Probabilité que le couple ne soit pas choisi par le cupidon mais de manière aléatoire");
+		
+	
+		
 		
 	}
 	
@@ -271,6 +285,16 @@ public class Main extends JavaPlugin implements Listener {
 			
 		}, 6000);
 	}
+	public static void placeVoteStruct(Location loc) {
+		try {
+			StructureLoader.place(loc, StructureLoader.load(new File("schems/urne.schematic")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Location voteB = new Location(world, loc.getX()+6, loc.getY()+1, loc.getZ()+4);
+		placeVoteBlock(voteB);
+	}
 	public static void placeVoteBlock(Location loc) {
 		System.out.println("bloc vote placé");
 		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
@@ -283,6 +307,14 @@ public class Main extends JavaPlugin implements Listener {
 		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
 
 		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Accuse, null));
+		
+		
+	}
+	public static void placeTreasureBlock(Location loc, TreasureBlockType type) {
+		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Treasure, new TreasureBlockData(type)));
 		
 		
 	}

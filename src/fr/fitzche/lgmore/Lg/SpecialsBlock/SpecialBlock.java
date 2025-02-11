@@ -1,6 +1,8 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,11 +12,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -65,18 +71,22 @@ public class SpecialBlock implements Listener{
 	@Deprecated
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
-		if (!e.getClickedBlock().hasMetadata("specialBlock-lgFitzche")) {
+		
+		if (e.getClickedBlock() ==null || !e.getClickedBlock().hasMetadata("specialBlock-lgFitzche")) {
+			System.out.println("cancelled");
 			return;
 		}
-		System.out.println("interact onPlayerInteract");
 		
+		System.out.println("interact");
 		
 		if (e.getClickedBlock().getLocation().equals(this.loc)) {
+			System.out.println("interact2");
 			e.setCancelled(true);
+			System.out.println("bloc interact in SpecialBlock jkjk");
 			if (this.type.equals(SpecialBlockType.Vote)) {
 				
 				
-				System.out.println("interact true onPlayerInteract");
+				
 				e.getPlayer().openInventory(GameLgUtil.getGameOfPlayer(e.getPlayer(), "interactBlockVote").invVote);
 				PlayerUtil.getDataOfPlayer(e.getPlayer(), " at player interact special block").lastVoteOpen = this;
 			}
@@ -98,11 +108,26 @@ public class SpecialBlock implements Listener{
 			
 			if (this.type.equals(SpecialBlockType.Treasure)) {
 				TreasureBlockData data = (TreasureBlockData) this.data;
-				
+				System.out.println("treasure");
+				if (data.used) {
+					e.getPlayer().sendMessage("Déjà utilisé");
+					return;
+				}
 				if (data.type.equals(TreasureBlockType.RegisterModifier)) {
-					ArrayList<PlayerData> ps = (ArrayList<PlayerData>) LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					System.out.println("register modifier act in special b");
+					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					ArrayList<PlayerData> ps = new ArrayList<PlayerData>(); 
+					if (LocationUtil.getClassByDistance(this.loc).size() == 1) {
+						ps = new ArrayList<PlayerData>(Arrays.asList(LocationUtil.getClassByDistance(this.loc).get(0)));
+					}
+					
+					
+					for (PlayerData toAdd:psList) {
+						ps.add(toAdd);
+					}
 					boolean ann = false;
 					for (PlayerData p2:ps) {
+						System.out.println("register modifier seek ply in special b");
 						if (p2.getLocation().distance(loc) > 5) {
 							e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+"Il faut plus de joueurs à moins de 5 blocs de ce camp pour l'activer,");
 							return;
@@ -123,14 +148,19 @@ public class SpecialBlock implements Listener{
 							if (e.getPlayer().getName().equals(str) && !data.used) {
 								Main.game.groupInfluenceRegistre(ps, loc);
 								data.used = true;
+								return;
 							}
 						}
 						e.getPlayer().sendMessage("Votre groupe a trouvé un camp, chacun sa manière de jouer la scène !! En tout cas chaque joueur reçoit un message, et doit choisir un registre (30s), le registre le + choisi gagnera 20%, cependant, les loups et surtout les solos ont une influence énorme sur ce choix. Réflechissez bien avant d'activer ce camp en clicquant une deuxième fois dessus car si un traitre se trouve parmis vous, il pourra facilement vous utiliser pour avantager le registre de son choix.");
-						
+						data.playersClickedOne.add(e.getPlayer().getName());
 						
 					}
 				} else if (data.type.equals(TreasureBlockType.AuraAnalyser)) {
-					ArrayList<PlayerData> ps = (ArrayList<PlayerData>) LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					ArrayList<PlayerData> ps = new ArrayList<PlayerData>(); 
+					if (LocationUtil.getClassByDistance(this.loc).size() == 1) {
+						ps = new ArrayList<PlayerData>(Arrays.asList(LocationUtil.getClassByDistance(this.loc).get(0)));
+					}
 					for (PlayerData p2:ps) {
 						if (p2.getLocation().distance(loc) > 5) {
 							e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+"Il faut plus de joueurs à moins de 5 blocs de ce camp pour l'activer,");
@@ -141,8 +171,19 @@ public class SpecialBlock implements Listener{
 					Main.game.groupAuraEstimation(ps);
 					data.used = true;
 				} else if (data.type.equals(TreasureBlockType.Bienfaisance)) {
+					
 					e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+ "Vous avez trouvé un coeur à conférer à un joueur avec la commande /lg conferer [nomDuJoueur], maintenant, à vous de temporairement prendre le role du bienfaiteur au bienfaiteur !!");
 					PlayerUtil.getDataOfPlayer(e.getPlayer(), "at bienfaiteur special block treasure block").bienfaisance ++;
+					data.used = true;
+				} else if (data.type.equals(TreasureBlockType.AuraPotion)) {
+					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
+					ItemStack item = potion.toItemStack(1);
+					ArrayList<String> strs = new ArrayList<String>();
+					strs.add("Révéleur d'Aura");
+					ItemUtil.setLore(item, strs);
+					Player p = e.getPlayer();
+					p.getInventory().addItem(item);
+					data.used = true;
 				}
 
 				

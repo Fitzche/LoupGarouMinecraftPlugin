@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class TreasureBlockData implements SpecialBlockData {
 	public TreasureBlockType type;
-	public ArrayList<String> playersClickedOne;
+	public ArrayList<String> playersClickedOne = new ArrayList<String>();
 	public boolean used = false;
 	
 	
