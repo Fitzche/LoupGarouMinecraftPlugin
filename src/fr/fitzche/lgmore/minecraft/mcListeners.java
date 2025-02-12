@@ -366,7 +366,26 @@ public class mcListeners implements Listener {
 					}
 				}
 			}
+		} else if (e.getPotion().getItem().hasItemMeta() && e.getPotion().getItem().getItemMeta().hasLore()&& e.getPotion().getItem().getItemMeta().getLore().contains("Potion de Téléportation ")) {
+			e.setCancelled(true);
+			for (LivingEntity ent:e.getAffectedEntities()) {
+				if (ent instanceof Player) {
+					
+					GameLgUtil.tpAl((PlayerData) ent);
+				}
+			}
+		} else if (e.getPotion().getItem().hasItemMeta() && e.getPotion().getItem().getItemMeta().hasLore()&& e.getPotion().getItem().getItemMeta().getLore().contains("Potion De Paralysie")) {
+			e.setCancelled(true);
+			for (LivingEntity ent:e.getAffectedEntities()) {
+				if (ent instanceof Player /*&& ( !ent.getName().equals(((Player)e.getEntity().getShooter()).getName()))*/) {
+					
+					ent.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3600, 255));
+					ent.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 3600, 255));
+					ent.sendMessage(ChatColor.DARK_PURPLE+"Vous êtes paralysé, vous ne pouvez plus ni mettre de dégat ni en subir (vous êtes hors de combat)");
+				}
+			}
 		}
+		
 	}
 	
 	
@@ -645,9 +664,9 @@ public class mcListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
-		System.out.println("vote1");
+		
 		if (Main.game != null&&GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), "click") != null && e.getInventory().equals(GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), "click").invVote)) {
-			System.out.println("vote2");
+			
 			e.setCancelled(true);
 			if (e.getCurrentItem().getItemMeta().hasLore()) {
 				if (e.getCurrentItem().getItemMeta().getLore().contains("utilisé")) {
@@ -657,7 +676,7 @@ public class mcListeners implements Listener {
 			if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta() != null && e.getCurrentItem().getItemMeta().getDisplayName().equals("Voter") ) {
 				
 				
-				System.out.println("vote3");
+				
 				VoteInv inv = new VoteInv((Player) e.getWhoClicked(), GameLgUtil.getGameOfPlayer((Player) e.getWhoClicked(), ""), e.getSlot());
 				
 			}

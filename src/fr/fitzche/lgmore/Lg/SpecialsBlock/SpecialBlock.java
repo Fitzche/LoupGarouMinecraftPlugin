@@ -73,14 +73,14 @@ public class SpecialBlock implements Listener{
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		
 		if (e.getClickedBlock() ==null || !e.getClickedBlock().hasMetadata("specialBlock-lgFitzche")) {
-			System.out.println("cancelled");
+			
 			return;
 		}
 		
-		System.out.println("interact");
+		
 		
 		if (e.getClickedBlock().getLocation().equals(this.loc)) {
-			System.out.println("interact2");
+			
 			e.setCancelled(true);
 			System.out.println("bloc interact in SpecialBlock jkjk");
 			if (this.type.equals(SpecialBlockType.Vote)) {
@@ -156,6 +156,7 @@ public class SpecialBlock implements Listener{
 						
 					}
 				} else if (data.type.equals(TreasureBlockType.AuraAnalyser)) {
+					System.out.println("auraAnalyser found (at special block interact event)");
 					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
 					ArrayList<PlayerData> ps = new ArrayList<PlayerData>(); 
 					if (LocationUtil.getClassByDistance(this.loc).size() == 1) {
@@ -171,15 +172,36 @@ public class SpecialBlock implements Listener{
 					Main.game.groupAuraEstimation(ps);
 					data.used = true;
 				} else if (data.type.equals(TreasureBlockType.Bienfaisance)) {
-					
+					System.out.println("bienfaisance found (at special block interact event)");
 					e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+ "Vous avez trouvé un coeur à conférer à un joueur avec la commande /lg conferer [nomDuJoueur], maintenant, à vous de temporairement prendre le role du bienfaiteur au bienfaiteur !!");
 					PlayerUtil.getDataOfPlayer(e.getPlayer(), "at bienfaiteur special block treasure block").bienfaisance ++;
 					data.used = true;
 				} else if (data.type.equals(TreasureBlockType.AuraPotion)) {
+					System.out.println("auraPotion found (at special block interact event)");
 					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
 					ItemStack item = potion.toItemStack(1);
 					ArrayList<String> strs = new ArrayList<String>();
 					strs.add("Révéleur d'Aura");
+					ItemUtil.setLore(item, strs);
+					Player p = e.getPlayer();
+					p.getInventory().addItem(item);
+					data.used = true;
+				} else if (data.type.equals(TreasureBlockType.ParalysiePotion)) {
+					System.out.println("Paralysie found (at special block interact event)");
+					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
+					ItemStack item = potion.toItemStack(1);
+					ArrayList<String> strs = new ArrayList<String>();
+					strs.add("Potion De Paralysie");
+					ItemUtil.setLore(item, strs);
+					Player p = e.getPlayer();
+					p.getInventory().addItem(item);
+					data.used = true;
+				} else if (data.type.equals(TreasureBlockType.TeleporterPotion)) {
+					System.out.println("tpPotion found (at special block interact event)");
+					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
+					ItemStack item = potion.toItemStack(1);
+					ArrayList<String> strs = new ArrayList<String>();
+					strs.add("Potion de Téléportation ");
 					ItemUtil.setLore(item, strs);
 					Player p = e.getPlayer();
 					p.getInventory().addItem(item);

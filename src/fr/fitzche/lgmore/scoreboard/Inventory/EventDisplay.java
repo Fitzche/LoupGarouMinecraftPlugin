@@ -37,21 +37,25 @@ public class EventDisplay implements Listener{
 	
 	
 	//System.out.println("b.1.");
-	int done = Main.eventsLgNames.size();
+	int done = 0;
+	int i = Main.eventsLgNames.size();
 
-    for (int i = Main.eventsLgNames.size(); i>0; i =- 9) {
+    while  (i > 0){
+    	
         Inventory inv = Bukkit.createInventory(null, 45, "Events");
         
        
-        int end = 8+(done-i);
+        
         List<String> firstEventsNames;
-        if (Main.eventsLgNames.size()< end +1) {
-            firstEventsNames = Main.eventsLgNames.subList(0 + (done -i), Main.eventsLgNames.size() - 1);
+        if (Main.eventsLgNames.size() - done >= 7) {
+            firstEventsNames = Main.eventsLgNames.subList(0 + done, done + 7);
 
         } else {
-        	firstEventsNames = Main.eventsLgNames.subList(0 + (done -i), 8+(done-i));
+        	firstEventsNames = Main.eventsLgNames.subList(done, Main.eventsLgNames.size() );
 
         }
+        done +=7;
+        i-=8;
         for (String eName:firstEventsNames) {
             ItemStack item = new ItemStack(Material.NAME_TAG);
             ItemUtil.setName(item, eName);
@@ -88,11 +92,12 @@ public class EventDisplay implements Listener{
         ItemUtil.setName(returnItem, "retour");
         inv.setItem(27, returnItem);
         invs.add(inv);
-        }
-
-
-
+        
     }
+    	
+
+
+}
 	
 	public void open(Player ply, boolean isOp) {
 		areOp.put(ply.getName(), isOp);
@@ -119,7 +124,7 @@ public class EventDisplay implements Listener{
         			}
                     
                     for (String str: Main.eventsLgNames) {
-                    	System.out.println("egal ???");
+                    	
                         if (e.getCurrentItem().getItemMeta().getDisplayName().equals(str)) {
                         	System.out.println("event correspondant");
                             switch(e.getCurrentItem().getItemMeta().getLore().get(0)) {
@@ -176,11 +181,12 @@ public class EventDisplay implements Listener{
                         if ((this.invs.indexOf(e.getInventory()) + 1) > this.invs.size()) {
                             return;
                         }
-                        e.getWhoClicked().openInventory(this.invs.get(this.invs.indexOf(e.getInventory()) - 1));
+                        e.getWhoClicked().openInventory(this.invs.get(this.invs.indexOf(e.getInventory()) + 1));
                     } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals("retour")) {
                         ConfigDisplay config = new ConfigDisplay(gm);
                         config.open((Player) e.getWhoClicked(), areOp.get(e.getWhoClicked().getName()));
                     }
+                    return;
                 } 
             }
 			

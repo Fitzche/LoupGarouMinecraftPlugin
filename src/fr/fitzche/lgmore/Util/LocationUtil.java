@@ -23,7 +23,8 @@ public class LocationUtil {
 		return String.valueOf(loc.getBlockX())+"; " + String.valueOf(loc.getBlockY())+"; " +String.valueOf(loc.getBlockZ());
 	}
 	
-	public static Location getAlLocAround(int r, int tr) {
+
+	public static Location getAlLocAroundFarfrom(int r, int tr, boolean bol) {
 		if (tr > 10) {
 			return null;
 		}
@@ -42,10 +43,19 @@ public class LocationUtil {
 			limit --;
 		} while (empty && limit >49);
 		if (limit < 50) {
-			return getAlLocAround(r, tr+1);
+			return getAlLocAroundFarfrom(r, tr+1, false);
 		} else {
 			Location loc = new Location(Main.server.getWorld("world"), x, limit, z);
-			Bukkit.broadcastMessage(LocationUtil.toString(loc));
+			boolean retry = false;
+			for (Location locT: Main.locBat) {
+				if ((new Location(loc.getWorld(), loc.getX(), 0, loc.getZ()).distance(new Location(loc.getWorld(), locT.getX(), 0, locT.getZ()))) <20) {
+					retry = true;
+				}
+			}
+			if (retry) {
+				return getAlLocAroundFarfrom(r, tr+1, false);
+			}
+			System.out.println("loc = "+ loc.getBlockX()+ "; "+loc.getBlockY()+"; "+loc.getBlockZ());
 			return loc;
 		}
 	}

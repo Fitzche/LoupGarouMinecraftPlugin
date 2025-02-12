@@ -243,11 +243,43 @@ public class GameLg implements Listener{
 				p.board.setgame(game);
 				p.board.refresh();
 			}
-			int rayon = 100;
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 0));
+			int rayon = 300;
+			/*
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));
+			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));*/
+			
+			int rayon2 = 100;
+			Main.placeAccuseStruct(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false));
+			
+			
+			int rayon3 = 400;
+			if (probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0) < 1) {
+				System.out.println("probasEvents.getOrDefault(\"Nombre Batiments à Bonus\"	, 0) == 0 in 259 of GameLg in start");
+			}
+			for (int i = 0; i<=probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0); i++) {
+				
+				TreasureBlockType type;
+				int x = MathUtil.generateAlInt(0, 100);
+				if (x <=15) {
+					type = TreasureBlockType.AuraAnalyser;
+				} else if (x <= 30) {
+					type = TreasureBlockType.AuraPotion;
+				} else if (x<=45) {
+					type = TreasureBlockType.TeleporterPotion;
+				} else if (x<=60) {
+					type = TreasureBlockType.ParalysiePotion;
+				} else if (x<=80) {
+					type = TreasureBlockType.RegisterModifier;
+				} else {
+					type = TreasureBlockType.Bienfaisance;
+				}
+				Main.placeTreasureStruct(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, true), type);
+			}
+			for (int i = 0; i<probasEvents.getOrDefault("Nombre Batiments Leurre"	, 0); i++) {
+				Main.placeBat(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false));
+			}
 			if (MathUtil.pourcentage(probasEvents.getOrDefault("Couple aléatoire"	, 0))) {
 				System.out.println("couple aléatoire");
 				this.aleaCouple = true;
@@ -1541,30 +1573,7 @@ public class GameLg implements Listener{
 		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data);
 		Main.specialBlocks.add(b);
 	}
-	public void summonAlTreasure(TreasureBlockType type, int rayon) {
-		
-		
-		Location loc = LocationUtil.getAlLocAround(rayon, 5);
-		
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		System.out.println("spawn loc in "+x + "; "+ y+ "; "+ z);
-		World world = Main.server.getWorld("world");
-		world.getBlockAt(new Location(world, x, y, z)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x+1, y, z+1)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x+1, y, z)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x+1, y, z-1)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x, y, z-1)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x-1, y, z-1)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x-1, y, z)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x-1, y, z+1)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x, y, z+1)).setType(Material.BEDROCK);
-		world.getBlockAt(new Location(world, x, y+1, z)).setType(Material.ENDER_CHEST);
-		TreasureBlockData data = new TreasureBlockData(type);
-		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data);
-		Main.specialBlocks.add(b);
-	}
+	
 	
 	
 }

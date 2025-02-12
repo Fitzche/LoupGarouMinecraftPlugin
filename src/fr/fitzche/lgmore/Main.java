@@ -53,6 +53,7 @@ import com.sk89q.worldedit.world.registry.WorldData;
 import WorldEditUtil.StructureLoader;
 import de.inventivegames.particle.ParticleEffect;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.AccuseBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
@@ -96,6 +97,11 @@ public class Main extends JavaPlugin implements Listener {
 	public static HashMap<String, String> descriptionsLgEvent = new HashMap<String, String>();
 	public static World world;
 	
+	public static int decalageBatX = 6;
+	public static int decalageBatY = 1;
+	public static int decalageBatZ = 4;
+	
+	public static ArrayList<Location> locBat = new ArrayList<Location>();
 
 	public JavaPlugin getPlugin() {
 		return this;
@@ -207,7 +213,11 @@ public class Main extends JavaPlugin implements Listener {
 		eventsLgNames.add("Couple aléatoire");
 		descriptionsLgEvent.put("Couple aléatoire", "Probabilité que le couple ne soit pas choisi par le cupidon mais de manière aléatoire");
 		
-	
+		eventsLgNames.add("Nombre Batiments Leurre");
+		descriptionsLgEvent.put("Nombre Batiments Leurre", "Nombres de batiments n'ayant aucun interet, ne pas trop elever");
+		
+		eventsLgNames.add("Nombre Batiments à Bonus");
+		descriptionsLgEvent.put("Nombre Batiments à Bonus", "Nombres de batiments aynt un interet (à vous de découvrir lequel), ne pas trop elever");
 		
 		
 	}
@@ -286,14 +296,29 @@ public class Main extends JavaPlugin implements Listener {
 		}, 6000);
 	}
 	public static void placeVoteStruct(Location loc) {
+		placeBat(loc);
+		Location voteB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		placeVoteBlock(voteB);
+	}
+	public static void placeAccuseStruct(Location loc) {
+		placeBat(loc);
+		Location voteB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		placeAccuseBlock(voteB);
+	}
+	public static void placeTreasureStruct(Location loc, TreasureBlockType type) {
+		placeBat(loc);
+		Location specialB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		placeTreasureBlock(specialB, type);
+	}
+	
+	public static void placeBat(Location loc) {
 		try {
 			StructureLoader.place(loc, StructureLoader.load(new File("schems/urne.schematic")));
+			Main.locBat.add(loc);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Location voteB = new Location(world, loc.getX()+6, loc.getY()+1, loc.getZ()+4);
-		placeVoteBlock(voteB);
 	}
 	public static void placeVoteBlock(Location loc) {
 		System.out.println("bloc vote placé");
@@ -306,7 +331,7 @@ public class Main extends JavaPlugin implements Listener {
 		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
 		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
 
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Accuse, null));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Accuse, new AccuseBlockData()));
 		
 		
 	}

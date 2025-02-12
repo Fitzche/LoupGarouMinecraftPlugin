@@ -58,6 +58,7 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
+import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.WorldUtil;
@@ -144,7 +145,34 @@ public class Lga implements CommandExecutor  {
 			
 			}
 			
-		} 
+		} else if (args[0].equals("testMath")) {
+			int it = 100;
+			double sum = 0;
+			for (int i = 0; i < 100; i++) {
+				int x =MathUtil.generateAlInt(0 , 100);
+				sum += x;
+				if (x > 100 || x<0) {
+					System.out.println("not good");
+				}
+			}
+			System.out.println("moyenne  = "+ Double.toString(sum/it));
+		} else if (args[0].equals("tpPotion")) {
+			Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
+			ItemStack item = potion.toItemStack(1);
+			ArrayList<String> strs = new ArrayList<String>();
+			strs.add("Potion de Téléportation ");
+			ItemUtil.setLore(item, strs);
+			Player p = (Player) sender;
+			p.getInventory().addItem(item);
+		}else if (args[0].equals("ParalysiePotion")) {
+			Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
+			ItemStack item = potion.toItemStack(1);
+			ArrayList<String> strs = new ArrayList<String>();
+			strs.add("Potion De Paralysie");
+			ItemUtil.setLore(item, strs);
+			Player p = (Player) sender;
+			p.getInventory().addItem(item);
+		}
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {
 				sender.sendMessage("Veuillez indiquer un nombre valide");
@@ -208,6 +236,12 @@ public class Lga implements CommandExecutor  {
 					break;
 				case "AuraPotion":
 					Main.placeTreasureBlock(loc, TreasureBlockType.AuraPotion);
+					break;
+				case "ParalysiePotion":
+					Main.placeTreasureBlock(loc, TreasureBlockType.ParalysiePotion);
+					break;
+				case "TeleporterPotion":
+					Main.placeTreasureBlock(loc, TreasureBlockType.TeleporterPotion);
 					break;
 				}
 			}
