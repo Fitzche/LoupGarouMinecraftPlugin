@@ -1,5 +1,5 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
 public enum SpecialBlockType {
-	Vote, Accuse, Treasure;
+	Vote, Accuse, Treasure, Cauldron;
 }

@@ -19,11 +19,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
+import fr.fitzche.lgmore.scoreboard.Inventory.sorcierInv;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -208,6 +210,17 @@ public class SpecialBlock implements Listener{
 					data.used = true;
 				}
 
+				
+			} else if (this.data.getType().equals(SpecialBlockType.Cauldron)) {
+				Player p = e.getPlayer();
+				PlayerData plyD = PlayerUtil.getDataOfPlayer(p, "at cauldron interact");
+				
+				
+				if (!plyD.role.equals(RolesLg.SORCIER)) {
+					p.sendMessage("Vous ne pouvez pas utiliser ce bloc");
+					return;
+				} 
+				sorcierInv inv = new sorcierInv(p, Main.game);
 				
 			}
 		} 

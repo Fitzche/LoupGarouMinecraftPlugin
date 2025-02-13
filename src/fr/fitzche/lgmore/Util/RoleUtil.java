@@ -47,6 +47,7 @@ import fr.fitzche.lgmore.RolesLg.SALVATEUR;
 import fr.fitzche.lgmore.RolesLg.SIMPLE_VILLAGER;
 import fr.fitzche.lgmore.RolesLg.SIMPLE_WOLF;
 import fr.fitzche.lgmore.RolesLg.SOEUR;
+import fr.fitzche.lgmore.RolesLg.SORCIER;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
@@ -248,6 +249,10 @@ public class RoleUtil {
 			return role;
 		}else if (player.role.equals(RolesLg.COMEDIEN)) {
 			COMEDIEN role = new COMEDIEN(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.SORCIER)) {
+			SORCIER role = new SORCIER(player);
 			player.roleIn = role;
 			return role;
 		}else{

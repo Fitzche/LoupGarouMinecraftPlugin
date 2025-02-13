@@ -167,6 +167,7 @@ public class Main extends JavaPlugin implements Listener {
 				RolesLg.LOUP_MANIP,
 				RolesLg.LOUP_METAMORPHE, 
 				RolesLg.LOUP_MYSTIQUE, 
+				RolesLg.SORCIER,
 				RolesLg.MONTREUR, 
 				RolesLg.PARRAIN,
 				RolesLg.PERFIDE, 
