@@ -10,6 +10,7 @@ import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -796,6 +797,23 @@ public class GameLg implements Listener{
 		
 		
 	}
+	
+	public void playSoundMO() {
+		for (PlayerData p:getPlayerAlive()) {
+			if (p.isOnline) {
+				p.player.playSound(p.getLocation(), Sound.WOLF_GROWL, 1, 1);
+			}
+			
+		}
+	}
+	public void playSoundWolf() {
+		for (PlayerData p:getPlayerAlive()) {
+			if (p.isOnline) {
+				p.player.playSound(p.getLocation(), Sound.WOLF_HOWL, 1, 1);
+			}
+			
+		}
+	}
 
 	@Deprecated
 	public void startVote() {
@@ -803,7 +821,7 @@ public class GameLg implements Listener{
 		
 		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
 		for (SpecialBlock bloc:Main.specialBlocks) {
-			if (bloc.getData().getType().equals(SpecialBlockType.Vote)) {
+			if (bloc.getData() != null&&bloc.getData().getType() !=null  &&bloc.getData().getType().equals(SpecialBlockType.Vote)) {
 				((VoteBlockData) bloc.getData()).nbOfVote = 5;
 			}
 		}

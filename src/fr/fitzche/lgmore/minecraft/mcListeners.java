@@ -371,7 +371,7 @@ public class mcListeners implements Listener {
 			for (LivingEntity ent:e.getAffectedEntities()) {
 				if (ent instanceof Player) {
 					
-					GameLgUtil.tpAl((PlayerData) ent);
+					GameLgUtil.tpAl((Player) ent);
 				}
 			}
 		} else if (e.getPotion().getItem().hasItemMeta() && e.getPotion().getItem().getItemMeta().hasLore()&& e.getPotion().getItem().getItemMeta().getLore().contains("Potion De Paralysie")) {
@@ -379,7 +379,7 @@ public class mcListeners implements Listener {
 			for (LivingEntity ent:e.getAffectedEntities()) {
 				if (ent instanceof Player /*&& ( !ent.getName().equals(((Player)e.getEntity().getShooter()).getName()))*/) {
 					
-					ent.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3600, 255));
+					ent.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3600, 1255));
 					ent.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 3600, 255));
 					ent.sendMessage(ChatColor.DARK_PURPLE+"Vous êtes paralysé, vous ne pouvez plus ni mettre de dégat ni en subir (vous êtes hors de combat)");
 				}

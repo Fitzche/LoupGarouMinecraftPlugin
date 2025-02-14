@@ -311,6 +311,11 @@ public class Main extends JavaPlugin implements Listener {
 		Location specialB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeTreasureBlock(specialB, type);
 	}
+	public static void placeCauldronStruct(Location loc) {
+		placeBat(loc);
+		Location specialB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		placeCauldronBlock(specialB);
+	}
 	
 	public static void placeBat(Location loc) {
 		try {
@@ -326,6 +331,13 @@ public class Main extends JavaPlugin implements Listener {
 		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
 		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
 		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Vote, new VoteBlockData(5)));
+		
+	}
+	public static void placeCauldronBlock(Location loc) {
+		System.out.println("bloc vote placé");
+		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Cauldron, new VoteBlockData(5)));
 		
 	}
 	public static void placeAccuseBlock(Location loc) {

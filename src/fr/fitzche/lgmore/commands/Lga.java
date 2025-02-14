@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -172,6 +173,11 @@ public class Lga implements CommandExecutor  {
 			ItemUtil.setLore(item, strs);
 			Player p = (Player) sender;
 			p.getInventory().addItem(item);
+		} else if (args[0].equals("cauldronStruct")) {
+			Main.placeCauldronStruct(((Player) sender).getLocation());
+		} else if (args[0].equals("sound")) {
+			Player p = (Player) sender;
+			p.playSound(p.getLocation(), Sound.WOLF_HOWL, 1, 1);
 		}
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {
@@ -197,7 +203,7 @@ public class Lga implements CommandExecutor  {
 		}else if (args[0].equals("placeVote")) {
 			Main.placeVoteStruct(((Player) sender).getLocation());
 		}else if (args[0].equals("placeAccuse")) {
-			Main.placeAccuseBlock(((Player) sender).getLocation());
+			Main.placeAccuseStruct(((Player) sender).getLocation());
 		} else if (args[0].equals("auraDisplay")) {
 			Main.game.futuresActions.add(new FutureAction(new BukkitRunnable() {
 				

@@ -43,7 +43,7 @@ public class SpecialBlock implements Listener{
 		return data;
 	}
 	public SpecialBlock(Location loc, SpecialBlockType type, SpecialBlockData data) {
-		this.loc = loc;
+		this.loc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		this.data = data;
 		this.type = type;
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
@@ -78,10 +78,11 @@ public class SpecialBlock implements Listener{
 			
 			return;
 		}
-		
+		System.out.println("interact 1 in special b");
 		
 		
 		if (e.getClickedBlock().getLocation().equals(this.loc)) {
+			System.out.println("interact 2");
 			
 			e.setCancelled(true);
 			System.out.println("bloc interact in SpecialBlock jkjk");
@@ -211,10 +212,11 @@ public class SpecialBlock implements Listener{
 				}
 
 				
-			} else if (this.data.getType().equals(SpecialBlockType.Cauldron)) {
+			} 
+			if (this.type.equals(SpecialBlockType.Cauldron)) {
 				Player p = e.getPlayer();
 				PlayerData plyD = PlayerUtil.getDataOfPlayer(p, "at cauldron interact");
-				
+				System.out.println("cauldron block");
 				
 				if (!plyD.role.equals(RolesLg.SORCIER)) {
 					p.sendMessage("Vous ne pouvez pas utiliser ce bloc");

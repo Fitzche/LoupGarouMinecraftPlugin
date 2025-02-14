@@ -56,6 +56,9 @@ public class PlayerData {
 	public RegisterType favRegister;
 	public int bienfaisance = 0;
 	public boolean toEscape = false;
+	public boolean visionDeath = false;
+	public boolean visionRegister = false;
+	
 	
 	public PlayerData(Player player) {
 		

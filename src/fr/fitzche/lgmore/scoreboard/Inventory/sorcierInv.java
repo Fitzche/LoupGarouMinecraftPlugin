@@ -58,9 +58,9 @@ public class sorcierInv implements Listener{
 		
 		ItemUtil.setLore(itemAura, lores3);
 		
-		inv.setItem(1, itemAura);
+		inv.setItem(2, itemAura);
 		
-		
+		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		
 		
 		p.openInventory(inv);
@@ -73,10 +73,10 @@ public class sorcierInv implements Listener{
 			if (e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().hasDisplayName()) {
 				switch (e.getCurrentItem().getItemMeta().getDisplayName()) {
 				case "Potion de Téléportation":
-					if (ItemUtil.howManyOf(	inv	, Material.GOLDEN_APPLE) >= 1 && ItemUtil.howManyOf(	inv	, Material.LAPIS_BLOCK ) >= 3 &&  ItemUtil.howManyOf(	inv	, Material.REDSTONE) >= 30) {
-						ItemUtil.takeInInv(inv, Material.GOLDEN_APPLE, 1);
-						ItemUtil.takeInInv(inv, Material.LAPIS_BLOCK, 3);
-						ItemUtil.takeInInv(inv, Material.REDSTONE	, 30);
+					if (ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.GOLDEN_APPLE) >= 1 && ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.LAPIS_BLOCK ) >= 3 &&  ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.REDSTONE) >= 30) {
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.GOLDEN_APPLE, 1);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.LAPIS_BLOCK, 3);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.REDSTONE	, 30);
 						
 						Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
 						ItemStack item = potion.toItemStack(1);
@@ -90,11 +90,12 @@ public class sorcierInv implements Listener{
 					}
 					break;
 				case "Potion de Paralysie":
-					if (ItemUtil.howManyOf(	inv	, Material.FLINT) >= 3&&ItemUtil.howManyOf(	inv	, Material.GOLDEN_APPLE) >= 2 && ItemUtil.howManyOf(	inv	, Material.ROTTEN_FLESH ) >= 5 &&  ItemUtil.howManyOf(	inv	, Material.STRING) >= 3) {
-						ItemUtil.takeInInv(inv, Material.GOLDEN_APPLE, 2);
-						ItemUtil.takeInInv(inv, Material.ROTTEN_FLESH, 5);
-						ItemUtil.takeInInv(inv, Material.STRING	, 3);
-						ItemUtil.takeInInv(inv, Material.FLINT	, 3);
+					System.out.println("flint: "+ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.FLINT));
+					if (ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.FLINT) >= 3&&ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.GOLDEN_APPLE) >= 2 && ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.ROTTEN_FLESH ) >= 5 &&  ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.STRING) >= 3) {
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.GOLDEN_APPLE, 2);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.ROTTEN_FLESH, 5);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.STRING	, 3);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.FLINT	, 3);
 						
 						Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
 						ItemStack item = potion.toItemStack(1);
@@ -108,10 +109,10 @@ public class sorcierInv implements Listener{
 					}
 					break;
 				case "Potion de Révélation d'Auras":
-					if (ItemUtil.howManyOf(	inv	, Material.GOLDEN_APPLE) >= 1 && ItemUtil.howManyOf(	inv	, Material.FEATHER) >= 10 &&  ItemUtil.howManyOf(	inv	, Material.REDSTONE) >= 30) {
-						ItemUtil.takeInInv(inv, Material.GOLDEN_APPLE, 1);
-						ItemUtil.takeInInv(inv, Material.FEATHER, 10);
-						ItemUtil.takeInInv(inv, Material.REDSTONE	, 30);
+					if (ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.GOLDEN_APPLE) >= 1 && ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.FEATHER) >= 10 &&  ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.REDSTONE) >= 30) {
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.GOLDEN_APPLE, 1);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.FEATHER, 10);
+						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.REDSTONE	, 30);
 						
 						Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
 						ItemStack item = potion.toItemStack(1);

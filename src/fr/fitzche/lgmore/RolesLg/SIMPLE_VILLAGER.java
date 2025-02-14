@@ -10,6 +10,7 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -22,6 +23,25 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	public SIMPLE_VILLAGER(PlayerData player) {
 		this.playerWithRole = player;
 		this.game = GameLgUtil.getGameOfPlayer(player, "at role creation: ");
+		
+		if (MathUtil.pourcentage(50)) {
+			if (MathUtil.pourcentage(50)) {
+				playerWithRole.sendMessage(ChatColor.GREEN+ "Vous obtenez 2 coeurs à donner à deux joueurs de votre choix (vous exclus) avec la commande /lg conférer [nomDuJoueur]");
+				playerWithRole.bienfaisance += 2;
+			} else {
+				playerWithRole.sendMessage(ChatColor.GREEN+ "Vous obtenez 5% de résistance");
+				playerWithRole.boostR5 ++;
+
+			}
+		} else {
+			if (MathUtil.pourcentage(50)) {
+				playerWithRole.sendMessage(ChatColor.GREEN+ "Vous pouvez voir les mort 15s en avance");
+				playerWithRole.visionDeath = true;
+			} else {
+				playerWithRole.sendMessage(ChatColor.GREEN+ "Vous pouvez voir les changements de registre proche de vous");
+				playerWithRole.visionRegister = true;
+			}
+		}
 	}
 	
 	@Override
@@ -30,7 +50,7 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, vous ne possédez aucun pouvoir");
+		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, vous ne possédez qu'un pouvoir aléatoire parmis 4. ");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 

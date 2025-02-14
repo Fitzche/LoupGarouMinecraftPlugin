@@ -23,8 +23,14 @@ public class ItemUtil {
 	public static int howManyOf(Inventory inv, Material mat) {
 		int h = 0;
 		for (ItemStack item:inv.getContents()) {
-			if (item.getType().equals(mat)) {
+			if (item == null) {
+				
+			} else if (item.getType().equals(mat)) {
+				System.out.println("silex exist");
+			}
+			if (item != null &&item.getType().equals(mat)) {
 				h += item.getAmount();
+				System.out.println("mat +"+ item.getAmount());
 			}
 		}
 		return h;
@@ -32,10 +38,18 @@ public class ItemUtil {
 	
 	public static void takeInInv(Inventory inv, Material mat, int amount) {
 		int taken = 0;
-		do {
-			inv.remove(mat);
-			taken ++;
-		} while (taken < amount);
+		for (ItemStack item:inv.getContents()) {
+			if (item != null && item.getType().equals(mat)) {
+				do {
+					item.setAmount(item.getAmount() - 1);
+					taken ++;
+					
+				} while (item.getAmount() > 0 && taken < amount);
+				if (item.getAmount()<0) {
+					inv.remove(item);
+				}
+			}
+		}
 	}
 
 }

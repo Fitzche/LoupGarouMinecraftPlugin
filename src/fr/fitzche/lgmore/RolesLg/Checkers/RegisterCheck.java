@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
@@ -29,7 +30,11 @@ public class RegisterCheck implements ResCheck{
 	}
 	@Override
 	public boolean checkRes(PlayerDeathEvent e) {
-		// TODO Auto-generated method stub
+		for (PlayerData p:Main.game.getPlayerAlive()) {
+			if (p.visionDeath) {
+				p.sendMessage(ChatColor.GRAY+ "Le joueur "+ChatColor.RED+ e.getEntity().getName()+ChatColor.GRAY+ " est mort");
+			}
+		}
 		return false;
 	}
 
@@ -78,6 +83,11 @@ public class RegisterCheck implements ResCheck{
 
 	@Override
 	public void onAddTragic(int before, int after, Location loc) {
+		for (PlayerData p:Main.game.getPlayerAlive()) {
+			if (p.getLocation().distance(loc) < 20 && p.visionRegister) {
+				p.sendMessage(ChatColor.GRAY+ "Changement de registre proche");
+			}
+		}
 		if (before  < 100 && after >= 100) {
 			for (PlayerData p:game.getPlayerAlive()) {
 				GameLgUtil.tpAl(p);
@@ -88,13 +98,29 @@ public class RegisterCheck implements ResCheck{
 
 	@Override
 	public void onAddEpic(int before, int after, Location loc) {
-		// TODO Auto-generated method stub
+		for (PlayerData p:Main.game.getPlayerAlive()) {
+			if (p.getLocation().distance(loc) < 20 && p.visionRegister) {
+				p.sendMessage(ChatColor.GRAY+ "Changement de registre proche");
+			}
+		}
+		if (before  < 100 && after >= 100) {
+			Main.game.broadcoast(ChatColor.DARK_RED+"La Nuit tombe, C'est la Pleine Lune. Tous les loups hurlent à la lune");
+			Main.game.broadcoast(ChatColor.RED+"Les joueurs mal entourés entendront les hurlements des loups, et la nuit tombera précipitament, mais les auras lumineuses resteront éclairer le village");
+			Main.world.setTime(14000);
+
+		
+		}
 		
 	}
 
 	@Deprecated
 	@Override
 	public void onAddOrat(int before, int after, Location loc) {
+		for (PlayerData p:Main.game.getPlayerAlive()) {
+			if (p.getLocation().distance(loc) < 20 && p.visionRegister) {
+				p.sendMessage(ChatColor.GRAY+ "Changement de registre proche");
+			}
+		}
 		if (before  < 80 && after >= 80) {
 			if ((game.timer.temps - (game.timer.getEpisode() - 1) * 1200)>80 && (game.timer.temps - (game.timer.getEpisode() - 1) * 1200) < 1120 && !game.hasMoreVote) {
 				game.broadcoast(ChatColor.AQUA+"Un vote Supplémentaire se déclenche");

@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -76,6 +77,7 @@ public class MONTREUR implements RoleInstance {
 		for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole, " at renifle() in MONTREUR, at listing of player for test them").playerAlive) {
 			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
+				Main.game.playSoundMO();
 				GameLgUtil.getGameOfPlayer(playerWithRole,"at montreur renifler").addorat(5, playerWithRole.getLocation());
 			}
 		}
