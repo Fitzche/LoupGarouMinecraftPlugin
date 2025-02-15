@@ -16,10 +16,12 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.VoteEvent;
+import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
 public class RegisterCheck implements ResCheck{
@@ -58,8 +60,8 @@ public class RegisterCheck implements ResCheck{
 
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
-		// TODO Auto-generated method stub
-		return false;
+		return game.roleBrumed;
+		
 	}
 
 	@Override
@@ -104,9 +106,26 @@ public class RegisterCheck implements ResCheck{
 			}
 		}
 		if (before  < 100 && after >= 100) {
-			Main.game.broadcoast(ChatColor.DARK_RED+"La Nuit tombe, C'est la Pleine Lune. Tous les loups hurlent à la lune");
-			Main.game.broadcoast(ChatColor.RED+"Les joueurs mal entourés entendront les hurlements des loups, et la nuit tombera précipitament, mais les auras lumineuses resteront éclairer le village");
+			game.broadcoast(ChatColor.DARK_RED+"La Nuit tombe, C'est la Pleine Lune. Tous les loups hurlent à la lune");
+			game.broadcoast(ChatColor.RED+"Les joueurs mal entourés entendront les hurlements des loups, les rôles seront brouillés pendant 5min, et la nuit tombera précipitament, mais les auras lumineuses resteront éclairer le village");
 			Main.world.setTime(14000);
+			game.roleBrumed = true;
+			game.futuresActions.add(new FutureAction(new BukkitRunnable() {
+				
+				@Override
+				public void run() {
+					game.roleBrumed = false;
+					
+				}
+			}, 300));
+			for (PlayerData p:game.getPlayerAlive()) {
+				if (p.role.getCampOfRole().equals(Camp.Wolf)) {
+					game.playSoundWolf(p);
+				}
+				if (p.aura.equals(Aura.LUMINOUS)) {
+					p.auraDiscoverEffetDuration += 60;
+				}
+			}
 
 		
 		}

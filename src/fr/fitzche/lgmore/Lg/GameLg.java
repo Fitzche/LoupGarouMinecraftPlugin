@@ -81,6 +81,8 @@ public class GameLg implements Listener{
 	private int oratTaux = 0;
 	private int tragicTaux = 0;
 	
+	public boolean roleBrumed = false;
+	
 	public boolean aleaCouple = false;
 	
 	
@@ -812,6 +814,16 @@ public class GameLg implements Listener{
 				p.player.playSound(p.getLocation(), Sound.WOLF_HOWL, 1, 1);
 			}
 			
+		}
+	}
+	public void playSoundMO(PlayerData p) {
+		if (p.isOnline) {
+			p.player.playSound(p.getLocation(), Sound.WOLF_GROWL, 1, 1);
+		}
+	}
+	public void playSoundWolf(PlayerData p) {
+		if (p.isOnline) {
+			p.player.playSound(p.getLocation(), Sound.WOLF_HOWL, 1, 1);
 		}
 	}
 
