@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,8 +26,10 @@ import fr.fitzche.lgmore.Lg.RegisterType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.RolesLg.ANGE;
+import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
+import fr.fitzche.lgmore.RolesLg.DEMON;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
@@ -390,6 +393,49 @@ public class Lg implements CommandExecutor {
 				renards.flairer(target);
 				return true;
 			}
+			
+		} else if (args[0].equals("pactiser")) {
+			PlayerData target = PlayerUtil.checkExist(args[1]);
+			Player player = (Player) sender;
+			PlayerData demon = PlayerUtil.getDataOfPlayer(player, "at /lg pactiser command");
+			if (demon.role.equals(RolesLg.DEMON)) {
+				DEMON demonI = (DEMON) demon.roleIn;
+				TextComponent text = new TextComponent();
+				text.setText(ChatColor.DARK_RED+ "Le Démon vous propose un pacte, clicquez ici pour l'accepter, ainsi vous perdrez 2 coeurs permanents, mais en contrepartie, votre aura et votre camp seront vus par les rôles à info comme positifs, vous gagnerez 5 golden apple, et vous obtiendrez le rôle d'un joueur au hasard. Cependant si vous venez à mourir, le démon récupérera votre âme, votre aura et votre camp seront vus comme négatifs, et vous devrez gagner la partie avec le démon tout en ayant weakness.");
+				text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg pacteAccept "+target.Name+ " "+ player.getName())));
+				target.player.spigot().sendMessage(text);
+				return true;
+			}
+			
+		}  else if (args[0].equals("pacteAccept")) {
+			PlayerData target = PlayerUtil.checkExist(args[1]);
+			PlayerData demon = PlayerUtil.checkExist(args[2]);
+			
+			target.sendMessage(ChatColor.DARK_RED+ "Vous avez accepté le pacte du démon, veuillez référer au message précédent pour en connaitre les règles.");
+			demon.sendMessage(ChatColor.DARK_RED+ "Le joueur "+target.getName()+ " a accepté votre pacte");
+			
+			DEMON demonI = (DEMON) demon.roleIn;
+			demonI.pactedPlayers.add(target);
+			
+			target.aura = Aura.LUMINOUS;
+			target.camp = Camp.Villager;
+			
+			PlayerData revealed = GameLgUtil.getAlPlayer(Main.game);
+			target.sendMessage(ChatColor.RED+"Le joueur "+ revealed.getName()+ " est "+revealed.role.getCampOfRole().getColor()+ revealed.role.getName());
+			
+			if (!target.isOnline) {
+				Main.game.playersLeft.get(target.getName()).life -= 4;
+				
+			} else {
+				target.changeHealth(-4);
+				target.player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 5));
+			}
+			if (!demon.isOnline) {
+				Main.game.playersLeft.get(demon.getName()).life -= 4;
+			} else {
+				demon.changeHealth(-4);
+			}
+			
 			
 		}else if (args[0].equals("chooseInter")) {
 			PlayerData player = PlayerUtil.getDataPlayer(args[2], "at Command interpreter/choose");
