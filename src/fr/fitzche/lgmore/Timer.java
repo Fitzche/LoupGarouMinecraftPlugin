@@ -40,6 +40,13 @@ public class Timer {
 		
 		
 	}
+	
+	
+	public void add(int value) {
+		for (int i = 0; i < value; i++) {
+			addOne();
+		}
+	}
 	public String getStringTime() {
 		int hours = 0;
 		int min= 0;

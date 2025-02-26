@@ -55,6 +55,7 @@ public enum RolesLg implements Role{
 	ANGE_THIERCE(Camp.Other, "Ange de Thiercelieux", Material.FEATHER, Aura.LUMINOUS, "L'ange de thiercelieux gagne tout seul, il peut craft une sharpness 4, quand il est accusé, il gagne 20% de force contre l'accuseur et connait son role, 5% de résistance et 1 coeur permanents, et l'accuseur ne possède pas 20% de force contre lui. Si l'ange de T tue l'accuseur, sa mort ne sera pas annoncée. Aura Lumineuse"),
 	DEMON(Camp.Other, "Démon", Material.NETHERRACK, Aura.OBSCUR, ""),
 	DAMNE(Camp.Other, "Damné", Material.BANNER,Aura.OBSCUR, "Role utilitaire, ne pas utiliser"),
+	THANOS(Camp.Other, "Thanos", Material.EMERALD,Aura.DANGEROUS, "Vous verrez"),
 	SORCIER(Camp.Other, "Sorcier", Material.BLAZE_POWDER, Aura.NEUTRAL, "Le sorcier a 50% de gagner tout seul, et 50% de gagner avec le village, il peut créer des potions avec certains matériaux. Ces potions ont des effets divers, ce sont celles que des joueurs normaux trouverait dans des batiments bonus."),
 	SIMPLE_WOLF(Camp.Wolf, "Simple Loup Garou", Material.DIAMOND_SWORD, Aura.OBSCUR, "Le loup garou simple gagne avec les loups, et possède la force des loups. Aura obscure");//correspondant
 	

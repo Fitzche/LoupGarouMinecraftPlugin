@@ -225,6 +225,22 @@ public class SpecialBlock implements Listener{
 				sorcierInv inv = new sorcierInv(p, Main.game);
 				
 			}
+			
+			if (this.type.equals(SpecialBlockType.Stone)) {
+				StoneBlockData data = (StoneBlockData) this.data;
+				if (data.taken) {
+					e.getPlayer().sendMessage("Déjà Pris");
+					
+				} else {
+					data.taken = true;
+					PlayerData taker = PlayerUtil.getDataOfPlayer(e.getPlayer(), "at specialblock stone event taken");
+					data.stone.owner = taker;
+					taker.addStone(data.stone.type);
+					if (data.than.playerWithRole.isOnline) {
+						data.than.playerWithRole.sendMessage(ChatColor.LIGHT_PURPLE+ "Le joueur "+ taker.getName()+ " a récupéré la pierre de "+ data.stone.type.getName());
+					}
+				}
+			}
 		} 
 		
 	}

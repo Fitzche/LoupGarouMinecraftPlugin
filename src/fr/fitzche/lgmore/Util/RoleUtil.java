@@ -21,6 +21,7 @@ import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.COMEDIEN;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
+import fr.fitzche.lgmore.RolesLg.DEMON;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.ERMITE;
@@ -49,6 +50,7 @@ import fr.fitzche.lgmore.RolesLg.SIMPLE_WOLF;
 import fr.fitzche.lgmore.RolesLg.SOEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIER;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
+import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
@@ -253,6 +255,14 @@ public class RoleUtil {
 			return role;
 		}else if (player.role.equals(RolesLg.SORCIER)) {
 			SORCIER role = new SORCIER(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.DEMON)) {
+			DEMON role = new DEMON(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.THANOS)) {
+			THANOS role = new THANOS(player);
 			player.roleIn = role;
 			return role;
 		}else{

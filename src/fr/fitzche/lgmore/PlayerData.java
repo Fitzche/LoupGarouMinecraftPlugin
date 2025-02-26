@@ -10,12 +10,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.RegisterType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
@@ -36,6 +38,7 @@ public class PlayerData {
 	public RolesLg role;
 	public Camp camp;
 	public Team team;
+	public boolean hasRes = false;
 	public boolean inLove;
 	public boolean infected;
 	public boolean inLife;
@@ -58,6 +61,24 @@ public class PlayerData {
 	public boolean toEscape = false;
 	public boolean visionDeath = false;
 	public boolean visionRegister = false;
+	
+	
+	
+	public boolean hasSpace = false;
+	public boolean hasSoul = false;
+	public boolean hasPower = false;
+	public boolean hasTime = false;
+	public boolean hasReality = false;
+	public boolean hasMind = false;
+	
+	
+	public boolean hasSpaceUsed = false;
+	public boolean hasSoulUsed = false;
+	public boolean hasPowerUsed = false;
+	public boolean hasTimeUsed = false;
+	public boolean hasRealityUsed = false;
+	public boolean hasMindUsed = false;
+	
 	
 	
 	public PlayerData(Player player) {
@@ -114,6 +135,45 @@ public class PlayerData {
 			return 0;
 		}
 		
+	}
+	
+	public void addStone(StonesType type) {
+		switch (type) {
+		case MIND:
+			this.hasMind = true;
+			sendMessage(ChatColor.YELLOW+"Pierre de L'Esprit: "+ChatColor.DARK_BLUE+"Vous pouvez (avec la commande /lg esprit [nomDuJoueur]) changer l'aura et le camp visible d'un joueur de manière à ce qu'il soit vu comme loup");
+			break;
+		case POWER:
+			this.hasPower = true;
+			this.boostS5+=3;
+			sendMessage(ChatColor.DARK_PURPLE+"Pierre du Pouvoir: "+ChatColor.DARK_BLUE+"Vous possédez 10% de force supplémentaire");
+			break;
+		case REALITY:
+			this.hasReality = true;
+			sendMessage(ChatColor.RED+ "Pierre de Réalité:"+ChatColor.DARK_BLUE+" vous pouvez (avec la commande /lg reality) donner un effet de jump boost 2 pendant 3min à tous les autres joueurs dans un rayon de 15 à 30 bloc");
+			break;
+		case SOUL:
+			this.hasSoul = true;
+			sendMessage("Pierre de L'Ame: "+ ChatColor.DARK_BLUE+"Vous pouvez (avec la commande /lg ame [nomDuJoueur]) afficher l'aura d'un joueur aux yeux de tout le monde (particules autour du joueur)");
+			break;
+		case SPACE:
+			this.hasSpace = true;
+			sendMessage(ChatColor.BLUE+"Pierre de L'espace: "+"Vous pouvez (avec la commande /lg space) obtenir speed 2 pendant 3min");
+			break;
+		case TIME:
+			this.hasTime = true;
+			sendMessage(ChatColor.DARK_GREEN+"Pierre du Temps: "+ChatColor.DARK_BLUE + "Vous pouvez (avec la commande /lg time) avancer le temps de 2min");
+			break;
+		default:
+			break;
+		
+		}
+		if (role.equals(RolesLg.THANOS)&& hasMind && hasPower&&hasReality&&hasSoul&&hasSpace&&hasTime) {
+			THANOS than = (THANOS) roleIn;
+			than.hasAll = true;
+			than.playerWithRole.boostS5 +=3;
+		}
+		sendMessage(ChatColor.DARK_PURPLE+"Vous avez réçu la pierre de "+type.getName());
 	}
 	
 	

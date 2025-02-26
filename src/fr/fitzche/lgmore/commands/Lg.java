@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,12 +45,14 @@ import fr.fitzche.lgmore.RolesLg.RENARD;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SALVATEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
+import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
 import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
+import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
@@ -901,7 +904,105 @@ public class Lg implements CommandExecutor {
 				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command orat choose event");
 				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Oratoire");
 				p.favRegister = RegisterType.Oratoire;
+			} else if (args[0].equals("reality")) {
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at reality command");
+				if (p.hasReality && !p.hasRealityUsed) {
+					p.hasRealityUsed = true;
+					int dist = MathUtil.generateAlInt(15, 30);
+					for (PlayerData ply:Main.game.getPlayerAlive()) {
+						if (ply.getLocation().distance(p.getLocation()) < dist && !ply.getName().equals(p.getName()) && ply.isOnline) {
+							ply.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 3600, 2));
+							ply.sendMessage("Vous êtes affecté par la pierre de réalité");
+							ply.player.playSound(p.getLocation(), Sound.ARROW_HIT, 1, 1);
+						}
+					}
+				}
+			} else if (args[0].equals("esprit")) {
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at mind command");
+				if (p.hasMind && !p.hasMindUsed) {
+					
+					if (args.length < 2) {
+						sender.sendMessage(ChatColor.RED+"Commande Invalide, il manque un argument");
+						return true;
+					}
+					PlayerData target = PlayerUtil.checkExist(args[1]);
+					if (target == null) {
+						sender.sendMessage(ChatColor.RED+"Commande invalide, le nom du joueur est incorrect");
+						return true;
+					}
+					if (!target.isOnline) {
+						sender.sendMessage("Ce joueur est hors ligne");
+						return true;
+					}
+					p.hasMindUsed = true;
+					target.aura = Aura.OBSCUR;
+					target.camp = Camp.Wolf;
+					sender.sendMessage("Vous affectez le joueur "+target.getName()+ " avec la pierre de l'esprit");
+				}
+			} else if (args[0].equals("time")) {
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at time command");
+				if (p.hasTime && !p.hasTimeUsed) {
+					p.hasTimeUsed = true;
+					for (int i = 0; i < 120; i++) {
+						Main.game.everySec();
+					}
+					for (PlayerData ply:Main.game.getPlayerAlive()) {
+						ply.sendMessage(ChatColor.DARK_GREEN+"Le temps a été avancé de 2min");
+					}
+					
+				}
+			}else if (args[0].equals("ame")) {
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at soul command");
+				if (p.hasSoul && !p.hasSoulUsed) {
+					
+					if (args.length < 2) {
+						sender.sendMessage(ChatColor.RED+"Commande Invalide, il manque un argument");
+						return true;
+					}
+					PlayerData target = PlayerUtil.checkExist(args[1]);
+					if (target == null) {
+						sender.sendMessage(ChatColor.RED+"Commande invalide, le nom du joueur est incorrect");
+						return true;
+					}
+					if (!target.isOnline) {
+						sender.sendMessage("Ce joueur est hors ligne");
+						return true;
+					}
+					p.hasSoulUsed = true;
+					target.auraDiscoverEffetDuration += 15;
+					sender.sendMessage("Vous affectez le joueur "+target.getName()+ " avec la pierre de l'Ame");
+				}
+			}else if (args[0].equals("space")) {
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at espace command");
+				if (p.hasSpace && !p.hasSpaceUsed) {
+					p.hasSpaceUsed = true;
+					p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 2));
+					
+				}
+			}else if (args[0].equals("thanos")) {
+				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at thanos command");
+				if (p.role.equals(RolesLg.THANOS)) {
+					THANOS than = (THANOS) p.roleIn;
+					if (than.hasAll && !than.hasAllUsed) {
+						for (PlayerData target:Main.game.getPlayerAlive()) {
+							if (target.isOnline) {
+								target.sendMessage(ChatColor.DARK_RED+ "Thanos a réuni les 6 pierres d'infinités, chaque joueur a alors 50% de chance de subir 5 coeur de dégat");
+								if (MathUtil.pourcentage(50) && !target.getName().equals(p.getName())) {
+									if (target.player.getHealth() < 10 ) {
+										target.player.setHealth(3);
+									} else {
+										target.player.damage(10);
+									}
+								}
+							}
+							
+						}
+					}
+					
+				}
 			}
+		
+		
 	
 		
 		

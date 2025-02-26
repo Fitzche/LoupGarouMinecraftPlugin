@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+C:\Users\Utilisateur\Documents\MyCodes\GitHub\LoupGarouMinecraftPlugin\.metadata\.plugins\org.eclipse.jdt.core
+2833287191.index
+1444765742.index
+1865797976.index
+4239250197.index

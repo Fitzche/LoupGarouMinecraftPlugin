@@ -52,10 +52,13 @@ import com.sk89q.worldedit.world.registry.WorldData;
 
 import WorldEditUtil.StructureLoader;
 import de.inventivegames.particle.ParticleEffect;
+import fr.fitzche.lgmore.InfinityStones.Stone;
+import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.AccuseBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.StoneBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
@@ -66,6 +69,7 @@ import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SOEUR;
+import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -187,7 +191,10 @@ public class Main extends JavaPlugin implements Listener {
 				RolesLg.VOLEUR,
 				RolesLg.ANGE_THIERCE,
 				RolesLg.LOUP_BRUMEUX,
+				RolesLg.DEMON,
+				RolesLg.THANOS,
 				RolesLg.VOYANTE
+				
 				
 				));
 		RoleUtil.existingRoles.addAll(list);
@@ -316,6 +323,11 @@ public class Main extends JavaPlugin implements Listener {
 		Location specialB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeCauldronBlock(specialB);
 	}
+	public static void placeStoneStruct(Location loc, Stone stone) {
+		placeBat(loc);
+		Location specialB = new Location(world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		placeStoneBlock(stone,specialB);
+	}
 	
 	public static void placeBat(Location loc) {
 		try {
@@ -339,6 +351,12 @@ public class Main extends JavaPlugin implements Listener {
 		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
 		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Cauldron, new VoteBlockData(5)));
 		
+	}
+	
+	public static void placeStoneBlock(Stone stone, Location loc) {
+		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);
+		Main.server.getWorld("world").getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Stone, new StoneBlockData(stone)));
 	}
 	public static void placeAccuseBlock(Location loc) {
 		Main.server.getWorld("world").getBlockAt(loc).setType(Material.ENDER_CHEST);

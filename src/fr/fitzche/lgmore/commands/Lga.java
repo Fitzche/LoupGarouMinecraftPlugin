@@ -47,6 +47,8 @@ import org.bukkit.command.TabCompleter.*;
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.InfinityStones.Stone;
+import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
@@ -56,6 +58,7 @@ import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
@@ -178,6 +181,30 @@ public class Lga implements CommandExecutor  {
 		} else if (args[0].equals("sound")) {
 			Player p = (Player) sender;
 			p.playSound(p.getLocation(), Sound.WOLF_HOWL, 1, 1);
+		} else if (args[0].equals("thanPlace")) {
+			THANOS than = (THANOS) PlayerUtil.getDataOfPlayer((Player) sender, "at than command").roleIn;
+			Location loc = ((Player) sender).getLocation();
+			
+			switch (args[1]) {
+				case "t":
+					Main.placeStoneStruct(loc, new Stone(than, StonesType.TIME));
+					break;
+				case "s":
+					Main.placeStoneStruct(loc, new Stone(than, StonesType.SPACE));
+					break;
+				case "p":
+					Main.placeStoneStruct(loc, new Stone(than, StonesType.POWER));
+					break;
+				case "e":
+					Main.placeStoneStruct(loc, new Stone(than, StonesType.MIND));
+					break;
+				case "a":
+					Main.placeStoneStruct(loc, new Stone(than, StonesType.SOUL));
+					break;
+				case "r":
+					Main.placeStoneStruct(loc, new Stone(than, StonesType.REALITY));
+					break;
+			}
 		}
 		if (args[0].equals("groupe")) {
 			if (args.length < 2) {

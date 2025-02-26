@@ -38,6 +38,7 @@ public class demonChecker implements ResCheck {
 				DAMNE damn = (DAMNE) p.roleIn;
 				damn.demon = demon;
 				demon.team.add(p);
+				p.boostS5 -= 20;
 				p.team = demon.team;
 				demon.playerWithRole.changeHealth(2);
 				demon.playerWithRole.sendMessage(ChatColor.DARK_RED+"Le joueur "+ p.getName()+ " est mort, vous récupérez donc son âme, il doit gagner avec vous, mais possède weakness de manière permanente");
@@ -50,7 +51,12 @@ public class demonChecker implements ResCheck {
 
 	@Override
 	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+		if (e.getEntity().getName().equals(demon.playerWithRole.getName())) {
+			for (PlayerData p:demon.pactedPlayers) {
+				p.sendMessage(ChatColor.DARK_RED+ "Le démon avez qui vous avez pactisé est mort, vous regagnez donc 1 coeur permanent sans perdre vos avantages");
+				p.changeHealth(2);
+			}
+		}
 
 	}
 
