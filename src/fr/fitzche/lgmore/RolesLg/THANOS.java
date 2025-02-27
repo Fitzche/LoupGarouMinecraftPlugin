@@ -12,12 +12,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.InfinityStones.Stone;
 import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Love.Team;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.LocationUtil;
+import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -44,6 +48,12 @@ public class THANOS implements RoleInstance {
 		
 		
 		playerWithRole.changeHealth(4);
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.MIND));
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.SOUL));
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.TIME));
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.SPACE));
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.REALITY));
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.POWER));
 	}
 	
 	@Override

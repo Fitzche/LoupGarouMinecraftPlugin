@@ -246,18 +246,18 @@ public class GameLg implements Listener{
 				p.board.setgame(game);
 				p.board.refresh();
 			}
-			int rayon = 300;
-			/*
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));
-			Main.placeVoteStruct(LocationUtil.getAlLocAround(rayon, 2));*/
+			int rayon = 500;
+			
+			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
+			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
+			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
+			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
 			
 			int rayon2 = 100;
 			Main.placeAccuseStruct(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false));
 			
 			
-			int rayon3 = 400;
+			int rayon3 = 500;
 			if (probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0) < 1) {
 				System.out.println("probasEvents.getOrDefault(\"Nombre Batiments à Bonus\"	, 0) == 0 in 259 of GameLg in start");
 			}
@@ -278,7 +278,7 @@ public class GameLg implements Listener{
 				} else {
 					type = TreasureBlockType.Bienfaisance;
 				}
-				Main.placeTreasureStruct(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, true), type);
+				Main.placeTreasureStruct(LocationUtil.getAlLocAroundFarfrom(rayon3, 5, true), type);
 			}
 			for (int i = 0; i<probasEvents.getOrDefault("Nombre Batiments Leurre"	, 0); i++) {
 				Main.placeBat(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false));
