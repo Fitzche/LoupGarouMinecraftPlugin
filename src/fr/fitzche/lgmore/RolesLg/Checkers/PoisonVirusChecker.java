@@ -18,22 +18,27 @@ public class PoisonVirusChecker implements ResCheck {
 		this.virus = virus;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		String str = "";
 		if (virus.type.equals(VirusType.POISON) ) {
-			if (e.getEntity().getName().equals(virus.infecter.Name)) {
-				if (k.getName().equals(virus.owner.Name)) {
+			if (e.getEntity().getName().equals(virus.infecter.getName())) {
+				str = str + "endAlchimistPoison";
+				if (k.getName().equals(virus.owner.getName())) {
 					virus.poisonGuerison = true;
+					str = str + " + killerIsTheInfected";
+					
 				}
 				virus.stopped = true;
 			}
 			
 		}
+		return str;
 
 	}
 	@Override
@@ -77,6 +82,16 @@ public class PoisonVirusChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "PoisonVirusChecker";
 	}
 
 }

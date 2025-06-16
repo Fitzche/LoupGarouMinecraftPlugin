@@ -24,17 +24,18 @@ public class AngeChecker implements ResCheck {
 		
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
 		if (!target.Name.equals(e.getEntity().getName())) {
-			return;
+			return "";
 		} else {
 			ange.targetDeath(k.getName());
+			return "angeTargetDeath";
 		}
 		
 
@@ -80,6 +81,16 @@ public class AngeChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "Ange Checker";
 	}
 
 }

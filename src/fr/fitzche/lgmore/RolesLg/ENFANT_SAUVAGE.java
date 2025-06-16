@@ -1,6 +1,9 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,6 +16,7 @@ import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.EnfantChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class ENFANT_SAUVAGE implements RoleInstance{
@@ -25,7 +29,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 	public String name ="Enfant Sauvage";
 	@Deprecated
 	public ENFANT_SAUVAGE(PlayerData player) {
-		this.game = GameLgUtil.getGameOfPlayer(player, "at enfant sauvage creation");
+		this.game = player.game;
 		this.playerWithRole = player;
 		this.game.resCheckers.add(new EnfantChecker(this, game));
 		playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Vous pouvez choisir un modèle avec la commande /lg choose [nomDuJoueur], si ce modèle meure vous devenez loup garou");
@@ -35,7 +39,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 			@Override
 			public void run() {
 				if (model == null) {
-					model = MathUtil.getAlPlayer(GameLgUtil.getGameOfPlayer(playerWithRole, "at run of ENFANT sauvage creating"));
+					model = MathUtil.getAlPlayer(game);
 					playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Votre modèle est "+model.Name);
 				}
 				
@@ -98,7 +102,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
+		
 
 		
 	}
@@ -141,6 +145,32 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("choose")) {
+			
+			Player enfant = (Player) sender;
+			PlayerData sauvage = Main.strToPlayer.getOrDefault(sender.getName(), null);
+
+			PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
+			
+			if (sauvage.getName().equals(playerWithRole.getName())) {
+				if (target != null&& target.inLife) {
+					
+					choose(target);
+				} else {
+					sender.sendMessage(ChatColor.DARK_RED+"Choix Invalide");
+				}
+				
+			} else {
+				sender.sendMessage("Vous n'etes pas enfant sauvage");
+			}
+		}
+		
 	}
 
 }

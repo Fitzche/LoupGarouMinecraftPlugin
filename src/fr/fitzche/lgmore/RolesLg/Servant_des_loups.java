@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -21,13 +23,12 @@ public class Servant_des_loups implements RoleInstance {
 	public Servant_des_loups(PlayerData p, PlayerData playerWithRole) {
 		this.master = p;
 		this.playerWithRole = playerWithRole;
-		this.game = GameLgUtil.getGameOfPlayer(playerWithRole, "at servant creation");
+		this.game = p.game;
 		this.game.resCheckers.add(new servantLgChecker(this));
 		playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Vous êtes devenu servant des loups, si votre maitre meurt, vous mourrez à sa place, vous apparaissez comme un loup et avez la liste mais vous n'avez pas d'effet, votre maitre est "+ master.Name);
 		if (!playerWithRole.inLove) {
 			
-			playerWithRole.team.remove(playerWithRole);
-			playerWithRole.team = game.lgTeam;
+			
 		}
 		playerWithRole.camp = Camp.Wolf;
 		
@@ -110,6 +111,11 @@ public class Servant_des_loups implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

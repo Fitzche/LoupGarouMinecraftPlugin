@@ -1,10 +1,13 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -23,7 +26,7 @@ public class ANCIEN implements RoleInstance{
 	
 	public ANCIEN(PlayerData player) {
 		playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at ancien creation");
+		this.game = player.game;
 		this.game.resCheckers.add(new AncienChecker(this, game));
 
 	}
@@ -59,7 +62,7 @@ public class ANCIEN implements RoleInstance{
 				return;
 			}
 			wait = 3;
-			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 79, 0, false , false));
+			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 19, 0, false , false));
 		}
 		
 	}
@@ -78,8 +81,7 @@ public class ANCIEN implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
+		
 		
 	}
 
@@ -119,6 +121,13 @@ public class ANCIEN implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

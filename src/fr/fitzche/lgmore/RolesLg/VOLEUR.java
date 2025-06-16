@@ -2,14 +2,17 @@ package fr.fitzche.lgmore.RolesLg;
 
 import java.util.ArrayList;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.RolesLg.Checkers.VoleurChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
@@ -23,11 +26,9 @@ public class VOLEUR implements RoleInstance{
 	
 	public VOLEUR(PlayerData player) {
 		this.playerWithRole = player;
-		GameLg game = GameLgUtil.getGameOfPlayer(player, "at voleur creating");
+		GameLg game = player.game;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		playerWithRole.team = new Team("Voleur", Camp.Other, game, players, null, "at voleur team creating", null, null, true, false, false, false);
-		GameLgUtil.getGameOfPlayer(playerWithRole, "at voleur creating").teams.add(playerWithRole.team);	
 		
 		game.resCheckers.add(new VoleurChecker(this, game, null));
 	}
@@ -52,8 +53,7 @@ public class VOLEUR implements RoleInstance{
 
 	@Override
 	public void giveRoleEffectAndItem(PlayerData player) {
-		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3600, 0, false, false));
-		
+		playerWithRole.boostS5 += 4;
 	}
 
 	@Override
@@ -70,11 +70,7 @@ public class VOLEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-		}
+		
 		
 	}
 
@@ -109,25 +105,23 @@ public class VOLEUR implements RoleInstance{
 			}
 		}
 		
-		stealed.player = playerWithRole.player;
-        
-		stealed.Name = playerWithRole.Name;	
-		playerWithRole.role = stealed.role;
-		playerWithRole.roleIn = stealed.roleIn;
-		stealed.roleIn = null;
-		
-	
-		playerWithRole.player = null;
-
-
-		playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez volé le role de "+ stealed.Name + " qui était "+ stealed.role.getName());
 		if (stealed.role.getCampOfRole().equals(Camp.Wolf)) {
-			GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at steal of voleur");
 			
-			for (PlayerData p: game.getFalseWolfAlive()) {
-				p.sendMessage(ChatColor.RED+"Le Joueur "+ playerWithRole.Name+ " a rejoint votre camp");
+			
+			for (PlayerData p: stealed.game.getFalseWolfAlive()) {
+				p.sendMessage(ChatColor.RED+"Le Joueur "+ playerWithRole.getName()+ " a rejoint votre camp");
 			}
 		}
+		playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez volé le role de "+ stealed.getName() + " qui était "+ stealed.role.getName());
+		playerWithRole.game.setRole(playerWithRole, stealed.role);
+		
+		
+		
+        
+		
+
+
+		
 	}
 
 	@Override
@@ -140,6 +134,12 @@ public class VOLEUR implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

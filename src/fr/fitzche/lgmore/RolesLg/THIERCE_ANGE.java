@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,12 +17,13 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.RolesLg.Checkers.AngeChecker;
 import fr.fitzche.lgmore.RolesLg.Checkers.thierceAnge_Checker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -38,7 +42,7 @@ public class THIERCE_ANGE implements RoleInstance {
 
 	public THIERCE_ANGE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at T angel creating");
+		this.game = player.game;
 		game.resCheckers.add(new thierceAnge_Checker(this));
 		
 	}
@@ -79,17 +83,7 @@ public class THIERCE_ANGE implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			
-			
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			
-		}
+		
 		
 		
 	}
@@ -136,5 +130,31 @@ public class THIERCE_ANGE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		 if (args[0].equals("hideDeath")) {
+				if (args.length < 2) {
+					sender.sendMessage("pas assez d'arguments");
+					return;
+				}
+				PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
+				if (target == null) {
+					sender.sendMessage("Veuillez entrer un nom de joueur valide");
+					return;
+				}
+				PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
+				if (p.getName().equals(playerWithRole.getName())) {
+					wantNotAnnounced.add(target);
+					p.sendMessage(ChatColor.GOLD+"La mort du joueur "+ target.getName() + " ne sera pas annoncée si vous le tuez.");
+					
+				} else {
+					p.sendMessage(ChatColor.GOLD+"Votre role ne vous permet pas cette commande");
+				}
+			} 
+		
 	}
 }

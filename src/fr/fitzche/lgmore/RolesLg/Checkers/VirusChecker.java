@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -19,8 +20,8 @@ public class VirusChecker implements ResCheck {
 		this.virus = virus;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
-		if (e.getEntity().getKiller().getName().equals(virus.owner.Name)) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
+		if (killer.getName().equals(virus.owner.getName())) {
 			System.out.println("killer has virus");
 			switch (virus.type) {
 			case ENDED:
@@ -29,11 +30,12 @@ public class VirusChecker implements ResCheck {
 				break;
 			case PARASITE:
 				System.out.println("killer has parasite");
-				PlayerData newOwner = PlayerUtil.getDataOfPlayer(e.getEntity(), "at virus checker");
+				PlayerData newOwner = Main.getData(e.getEntity());
 				virus.owner.sendMessage(ChatColor.DARK_GREEN+"Vous avez transmi le parasite");
 				
 				virus.owner = newOwner;
 				newOwner.sendMessage(ChatColor.DARK_GREEN+"Vous réssucitez, cependant un parasite vous a infecté");
+				System.out.println("parasit ressut");
 				return true;
 				
 			case POISON:
@@ -47,8 +49,8 @@ public class VirusChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 
 	}
 	@Override
@@ -92,6 +94,16 @@ public class VirusChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "VirusChecker";
 	}
 
 }

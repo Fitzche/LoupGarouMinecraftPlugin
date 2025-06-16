@@ -9,5 +9,7 @@
 	<classpathentry kind="lib" path="ParticleAPI_v2.1.1.jar"/>
 	<classpathentry kind="lib" path="worldedit-bukkit-6.1.jar"/>
 	<classpathentry kind="lib" path="spigot.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilisateur/Documents/MyCodes/GitHub/LoupGarouMinecraftPlugin/Multiverse-Core-2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilisateur/Documents/MyCodes/GitHub/LoupGarouMinecraftPlugin/TerrainControl (1).jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

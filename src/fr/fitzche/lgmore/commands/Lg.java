@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.commands;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,16 +20,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.sk89q.worldedit.WorldEdit;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.GameNote;
 import fr.fitzche.lgmore.Lg.RegisterType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
 import fr.fitzche.lgmore.RolesLg.ANGE;
 import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.BIENFAITEUR;
+import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CUPIDON;
 import fr.fitzche.lgmore.RolesLg.DEMON;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
@@ -47,15 +51,19 @@ import fr.fitzche.lgmore.RolesLg.SALVATEUR;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
 import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
+import fr.fitzche.lgmore.RolesLg.TRAQUEUR;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
 import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
+import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
+import fr.fitzche.lgmore.minecraft.ResCheck;
+import fr.fitzche.lgmore.scoreboard.Inventory.PlayerGameListInv;
 import fr.fitzche.lgmore.scoreboard.Inventory.playersDisplay;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -65,14 +73,41 @@ public class Lg implements CommandExecutor {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
-		// TODO Auto-generated method stub
+		PlayerData senderData = Main.strToPlayer.getOrDefault(sender.getName(), null);
+		GameLg game = senderData.game;
+		
+		if (args.length == 0) {
+			for (Entry<String, GameLg> entry: Main.strToGame.entrySet()) {
+				GameLg gameJ = entry.getValue();
+				TextComponent text = new TextComponent();
+				text.setText("Clicquez ici pour rejoindre "+ ChatColor.GOLD + gameJ.name);
+				text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg join ")+ gameJ.name));
+				((Player) sender).spigot().sendMessage(text);
+			}
+			return true;
+		}
+		if (senderData != null && game != null) {
+			for (RoleInstance role:game.rolesIn) {
+				System.out.println("command tested");
+				role.command(sender, cmd, msg, args);
+			}
+		} 
+		
+		if (args[0].equals("xp")) {
+			senderData.sendMessage("Vous avez "+senderData.xp+ "xp");
+			return true;
+		}
 		if (args[0].equals("revive")) {
-			if ((GameLgUtil.getGameOfPlayer((Player) sender, " at command revive of Lg, 1").getPlayer(sender.getName())).role.equals(RolesLg.INFECT_PERE_DES_LOUPS)){
+			if (game == null || senderData == null) {
+				return true;
+			}
+			PlayerData plyI = Main.strToPlayer.getOrDefault(args[2], null);
+			if (plyI != null && plyI.role.equals(RolesLg.INFECT_PERE_DES_LOUPS)){
 				Player ply = PlayerUtil.getPlayer(args[1]);
-				GameLg gm = GameLgUtil.getGameOfPlayer(ply, " at command revive of Lg 2");
-				PlayerData plyD = gm.getPlayer(ply.getName());
-				Player plyI = PlayerUtil.getPlayer(args[2]);
-				INFECT_PERE_DES_LOUPS role = (INFECT_PERE_DES_LOUPS) PlayerUtil.getDataOfPlayer(plyI, " at command revive of Lg, 3 ").roleIn;
+				
+				PlayerData plyD = game.getPlayer(ply.getName());
+				
+				INFECT_PERE_DES_LOUPS role = (INFECT_PERE_DES_LOUPS) plyI.roleIn;
 
 				if (role.powerUsed) {
 					sender.sendMessage(ChatColor.RED +"" +ChatColor.ITALIC +"Vous ne pouvez pas infecter à nouveau");
@@ -86,38 +121,44 @@ public class Lg implements CommandExecutor {
 				plyD.relive = true;
 				plyD.infected = true;
 				plyD.camp = Camp.Wolf;
-				
+				plyD.considWolf = true;
 				if (!plyD.inLove) {
 					
-					gm.lgTeam.add(plyD);
-					plyD.team = gm.lgTeam;
+					
+					plyD.camp = Camp.Wolf;
 				}
 				
 				
 				
 				role.powerUsed = true;
-				for (PlayerData loup:gm.getFalseWolfAlive()) {
-					loup.sendMessage(ChatColor.GOLD+"Le joueur "+ plyI.getName() + " a rejoint votre camp");
+				for (PlayerData loup:game.getFalseWolfAlive()) {
+					loup.sendMessage(ChatColor.GOLD+"Le joueur "+ ply.getName() + " a rejoint votre camp");
 				}
 				plyI.sendMessage("Vous avez infecté "+ ply.getName());
 				return true;
 				
 				
-			} else if ((GameLgUtil.getGameOfPlayer((Player) sender, " at command revive of Lg 3").getPlayer(sender.getName())).role.equals(RolesLg.SORCIERE)) {
-				Player ply = PlayerUtil.getPlayer(args[1]);
-				GameLg gm = GameLgUtil.getGameOfPlayer(ply, " at command revive of Lg, 4");
-				PlayerData plyD = gm.getPlayer(ply.getName());
-				if (plyD.inLife==false) {
+			} else if (game.getPlayer(sender.getName()).role.equals(RolesLg.SORCIERE)) {
+				
+			
+				PlayerData plyD =  Main.strToPlayer.getOrDefault(args[1], null);
+				
+				if (plyD == null || plyD.inLife==false) {
 					sender.sendMessage(ChatColor.BLUE + "Ce joueur est mort, il est trop tard pour le ressuciter");
 					return true;
 				} 
 				plyD.relive = true;
-				Player plyS = PlayerUtil.getPlayer(args[2]);
+				PlayerData soso = Main.strToPlayer.getOrDefault(args[2], null);
+				if (soso == null || soso.roleIn == null) {
+					sender.sendMessage("erreur quand au sender >> commande revive");
+					return false;
+				}
 
-				SORCIERE role = (SORCIERE) PlayerUtil.getDataOfPlayer(plyS, " at command revive of Lg, 5").roleIn;
+				SORCIERE role = (SORCIERE) soso.roleIn;
 				role.powerUsed = true;
 				Player s = (Player) sender;
 				s.sendMessage("Vous avez ressucité "+ plyD.Name);
+				plyD.sendMessage("La sorcière vous a réssucité");
 				
 				return true;
 			} else {
@@ -129,67 +170,15 @@ public class Lg implements CommandExecutor {
 			
 			
 			
-		} else if (args[0].equals("voir")) {
-			
-			Player player = (Player) sender;
-			
-			if (!PlayerUtil.getDataOfPlayer(player, " at command voir of Lg, 1").role.equals(RolesLg.VOYANTE)) {
-				player.sendMessage(ChatColor.BLACK + "vous n'etes pas voyante !!!");
-				return true;
-			}
-			
-			VOYANTE role = (VOYANTE) PlayerUtil.getDataOfPlayer(player, " at command voir of Lg, 2").roleIn;
-			if (role.powerUsed) {
-				player.sendMessage(ChatColor.BLACK + "vous avez déjà utilisé votre pouvoir !!!");
-				return true;
-			
-			}
-			PlayerData ply = PlayerUtil.getDataOfPlayer(PlayerUtil.getPlayer(args[1]), " at command voir of Lg, 3");
-			
-			if (ply.camp.equals(Camp.Villager)) {
-				player.damage(10);
-				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 6000, 1, false, false));
-		
-				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role);
-			}  else {
-				Location loc = ply.getLocation();
-				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role+ ", il se trouve en "+loc.getBlockX()+ ", "+loc.getBlockY() + ", " + loc.getBlockZ()+ "; (x/y/z)");
-
-			}
-			
-			role.powerUsed = true;
+		}  else if (args[0].equals("list")) {
 			
 			
 			
-			
-			
-			
-			
-			
-		} else if (args[0].equals("list")) {
-			
-			
-			if (Main.game == null) {
-				if (sender instanceof Player) {
-					Player player = (Player) sender;
-					player.sendMessage("Aucune partie n'existe");
-					
-				}
-				return true;
-			} else {
-				//System.out.println(Main.games.get(0).name);
-			}
 			//System.out.println("recherche de " + args[2]);
-			GameLg game = GameLgUtil.searchGame(args[1]);
 			
-			if (game == null) {
-				//System.out.println("error GameNotFound");
-				//System.out.println(Main.games.get(0));
-				if (sender instanceof Player) {
-					Player player = (Player) sender;
-					player.sendMessage("La partie " + args[2] + " n'existe pas");
-					
-				}return true;
+			
+			if (game == null || senderData == null) {
+				return true;
 			}
 			
 			
@@ -200,31 +189,40 @@ public class Lg implements CommandExecutor {
 			
 		} else if (args[0].equals("couple")) {
 			
-			
-			Player cupi = (Player) sender;
-			if (!PlayerUtil.getDataOfPlayer(cupi, " at command couple of Lg, 1").getLgRole().equals(RolesLg.CUPIDON)){
-				cupi.sendMessage("Vous n'etes pas cupidon !!");
-			}
-			if (Main.game.aleaCouple) {
-				cupi.sendMessage("Le couple est aléatoire");
+			if (game == null || senderData == null) {
+				return true;
 			}
 			
-			playersDisplay choose = new playersDisplay(GameLgUtil.getGameOfPlayer(cupi, " at command couple of Lg, 2").getPlayerAlive(), "/couple ");
+			if (!senderData.getLgRole().equals(RolesLg.CUPIDON)){
+				sender.sendMessage("Vous n'etes pas cupidon !!");
+			}
+			if (game.aleaCouple) {
+				sender.sendMessage("Le couple est aléatoire");
+			}
+			
+			playersDisplay choose = new playersDisplay(game.getPlayerAlive(), "/couple ");
 			Main.server.getPluginManager().registerEvents(choose, Main.plug);
 
-			choose.display(cupi, args);
+			choose.display((Player) sender, args);
 			
 			
 			
 		} else if (args[0].equals("don")) {
+			
+			if (game == null || senderData == null) {
+				return true;
+			}
+			if ( !(sender instanceof Player)) {
+				return false;
+			}
 			Player giver = (Player) sender;
-			PlayerData player = PlayerUtil.checkExist(giver.getName());
+			PlayerData player = Main.strToPlayer.getOrDefault(sender.getName(), null);
 			if (player == null) {
 				return true;
 			}
-			GameLg gm = GameLgUtil.getGameOfPlayer(giver, " at command don of Lg, 1");
 			
-			if (!PlayerUtil.getDataOfPlayer(giver, " at command don of Lg, 2").inLove) {
+			
+			if (!player.inLove) {
 				giver.sendMessage(ChatColor.DARK_RED+"Vous n'etes pas en couple !! ");
 				return true;
 			}
@@ -239,90 +237,75 @@ public class Lg implements CommandExecutor {
 				return true;
 
 			}
+			double value = Integer.valueOf(args[1]);
+			PlayerUtil.don(player, player.coupleL, value);
 			
-			player.team.donCouple(player, Integer.valueOf(args[1]));
 			
 			System.out.println(args[1]);
 			
 		} else if (args[0].equals("voteCmd")){
+			if (game == null || senderData == null) {
+				return true;
+			}
 			if (args.length < 3) {
 				return true;
 			}
 			
 			
-			PlayerData player = PlayerUtil.getDataPlayer(sender.getName(), "at command ''vote'' of Lg, 1 ");
-			ItemStack item = GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").invVote.getItem(Integer.valueOf(args[2]));
+			ItemStack item = game.invVote.getItem(Integer.valueOf(args[2]));
 			if (item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().contains("utilisé")) {
-				player.sendMessage(ChatColor.GOLD+"Cette enveloppe à vote est déjà utilisée");
+				sender.sendMessage(ChatColor.GOLD+"Cette enveloppe à vote est déjà utilisée");
 				return true;
 			}
-			if (!GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").isInVote) {
-				player.sendMessage(ChatColor.GOLD +"Ce n'est pas l'heure du vote");
+			if (!game.isInVote) {
+				sender.sendMessage(ChatColor.GOLD +"Ce n'est pas l'heure du vote");
 				return true;
 			} 
 			
 			
-			PlayerData voted = PlayerUtil.getDataPlayer(args[1], "at command ''vote'' of Lg,  3");
-			if (GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 2 ").cannotBeVoted.contains(player)) {
-				player.sendMessage(ChatColor.RED+"Vous ne pouvez pas voter");
+			PlayerData voted = Main.strToPlayer.getOrDefault(args[1], null);
+			if (voted == null) {
+				sender.sendMessage("erreur sur le joueur voté >> voteCmd");
+			}
+			if (game.cannotBeVoted.contains(sender)) {
+				sender.sendMessage(ChatColor.RED+"Vous ne pouvez pas voter");
 				return true;
 			}
 			
-			if (player.timeWithPlayers.getOrDefault(voted.getName(), 0) < 1) {
-				player.sendMessage(ChatColor.GOLD +"Vous n'avez pas croisé ce joueur, vous ne pouvez donc pas voter pour celui-ci");
+			if (senderData.timeWithPlayers.getOrDefault(voted.getName(), 0) < 1) {
+				sender.sendMessage(ChatColor.GOLD +"Vous n'avez pas croisé ce joueur, vous ne pouvez donc pas voter pour celui-ci");
 				return true;
 
 			}
-			if (player.lastVoteOpen != null && player.lastVoteOpen.data.getType().equals(SpecialBlockType.Vote)) {
-				VoteBlockData data = (VoteBlockData) player.lastVoteOpen.data;
+			if (senderData.lastVoteOpen != null && senderData.lastVoteOpen.data.getType().equals(SpecialBlockType.Vote)) {
+				VoteBlockData data = (VoteBlockData) senderData.lastVoteOpen.data;
 				if (data.nbOfVote < 1) {
-					player.sendMessage(ChatColor.GOLD +"L'urne à vote que vous avez ouverte est pleine...");
+					sender.sendMessage(ChatColor.GOLD +"L'urne à vote que vous avez ouverte est pleine...");
 					return true;
 				}
-				data.hasVotedFor.put(player.getName(), voted.getName());
+				data.hasVotedFor.put(sender.getName(), voted.getName());
 				data.nbOfVote --;
 			}
 			
-			if (player.voted != null) {
-				player.voted.vote --;
+			if (senderData.voted != null) {
+				senderData.voted.vote --;
 			}
 			
-			player.voted = voted;
-			player.sendMessage("Vous avez voté pour "+ voted.Name +"");
+			senderData.voted = voted;
+			sender.sendMessage("Vous avez voté pour "+ voted.Name +"");
 			voted.vote ++;
 			
 			
 			ArrayList<String> str = new ArrayList<String>();
 			str.add("utilisé");
-			ItemUtil.setLore(GameLgUtil.getGameOfPlayer(player, "at command ''vote'' of Lg, 3 ").invVote.getItem(Integer.valueOf(args[2])), str);
-		} else if (args[0].equals("tirer")) {
-			if (PlayerUtil.getPlayer(args[1]) != null && GameLgUtil.getGameOfPlayer(PlayerUtil.getPlayer(args[1]), "at command tirer of Lg commander") != null && PlayerUtil.getDataPlayer(args[1], "at command tirer of Lg commander 2").inLife) {
-				
-				GameLg gameOfTarget = GameLgUtil.getGameOfPlayer(PlayerUtil.getPlayer(args[1]), "at command tirer of Lg commander");
-				PlayerData target = PlayerUtil.getDataPlayer(args[1], "at command tirer of Lg commander 2");
-				
-				if (gameOfTarget.hunter.equals(sender)) {
-					gameOfTarget.Hunter.shoot(target);
-				}
-			}
-		} else if (args[0].equals("proteger")) {
-			if (PlayerUtil.getPlayer(args[1]) != null && GameLgUtil.getGameOfPlayer(PlayerUtil.getPlayer(args[1]), "at command tirer of Lg commander") != null && PlayerUtil.getDataPlayer(args[1], "at command tirer of Lg commander 2").inLife) {
-				GameLg gameOfTarget = GameLgUtil.getGameOfPlayer(PlayerUtil.getPlayer(args[1]), "at command tirer of Lg commander");
-				PlayerData target = PlayerUtil.getDataPlayer(args[1], "at command tirer of Lg commander 2");
-				
-				if (PlayerUtil.getDataOfPlayer((Player) sender, "at Lg command proteger").role.equals(RolesLg.SALVATEUR)) {
-					SALVATEUR salvateur = (SALVATEUR) PlayerUtil.getDataOfPlayer((Player) sender, "at Lg command proteger").roleIn;
-					if (!salvateur.powerUsed) {
-						salvateur.proteger(target);
-					}
-					return true;
-				}
+			ItemUtil.setLore(game.invVote.getItem(Integer.valueOf(args[2])), str);
+		}  else if (args[0].equals("conferer")) {
+			if (game == null || senderData == null) {
 				return true;
 			}
-		} else if (args[0].equals("conferer")) {
 			Player bienfaiteurP = (Player) sender;
-			PlayerData bienfaiteur = PlayerUtil.getDataOfPlayer(bienfaiteurP, "at /lg conferer command");
-			PlayerData target = PlayerUtil.checkExist(args[1]);
+			PlayerData bienfaiteur = senderData;
+			PlayerData target = Main.strToPlayer.getOrDefault(args[1],null);
 			
 			if (target == null && target.inLife && !target.Name.equals(bienfaiteur.Name)) {
 				bienfaiteur.sendMessage("Veuillez spécifier un nom valide dans votre commande");
@@ -342,39 +325,32 @@ public class Lg implements CommandExecutor {
 				bft.conferer(target);
 				return true;
 			}
-		} else if (args[0].equals("choose")) {
-			
-			Player enfant = (Player) sender;
-			PlayerData sauvage = PlayerUtil.getDataOfPlayer(enfant, "at /lg choose command");
-
-			PlayerData target = PlayerUtil.checkExist(args[1]);
-			
-			if (sauvage.role == RolesLg.ENFANT_SAUVAGE) {
-				if (target != null&& target.inLife) {
-					ENFANT_SAUVAGE es = (ENFANT_SAUVAGE) sauvage.roleIn;
-					es.choose(target);
-				} else {
-					sender.sendMessage(ChatColor.DARK_RED+"Choix Invalide");
-				}
-				
-			} else {
-				sender.sendMessage("Vous n'etes pas enfant sauvage");
+		}  else if (args[0].equals("role")) {
+			if (game == null || senderData == null) {
+				return true;
 			}
-		} else if (args[0].equals("role")) {
+			System.out.println("command role");
 			Player player = (Player) sender; 
-			PlayerData ply = PlayerUtil.getDataOfPlayer(player, "at command /lg role");
-			GameLg game = GameLgUtil.getGameOfPlayer(ply, "at /lg role command");
+			PlayerData ply = senderData;
 			
-			ply.sendMessage(ply.roleIn.getDescription());
-			if (ply.inLove) {
-				ply.sendMessage(ChatColor.LIGHT_PURPLE+ "En couple avec: "+ ply.team.getNextCouple(ply).Name);
+			
+			ply.sendMessage(ChatColor.GOLD +ply.roleIn.getDescription());
+			System.out.println("sended");
+			if (ply.roleIn.getDescription() == null) {
+				System.out.println("command role --> str null");
+			}
+			if (ply.roleIn == null) {
+				System.out.println("command role--> role nul");
+			}
+			if (ply.inLove && ply.coupleL != null) {
+				ply.sendMessage(ChatColor.LIGHT_PURPLE+ "En couple avec: "+ ply.coupleL.getName());
 			}
 			
 			if (ply.infected) {
 				ply.sendMessage(ChatColor.RED+"Infecté");
 			}
 			
-			if (ply.role.getCampOfRole().equals(Camp.Wolf) || ply.camp.equals(Camp.Wolf) || ply.role.getCampOfRole().equals(Camp.Wolf)) {
+			if (ply.considWolf) {
 				ply.sendMessage(ChatColor.RED+"Liste:" + "\n");
 				if (game.timer.temps > 2699) {
 					for (PlayerData loup: game.getFalseWolfAlive()) {
@@ -387,269 +363,7 @@ public class Lg implements CommandExecutor {
 				
 			}
 			return true;
-		} else if (args[0].equals("flairer")) {
-			PlayerData target = PlayerUtil.checkExist(args[1]);
-			Player player = (Player) sender;
-			PlayerData renard = PlayerUtil.getDataOfPlayer(player, "at /lg flairer command");
-			if (renard.role.equals(RolesLg.RENARD)) {
-				RENARD renards = (RENARD) renard.roleIn;
-				renards.flairer(target);
-				return true;
-			}
-			
-		} else if (args[0].equals("pactiser")) {
-			PlayerData target = PlayerUtil.checkExist(args[1]);
-			Player player = (Player) sender;
-			PlayerData demon = PlayerUtil.getDataOfPlayer(player, "at /lg pactiser command");
-			if (demon.role.equals(RolesLg.DEMON)) {
-				DEMON demonI = (DEMON) demon.roleIn;
-				TextComponent text = new TextComponent();
-				text.setText(ChatColor.DARK_RED+ "Le Démon vous propose un pacte, clicquez ici pour l'accepter, ainsi vous perdrez 2 coeurs permanents, mais en contrepartie, votre aura et votre camp seront vus par les rôles à info comme positifs, vous gagnerez 5 golden apple, et vous obtiendrez le rôle d'un joueur au hasard. Cependant si vous venez à mourir, le démon récupérera votre âme, votre aura et votre camp seront vus comme négatifs, et vous devrez gagner la partie avec le démon tout en ayant weakness.");
-				text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg pacteAccept "+target.Name+ " "+ player.getName())));
-				target.player.spigot().sendMessage(text);
-				return true;
-			}
-			
-		}  else if (args[0].equals("pacteAccept")) {
-			PlayerData target = PlayerUtil.checkExist(args[1]);
-			PlayerData demon = PlayerUtil.checkExist(args[2]);
-			
-			target.sendMessage(ChatColor.DARK_RED+ "Vous avez accepté le pacte du démon, veuillez référer au message précédent pour en connaitre les règles.");
-			demon.sendMessage(ChatColor.DARK_RED+ "Le joueur "+target.getName()+ " a accepté votre pacte");
-			
-			DEMON demonI = (DEMON) demon.roleIn;
-			demonI.pactedPlayers.add(target);
-			
-			target.aura = Aura.LUMINOUS;
-			target.camp = Camp.Villager;
-			
-			PlayerData revealed = GameLgUtil.getAlPlayer(Main.game);
-			target.sendMessage(ChatColor.RED+"Le joueur "+ revealed.getName()+ " est "+revealed.role.getCampOfRole().getColor()+ revealed.role.getName());
-			
-			if (!target.isOnline) {
-				Main.game.playersLeft.get(target.getName()).life -= 4;
-				
-			} else {
-				target.changeHealth(-4);
-				target.player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 5));
-			}
-			if (!demon.isOnline) {
-				Main.game.playersLeft.get(demon.getName()).life -= 4;
-			} else {
-				demon.changeHealth(-4);
-			}
-			
-			
-		}else if (args[0].equals("chooseInter")) {
-			PlayerData player = PlayerUtil.getDataPlayer(args[2], "at Command interpreter/choose");
-			
-			INTERPRETE role = (INTERPRETE) player.roleIn;
-			role.choosen = RoleUtil.RoleofString(args[1]);
-			role.playerWithRole.sendMessage("Vous avez choisi: "+ args[1]);
-		}else if (args[0].equals("aura")) {
-			
-			if (sender instanceof Player) {
-				Player senderPlayer = (Player) sender;
-				PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
-				if (senderPlayerData != null) {
-					GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at aura command check game player exist");
-					if (gameOfSender != null) {
-						if (senderPlayerData.role.equals(RolesLg.DISCIPLE)) {
-							DISCIPLE disciple = (DISCIPLE) senderPlayerData.roleIn;
-							if (disciple.secondUnlock) {
-								PlayerData target = PlayerUtil.checkExist(args[1]);
-								if (target == null) {
-									sender.sendMessage(ChatColor.RED +"[/lg aura] veuillez choisir un joueur valide");
-								} else {
-									if (!disciple.powerUsed) {
-										sender.sendMessage("L'aura du joueur "+ target.Name + " est "+ target.aura);
-										disciple.powerUsed = true;
-									} else {
-										sender.sendMessage("L'aura du joueur "+ target.Name + " est "+ target.aura);
-										disciple.secondUnlock = false;
-									}
-								}
-							}
-						}
-					} else {
-						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
-						return true;
-					}
-				} else {
-					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
-					return true;
-				}
-				
-			} else {
-				sender.sendMessage("Seul un joueur peut effectuer cette commande");
-				return true;
-			}
-			
-			
-		
-		}else if (args[0].equals("trouver")) {
-			
-			if (sender instanceof Player) {
-				Player senderPlayer = (Player) sender;
-				PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
-				if (senderPlayerData != null) {
-					GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at aura command check game player exist");
-					if (gameOfSender != null) {
-						if (senderPlayerData.role.equals(RolesLg.DISCIPLE)) {
-							DISCIPLE disciple = (DISCIPLE) senderPlayerData.roleIn;
-							sender.sendMessage(ChatColor.GOLD +"La dernière position connue du vieux sage est "+ disciple.sageLocation.getX() + "; "+ disciple.sageLocation.getY() + "; "+ disciple.sageLocation.getZ() );
-						}
-					} else {
-						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
-						return true;
-					}
-				} else {
-					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
-					return true;
-				}
-				
-			} else {
-				sender.sendMessage("Seul un joueur peut effectuer cette commande");
-				return true;
-			}
-			
-			
-		
-		}else if (args[0].equals("recouvrir")) {
-			System.out.println("covered");
-			if (sender instanceof Player) {
-				Player senderPlayer = (Player) sender;
-				PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
-				if (senderPlayerData != null) {
-					GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at recouvrir command check game player exist");
-					if (gameOfSender != null) {
-						if (senderPlayerData.role.equals(RolesLg.PYROMANE)) {
-							PYROMANE pyro = (PYROMANE) senderPlayerData.roleIn;
-							pyro.recouvrir(PlayerUtil.getDataPlayer(args[1], "at command recouvrir check target exist"));
-							return true;
-						}
-					} else {
-						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
-						return true;
-					}
-				} else {
-					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
-					return true;
-				}
-				
-			}
-		}else if (args[0].equals("enflammer")) {
-				System.out.println("enflammed");
-				if (sender instanceof Player) {
-					Player senderPlayer = (Player) sender;
-					PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
-					if (senderPlayerData != null) {
-						GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at recouvrir command check game player exist");
-						if (gameOfSender != null) {
-							if (senderPlayerData.role.equals(RolesLg.PYROMANE)) {
-								PYROMANE pyro = (PYROMANE) senderPlayerData.roleIn;
-								pyro.allumer();
-								return true;
-							}
-						} else {
-							sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
-							return true;
-						}
-					} else {
-						sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
-						return true;
-					}
-					
-				} 
-		}else if (args[0].equals("aveugler")) {
-			
-			if (sender instanceof Player) {
-				Player senderPlayer = (Player) sender;
-				PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
-				if (senderPlayerData != null) {
-					GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at aveugler command check game player exist");
-					if (gameOfSender != null) {
-						if (senderPlayerData.role.equals(RolesLg.LOUP_MANIP)) {
-							
-							LOUP_MANIPULATEUR manip = (LOUP_MANIPULATEUR) senderPlayerData.roleIn;
-							if (manip.powerUsed == 0) {
-								sender.sendMessage(ChatColor.RED+"Il ne vous reste plus assez d'utilisation");
-								return true;
-							}
-							PlayerUtil.getDataPlayer(args[1], "at /lg aveugler in lg").roleIn.blind(senderPlayerData);
-							if (!PlayerUtil.getDataPlayer(args[1], "at /lg aveugler in lg").roleIn.isInfoRole()) {
-								manip.playerWithRole.sendMessage("Ce n'est pas un role à info");
-							}
-							manip.powerUsed --;
-							gameOfSender.addorat(5, manip.playerWithRole.getLocation());
-							return true;
-						}
-					} else {
-						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
-						return true;
-					}
-				} else {
-					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
-					return true;
-				}
-				
-			} 
-	}else if (args[0].equals("switchfire")) {
-					System.out.println("switch");
-					if (sender instanceof Player) {
-						Player senderPlayer = (Player) sender;
-						PlayerData senderPlayerData = PlayerUtil.checkExist(senderPlayer.getName());
-						if (senderPlayerData != null) {
-							GameLg gameOfSender = GameLgUtil.getGameOfPlayer(senderPlayerData, "at recouvrir command check game player exist");
-							if (gameOfSender != null) {
-								if (senderPlayerData.role.equals(RolesLg.PYROMANE)) {
-									PYROMANE pyro = (PYROMANE) senderPlayerData.roleIn;
-									pyro.fireaspect();
-									return true;
-								}
-							} else {
-								sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
-								return true;
-							}
-						} else {
-							sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
-							return true;
-						}
-						
-					} else{
-				sender.sendMessage("Seul un joueur peut effectuer cette commande");
-				return true;
-			} 
-		} else if (args[0].equals("angechoose")) {
-			PlayerData player = PlayerUtil.getDataPlayer(args[2], "at ange command");
-			if (player.role.equals(RolesLg.ANGE)) {
-				ANGE ange = (ANGE) player.roleIn;
-				switch (args[1]) {
-				case "d":
-					ange.chooseVersion(false);
-
-				case "g":
-					ange.chooseVersion(true);
-
-			}
-			}
-			
-		} else if (args[0].equals("prime")){
-			PlayerData target = PlayerUtil.checkExist(args[1]);
-			Player player = (Player) sender;
-			PlayerData parrain = PlayerUtil.getDataOfPlayer(player, "at /lg cibler command");
-			if (parrain.role.equals(RolesLg.PARRAIN)) {
-				PARRAIN parrainR = (PARRAIN) parrain.roleIn;
-				if (parrainR.powerUsed) {
-					player.sendMessage("Vous devez attendre pour pouvoir mettre un prime sur un joueur");
-					
-				} else {
-					parrainR.setNexTarget(target);
-				}
-				
-				return true;
-			}
-		} else if (args[0].equals("help")) {
+		}else if (args[0].equals("help")) {
 			sender.sendMessage(ChatColor.GOLD+"||PRESENTATION||");
 			sender.sendMessage(ChatColor.AQUA+"Ceci est un plugin de loup garou uhc, il faut entre 15 et 30 joueurs, l'host peut créer un partie, y ajouter des joueurs, configurer la probabilité des events et la composition est rôles."
 					+ "Au début de la partie, les joueurs vont miner pour se créer un équipement. "
@@ -687,67 +401,12 @@ public class Lg implements CommandExecutor {
 					+ "\n" + "/lg vote [nomDuJoueur] ---> permet de voter contre un joueur pendant la phase des votes"
 					+ "\n" + "/lg accuse [nomDuJoueur] ---> permet d'accuser un joueur, l'executeur de la commande aura alors 5min pour tuer l'accusé sous peine de perdre de la vie "
 					+ "\n" + "/lg escape  ---> permet d'échapper à la justice du village, cependant au su et vu de tous, le joueur ne pourra alors ni voter ni etre voté et sa position sera révélée dans le chat. Devient effectif au prochain épisode"
+					+ "\n" + "/lg checkEnd ---> permet de vérifier si la partie est finie, mais coute 5% de force. Par défaut la vérification est effectuée à chaque mort/infection, mais un évènement permet de baisser le pourcentage des vérification."
 					+ "\n"+"\n"+"/lg role ---> affiche le role du joueur, et d'autre infos supplémentaires comme la liste des loups s'il est loup"+ "\n"
 					+ "\n"+"\n"+"/lg list ---> affiche les joueurs de la partie"+ "\n"
 							+ "/color ---> permet de colorer des pseudo "+ ChatColor.RED + "(plugin externe)"+ ChatColor.AQUA + "."+ "\n"
 							+ "/lg info ---> documentation roles, clicquable");
-		} else if (args[0].equals("virus")) {
-			if (args[1]== null) {
-				sender.sendMessage("Il manque du contenu");
-			}
-			PlayerData alchi = PlayerUtil.getDataOfPlayer((Player) sender, "at virus command");
-			if (alchi.role.equals(RolesLg.LOUP_ALCHIMISTE)) {
-				LOUP_ALCHIMISTE alchiR = (LOUP_ALCHIMISTE) alchi.roleIn;
-				if (alchiR.powerUsed) {
-					alchi.sendMessage(ChatColor.AQUA+"Vous avez déjà utilisé votre pouvoir");
-				} else {
-					alchiR.choose(PlayerUtil.getDataPlayer(args[1], "at virus command"));
-				}
-			}
-		} else if (args[0].equals("declencheVirus")) {
-			
-			PlayerData target = PlayerUtil.getDataPlayer(args[2], "at declenche virus command");
-			PlayerData declencher = PlayerUtil.getDataPlayer(args[3], "at declenche virus command 2");
-			Virus virus;
-			switch (args[1]) {
-			
-			case "epid":
-				LOUP_ALCHIMISTE alchi1 = (LOUP_ALCHIMISTE) declencher.roleIn;
-				if (alchi1.powerUsed) {
-					sender.sendMessage("Pouvoir déjà utilisé");
-					return true;
-				}
-				virus = new Virus(VirusType.EPIDEMIE	, target, declencher, 12000);
-				declencher.sendMessage(ChatColor.AQUA+"Vous avez mis une épidémie sur "+target.Name);
-				alchi1.powerUsed = true;
-				break;
-			case "parasit":
-				LOUP_ALCHIMISTE alchi2 = (LOUP_ALCHIMISTE) declencher.roleIn;
-
-				if (alchi2.powerUsed) {
-					sender.sendMessage("Pouvoir déjà utilisé");
-					return true;
-				}
-				virus = new Virus(VirusType.PARASITE, target, declencher, 0);
-				target.sendMessage(ChatColor.AQUA+"Vous avez mis un parasite sur "+target.Name);
-				alchi2.powerUsed = true;
-				break;
-			case "pois":
-				LOUP_ALCHIMISTE alchi3 = (LOUP_ALCHIMISTE) declencher.roleIn;
-
-				if (alchi3.powerUsed) {
-					sender.sendMessage("Pouvoir déjà utilisé");
-					return true;
-				}
-				virus = new Virus(VirusType.POISON, target, declencher, 0);
-				sender.sendMessage(ChatColor.AQUA+"Vous avez empoisonné "+target.Name);
-				alchi3.powerUsed = true;
-				break;
-			
-				
-				
-			} 
-		}else if (args[0].equals("info")) {
+		} else if (args[0].equals("info")) {
 				if (args.length == 1) {
 					
 					
@@ -761,12 +420,14 @@ public class Lg implements CommandExecutor {
 					return true;
 				}
 				
-				GameLg gm = GameLgUtil.searchGame(args[1]);
+				
 				
 				Player player = (Player) sender;
 				 
-				
-				gm.config.open(player, false);
+				if (game == null || senderData == null) {
+					return true;
+				}
+				game.config.open(player, false);
 				
 				
 				
@@ -804,23 +465,17 @@ public class Lg implements CommandExecutor {
 						p.sendMessage(ChatColor.RED + sender.getName() + ChatColor.ITALIC + " >> "+ mess);
 					}
 				}
-			} else if (args[0].equals("grimmer")) {
-				
-				PlayerData senderPlD = PlayerUtil.getDataPlayer(args[2], " at grimmer command");
-				if (senderPlD.role != null && senderPlD.role.equals(RolesLg.LOUP_GRIMEUR)) {
-					
-					PlayerData p = PlayerUtil.getDataPlayer(args[1], " at grimmer command");
-					p.grimed = true;
-					sender.sendMessage(ChatColor.GOLD+"Vous avez grimmé "+ args[1]);
-				}
 			} else if (args[0].equals("escape")) {
-				GameLg game = GameLgUtil.getGameOfPlayer((Player) sender, "at the lg escape command");
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at lg escape command");
-				p.toEscape = true;
+				if (game == null || senderData == null) {
+					return true;
+				}
+				senderData.toEscape = true;
 			} else if (args[0].equals("accuse")) {
-				GameLg game = GameLgUtil.getGameOfPlayer((Player) sender, "at the lg accuse command");
-				PlayerData accuser = PlayerUtil.getDataOfPlayer((Player) sender, "at lg accuse command");
-				PlayerData accused = PlayerUtil.getDataPlayer(args[1], "at lg accuse command");
+				if (game == null || senderData == null) {
+					return true;
+				}
+				PlayerData accuser = senderData;
+				PlayerData accused = Main.strToPlayer.getOrDefault(args[1], null);
 				
 				if (accused == null || accuser == null) {
 					return true;
@@ -852,64 +507,22 @@ public class Lg implements CommandExecutor {
 				game.futureAcc.put(accuser.getName(), accused);
 				accuser.sendMessage(ChatColor.RED+"Votre accusation aura lieu au prochain épisode");
 				
-			} else if (args[0].equals("hideDeath")) {
-				if (args.length < 2) {
-					sender.sendMessage("pas assez d'arguments");
-					return false;
-				}
-				PlayerData target = PlayerUtil.getDataPlayer(args[1], "at hideDeath command");
-				if (target == null) {
-					sender.sendMessage("Veuillez entrer un nom de joueur valide");
-					return true;
-				}
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at hideDeath command");
-				if (p.role.equals(RolesLg.ANGE_THIERCE)) {
-					((THIERCE_ANGE) p.roleIn).wantNotAnnounced.add(target);
-					p.sendMessage(ChatColor.GOLD+"La mort du joueur "+ target.getName() + " ne sera pas annoncée si vous le tuez.");
-					
-				} else {
-					p.sendMessage(ChatColor.GOLD+"Votre role ne vous permet pas cette commande");
-				}
-			} else if (args[0].equals("hidelgbr")) {
-				PlayerData commander = PlayerUtil.getDataPlayer(args[2], "at hidelgbr command 1");
-				PlayerData target = PlayerUtil.getDataPlayer(args[1], "at hidelgbr command 2");
-				
-				if (commander == null || target == null) {
-					sender.sendMessage("commande invalide");
-					return true;
-				}
-				
-				if (!commander.role.equals(RolesLg.LOUP_BRUMEUX)) {
-					sender.sendMessage("Votre joueur ne vous permet pas cette commande");
-					return true;
-					
-				}
-				if (((LOUP_BRUMEUX) commander.roleIn).Using < 1) {
-					sender.sendMessage(ChatColor.GOLD + "Vous avez déjà utilisé votre pouvoir 2 fois");
-					return true;
-				}
-				((LOUP_BRUMEUX) commander.roleIn).toHide.add(target);
-				((LOUP_BRUMEUX) commander.roleIn).Using --;
-				commander.sendMessage("Vous utilisez votre pouvoir et la mort du joueur "+target.getName()+" ne sera pas annoncée.");
-				
 			} else if (args[0].equals("epicchooseevent")) {
-				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command epic choose event");
+				
 				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Epique");
-				p.favRegister = RegisterType.Epic;
+				senderData.favRegister = RegisterType.Epic;
 			}else if (args[0].equals("tragicchooseevent")) {
-				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command tragic choose event");
 				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Tragique");
-				p.favRegister = RegisterType.Tragic;
+				senderData.favRegister = RegisterType.Tragic;
 			}else if (args[0].equals("oratchooseevent")) {
-				PlayerData p = PlayerUtil.getDataPlayer(args[1], "at command orat choose event");
 				sender.sendMessage("Vous avez choisi "+ChatColor.DARK_PURPLE+"Oratoire");
-				p.favRegister = RegisterType.Oratoire;
+				senderData.favRegister = RegisterType.Oratoire;
 			} else if (args[0].equals("reality")) {
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at reality command");
+				PlayerData p = senderData;
 				if (p.hasReality && !p.hasRealityUsed) {
 					p.hasRealityUsed = true;
 					int dist = MathUtil.generateAlInt(15, 30);
-					for (PlayerData ply:Main.game.getPlayerAlive()) {
+					for (PlayerData ply:game.getPlayerAlive()) {
 						if (ply.getLocation().distance(p.getLocation()) < dist && !ply.getName().equals(p.getName()) && ply.isOnline) {
 							ply.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 3600, 2));
 							ply.sendMessage("Vous êtes affecté par la pierre de réalité");
@@ -918,14 +531,14 @@ public class Lg implements CommandExecutor {
 					}
 				}
 			} else if (args[0].equals("esprit")) {
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at mind command");
+				PlayerData p = senderData;
 				if (p.hasMind && !p.hasMindUsed) {
 					
 					if (args.length < 2) {
 						sender.sendMessage(ChatColor.RED+"Commande Invalide, il manque un argument");
 						return true;
 					}
-					PlayerData target = PlayerUtil.checkExist(args[1]);
+					PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
 					if (target == null) {
 						sender.sendMessage(ChatColor.RED+"Commande invalide, le nom du joueur est incorrect");
 						return true;
@@ -940,26 +553,26 @@ public class Lg implements CommandExecutor {
 					sender.sendMessage("Vous affectez le joueur "+target.getName()+ " avec la pierre de l'esprit");
 				}
 			} else if (args[0].equals("time")) {
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at time command");
+				PlayerData p = senderData;
 				if (p.hasTime && !p.hasTimeUsed) {
 					p.hasTimeUsed = true;
 					for (int i = 0; i < 120; i++) {
-						Main.game.everySec();
+						game.everySec();
 					}
-					for (PlayerData ply:Main.game.getPlayerAlive()) {
+					for (PlayerData ply:game.getPlayerAlive()) {
 						ply.sendMessage(ChatColor.DARK_GREEN+"Le temps a été avancé de 2min");
 					}
 					
 				}
 			}else if (args[0].equals("ame")) {
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at soul command");
+				PlayerData p = senderData;
 				if (p.hasSoul && !p.hasSoulUsed) {
 					
 					if (args.length < 2) {
 						sender.sendMessage(ChatColor.RED+"Commande Invalide, il manque un argument");
 						return true;
 					}
-					PlayerData target = PlayerUtil.checkExist(args[1]);
+					PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
 					if (target == null) {
 						sender.sendMessage(ChatColor.RED+"Commande invalide, le nom du joueur est incorrect");
 						return true;
@@ -973,32 +586,74 @@ public class Lg implements CommandExecutor {
 					sender.sendMessage("Vous affectez le joueur "+target.getName()+ " avec la pierre de l'Ame");
 				}
 			}else if (args[0].equals("space")) {
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at espace command");
+				if (game == null || senderData == null) {
+					return true;
+				}
+				PlayerData p = senderData;
 				if (p.hasSpace && !p.hasSpaceUsed) {
 					p.hasSpaceUsed = true;
 					p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 2));
 					
 				}
-			}else if (args[0].equals("thanos")) {
-				PlayerData p = PlayerUtil.getDataOfPlayer((Player) sender, "at thanos command");
-				if (p.role.equals(RolesLg.THANOS)) {
-					THANOS than = (THANOS) p.roleIn;
-					if (than.hasAll && !than.hasAllUsed) {
-						for (PlayerData target:Main.game.getPlayerAlive()) {
-							if (target.isOnline) {
-								target.sendMessage(ChatColor.DARK_RED+ "Thanos a réuni les 6 pierres d'infinités, chaque joueur a alors 50% de chance de subir 5 coeur de dégat");
-								if (MathUtil.pourcentage(50) && !target.getName().equals(p.getName())) {
-									if (target.player.getHealth() < 10 ) {
-										target.player.setHealth(3);
-									} else {
-										target.player.damage(10);
-									}
-								}
-							}
-							
-						}
+			} else if (args[0].equals("join"))  {
+				if (args.length < 2) {
+					sender.sendMessage("pas assez d'arguments");
+					return true;
+				} else {
+					if (Main.strToGame.getOrDefault(args[1], null) == null || Main.getData(sender).game != null) {
+						sender.sendMessage("Cette game n'existe pas");
+						return true;
+					} else {
+					
+						sender.sendMessage("ajouté");
+						Main.strToGame.get(args[1]).addPlayer(sender.getName());
 					}
 					
+				}
+			}else if (args[0].equals("stat")) {
+				if (!(sender instanceof Player)) {
+					return true;
+				}
+				String str;
+				if (args.length < 2) {
+					str = sender.getName();
+				} else {
+					str = args[1];
+				}
+				if (Main.strToPlayer.getOrDefault(str, null) != null) {
+					
+					Player p = (Player) sender;
+					PlayerGameListInv list = new PlayerGameListInv(Main.strToPlayer.get(args[1]), null, p);
+					
+				} else {
+					sender.sendMessage("Le joueur recherché n'est pas enregistré");
+					
+				}
+			} else if (args[0].equals("checkEnd")) {
+				if (game == null || senderData == null) {
+					return true;
+				}
+				if (Main.strToPlayer.getOrDefault(sender.getName(), null) != null) {
+					PlayerData player = Main.strToPlayer.get(sender.getName());
+					if (player.game != null && player.isInLgGame && (player.game.statut.equals(GameStatut.BEFORE_ROLE) || player.game.statut.equals(GameStatut.IN_GAME))) {
+						player.game.checkWin();
+						player.sendMessage("Vérification des conditions de victoires, vous perdez 5% de force");
+						player.boostR5 --;
+					} else {
+						player.sendMessage("Vous n'etes pas dans une partie, ou celle si est finie ou pas encore commencée");
+					}
+				} else {
+					sender.sendMessage("Erreur sur votre identité, vous serez enregistré comme joueur en rejoignant une partie ou en executant la commande /lg register");
+				}
+			} else if (args[0].equals("register")) {
+				if (Main.strToPlayer.getOrDefault(sender.getName(), null) != null) {
+					sender.sendMessage("Vous êtes déjà enregistré comme joueur, faites /lg stat [votrePseudo] pour voir vos parties");
+					return true;
+				} else if (sender instanceof Player){
+					Main.strToPlayer.put(sender.getName(), new PlayerData((Player) sender));
+					sender.sendMessage("enregistré comme joueur, faites /lg stat pour voir vos partie, et /profil pour voir votre profil (fonctionnalité à venir");
+				} else {
+					sender.sendMessage("Vous n'êtes pas un joueur");
 				}
 			}
 		

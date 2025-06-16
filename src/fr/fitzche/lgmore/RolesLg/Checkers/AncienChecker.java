@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
@@ -22,20 +23,25 @@ public class AncienChecker implements ResCheck{
 	}
 
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
-		if (e.getEntity().getKiller() == null) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
+		if (killer == null) {
+			System.out.println("ancien killer nul");
 			return false;
 		}
-		if (!ancien.isRes &&PlayerUtil.getDataOfPlayer(e.getEntity().getKiller(), "at ancien checker d").camp.equals(Camp.Wolf)) {
+		
+		if (!ancien.isRes 
+				&&(killer.considWolf 
+						|| killer.role.getCampOfRole().equals(Camp.Wolf))) {
 			ancien.isRes = true;
+			System.out.println("ancien ressut");
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 		
 	}
 
@@ -84,6 +90,18 @@ public class AncienChecker implements ResCheck{
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "Ancien Checker";
 	}
 
 }

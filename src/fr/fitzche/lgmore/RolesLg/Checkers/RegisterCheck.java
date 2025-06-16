@@ -21,6 +21,7 @@ import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.VoteEvent;
+import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 
@@ -31,8 +32,8 @@ public class RegisterCheck implements ResCheck{
 		this.game = game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
-		for (PlayerData p:Main.game.getPlayerAlive()) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
+		for (PlayerData p:game.getPlayerAlive()) {
 			if (p.visionDeath) {
 				p.sendMessage(ChatColor.GRAY+ "Le joueur "+ChatColor.RED+ e.getEntity().getName()+ChatColor.GRAY+ " est mort");
 			}
@@ -41,25 +42,46 @@ public class RegisterCheck implements ResCheck{
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
 	
+		if (!game.isRegistresActivated) {
+			return "";
+		}
+		String str = "";
+		PlayerData victim = Main.strToPlayer.getOrDefault(e.getEntity().getName(), null);
+		if (victim == null) {
+			return "";
+		}
+		PlayerData killer = Main.strToPlayer.getOrDefault(k.getName(), null);
 		
-		PlayerData victim = PlayerUtil.getDataOfPlayer(e.getEntity(), "at register checker");
-		if (game.getTragic() > 25) {
-			PlayerUtil.getDataOfPlayer(k, "at register checker").changeHealth(1);
+		if (killer != null && game.getTragic() > 25) {
+			
+			killer.changeHealth(1);
+			str = str + "tragicBonusDemiCoeurTueur -- ";
+			
 		}
 		if (MathUtil.pourcentage(game.getEpic()/6)) {
-			k.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 18000, 0, false, false));
+			k.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 6000, 0, false, false));
+			
+			str = str + "EpicBonusSpeedTueur -- ";
 		}
-		if (victim.camp == Camp.Wolf) {
+		
+		if (victim.camp == Camp.Wolf || (victim.camp != null && victim.considWolf)) {
 			if (MathUtil.pourcentage(game.getEpic()/3)) {
 				game.broadcoast("Le tueur du loup garou "+victim.getName()+ " est "+k.getName());
+				str = str + "EpicBonusIdentLoupTueur -- ";
 			}
 		}
+		return str;
 	}
 
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
+		if (game.roleBrumed) {
+			System.out.println("register hide deaths");
+		}
+		
+		
 		return game.roleBrumed;
 		
 	}
@@ -72,7 +94,9 @@ public class RegisterCheck implements ResCheck{
 
 	@Override
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
-		// TODO Auto-generated method stub
+		if (attacker.infected && WorldUtil.getTime(Main.server.getWorld("world")).equals("night")) {
+			return 20;
+		}
 		return 0;
 	}
 	
@@ -85,7 +109,7 @@ public class RegisterCheck implements ResCheck{
 
 	@Override
 	public void onAddTragic(int before, int after, Location loc) {
-		for (PlayerData p:Main.game.getPlayerAlive()) {
+		for (PlayerData p:game.getPlayerAlive()) {
 			if (p.getLocation().distance(loc) < 20 && p.visionRegister) {
 				p.sendMessage(ChatColor.GRAY+ "Changement de registre proche");
 			}
@@ -100,7 +124,7 @@ public class RegisterCheck implements ResCheck{
 
 	@Override
 	public void onAddEpic(int before, int after, Location loc) {
-		for (PlayerData p:Main.game.getPlayerAlive()) {
+		for (PlayerData p:game.getPlayerAlive()) {
 			if (p.getLocation().distance(loc) < 20 && p.visionRegister) {
 				p.sendMessage(ChatColor.GRAY+ "Changement de registre proche");
 			}
@@ -135,7 +159,7 @@ public class RegisterCheck implements ResCheck{
 	@Deprecated
 	@Override
 	public void onAddOrat(int before, int after, Location loc) {
-		for (PlayerData p:Main.game.getPlayerAlive()) {
+		for (PlayerData p:game.getPlayerAlive()) {
 			if (p.getLocation().distance(loc) < 20 && p.visionRegister) {
 				p.sendMessage(ChatColor.GRAY+ "Changement de registre proche");
 			}
@@ -175,6 +199,20 @@ public class RegisterCheck implements ResCheck{
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		for (PlayerData p:game.getPlayerAlive()) {
+			if (p.visionDeath) {
+				p.sendMessage(ChatColor.GRAY+ "Le joueur "+ChatColor.RED+ e.getEntity().getName()+ChatColor.GRAY+ " est mort");
+			}
+		}
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "Registre Checker";
 	}
 
 }

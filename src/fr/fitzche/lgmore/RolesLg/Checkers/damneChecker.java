@@ -21,19 +21,19 @@ public class damneChecker implements ResCheck {
 		this.game = game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (damn.demon.playerWithRole.getName().equals(e.getEntity().getName())) {
-			this.damn.playerWithRole.player.damage(10000);
-		}
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		
 		if (damn.playerWithRole.getName().equals(e.getEntity().getName())) {
 			this.damn.demon.playerWithRole.changeHealth(2);
+			return "DeamonHealthGainDamneDeath";
 		}
+		return "";
 
 	}
 
@@ -83,6 +83,16 @@ public class damneChecker implements ResCheck {
 	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "damneChecker";
 	}
 
 }

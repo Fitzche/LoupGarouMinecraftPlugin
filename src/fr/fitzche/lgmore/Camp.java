@@ -1,15 +1,24 @@
 package fr.fitzche.lgmore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 
-public enum Camp {
+public enum Camp implements Serializable{
 	Villager(ChatColor.GREEN, "Villageois"),
 	Wolf(ChatColor.DARK_RED, "Loups-Garou"),
 	Other(ChatColor.GOLD, "Solo et Hybride"),
 	TEAM(ChatColor.GOLD, "Team"),
-	Love(ChatColor.LIGHT_PURPLE, "Amoureux");
+	Love(ChatColor.LIGHT_PURPLE, "Amoureux"),
+	Died(ChatColor.ITALIC, "Mort-Vivant"),
+	RED(ChatColor.RED, "Rouge"),
+	YELLOW(ChatColor.YELLOW, "Jaune"),
+	BLUE(ChatColor.DARK_BLUE, "Bleu"),
+	GREEN(ChatColor.DARK_GREEN, "Vert"),
+	PINK(ChatColor.LIGHT_PURPLE, "Rose"),
+
+	Uneffective(ChatColor.DARK_GRAY, "Invisible");
 	
 	
 	private ChatColor color;

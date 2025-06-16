@@ -24,21 +24,25 @@ public class LgBarbare_Checker implements ResCheck {
 		
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
 		
 		if (k.getName().equals(owner.getName())) {
 			owner.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 2400, 0, false, false));
+			owner.changeHealth(-2);
+			lg.sup =+ 4;
+			return "barbareIsKiller";
 		}
+		return "";
 		
-		owner.changeHealth(-2);
-		lg.sup =+ 4;
-		System.out.println("run death action");
+		
+		
+		
 		
 
 	}
@@ -83,6 +87,16 @@ public class LgBarbare_Checker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "BarbareChecker";
 	}
 
 }

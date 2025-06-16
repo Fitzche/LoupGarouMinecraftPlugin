@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -22,7 +24,7 @@ public class SAGE implements RoleInstance {
 	public String name ="Vieux Sage";
 	public SAGE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at Sage creating");
+		this.game = player.game;
 		
 	}
 	
@@ -53,7 +55,7 @@ public class SAGE implements RoleInstance {
 	public void giveEffectAllTime() {
 	
 		for (PlayerData player: game.getPlayerAlive()) {
-			if (!player.getName().equals(this.playerWithRole.getName())) {
+			if (player != null && playerWithRole != null &&!player.getName().equals(this.playerWithRole.getName()) && player.getLocation().distance(this.playerWithRole.player.getLocation()) < 20) {
 				if (player.role.aura.equals(Aura.LUMINOUS) && sageGood < 100) {
 					sageGood += jaugeur;
 				} else if (player.aura.equals(Aura.NEUTRAL) && sageNeutral < 100) {
@@ -77,11 +79,7 @@ public class SAGE implements RoleInstance {
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-		}
+		
 
 	}
 
@@ -128,6 +126,12 @@ public class SAGE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

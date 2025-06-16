@@ -1,5 +1,8 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -7,9 +10,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -66,14 +72,7 @@ public class SALVATEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			
-			
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-			
-		}
+		
 		
 		
 	}
@@ -106,7 +105,7 @@ public class SALVATEUR implements RoleInstance{
 		this.powerUsed = true;
 		
 		if (this.playerWithRole.getName().equals(target.Name)) {
-			GameLgUtil.getGameOfPlayer(playerWithRole, " at salvateur protection").addEpic(10, playerWithRole.getLocation());
+			playerWithRole.game.addEpic(10, playerWithRole.getLocation());
 		}
 	}
 	@Override
@@ -125,6 +124,26 @@ public class SALVATEUR implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		 if (args[0].equals("proteger")) {
+			 PlayerData p = Main.getData(args[1]);
+			if (PlayerUtil.getPlayer(args[1]) != null && p != null && p.inLife) {
+				GameLg gameOfTarget = p.game;
+				PlayerData target = p;
+					
+				if (sender.getName().equals(playerWithRole.getName())) {
+					if (!powerUsed) {
+						proteger(target);
+					}
+					return;
+				}
+				return;
+			}
+		}
+		
 	}
 
 }

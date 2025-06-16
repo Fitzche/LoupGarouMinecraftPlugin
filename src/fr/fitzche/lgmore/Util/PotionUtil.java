@@ -11,7 +11,7 @@ public class PotionUtil {
 
 	
   public static final PotionEffect INVINCIBILITY =
-	  new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 400, 999, false, false);
+	  new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 999, false, false);
   public static final PotionEffect NIGHT_VISION = 
       new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0, false, false);
   

@@ -1,8 +1,11 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import java.awt.print.Book;
+import java.util.HashMap;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -10,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import net.md_5.bungee.api.ChatColor;
@@ -20,6 +24,7 @@ public class BIENFAITEUR implements RoleInstance{
 	public int used = 0;
 	public PlayerData playerWithRole;
 	public String name = "Bienfaiteur";
+	public HashMap<String, Boolean> hasGived = new HashMap<String, Boolean>();
 	
 	public BIENFAITEUR(PlayerData player) {
 		this.playerWithRole = player;
@@ -46,10 +51,17 @@ public class BIENFAITEUR implements RoleInstance{
 	public void giveRoleEffectAndItem(PlayerData player) {
 		ItemStack book = new ItemStack(Material.ENCHANTED_BOOK, 1);
 		ItemStack book2 = new ItemStack(Material.ENCHANTED_BOOK, 1);
+		
 		EnchantmentStorageMeta meta1 = (EnchantmentStorageMeta) book.getItemMeta();
-		meta1.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, false);
+		meta1.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, true);
+		
+		EnchantmentStorageMeta meta2 = meta1.clone();
+		
+		
+		
 		book.setItemMeta(meta1);
-		book2.setItemMeta(meta1);
+		book2.setItemMeta(meta2);
+		
 		player.player.getInventory().addItem(new ItemStack(book));
 		player.player.getInventory().addItem(new ItemStack(book2));
 	}
@@ -68,24 +80,20 @@ public class BIENFAITEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-		}
+		
 		
 	}
 
 	public void conferer(PlayerData ply) {
-		if (used > 3) {
-			playerWithRole.sendMessage("Vous n'avez plus de coeur à offrir");
+		if (used > 3 || this.hasGived.getOrDefault(ply.getName(), false)) {
+			playerWithRole.sendMessage("Vous n'avez plus de coeur à offrir ou vous en avez déjà offert à ce joueur");
 			return;
 
 		}
 		ply.setMaxHealth(ply.getMaxHealth()+2);
 		ply.sendMessage("Le bienfaiteur vous a conféré un coeur");
 		playerWithRole.sendMessage("Vous avez conférer un coeur à "+ ply.Name);
+		this.hasGived.put(ply.getName(), true);
 		used++;
 	}
 	
@@ -123,6 +131,12 @@ public class BIENFAITEUR implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

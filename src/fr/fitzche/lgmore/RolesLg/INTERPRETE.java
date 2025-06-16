@@ -3,6 +3,8 @@ package fr.fitzche.lgmore.RolesLg;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Camp;
@@ -11,6 +13,7 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -181,6 +184,21 @@ public class INTERPRETE implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		 if (args[0].equals("chooseInter")) {
+			 
+			PlayerData player = Main.getData(args[2]);
+			if (!player.getName().equals(playerWithRole.getName())) {
+				return;
+			}
+				
+			choosen = RoleUtil.RoleofString(args[1]);
+			playerWithRole.sendMessage("Vous avez choisi: "+ args[1]);
+		}
+		
 	}
 
 }

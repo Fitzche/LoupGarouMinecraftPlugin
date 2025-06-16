@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -19,26 +20,28 @@ public class VoteChecker implements ResCheck {
 		this.gameOfVote = gameOfVote;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (PlayerUtil.getDataOfPlayer(e.getEntity(), "at vote checker") == null) {
-			return;
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		PlayerData p = Main.strToPlayer.getOrDefault(e.getEntity(), null);
+		
+		if (p == null) {
+			return "";
 		}
-		PlayerData p = PlayerUtil.getDataOfPlayer(e.getEntity(), "at vote checker");
-		GameLg game = GameLgUtil.getGameOfPlayer(p, "at vote checker");
-		if (!game.equals(gameOfVote) ) {
-			return;
+		GameLg game = p.game;
+		if (game == null || !game.equals(gameOfVote) ) {
+			return "";
 		}
 		for (PlayerData players:game.getPlayerAlive()) {
-			if (players.canVoted.contains(p) ) {
+			if (players.canVoted != null && players.canVoted.contains(p) ) {
 				players.canVoted.remove(p);
 			}
 		}
+		return "";
 
 	}
 	@Override
@@ -83,6 +86,16 @@ public class VoteChecker implements ResCheck {
 	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "VoteChecker";
 	}
 
 }

@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.Lg;
 
-public enum RegisterType {
+import java.io.Serializable;
+
+public enum RegisterType implements Serializable{
 	Tragic, Oratoire, Epic;
 }

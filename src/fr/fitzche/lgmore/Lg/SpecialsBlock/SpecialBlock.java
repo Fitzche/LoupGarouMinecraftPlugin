@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +18,12 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.RolesLg.SORCIER;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
@@ -30,19 +34,19 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class SpecialBlock implements Listener{
+public class SpecialBlock implements Listener, Serializable{
 
 	
 	public Location loc;
 	public SpecialBlockType type;
 	public String id;
 	public SpecialBlockData data;
-	
+	public GameLg game;
 	
 	public SpecialBlockData getData() {
 		return data;
 	}
-	public SpecialBlock(Location loc, SpecialBlockType type, SpecialBlockData data) {
+	public SpecialBlock(Location loc, SpecialBlockType type, SpecialBlockData data, GameLg game, String checkLoc) {
 		this.loc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		this.data = data;
 		this.type = type;
@@ -74,28 +78,35 @@ public class SpecialBlock implements Listener{
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		
-		if (e.getClickedBlock() ==null || !e.getClickedBlock().hasMetadata("specialBlock-lgFitzche")) {
+		if (e.getClickedBlock() ==null || !e.getClickedBlock().hasMetadata("specialBlock-lgFitzche") || data == null) {
 			
 			return;
 		}
-		System.out.println("interact 1 in special b");
+		
 		
 		
 		if (e.getClickedBlock().getLocation().equals(this.loc)) {
-			System.out.println("interact 2");
+			
 			
 			e.setCancelled(true);
-			System.out.println("bloc interact in SpecialBlock jkjk");
+			
 			if (this.type.equals(SpecialBlockType.Vote)) {
 				
 				
-				
-				e.getPlayer().openInventory(GameLgUtil.getGameOfPlayer(e.getPlayer(), "interactBlockVote").invVote);
-				PlayerUtil.getDataOfPlayer(e.getPlayer(), " at player interact special block").lastVoteOpen = this;
+				if (Main.getData(e.getPlayer()).game.invVote == null) {
+					return;
+				}
+				e.getPlayer().openInventory(Main.getData(e.getPlayer()).game.invVote);
+				Main.getData(e.getPlayer()).lastVoteOpen = this;
 			}
 			if (this.type.equals(SpecialBlockType.Accuse)) {
+				if (true) {
+					e.getPlayer().sendMessage("désactivé");
+					return;
+				}
+				
 				e.getPlayer().sendMessage(ChatColor.RED+"Vous avez 30sec pour accuser un joueur avec la commande /lg accuse [nom du joueur], votre accusation sera rendu publique au prochain épisode.");
-				PlayerData p = PlayerUtil.getDataOfPlayer(e.getPlayer(), "on player interact bloc accuse");
+				PlayerData p = Main.getData(e.getPlayer());
 				p.canAccuse = true;
 			
 				Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
@@ -111,17 +122,38 @@ public class SpecialBlock implements Listener{
 			
 			if (this.type.equals(SpecialBlockType.Treasure)) {
 				TreasureBlockData data = (TreasureBlockData) this.data;
+				if (data.type == null) {
+					return;
+				}
 				System.out.println("treasure");
 				if (data.used) {
 					e.getPlayer().sendMessage("Déjà utilisé");
 					return;
 				}
 				if (data.type.equals(TreasureBlockType.RegisterModifier)) {
+					
 					System.out.println("register modifier act in special b");
-					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					if (true) {
+						return;
+					}
+					
+					if (game.groupe < 3) {
+						e.getPlayer().sendMessage("groupes insuffisants");
+					}
+					List<PlayerData> psList =null;
+					try {
+						psList = LocationUtil.getClassByDistance(this.loc, "ok", game).subList(0, game.groupe-1);
+
+					} catch (Exception e2) {
+						e.getPlayer().sendMessage("error, essayez avec plus de monde dans les environs");
+						System.out.println("erreur register modif: ");
+						e2.printStackTrace();
+						return;
+					}
+
 					ArrayList<PlayerData> ps = new ArrayList<PlayerData>(); 
-					if (LocationUtil.getClassByDistance(this.loc).size() == 1) {
-						ps = new ArrayList<PlayerData>(Arrays.asList(LocationUtil.getClassByDistance(this.loc).get(0)));
+					if (LocationUtil.getClassByDistance(this.loc, "ok", game).size() == 1) {
+						ps = new ArrayList<PlayerData>(Arrays.asList(LocationUtil.getClassByDistance(this.loc, "ok" , game).get(0)));
 					}
 					
 					
@@ -149,7 +181,7 @@ public class SpecialBlock implements Listener{
 					} else {
 						for (String str:data.playersClickedOne) {
 							if (e.getPlayer().getName().equals(str) && !data.used) {
-								Main.game.groupInfluenceRegistre(ps, loc);
+								game.groupInfluenceRegistre(ps, loc);
 								data.used = true;
 								return;
 							}
@@ -160,10 +192,10 @@ public class SpecialBlock implements Listener{
 					}
 				} else if (data.type.equals(TreasureBlockType.AuraAnalyser)) {
 					System.out.println("auraAnalyser found (at special block interact event)");
-					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc).subList(0, Main.game.groupe-1);
+					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc, "ok",game).subList(0,game.groupe-1);
 					ArrayList<PlayerData> ps = new ArrayList<PlayerData>(); 
-					if (LocationUtil.getClassByDistance(this.loc).size() == 1) {
-						ps = new ArrayList<PlayerData>(Arrays.asList(LocationUtil.getClassByDistance(this.loc).get(0)));
+					if (LocationUtil.getClassByDistance(this.loc, "ok" , game).size() == 1) {
+						ps = new ArrayList<PlayerData>(Arrays.asList(LocationUtil.getClassByDistance(this.loc, "ok", game).get(0)));
 					}
 					for (PlayerData p2:ps) {
 						if (p2.getLocation().distance(loc) > 5) {
@@ -172,12 +204,12 @@ public class SpecialBlock implements Listener{
 						}
 					}
 					
-					Main.game.groupAuraEstimation(ps);
+					game.groupAuraEstimation(ps);
 					data.used = true;
 				} else if (data.type.equals(TreasureBlockType.Bienfaisance)) {
 					System.out.println("bienfaisance found (at special block interact event)");
 					e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+ "Vous avez trouvé un coeur à conférer à un joueur avec la commande /lg conferer [nomDuJoueur], maintenant, à vous de temporairement prendre le role du bienfaiteur au bienfaiteur !!");
-					PlayerUtil.getDataOfPlayer(e.getPlayer(), "at bienfaiteur special block treasure block").bienfaisance ++;
+					Main.getData(e.getPlayer()).bienfaisance ++;
 					data.used = true;
 				} else if (data.type.equals(TreasureBlockType.AuraPotion)) {
 					System.out.println("auraPotion found (at special block interact event)");
@@ -200,7 +232,9 @@ public class SpecialBlock implements Listener{
 					p.getInventory().addItem(item);
 					data.used = true;
 				} else if (data.type.equals(TreasureBlockType.TeleporterPotion)) {
+					
 					System.out.println("tpPotion found (at special block interact event)");
+					
 					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
 					ItemStack item = potion.toItemStack(1);
 					ArrayList<String> strs = new ArrayList<String>();
@@ -215,14 +249,14 @@ public class SpecialBlock implements Listener{
 			} 
 			if (this.type.equals(SpecialBlockType.Cauldron)) {
 				Player p = e.getPlayer();
-				PlayerData plyD = PlayerUtil.getDataOfPlayer(p, "at cauldron interact");
+				PlayerData plyD = Main.getData(p);
 				System.out.println("cauldron block");
 				
 				if (!plyD.role.equals(RolesLg.SORCIER)) {
 					p.sendMessage("Vous ne pouvez pas utiliser ce bloc");
 					return;
 				} 
-				sorcierInv inv = new sorcierInv(p, Main.game);
+				sorcierInv inv = new sorcierInv(p, game);
 				
 			}
 			
@@ -233,7 +267,7 @@ public class SpecialBlock implements Listener{
 					
 				} else {
 					data.taken = true;
-					PlayerData taker = PlayerUtil.getDataOfPlayer(e.getPlayer(), "at specialblock stone event taken");
+					PlayerData taker = Main.getData(e.getPlayer());
 					data.stone.owner = taker;
 					taker.addStone(data.stone.type);
 					if (data.than.playerWithRole.isOnline) {

@@ -1,6 +1,8 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -72,19 +74,7 @@ public class SORCIERE implements RoleInstance {
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 	}
 
@@ -150,6 +140,12 @@ public class SORCIERE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

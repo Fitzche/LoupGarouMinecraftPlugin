@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -24,40 +25,58 @@ public class demonChecker implements ResCheck {
 	
 	public demonChecker(DEMON demon) {
 		this.player = demon.playerWithRole;
-		this.game = Main.game;
+		this.game = demon.playerWithRole.game;
 		this.demon = demon;
 	}
 
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
+		PlayerData toRemove = null;
+		boolean remove = false;
 		for (PlayerData p:demon.pactedPlayers) {
 			if (p.getName().equals(e.getEntity().getName())) {
+				demon.playerWithRole.sendMessage(ChatColor.DARK_RED+"Le joueur "+ p.getName()+ " est mort, vous récupérez donc son âme, il doit gagner avec vous, mais possède weakness de manière permanente, il était "+ p.role.getName());
+
 				p.role = RolesLg.DAMNE;
 				p.aura = Aura.OBSCUR;
 				p.roleIn = new DAMNE(p);
 				DAMNE damn = (DAMNE) p.roleIn;
 				damn.demon = demon;
-				demon.team.add(p);
-				p.boostS5 -= 20;
-				p.team = demon.team;
+				
+				p.boostS5 -= 4;
+				
 				demon.playerWithRole.changeHealth(2);
-				demon.playerWithRole.sendMessage(ChatColor.DARK_RED+"Le joueur "+ p.getName()+ " est mort, vous récupérez donc son âme, il doit gagner avec vous, mais possède weakness de manière permanente");
+				p.camp = Camp.Uneffective;
 				p.sendMessage(ChatColor.DARK_RED+ "Vous êtes mort, votre âme revient donc au démon avec qui vous avez passé un pacte, faites /lg role pour plus d'info");
-				return true;
+				remove = true;
+				toRemove = p;
 			}
+		}
+		if (remove) {
+			demon.pactedPlayers.remove(toRemove);
+			System.out.println("demon ressut");
+			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		boolean hasPacted = false;
 		if (e.getEntity().getName().equals(demon.playerWithRole.getName())) {
 			for (PlayerData p:demon.pactedPlayers) {
 				p.sendMessage(ChatColor.DARK_RED+ "Le démon avez qui vous avez pactisé est mort, vous regagnez donc 1 coeur permanent sans perdre vos avantages");
 				p.changeHealth(2);
+				
+				hasPacted = true;
 			}
 		}
-
+		if (hasPacted) {
+			return "pactedHealthGainDemonDeath";
+		} else {
+			return "";
+		}
+		
 	}
 
 	@Override
@@ -106,6 +125,43 @@ public class demonChecker implements ResCheck {
 	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		PlayerData toRemove = null;
+		boolean remove = false;
+		for (PlayerData p:demon.pactedPlayers) {
+			if (p.getName().equals(e.getEntity().getName())) {
+				demon.playerWithRole.sendMessage(ChatColor.DARK_RED+"Le joueur "+ p.getName()+ " est mort, vous récupérez donc son âme, il doit gagner avec vous, mais possède weakness de manière permanente, il était "+ p.role.getName());
+
+				p.role = RolesLg.DAMNE;
+				p.aura = Aura.OBSCUR;
+				p.roleIn = new DAMNE(p);
+				DAMNE damn = (DAMNE) p.roleIn;
+				damn.demon = demon;
+				
+				p.boostS5 -= 4;
+				
+				demon.playerWithRole.changeHealth(2);
+				p.sendMessage(ChatColor.DARK_RED+ "Vous êtes mort, votre âme revient donc au démon avec qui vous avez passé un pacte, faites /lg role pour plus d'info");
+				p.camp = Camp.Uneffective;
+				remove = true;
+				toRemove = p;
+			}
+		}
+		if (remove) {
+			demon.pactedPlayers.remove(toRemove);
+			System.out.println("demon ressut");
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "demonChecker";
 	}
 
 }

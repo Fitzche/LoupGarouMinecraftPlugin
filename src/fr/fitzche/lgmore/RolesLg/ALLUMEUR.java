@@ -3,11 +3,14 @@ package fr.fitzche.lgmore.RolesLg;
 import java.util.HashMap;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -22,7 +25,7 @@ public class ALLUMEUR implements RoleInstance {
 	public Camp camp = Camp.Villager;
 	public ALLUMEUR(PlayerData player) {
 		this.playerWithRole = player;
-        for (PlayerData p: GameLgUtil.getGameOfPlayer(player, "at Allumeur creating").getPlayerAlive()) {
+        for (PlayerData p: player.game.getPlayerAlive()) {
             this.tauxConversion.put(player, 0);
         }
 	}
@@ -39,7 +42,7 @@ public class ALLUMEUR implements RoleInstance {
 
 	
 	public void giveEffectAllTime() {
-		for (PlayerData player:GameLgUtil.getGameOfPlayer(playerWithRole, "at Allumeur checking").getPlayerAlive()) {
+		for (PlayerData player:playerWithRole.game.getPlayerAlive()) {
             if (LocationUtil.getDistanceBetween(player, playerWithRole) < 20) {
             	int x = 0;
             	if (this.tauxConversion.get(player) != null) {
@@ -51,21 +54,17 @@ public class ALLUMEUR implements RoleInstance {
             	this.tauxConversion.put(player, 0);
             }
             if (this.tauxConversion.get(player) > 600) {
-                switch (player.camp) {
-                    case Love:
-                        player.aura = Aura.DANGEROUS;
-                    case Other:
-                        player.aura = Aura.OBSCUR;
-                    case TEAM:
-                        player.aura = Aura.OBSCUR;
-                    case Villager:
-                        player.aura = Aura.LUMINOUS;
-                    case Wolf:
-                        player.aura = Aura.OBSCUR;
-                    default:
-                        break;
+            	if (player.considVill) {
+            		player.aura = Aura.LUMINOUS;
+            		
+            	} else if (player.inLove) {
+            		player.aura = Aura.UNKNOW;
+            		
+            	} else {
+            		player.aura = Aura.OBSCUR;
+            	}
                     
-                }
+                
                 this.tauxConversion.put(player, 0);
             }
         }
@@ -83,19 +82,7 @@ public class ALLUMEUR implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 		
 	}
@@ -135,7 +122,7 @@ public class ALLUMEUR implements RoleInstance {
 	@Override
 	public void blind(PlayerData origin) {
 		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Allumeur de Lampadaire, ses taux de conversion pour corriger l'aura de son entourage ont donc été remis à 0, à son insu...");
-		for (PlayerData p: GameLgUtil.getGameOfPlayer(origin, "at allumeur blind").getPlayerAlive()) {
+		for (PlayerData p: origin.game.getPlayerAlive()) {
 			this.tauxConversion.put(p, 0);
 		}
 		
@@ -145,5 +132,11 @@ public class ALLUMEUR implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 }

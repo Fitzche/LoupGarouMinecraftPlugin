@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -13,7 +15,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
@@ -29,22 +31,21 @@ public class SORCIER implements RoleInstance {
 	
 	public SORCIER(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at role sorcier creation: ");
+		this.game = player.game;
 		
 		if (MathUtil.pourcentage(50)) {
 			
 			player.sendMessage(ChatColor.GOLD+"Vous êtes solitaire, vous pouvez donc craft une épée sharpness 4 et vous obtenez un grappin");
 			ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 			players.add(player);
-			playerWithRole.team = new Team("Assassin", Camp.Other, game, players, null, "at wolf team creating at == 1200", null, null, true, false, false, false);
 
 		} else {
 			this.camp = Camp.Villager;
 			player.sendMessage(ChatColor.GREEN+"Vous êtes villageois");
 		}
 		
-		this.labLoc = LocationUtil.getAlLocAroundFarfrom(400, 2, true);
-		Main.placeCauldronStruct(labLoc);
+		this.labLoc = LocationUtil.getAlLocAroundFarfrom(400, 2, true, game.world, game);
+		Main.placeCauldronStruct(labLoc, game);
 	}
 	
 	@Override
@@ -74,14 +75,7 @@ public class SORCIER implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			
-			
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-			
-		}
+		
 		
 		
 	}
@@ -128,5 +122,11 @@ public class SORCIER implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 }

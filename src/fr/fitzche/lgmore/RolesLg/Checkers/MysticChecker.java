@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
@@ -22,17 +23,19 @@ public class MysticChecker implements ResCheck {
 	}
 
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		PlayerData p = PlayerUtil.getDataOfPlayer(e.getEntity(), "at mystic checker");
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		PlayerData p = Main.getData(e.getEntity());
 		if (p.camp.equals(Camp.Wolf)) {
 			mystic.voir();
+			return "MysticSpec";
 		}
+		return "";
 		
 		
 	}
@@ -82,6 +85,18 @@ public class MysticChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "MysticChecker";
 	}
 
 }

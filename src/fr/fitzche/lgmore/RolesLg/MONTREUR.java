@@ -3,6 +3,8 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -50,12 +52,7 @@ public class MONTREUR implements RoleInstance {
 	public static Camp camp = Camp.Villager;
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-		}
+		
 		
 		
 	}
@@ -74,11 +71,11 @@ public class MONTREUR implements RoleInstance {
 	
 	public void renifle() {
 		Location loc = this.playerWithRole.getLocation();
-		for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole, " at renifle() in MONTREUR, at listing of player for test them").playerAlive) {
+		for (PlayerData target:playerWithRole.game.playerAlive) {
 			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
-				Main.game.playSoundMO();
-				GameLgUtil.getGameOfPlayer(playerWithRole,"at montreur renifler").addorat(5, playerWithRole.getLocation());
+				playerWithRole.game.playSoundMO();
+				playerWithRole.game.addorat(5, playerWithRole.getLocation());
 			}
 		}
 	}
@@ -114,5 +111,11 @@ public class MONTREUR implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 }

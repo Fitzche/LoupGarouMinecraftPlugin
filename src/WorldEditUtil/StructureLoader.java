@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
-
+import org.bukkit.World;
 
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
@@ -19,6 +19,7 @@ import com.sk89q.worldedit.world.registry.WorldData;
 
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
 
 import com.sk89q.jnbt.NBTInputStream;
 import com.sk89q.jnbt.NBTOutputStream;
@@ -97,11 +98,11 @@ public class StructureLoader {
 		
 	}
 	
-	public static void place(Location primary,  Clipboard clip) {
+	public static void place(Location primary,  Clipboard clip, World world, WorldData worldD) {
 		try {
 			
 			
-			EditSession editSession = new EditSession(BukkitUtil.getLocalWorld(Main.world), 1000);
+			EditSession editSession = new EditSession(BukkitUtil.getLocalWorld(world), 10000000);
 			
 			editSession.enableQueue();
 			if (clip == null) {
@@ -113,8 +114,8 @@ public class StructureLoader {
 			
 			
 			
-		    Operation operation = new ClipboardHolder(clip, Main.worldData)
-		            .createPaste(editSession, Main.worldData)
+		    Operation operation = new ClipboardHolder(clip, worldD)
+		            .createPaste(editSession, worldD)
 		            .to(locToVector(primary))
 		            // configure here
 

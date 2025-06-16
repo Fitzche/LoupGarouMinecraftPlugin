@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -17,22 +18,27 @@ public class thierceAnge_Checker implements ResCheck {
 		this.ange = ange;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (k.getName().equals(ange.playerWithRole.getName()) && ange.wantNotAnnounced.contains(PlayerUtil.getDataOfPlayer(e.getEntity(), "at t ange checker 3"))) {
-			ange.notAnnounced.add(PlayerUtil.getDataOfPlayer(e.getEntity(), "at t ange checker 3*2"));
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		if (k.getName().equals(ange.playerWithRole.getName()) && ange.wantNotAnnounced.contains(Main.getData(e.getEntity()))) {
+			ange.notAnnounced.add(Main.getData(e.getEntity()));
+			return "canHideAngeThierce";
+		} else {
+			return "";
 		}
+		
+		
 
 	}
 
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
-		if (this.ange.notAnnounced.contains(PlayerUtil.getDataOfPlayer(e.getEntity(), "at T ange checker"))) {
+		if (this.ange.notAnnounced.contains(Main.getData(e.getEntity()))) {
 			return true;
 		} else {
 			return false;
@@ -75,6 +81,16 @@ public class thierceAnge_Checker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "ThierceAngeChecker";
 	}
 
 }

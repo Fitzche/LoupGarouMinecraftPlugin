@@ -1,20 +1,28 @@
 package fr.fitzche.lgmore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import StarParty.RoleStar;
+import StarParty.RolesStar;
+import StarParty.StarParty;
 import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.GameNote;
+import fr.fitzche.lgmore.Lg.PlayerNote;
 import fr.fitzche.lgmore.Lg.RegisterType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.THANOS;
@@ -24,52 +32,82 @@ import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import net.md_5.bungee.api.ChatColor;
 
-public class PlayerData {
-	public RoleInstance roleIn;
+public class PlayerData implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5021567793654652540L;
 	public String Name;
 	public boolean isOnline = true;
-	public ArrayList<PlayerData> canVoted;
-	public int vote;
-	public PlayerDataLeft left;
-	public boolean contamined = false;
-	public boolean isShooted = false;
-	public PlayerData voted;
-	public Player player;
-	public RolesLg role;
-	public Camp camp;
-	public Team team;
-	public boolean hasRes = false;
-	public boolean inLove;
-	public boolean infected;
-	public boolean inLife;
-	public boolean relive;
-	public Inventory deathInventory;
-	public int boostS5;
-	public int boostR5;
-	public Aura aura;
-	public int auraDiscoverEffetDuration = 0;
-	public boolean instantDeath;
-	public boolean grimed = false;
-	public int numberOfKill = 0;
-	public ScoreboardLg board;
-	public HashMap<String, Integer> timeWithPlayers = new HashMap<String, Integer>();
-	public HashMap<Player, Boolean> hasStrenghtAgainst = new HashMap<Player, Boolean>();
-	public boolean canAccuse = false;
-	public SpecialBlock lastVoteOpen;
-	public RegisterType favRegister;
-	public int bienfaisance = 0;
-	public boolean toEscape = false;
-	public boolean visionDeath = false;
-	public boolean visionRegister = false;
+	public boolean isInLgGame = false;
+	public ArrayList<GameNote> notes = new ArrayList<GameNote>();
+	public int xp = 0;
+	public int feathers = 0;
+	public boolean hoster = false;
+	public boolean absoluteOp = false;
+	public transient Location rejoinLoc;
 	
 	
 	
-	public boolean hasSpace = false;
-	public boolean hasSoul = false;
-	public boolean hasPower = false;
-	public boolean hasTime = false;
-	public boolean hasReality = false;
-	public boolean hasMind = false;
+	public transient StarParty starParty;
+	public transient RolesStar roleStar;
+	public transient RoleStar roleSta;
+	
+	
+	
+	
+	
+	public transient GameLg game;
+	
+	public transient RoleInstance roleIn;
+	public transient Camp appCamp;
+	public transient Inventory leftInv = null;
+	
+	public transient ArrayList<PlayerData> canVoted;
+	public transient int vote;
+	public transient PlayerDataLeft left;
+	public transient boolean contamined = false;
+	public transient boolean isShooted = false;
+	public transient boolean pacteAccept = false;
+	public transient PlayerData voted;
+	public transient Player player;
+	public transient RolesLg role;
+	public transient Camp camp;
+	
+	public transient boolean hasRes = false;
+	public transient boolean inLove = false;
+	public transient boolean infected;
+	public transient boolean inLife;
+	public transient boolean relive;
+	public transient Inventory deathInventory;
+	public transient int boostS5;
+	public transient int boostR5;
+	public transient Aura aura;
+	public transient int auraDiscoverEffetDuration = 0;
+	public transient boolean instantDeath;
+	public transient boolean grimed = false;
+	public transient int numberOfKill = 0;
+	public transient ScoreboardLg board;
+	public transient HashMap<String, Integer> timeWithPlayers = new HashMap<String, Integer>();
+	public transient HashMap<Player, Boolean> hasStrenghtAgainst = new HashMap<Player, Boolean>();
+	public transient boolean canAccuse = false;
+	public transient SpecialBlock lastVoteOpen;
+	public transient RegisterType favRegister;
+	public transient int bienfaisance = 0;
+	public transient boolean toEscape = false;
+	public transient boolean visionDeath = false;
+	public transient boolean visionRegister = false;
+	
+	public transient boolean considWolf = false;
+	public transient boolean considVill = false;
+	
+	public transient boolean hasSpace = false;
+	public transient boolean hasSoul = false;
+	public transient boolean hasPower = false;
+	public transient boolean hasTime = false;
+	public transient boolean hasReality = false;
+	public transient boolean hasMind = false;
 	
 	
 	public boolean hasSpaceUsed = false;
@@ -78,7 +116,67 @@ public class PlayerData {
 	public boolean hasTimeUsed = false;
 	public boolean hasRealityUsed = false;
 	public boolean hasMindUsed = false;
+	public RolesLg settedRole = null;
 	
+	public PlayerData coupleL;
+	public void clearLgGameVar() {
+		coupleL = null;
+		settedRole = null;
+		hasSpace = false;
+		hasSoul = false;
+		hasPower = false;
+		hasTime = false;
+		hasReality = false;
+		hasMind = false;
+		considWolf = false;
+		considVill = false;
+		
+		
+		hasSpaceUsed = false;
+		hasSoulUsed = false;
+		hasPowerUsed = false;
+		hasTimeUsed = false;
+		hasRealityUsed = false;
+		hasMindUsed = false;
+		leftInv = null;
+		
+		canVoted = new ArrayList<PlayerData>();
+		vote = 0;
+		left = null;
+		contamined = false;
+		isShooted = false;
+		pacteAccept = false;
+		voted = null;
+		
+		role = null;
+		camp = null;
+		
+		hasRes = false;
+		inLove = false;
+		infected = false;
+		inLife = true;
+		relive = false;
+		deathInventory = null;
+		boostS5 = 0;
+		boostR5 = 0;
+		aura = null;
+		auraDiscoverEffetDuration = 0;
+		instantDeath = false;
+		grimed = false;
+		numberOfKill = 0;
+		board = null;
+		timeWithPlayers = new HashMap<String, Integer>();
+		hasStrenghtAgainst = new HashMap<Player, Boolean>();
+		canAccuse = false;
+		lastVoteOpen = null;
+		favRegister = null;
+		bienfaisance = 0;
+		toEscape = false;
+		visionDeath = false;
+		visionRegister = false;
+		this.appCamp = null;
+		this.rejoinLoc = null;
+	}
 	
 	
 	public PlayerData(Player player) {
@@ -112,12 +210,45 @@ public class PlayerData {
 	public String getName() {
 		return this.Name;
 	}
+	public void setDisplayName() {
+		String setted = "";
+		if (game != null && role != null) {
+			if (game.statut.equals(GameStatut.IN_GAME) && game.displayedRoles) {
+				if (role.getCampOfRole().equals(Camp.Love) ) {
+					setted = Camp.Villager.getColor() + setted;
+				} else {
+					if (game.swapper) {
+						setted = camp.getColor() + setted;
+					} else {
+						setted = role.getCampOfRole().getColor() + setted;
+					}
+					
+				}
+				
+			}
+		}
+		setted = setted + getName();
+		if (isOnline) {
+			try {
+				player.setDisplayName(setted);
+				player.setCustomName(setted);
+				player.setCustomNameVisible(true);
+				player.setPlayerListName(setted);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public void setMaxHealth(double h) {
 		if (isOnline) {
 			this.player.setMaxHealth(h);
 		} else {
-			this.left.life= h;
+			if (this.left != null) {
+				this.left.life= h;
+			}
+			
 		}
 	}
 	
@@ -190,7 +321,7 @@ public class PlayerData {
 		if (this.isOnline) {
 			return this.player.getLocation();
 		}
-		return new Location(Main.plug.getServer().getWorld("world"), 10000, 10000, 10000);
+		return new Location(this.game.world, 10000, 10000, 10000);
 	}
 	
 	public void addPotionEffect(PotionEffect effect) {
@@ -207,8 +338,30 @@ public class PlayerData {
 	}
 	
 	public void sendMessage(String message) {
-		this.player.sendMessage(message);
+		if (isOnline) {
+			this.player.sendMessage(message);
+		}
+		
 	}
+	
+	public int getXp() {
+		return xp;
+		
+	}
+	public void addXp(int i) {
+		this.xp += i;
+	}
+	public void setXp(int i) {
+		this.xp = i;
+	}
+	public void removeXp(int i) {
+		if (i > xp ) {
+			xp = 0;
+		} else {
+			xp -= i;
+		}
+	}
+	
 	
 	public RolesLg getLgRole() {
 		return this.role;
@@ -232,7 +385,7 @@ public class PlayerData {
 	}
 	
 	public boolean isInGame(String spec) {
-		if (GameLgUtil.getGameOfPlayer(this, ("at 89 of PlayerData "+spec)) == null) {
+		if (this.game == null) {
 			return false;
 		} else {
 			return true;
@@ -248,5 +401,79 @@ public class PlayerData {
 		return false;
 		
 	}
+	
+	public double getWinRate() {
+		return getNumberOfWin() / notes.size();
+	}
+	
+	public double getWinRate(int last) {
+		int x = last;
+		
+		if (notes.size() < last) {
+			x = notes.size() - 1;
+		}
+	
+		ArrayList<GameNote> recents = new ArrayList<GameNote>();
+		for (GameNote note:notes) {
+			if (notes.indexOf(note) <= notes.size() - 1 && (notes.indexOf(note) >= notes.size() - x -1)) {
+				recents.add(note);
+			}
+		}
+		if (recents.size() <= 0) {
+			return 0.0;
+		}
+		return getNumberOfWin(x) /recents.size();
+	}
+	public String getWinRateString(int last) {
+		int x = last;
+		
+		if (notes.size() < last) {
+			x = notes.size() - 1;
+		}
+	
+		ArrayList<GameNote> recents = new ArrayList<GameNote>();
+		for (GameNote note:notes) {
+			if (notes.indexOf(note) <= notes.size() - 1 && (notes.indexOf(note) >= notes.size() - x -1)) {
+				recents.add(note);
+			}
+		}
+		if (recents.size() <= 0) {
+			return "0 parties jouée";
+		}
+		return ChatColor.AQUA+ ""+ChatColor.BOLD+ ""+getNumberOfWin(x) +ChatColor.RESET+ChatColor.WHITE+" victoires pour les "+ChatColor.AQUA+ChatColor.BOLD+recents.size()+ChatColor.RESET+ChatColor.WHITE+ " parties les + récentes";
+	}
+	
+	public int getNumberOfWin(int last) {
+		int x = last;
+		int win = 0;
+		if (notes.size() > last) {
+			x = notes.size();
+		}
+		List<GameNote> not = notes;
+		ArrayList<GameNote> recents = new ArrayList<GameNote>();
+		for (GameNote note:notes) {
+			if (notes.indexOf(note) <= notes.size() - 1 && (notes.indexOf(note) >= notes.size() - x -1)) {
+				recents.add(note);
+			}
+		}
+		for (GameNote note:recent) {
+			if (note.winners.contains(getName())) {
+				win ++;
+			}
+		}
+		return win;
+	}
+	
+	public int getNumberOfWin() {
+		int x = 0;
+		for (GameNote note:notes) {
+			if (note.winners.contains(Name)) {
+				x ++;
+			}
+		}
+		return x;
+	}
+	
+	
 	
 }

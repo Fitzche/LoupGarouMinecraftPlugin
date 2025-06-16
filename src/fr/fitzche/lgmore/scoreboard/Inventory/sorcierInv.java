@@ -14,11 +14,16 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
+import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.RolesLg.SORCIER;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
+import net.md_5.bungee.api.ChatColor;
 
 public class sorcierInv implements Listener{
 
@@ -73,6 +78,17 @@ public class sorcierInv implements Listener{
 			if (e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().hasDisplayName()) {
 				switch (e.getCurrentItem().getItemMeta().getDisplayName()) {
 				case "Potion de Téléportation":
+					if (e.getWhoClicked() instanceof Player) {
+						PlayerData witcher = Main.getData(e.getWhoClicked());
+						if (witcher.role != null && witcher.role.equals(RolesLg.SORCIER) && witcher.roleIn != null) {
+							SORCIER sorcier = (SORCIER) witcher.roleIn;
+							if (sorcier.camp.equals(Camp.Villager) || sorcier.camp.equals(Camp.Wolf)) {
+								e.getWhoClicked().sendMessage(ChatColor.DARK_PURPLE+"Vous ne pouvez crafter cette potion qu'en tant que sorcier solitaire");
+							}
+						}
+					
+					
+					}
 					if (ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.GOLDEN_APPLE) >= 1 && ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.LAPIS_BLOCK ) >= 3 &&  ItemUtil.howManyOf(	e.getWhoClicked().getInventory()	, Material.REDSTONE) >= 30) {
 						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.GOLDEN_APPLE, 1);
 						ItemUtil.takeInInv(e.getWhoClicked().getInventory(), Material.LAPIS_BLOCK, 3);

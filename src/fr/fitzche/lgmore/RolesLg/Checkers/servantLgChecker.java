@@ -20,13 +20,14 @@ public class servantLgChecker implements ResCheck {
 	}
 
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		
 		if (e.getEntity().getName().equals(servant.master.Name)) {
 			servant.playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Votre maitre est mort, vous mourrez donc à sa place");
 			if (servant.playerWithRole.isOnline) {	
 				servant.playerWithRole.player.damage(1000, e.getEntity().getKiller());
 			}
+			System.out.println("lgServant ressut");
 			return true;
 		}
 		
@@ -34,8 +35,8 @@ public class servantLgChecker implements ResCheck {
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 
 	}
 
@@ -84,6 +85,25 @@ public class servantLgChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		if (e.getEntity().getName().equals(servant.master.getName())) {
+			servant.playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Votre maitre est mort, vous mourrez donc à sa place");
+			if (servant.playerWithRole.isOnline) {	
+				servant.playerWithRole.player.damage(1000, e.getEntity().getKiller());
+			}
+			System.out.println("lgServant ressut");
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "ServantLgChecker";
 	}
 
 }

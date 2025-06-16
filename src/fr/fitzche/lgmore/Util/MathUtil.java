@@ -42,7 +42,7 @@ public class MathUtil {
 	
 	public static boolean pourcentage(int pourcentage) {
 		int x = generateAlInt(0, 100);
-		if (x > pourcentage) {
+		if (x >= pourcentage) {
 			return false;
 		} else {
 			return true;

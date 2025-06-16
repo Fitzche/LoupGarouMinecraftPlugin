@@ -21,23 +21,26 @@ public class SoeurChecker implements ResCheck {
 		this.game = game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		String str = "";
 		ArrayList<PlayerData> sToRemove = new ArrayList<PlayerData>();
 		for (PlayerData s:soeur.sisters) {
-			if (e.getEntity().getName().equals(s.Name)) {
+			if (e.getEntity().getName().equals(s.getName())) {
 				sToRemove.add(s);
 				soeur.playerWithRole.sendMessage("Votre soeur a été tué par "+ k.getName());
+				str = str + "announceSisterDeath * 1 -- ";
 			}
 		}
 		for (PlayerData p:sToRemove) {
 			soeur.sisters.remove(p);
 		}
+		return str;
 
 	}
 	@Override
@@ -81,6 +84,16 @@ public class SoeurChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "SoeurChecker";
 	}
 
 }

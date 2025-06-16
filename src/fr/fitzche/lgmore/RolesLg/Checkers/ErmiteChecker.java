@@ -17,17 +17,17 @@ public class ErmiteChecker implements ResCheck {
 	public GameLg game;
 	public ErmiteChecker(ERMITE player) {
 		this.player = player;
-		this.game = GameLgUtil.getGameOfPlayer(player.playerWithRole, "at ermite checker creation");
+		this.game = player.playerWithRole.game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 
 	}
 
@@ -35,6 +35,7 @@ public class ErmiteChecker implements ResCheck {
 	public boolean hide(PlayerDeathEvent e) {
 		if (e.getEntity().getName().equals(player.playerWithRole.getName())) {
 			System.out.println("mort ermite cachée: "+ e.getEntity().getName());
+			System.out.println("ermite hide");
 			return true;
 		}
 		return false;
@@ -52,12 +53,12 @@ public class ErmiteChecker implements ResCheck {
 		
 		if (attacker.getName().equals(player.playerWithRole.getName())) {
 			if (game.isDay()) {
-				returned += 30;
-				returned -= (player.nbOfPlayerAround * 5);
+				returned += 20;
+				returned -= (player.nbOfPlayerAround * 4);
 			} 
 			
-			if (game.getOrat() > 20) {
-				returned -= 10;
+			if (game.isRegistresActivated&&game.getOrat() > 20) {
+				returned -= 8;
 			}
 			
 		} else if(attacked.getName().equals(player.playerWithRole.getName())) {
@@ -65,8 +66,8 @@ public class ErmiteChecker implements ResCheck {
 				returned -= 20;
 				returned += (player.nbOfPlayerAround * 4);
 			}
-			if (game.getTragic() > 20) {
-				returned -= 10;
+			if (game.isRegistresActivated&&game.getTragic() > 20) {
+				returned -= 5;
 			}
 			
 		}
@@ -101,6 +102,16 @@ public class ErmiteChecker implements ResCheck {
 	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "ErmiteChecker";
 	}
 
 }

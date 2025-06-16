@@ -1,5 +1,6 @@
 package fr.fitzche.lgmore.Lg;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -19,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -40,11 +42,14 @@ import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
-import fr.fitzche.lgmore.Love.Team;
+import org.bukkit.WorldCreator;
+
+import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.CHASSEUR;
 import fr.fitzche.lgmore.RolesLg.CORBEAU;
 import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
+import fr.fitzche.lgmore.RolesLg.SWAPPER;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Checkers.RegisterCheck;
@@ -71,7 +76,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 
-public class GameLg implements Listener{
+public class GameLg implements Listener, Serializable{
 	public GameStatut statut;
 	public Timer timer;
 	public String name;
@@ -85,9 +90,24 @@ public class GameLg implements Listener{
 	
 	public boolean aleaCouple = false;
 	
+	//SCENARIOS
+	//CHAP
+	public HashMap<String, Boolean> scenarioAct = new HashMap<String, Boolean>();
 	
-	public Player hunter = null;
-	public CHASSEUR Hunter = null;
+	//1) REGISTRES
+	public boolean isRegistresActivated = false;
+	//2)Camps affichés
+	public boolean displayedRoles = false;
+	//3) Necromancie
+	public boolean necrom = false;
+	//4) TeamSwapper
+	public boolean swapperDuel = false;
+	public boolean swapperTrio = false;
+	public boolean swapperQuadrio = false;
+	public boolean swapperPente = false;
+	public boolean swapper = false;
+	
+	
 	
 	public ArrayList<PlayerData> playerAlive;
 	public ArrayList<PlayerData> RealwolfAlive;
@@ -97,13 +117,14 @@ public class GameLg implements Listener{
 	public ArrayList<PlayerData> FalseWolfAlive;
 	public boolean hasLgSolo = false;
 	
+	public HashMap<String, Boolean> isBanned = new HashMap<String, Boolean>();
 	
-	public ArrayList<Team> teams = new ArrayList<Team>();
-	public ArrayList<RolesLg> roles;
+	public ArrayList<RolesLg> roles = new ArrayList<RolesLg>();
+	
 	public ScoreboardLg board;
 	public boolean inGame;
 	public int groupe;
-	public ArrayList<PlayerData> players;
+	public ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 	public ArrayList<RoleInstance> rolesIn;
 	public boolean isInVote;
 	public boolean isInDisc;
@@ -111,9 +132,8 @@ public class GameLg implements Listener{
 	public HashMap<String, PlayerData> futureAcc = new HashMap<String, PlayerData>();
 	
 	public HashMap<String, Integer> probasEvents = new HashMap<String, Integer>();
-	
-	public Team lgTeam;
-	public Team villTeam;
+	public ArrayList<Location> locsBat = new ArrayList<Location>();
+
 	
 	
 	
@@ -129,19 +149,23 @@ public class GameLg implements Listener{
 	public EventDisplay events = new EventDisplay(this);
 	public PlayerDisplay plys;
 	public int voteForce = 1;
+	public int maxPlayerSize = 30;
 	
 	
 	
 	
 	public ConfigDisplay config = new ConfigDisplay(this);
+	public GameLgListener listener = new GameLgListener();
+	
 	
 	public boolean isMeetup = false;
 	public boolean hasMoreVote = false;
+	public boolean toRegister = true;
 	
 	public Inventory invVote;
 	
-	
-	
+	public World world;
+	public boolean isWorldGenerated = false;
 
 	
 	public GameLg(String name) {
@@ -183,6 +207,8 @@ public class GameLg implements Listener{
 		plys = new PlayerDisplay(this);
 		Main.server.getPluginManager().registerEvents(plys, Main.plug);
 		this.resCheckers.add(new RegisterCheck(this));
+		
+		this.probasEvents.put("AutomaticCheckWin", 100);
 	}
 	
 	public int getGroupe() {
@@ -217,8 +243,8 @@ public class GameLg implements Listener{
 		this.broadcoast(ChatColor.ITALIC+"Groupes à "+ Integer.toString(g));
 	}
 	public PlayerData getPlayer(String name) {
-		for (PlayerData ply:this.playerAlive ) {
-			if (ply.Name.equals(name)) {
+		for (PlayerData ply:this.getPlayerAlive() ) {
+			if (ply.getName().equals(name)) {
 				return ply;
 			}
 		}
@@ -241,48 +267,82 @@ public class GameLg implements Listener{
 			board.istimeRunned = true;
 			timer.temps = -20;
 			broadcoast(ChatColor.UNDERLINE + "La partie va commencer dans 20 secondes");
+			
+			this.isRegistresActivated = scenarioAct.getOrDefault("Théâtre", false);
+			this.displayedRoles = scenarioAct.getOrDefault("DirectFights", false);
+			this.necrom = scenarioAct.getOrDefault("Necromancie", false);
+			this.swapperDuel = scenarioAct.getOrDefault("SwapperDouble", false);
+			this.swapperTrio = scenarioAct.getOrDefault("SwapperTrio", false);
+			this.swapperQuadrio = scenarioAct.getOrDefault("SwapperQuatuor", false);
+			this.swapperPente = scenarioAct.getOrDefault("SwapperFive", false);
+			
+			if (swapperDuel || swapperPente || swapperQuadrio || swapperTrio) {
+				swapper = true;
+			}
+			
+			
 			for (PlayerData p:getPlayerAlive()) {
 				p.board = new ScoreboardLg(game, p);
 				p.board.setgame(game);
 				p.board.refresh();
-			}
-			int rayon = 500;
-			
-			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
-			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
-			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
-			Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true));
-			
-			int rayon2 = 100;
-			Main.placeAccuseStruct(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false));
-			
-			
-			int rayon3 = 500;
-			if (probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0) < 1) {
-				System.out.println("probasEvents.getOrDefault(\"Nombre Batiments à Bonus\"	, 0) == 0 in 259 of GameLg in start");
-			}
-			for (int i = 0; i<=probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0); i++) {
-				
-				TreasureBlockType type;
-				int x = MathUtil.generateAlInt(0, 100);
-				if (x <=15) {
-					type = TreasureBlockType.AuraAnalyser;
-				} else if (x <= 30) {
-					type = TreasureBlockType.AuraPotion;
-				} else if (x<=45) {
-					type = TreasureBlockType.TeleporterPotion;
-				} else if (x<=60) {
-					type = TreasureBlockType.ParalysiePotion;
-				} else if (x<=80) {
-					type = TreasureBlockType.RegisterModifier;
-				} else {
-					type = TreasureBlockType.Bienfaisance;
+				if (displayedRoles) {
+					p.setDisplayName();
 				}
-				Main.placeTreasureStruct(LocationUtil.getAlLocAroundFarfrom(rayon3, 5, true), type);
+				p.boostR5 = 0;
+				p.boostS5 = 0;
+				if (p.isOnline) {
+					p.player.teleport(Main.world.getSpawnLocation());
+					p.player.removePotionEffect(PotionEffectType.REGENERATION);
+					p.player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+					p.player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+				}
 			}
-			for (int i = 0; i<probasEvents.getOrDefault("Nombre Batiments Leurre"	, 0); i++) {
-				Main.placeBat(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false));
+			int rayon = 300;
+			boolean bat = true;
+			
+			if (swapper) {
+				bat = false;
+				this.displayedRoles = true;
 			}
+			if (bat) {
+				Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true, this.world, this), this);
+				Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true, this.world, this), this);
+				Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true, this.world, this), this);
+				Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true, this.world, this), this);
+				
+				int rayon2 = 100;
+				Main.placeAccuseStruct(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false, this.world, this), this);
+				
+				
+				int rayon3 = 300;
+				if (probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0) < 1) {
+					System.out.println("probasEvents.getOrDefault(\"Nombre Batiments à Bonus\"	, 0) == 0 in 259 of GameLg in start");
+				}
+				for (int i = 0; i<=probasEvents.getOrDefault("Nombre Batiments à Bonus"	, 0); i++) {
+					
+					TreasureBlockType type;
+					int x = MathUtil.generateAlInt(0, 100);
+					if (x <=15) {
+						type = TreasureBlockType.AuraAnalyser;
+					} else if (x <= 30) {
+						type = TreasureBlockType.AuraPotion;
+					} else if (x<=45) {
+						type = TreasureBlockType.TeleporterPotion;
+					} else if (x<=60) {
+						type = TreasureBlockType.ParalysiePotion;
+					} else if (x<=80) {
+						//type = TreasureBlockType.RegisterModifier;
+						type = TreasureBlockType.AuraAnalyser;
+					} else {
+						type = TreasureBlockType.Bienfaisance;
+					}
+					Main.placeTreasureStruct(LocationUtil.getAlLocAroundFarfrom(rayon3, 5, true, this.world, this), type, this);
+				}
+				for (int i = 0; i<probasEvents.getOrDefault("Nombre Batiments Leurre"	, 0); i++) {
+					Main.placeBat(LocationUtil.getAlLocAroundFarfrom(rayon2, 5, false, this.world, this), this);
+				}
+			}
+			
 			if (MathUtil.pourcentage(probasEvents.getOrDefault("Couple aléatoire"	, 0))) {
 				System.out.println("couple aléatoire");
 				this.aleaCouple = true;
@@ -302,14 +362,29 @@ public class GameLg implements Listener{
 		
 		if (game.timer.temps == -10) {
 			System.out.println("gived start kit Lga l.163");
+			
 			for (PlayerData ply:game.players) {
 				ply.setMaxHealth(20);
 				ply.player.setHealth(20);
-				GameLgUtil.tpAl(ply);
+				if (!swapper) {
+					if (displayedRoles) {
+						GameLgUtil.tpAl(ply, 100);
+						isMeetup = true;
+					} else {
+						GameLgUtil.tpAl(ply, 1000);
+					}
+				} 
+				
+				
 				ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.BOOK, 7) );
 				ply.player.getInventory().addItem(new ItemStack(org.bukkit.Material.COOKED_BEEF, 64) );
 				ply.player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
 			}
+			if (swapper) {
+				
+				isMeetup = true;
+				
+			} 
 		}
 		if (game.timer.temps==0) {
 			game.broadcoast(ChatColor.UNDERLINE + "La partie commence");
@@ -364,6 +439,53 @@ public class GameLg implements Listener{
 			game.statut = GameStatut.IN_GAME;
 			game.attributeRoleToAll();
 			
+			if (swapper) {
+				//r b ro v j
+				ArrayList<PlayerData> rs = new ArrayList<PlayerData>();
+				ArrayList<PlayerData> bs = new ArrayList<PlayerData>();
+				ArrayList<PlayerData> ros = new ArrayList<PlayerData>();
+				ArrayList<PlayerData> vs = new ArrayList<PlayerData>();
+				ArrayList<PlayerData> ys = new ArrayList<PlayerData>();
+				
+				for (PlayerData p:playerAlive) {
+					switch (p.camp) {
+					case BLUE:
+						bs.add(p);
+						break;
+
+					case GREEN:
+						vs.add(p);
+						break;
+
+
+					case PINK:
+						ros.add(p);
+						break;
+					case RED:
+						rs.add(p);
+						break;
+
+					case YELLOW:
+						ys.add(p);
+						break;
+					default:
+						break;
+					
+					}
+				}
+				GameLgUtil.tpAl(rs, 1000);
+				GameLgUtil.tpAl(bs, 1000);
+				GameLgUtil.tpAl(ros, 1000);
+				GameLgUtil.tpAl(vs, 1000);
+				GameLgUtil.tpAl(ys, 1000);
+				isMeetup = true;
+			}
+			if (displayedRoles) {
+				for (PlayerData p:getPlayerAlive()) {
+					p.setDisplayName();
+				}
+			}
+			
 		}
 		
 		if (game.timer.temps > 1200) {
@@ -378,7 +500,7 @@ public class GameLg implements Listener{
 					player.roleIn.giveEffectAllTime();
 					for (PlayerData p : getPlayerAlive()) {
 						
-						if (player.getLocation().distance(p.getLocation()) < 20) {
+						if (LocationUtil.getDistanceBetween(p, player) < 20) {
 							
 							player.timeWithPlayers.put(p.getName(), player.timeWithPlayers.getOrDefault(p.getName(), 0) + 1);
 						}
@@ -409,7 +531,7 @@ public class GameLg implements Listener{
 								break;
 							
 							}
-							PlayerUtil.particle(p.getLocation(), color);
+							PlayerUtil.particle(p.getLocation(), color, "ok", 1);
 							p.auraDiscoverEffetDuration --;
 						}
 						
@@ -425,7 +547,7 @@ public class GameLg implements Listener{
 			} else if (WorldUtil.getTime(Main.server.getWorld("world")).equals("night")) {
 				
 				for (PlayerData player: game.getPlayerAlive()) {
-					player.roleIn.giveNightEffectCheck();
+					player.roleIn.giveNightEffect();
 				}
 			}
 			if (game.isMeetup) {
@@ -458,12 +580,12 @@ public class GameLg implements Listener{
 	@Deprecated
 	public void accusation(PlayerData accuser, PlayerData accused) {
 		
-		Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " accuse le joueur "+ accused.getName() + " publiquement, il a 10 minutes pour prouver sa culpabilité sous peine de perdre 1.5 coeurs permanents, si celui-ci se révèle innocent, il perdra 3 coeurs permanents et son droit de vote.");
+		this.broadcoast("Le joueur "+ accuser.getName() + " accuse le joueur "+ accused.getName() + " publiquement, il a 10 minutes pour prouver sa culpabilité sous peine de perdre 1.5 coeurs permanents, si celui-ci se révèle innocent, il perdra 3 coeurs permanents et son droit de vote.");
 		//CAUSE ORAT
 		
 		this.addorat(10, accuser.getLocation());
 		//CONSEqUENCE orAT
-		if (getOrat() > 50) {
+		if (!isRegistresActivated|| getOrat() > 50) {
 			broadcoast("Ses Coordonnée sont "+String.valueOf(accused.getLocation().getBlockX())+ "; "+String.valueOf(accused.getLocation().getBlockY()) + "; "+ String.valueOf(accused.getLocation().getBlockZ()));
 		}
 		if (accused.role.equals(RolesLg.ANGE_THIERCE)) {
@@ -484,15 +606,15 @@ public class GameLg implements Listener{
 				accuser.hasStrenghtAgainst.put(accused.player, false);
 				if (accused.inLife) {
 					accuser.setMaxHealth(accuser.getMaxHealth() - 1.5);
-					Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " n'a pas pu prouver la culpabilité du joueur "+ accused.getName() + " à temps, il perd donc 1.5 coeurs permanents");
+					broadcoast("Le joueur "+ accuser.getName() + " n'a pas pu prouver la culpabilité du joueur "+ accused.getName() + " à temps, il perd donc 1.5 coeurs permanents");
 					addTragic(10, accuser.getLocation());
 				} else {
-					if (accused.team.equals(villTeam)) {
-						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + ", il perd donc 3 coeurs permanents et son droit de vote.");
+					if (accused.considVill) {
+						broadcoast("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + ", il perd donc 3 coeurs permanents et son droit de vote.");
 						accuser.setMaxHealth(accuser.getMaxHealth() - 3);
 						cannotBeVoted.add(accuser);
 					} else {
-						Bukkit.broadcastMessage("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + " à raison, il gagne donc 10% de force supplémentaires.");
+						broadcoast("Le joueur "+ accuser.getName() + " a accusé à tord le joueur "+ accused.getName() + " à raison, il gagne donc 10% de force supplémentaires.");
 						accuser.boostS5 += 2;
 						addEpic(15, accuser.getLocation());
 					}
@@ -510,7 +632,7 @@ public class GameLg implements Listener{
 			}
 			
 		}
-		Bukkit.broadcastMessage(ChatColor.RED+"Le joueur "+ p.getName() + " a fuit la justice des villageois. Il ne pourra alors ni être voté ni voter.");
+		broadcoast(ChatColor.RED+"Le joueur "+ p.getName() + " a fuit la justice des villageois. Il ne pourra alors ni être voté ni voter.");
 		for (PlayerData ply: this.getPlayerAlive()) {
 			ply.sendMessage(ChatColor.RED+"Le joueur fuyard se trouve à " + ply.getLocation().distance(p.getLocation()) + " blocs de vous.");
 		}
@@ -548,42 +670,167 @@ public class GameLg implements Listener{
 	}
 	
 	public void attributeRoleToAll() {
-		if (this.roles.size() == this.playerAlive.size()) {
-			
-			
+		if (this.roles.size() == this.playerAlive.size() && !swapper) {
 			ArrayList<RolesLg> exe = this.getRoles();
+			for (PlayerData player : this.playerAlive) {
+				if (player.settedRole != null) {
+					int ik = -1;
+					for (RolesLg role:exe) {
+						if (player.settedRole.equals(role)) {
+							ik = exe.indexOf(role);
+						}
+					}
+					if (ik > -1) {
+						player.applyLgRole(exe.get(ik));
+						this.roles.add(exe.get(ik));
+						exe.remove(ik);
+					}
+					
+				}
+			}
+			
+			
 			this.roles = new ArrayList<RolesLg>();
 			for (PlayerData player : this.playerAlive) {
+				if (player.role == null) {
+					int number = MathUtil.generateAlInt(0, exe.size()-1);
+					RolesLg role = exe.get(number);
+					player.applyLgRole(role);
 				
-				int number = MathUtil.generateAlInt(0, exe.size()-1);
-				RolesLg role = exe.get(number);
-				player.applyLgRole(role);
 				
 				
+					this.roles.add(role);
+					exe.remove(role);
+				}
 				
-				this.roles.add(role);
-				exe.remove(role);
 				
 			}
 			
 			
 		}
 		
-		
-		for (PlayerData player: this.getPlayerAlive()) {
+		if (swapper) {
+			for (PlayerData p:playerAlive) {
+				p.applyLgRole(RolesLg.SWAPPER);
+			}
+			if (swapperDuel) {
+				ArrayList<PlayerData> cop = new ArrayList<PlayerData>();
+				for (PlayerData p:playerAlive) {
+					cop.add(p);
+				}
+				int r = 0;
+				int b = 0;
+				int tri = 0;
+				while (cop.size() > 0 && tri < 100) {
+					if (r<=b) {
+						r++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.RED);
+					} else {
+						b++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.BLUE);
+					}
+					cop.remove(0);
+					tri ++;
+				}
+			} else if (swapperTrio) {
+				ArrayList<PlayerData> cop = new ArrayList<PlayerData>();
+				for (PlayerData p:playerAlive) {
+					cop.add(p);
+				}
+				int r = 0;
+				int b = 0;
+				int ro = 0;
+				int tri = 0;
+				while (cop.size() > 0&& tri < 100) {
+					if (r <= b && r <= ro) {
+						r++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.RED);
+					} else if (b <= ro) {
+						b++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.BLUE);
+					} else {
+						ro++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.PINK);
+					}
+					cop.remove(0);
+					tri ++;
+				}
+				
+			} else if (swapperQuadrio) {
+				ArrayList<PlayerData> cop = new ArrayList<PlayerData>();
+				for (PlayerData p:playerAlive) {
+					cop.add(p);
+				}
+				int r = 0;
+				int g = 0;
+				int b = 0;
+				int ro = 0;
+				int tri = 0;
+				while (cop.size() > 0&& tri < 100) {
+					if (g <= r && g<=b && g<=ro) {
+						g++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.GREEN);
+					} else if (r <= b && r <= ro) {
+						r++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.RED);
+					} else if (b <= ro) {
+						b++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.BLUE);
+					} else {
+						ro++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.PINK);
+					}
+					cop.remove(0);
+					tri ++;
+				}
+				
+			} else if (swapperPente) {
+				ArrayList<PlayerData> cop = new ArrayList<PlayerData>();
+				for (PlayerData p:playerAlive) {
+					cop.add(p);
+				}
+				int r = 0;
+				int g = 0;
+				int y = 0;
+				int b = 0;
+				int ro = 0;
+				int tri = 0;
+				while (cop.size() > 0&& tri < 100) {
+					if (y <= g   &&   y<=r    &&    y<=g   &&  y <= b  &&   y <= ro) {
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.YELLOW);
+						y++;
+					} else if (g <= r && g<=b && g<=ro) {
+						g++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.GREEN);
+					} else if (r <= b && r <= ro) {
+						r++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.RED);
+					} else if (b <= ro) {
+						b++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.BLUE);
+					} else {
+						ro++;
+						cop.get(0).roleIn = new SWAPPER(cop.get(0), Camp.PINK);
+					}
+					cop.remove(0);
+					tri ++;
+				}
+			}
 			
-			player.roleIn = RoleUtil.createRoleOfPlayerRoles(player);
-			player.sendMessage("Vous êtes "+player.roleIn.getName());
-			player.sendMessage(player.roleIn.getDescription());
-			player.sendMessage(ChatColor.GOLD+"Aura: "+ player.role.aura.getName());
-			this.rolesIn.add(player.roleIn);
-			player.roleIn.giveRoleEffectAndItem(player);
 		}
 		
-		this.lgTeam = new Team("Loups Garou", Camp.Wolf, this, this.getRealWolfAlive(), null, "at wolf team creating at == 1200", null, null, true, false, false, false);
-		this.villTeam = new Team("Village", Camp.Villager, this, this.getRealVillagerAlive(), null, "at village team creating at == 1200", null, null, true, false, false, false);
-		this.teams.add(this.lgTeam);
-		this.teams.add(this.villTeam);
+		
+		for (PlayerData player: this.getPlayerAlive()) {
+			this.setRole(player, player.role);
+			
+			player.sendMessage("Vous êtes "+player.roleIn.getName());
+			player.sendMessage(ChatColor.GOLD +player.roleIn.getDescription());
+			player.sendMessage(ChatColor.GOLD+"Aura: "+ player.role.aura.getName());
+			this.rolesIn.add(player.roleIn);
+			
+		}
+		
+		
 	}
 	
 	
@@ -619,25 +866,29 @@ public class GameLg implements Listener{
 			roles.setEpisodeTrue();	
 		}
 		
-		this.setChat();
-		this.startVote();
+		
+		if (timer.temps>1300 && !swapper) {
+			this.startVote();
+			this.setChat();
+			if (!hasLgSolo &&getRealWolfAlive().size() > 0 && MathUtil.pourcentage(probasEvents.getOrDefault("Loup Solitaire", 0))) {
+				PlayerData p = getRealWolfAlive().get(MathUtil.generateAlInt(0, getRealWolfAlive().size() - 1));
+				p.sendMessage(ChatColor.DARK_RED+"Vous devenez loup solitaire, vous devez maintenant gagner tout seul, pour cela vous gagnez 4 coeurs permanents, et 5% de résistance.");
+				
+				p.camp = Camp.Other;
+				p.changeHealth(8);
+				p.boostR5 ++;
+			}
+		}
+		
 		this.decideTimeEvent();
 		this.setEpisodeTime();
 		
-		if (!hasLgSolo &&getRealWolfAlive().size() > 0 && MathUtil.pourcentage(probasEvents.get("Loup Solitaire"))) {
-			PlayerData p = getRealWolfAlive().get(MathUtil.generateAlInt(0, getRealWolfAlive().size() - 1));
-			p.sendMessage(ChatColor.DARK_RED+"Vous devenez loup solitaire, vous devez maintenant gagner tout seul, pour cela vous gagnez 4 coeurs permanents, et 5% de résistance.");
-			p.team = new Team("Loup Solitaire", Camp.Other, this, players, null, "at wolf team creating at == 1200", null, null, true, false, false, false);
-			lgTeam.remove(p);
-			p.camp = Camp.Other;
-			p.changeHealth(8);
-			p.boostR5 ++;
-		}
+		
 		
 		setGroupsTo(getNumberOfPlayer() / 5);
 		
 		Registre r = getRegister();
-		if (r.getType().equals(RegisterType.Tragic)) {
+		if (r != null && r.getType() != null &&r.getType().equals(RegisterType.Tragic)) {
 			if (MathUtil.pourcentage(r.getTaux()) && getGroupe() > 2) {
 				setGroupsTo(getGroupe() - 1);
 			}
@@ -645,7 +896,7 @@ public class GameLg implements Listener{
 				exposed(GameLgUtil.getAlPlayer(this), 4);
 			}
 		}
-		if (r.getType().equals(RegisterType.Oratoire)) {
+		if (r != null && r.getType() != null &&r.getType().equals(RegisterType.Oratoire)) {
 			if (MathUtil.pourcentage(r.getTaux()) && getGroupe() < 6) {
 				setGroupsTo(getGroupe() + 1);
 			}
@@ -682,15 +933,31 @@ public class GameLg implements Listener{
 	}
 	
 	public void addPlayer(String name) {
-		Player playerToAdd = PlayerUtil.getPlayer(name);
-		if (playerToAdd != null) {
-			PlayerData player = new PlayerData(playerToAdd);
-			this.playerAlive.add(player);
-			this.players.add(player);
+		PlayerData toAdd;
+		if (isBanned.getOrDefault(name, false)) {
+			return;
+		}
+		if (Main.strToPlayer.getOrDefault(name, null) != null) {
+			toAdd=Main.strToPlayer.get(name);
+			
 			
 		} else {
-			System.out.println("joueur " + name + " non existant ou connecté");
+			if (PlayerUtil.getPlayer(name) != null) {
+				toAdd = new PlayerData(PlayerUtil.getPlayer(name));
+				Main.strToPlayer.put(name, toAdd);
+			} else {
+				System.out.println("joueur " + name + " non existant ou connecté");
+				return;
+			}
+			
 		}
+		toAdd.clearLgGameVar();
+		toAdd.board = new ScoreboardLg(this, toAdd);
+		toAdd.game = this;
+		toAdd.isInLgGame = true;
+		
+		this.playerAlive.add(toAdd);
+		this.players.add(toAdd);
 	}
 	
 	public ArrayList<PlayerData> getPlayerAlive() {
@@ -712,8 +979,10 @@ public class GameLg implements Listener{
 	public ArrayList<PlayerData> getRealWolfAlive() {
 		ArrayList<PlayerData> returneds = new ArrayList<PlayerData>();
 		
-		for (PlayerData player: playerAlive) {
-			if (player.camp.equals(Camp.Wolf)||player.role.getCampOfRole().equals(Camp.Wolf)) {
+		
+		for (PlayerData player: this.getPlayerAlive()) {
+			
+			if (player.camp.equals(Camp.Wolf)) {
 				returneds.add(player);
 			}
 		}
@@ -746,7 +1015,7 @@ public class GameLg implements Listener{
 		ArrayList<PlayerData> returneds = new ArrayList<PlayerData>();
 		
 		for (PlayerData player: playerAlive) {
-			if (player.role.getCampOfRole().equals(Camp.Wolf) || player.camp.equals(Camp.Wolf)) {
+			if (player.considWolf) {
 				returneds.add(player);
 			}
 		}
@@ -763,25 +1032,50 @@ public class GameLg implements Listener{
 		return null;
 	}
 	
+	
+	
 	public void removePlayer(PlayerData ply, String spec) {
 		playerAlive.remove(ply);
 		players.remove(ply);
+		ply.clearLgGameVar();
+		ply.game = null;
+		ply.isInLgGame = false;
 		System.out.println(ply.Name +" removed at "+ spec);
 	}
+	
+	public void setRole(PlayerData p, RolesLg role) {
+		p.setMaxHealth(20);
+		if (!role.equals(RolesLg.SWAPPER)) {
+			p.roleIn = RoleUtil.createRoleOfPlayerRoles(p);
+		}
+		
+		if (p.isOnline) {
+			
+			p.roleIn.giveRoleEffectAndItem(p);
+		}
+		p.role = role;
+		
+		
+		p.considVill = role.isConsidVill();
+		p.considWolf = role.isConsidWolf();
+		p.camp = role.getCampOfRole();
+		p.appCamp = role.getCampOfRole();
+	}
+	
 	
 	@Deprecated
 	public void removeDiedPlayer(PlayerData ply) {
 		if (ply.role.equals(RolesLg.CHASSEUR)) {
 			CHASSEUR hunter = (CHASSEUR) ply.roleIn;
-			this.Hunter = hunter;
+			
 			
 			ply.sendMessage(ChatColor.GOLD+"Vous avez 25 secondes pour tirer sur un joueur de votre choix avec la commande /lg tirer [nomDuJoueur], celui perdra 3 coeurs de manière non permanente, ainsi que sa force s'il est loup");
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
 
 				@Override
 				public void run() {
-					GameLg.this.hunter.sendMessage("Trop tard...");
-					GameLg.this.hunter = null;
+					hunter.playerWithRole.sendMessage("Trop tard...");
+					
 					playerAlive.remove(ply);
 					roles.remove(ply.role);
 					rolesIn.remove(ply.roleIn);
@@ -833,7 +1127,7 @@ public class GameLg implements Listener{
 		
 		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
 		for (SpecialBlock bloc:Main.specialBlocks) {
-			if (bloc.getData() != null&&bloc.getData().getType() !=null  &&bloc.getData().getType().equals(SpecialBlockType.Vote)) {
+			if (bloc.getData() != null && bloc.getData().getType() !=null  &&bloc.getData().getType().equals(SpecialBlockType.Vote)) {
 				((VoteBlockData) bloc.getData()).nbOfVote = 5;
 			}
 		}
@@ -871,8 +1165,10 @@ public class GameLg implements Listener{
 					}
 					
 				}
+				if (mostVoted != null && mostVoted.vote > 2) {
+					addorat(3*mostVoted.vote, mostVoted.getLocation());
+				}
 				
-				addorat(3*mostVoted.vote, mostVoted.getLocation());
 				
 				boolean corb = false;
 				if (mostVoted.vote > 0 && !equal) {
@@ -880,37 +1176,40 @@ public class GameLg implements Listener{
 					//CONSESQUENCE EPIC
 					int plus = 0;
 					int exposedPlus = 0;
-					if (getOrat() > 70) {
-						plus++;
-					}
-					if (getTragic() > 40 || getOrat() > 40) {
-						plus++;
-					} else if (getEpic() > 90) {
-						plus-= 3;
-						if (MathUtil.pourcentage(70)) {
-							exposedPlus ++;
+					if (isRegistresActivated) {
+						if (getOrat() > 70) {
+							plus++;
 						}
+						if (getTragic() > 40 || getOrat() > 40) {
+							plus++;
+						} else if (getEpic() > 90) {
+							plus-= 3;
+							if (MathUtil.pourcentage(70)) {
+								exposedPlus ++;
+							}
 						
-					}else if (getEpic() > 60) {
-						plus-= 2;
-						if (MathUtil.pourcentage(45)) {
+						}else if (getEpic() > 60) {
+							plus-= 2;
+							if (MathUtil.pourcentage(45)) {
 							exposedPlus ++;
-						}
+							}
 						
-					}else if (getEpic() > 30) {
-						plus-= 1;
-						if (MathUtil.pourcentage(20)) {
-							exposedPlus ++;
-						}
+						}else if (getEpic() > 30) {
+							plus-= 1;
+							if (MathUtil.pourcentage(20)) {
+								exposedPlus ++;
+							}
 						
+						}
+						//CONSEQUENCE ORAT
+						if (getOrat() > 20 && MathUtil.pourcentage(40)) {
+							exposedPlus --;
+						}
+						if (plus < 0) {
+							plus = 0;
+						}
 					}
-					//CONSEQUENCE ORAT
-					if (getOrat() > 20 && MathUtil.pourcentage(40)) {
-						exposedPlus --;
-					}
-					if (plus < 0) {
-						plus = 0;
-					}
+					
 					
 					
 					
@@ -927,7 +1226,7 @@ public class GameLg implements Listener{
 					}
 					
 					
-					Bukkit.broadcastMessage(ChatColor.GOLD + "Le joueur " + ChatColor.DARK_AQUA + mostVoted.Name +ChatColor.GOLD+ "a été le plus voté" );
+					broadcoast(ChatColor.GOLD + "Le joueur " + ChatColor.DARK_AQUA + mostVoted.Name +ChatColor.GOLD+ "a été le plus voté" );
 					for (PlayerData player:playerAlive) {
 						
 						
@@ -935,7 +1234,7 @@ public class GameLg implements Listener{
 							player.canVoted.remove(mostVoted);
 							
 							if (player.role.equals(RolesLg.CORBEAU)) {
-								Bukkit.broadcastMessage(ChatColor.BLACK+"Le corbeau a voté avec le village");
+								broadcoast(ChatColor.BLACK+"Le corbeau a voté avec le village");
 								corb = true;
 								addorat(5, player.getLocation());
 								CORBEAU corbeau = (CORBEAU) player.roleIn;
@@ -946,7 +1245,7 @@ public class GameLg implements Listener{
 					
 					
 				} else {
-					Bukkit.broadcastMessage(ChatColor.GOLD +"Aucun joueur n'a été voté plus de 2 fois, ou il y a une égalité");
+					broadcoast(ChatColor.GOLD +"Aucun joueur n'a été voté plus de 2 fois, ou il y a une égalité");
 				}
 				VoteEvent event = new VoteEvent(game, mostVoted, mostVoted.vote, corb);
 				for (ResCheck checker:game.resCheckers) {
@@ -961,7 +1260,7 @@ public class GameLg implements Listener{
 				}
 			}
 			
-		}, 1200);
+		}, 3600);
 	}
 	
 	public ArrayList<PlayerData> getFalseVillagersAlive() {
@@ -1054,12 +1353,7 @@ public class GameLg implements Listener{
 	public void announceDeath(PlayerData player1, boolean brumed, boolean hidden) {
 		
 		
-		if (hidden) {
-			for (Team team:teams) {
-				team.onPlayerDeath(player1);
-			}
-			return;
-		}
+		
 		ChatColor color = ChatColor.RED;
 		if (brumed) {
 			color = ChatColor.MAGIC;
@@ -1070,13 +1364,18 @@ public class GameLg implements Listener{
 		} 
 		if (player1.inLove) {
 			moreInfo = moreInfo+ (" (en couple) ");
-			addTragic(8, null);
+			Location loc = player1.getLocation();
+			if (loc == null) {
+				loc = new Location(Main.world, 0, 0, 0);
+			}
+			addTragic(8, loc);
 		} 
 
-		GameLg gm1 =GameLgUtil.getGameOfPlayer(player1, " at 152 Main");
-		if (gm1.name != this.name) {
+		GameLg gm1 = player1.game;
+		if (gm1 == null ||gm1.name != this.name ) {
 			return;
 		}
+		
 		if (MathUtil.pourcentage(probasEvents.get("Brume"))) {
 			return;
 		}
@@ -1086,9 +1385,7 @@ public class GameLg implements Listener{
 							color + player1.getName() + " est mort |"+ "\n"  +
 								" il était "+ player1.camp.getColor() + 
 								player1.getLgRole() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
-		for (Team team:teams) {
-			team.onPlayerDeath(player1);
-		}
+		
 	}
 	
 	public void announceDeath(PlayerData player1, RolesLg role, boolean brumed) {
@@ -1105,11 +1402,13 @@ public class GameLg implements Listener{
 			moreInfo = moreInfo+ (" (en couple) ");
 		} 
 
-		GameLg gm1 = Main.game;
-		if (gm1.name != this.name) {
+		GameLg gm1 = player1.game;
+		if (gm1 == null || gm1.name != this.name) {
 			return;
 		}
+		
 		if (MathUtil.pourcentage(probasEvents.get("Brume"))) {
+			System.out.println("brume activated");
 			return;
 		}
 
@@ -1117,9 +1416,7 @@ public class GameLg implements Listener{
 							color + player1.getName() + " est mort |"+ "\n"  +
 								" il était "+ role.getCampOfRole().getColor() + 
 								role.getName() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
-		for (Team team:teams) {
-			team.onPlayerDeath(player1);
-		}
+		
 	}
 	
 	
@@ -1160,8 +1457,8 @@ public class GameLg implements Listener{
 		
 		
 		//CHECK FOR LITTLE GIRL
-		if (GameLgUtil.getGameOfPlayer(sender, "at onPlayerClick at GameLg ", false) != null) {
-			if (PlayerUtil.getDataOfPlayer((Player) e.getWhoClicked(), "in onPlayerClick in GameLg").role == RolesLg.PETITE_FILLE) {
+		if (Main.strToPlayer.getOrDefault(sender.getName(), null) != null && Main.strToPlayer.get(sender.getName()).game != null) {
+			if (Main.getData(e.getWhoClicked()).role == RolesLg.PETITE_FILLE) {
 				EntityEquipment armorC = ((Player) e.getWhoClicked()).getEquipment();
 				ItemStack[] armor = armorC.getArmorContents();
 				
@@ -1175,7 +1472,7 @@ public class GameLg implements Listener{
 				}
 				
 				
-				PETITE_FILLE little = (PETITE_FILLE) PlayerUtil.getDataOfPlayer((Player) e.getWhoClicked(), "in onPlayerClick in GameLg").roleIn;
+				PETITE_FILLE little = (PETITE_FILLE) Main.getData(e.getWhoClicked()).roleIn;
 				
 				if (isEmpty) {
 					System.out.println("empty at GameLg onPlayerClick");
@@ -1201,8 +1498,8 @@ public class GameLg implements Listener{
 		}
 		
 		//CHECK FOR PERFIDE
-		if (GameLgUtil.getGameOfPlayer(sender, "at onPlayerClick at GameLg ", false) != null) {
-			if (PlayerUtil.getDataOfPlayer((Player) e.getWhoClicked(), "in onPlayerClick in GameLg").role == RolesLg.PETITE_FILLE) {
+		if (Main.strToPlayer.getOrDefault(sender.getName(), null) != null && Main.strToPlayer.get(sender.getName()).game != null) {
+			if (Main.getData(e.getWhoClicked()).role == RolesLg.PETITE_FILLE) {
 				EntityEquipment armorC = ((Player) e.getWhoClicked()).getEquipment();
 				ItemStack[] armor = armorC.getArmorContents();
 				
@@ -1216,7 +1513,7 @@ public class GameLg implements Listener{
 				}
 				
 				
-				PETITE_FILLE little = (PETITE_FILLE) PlayerUtil.getDataOfPlayer((Player) e.getWhoClicked(), "in onPlayerClick in GameLg").roleIn;
+				PETITE_FILLE little = (PETITE_FILLE) Main.getData(e.getWhoClicked()).roleIn;
 				
 				if (isEmpty) {
 					System.out.println("empty at GameLg onPlayerClick");
@@ -1260,9 +1557,9 @@ public class GameLg implements Listener{
 			
 		}
 		
-		Bukkit.broadcastMessage(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Le Role du joueur "+ player.getName() + " se trouve parmi les suivant: ");
+		broadcoast(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Le Role du joueur "+ player.getName() + " se trouve parmi les suivant: ");
 		for (String str:rolesStr) {
-			Bukkit.broadcastMessage(ChatColor.GOLD+"-"+str);
+			broadcoast(ChatColor.GOLD+"-"+str);
 		}
 		
 		
@@ -1279,16 +1576,16 @@ public class GameLg implements Listener{
 		}
 
 		
-		Bukkit.broadcastMessage(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Les Roles des joueurs:se trouvent parmis les suivants: ");
+		broadcoast(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Les Roles des joueurs:se trouvent parmis les suivants: ");
 		for (PlayerData p:players) {
-			Bukkit.broadcastMessage(ChatColor.DARK_GREEN+"-"+p.getName() );
+			broadcoast(ChatColor.DARK_GREEN+"-"+p.getName() );
 		}
-		Bukkit.broadcastMessage(ChatColor.DARK_GREEN+"se trouvent parmis les suivants: ");
+		broadcoast(ChatColor.DARK_GREEN+"se trouvent parmis les suivants: ");
 
 		int x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
 		do {
 			String str = rolesStr.get(x);
-			Bukkit.broadcastMessage(ChatColor.GOLD+"-"+str);
+			broadcoast(ChatColor.GOLD+"-"+str);
 			rolesStr.remove(x);
 			if (rolesStr.size() > 0) {
 				x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
@@ -1301,6 +1598,10 @@ public class GameLg implements Listener{
 	}
 	
 	public void addTragic(int toAdd, Location loc) {
+
+		if (!isRegistresActivated) {
+			return;
+		}
 		int before = this.tragicTaux;
 		if (this.oratTaux < 1 && this.epicTaux < 1) {
 			this.tragicTaux += toAdd;
@@ -1327,6 +1628,9 @@ public class GameLg implements Listener{
 	}
 	
 	public void addorat(int toAdd, Location loc) {
+		if (!isRegistresActivated) {
+			return;
+		}
 		int before = this.oratTaux;
 		if (this.tragicTaux < 1 && this.epicTaux < 1) {
 			this.oratTaux += toAdd;
@@ -1352,6 +1656,9 @@ public class GameLg implements Listener{
 	}
 	
 	public void addEpic(int toAdd, Location loc) {
+		if (!isRegistresActivated) {
+			return;
+		}
 		int before = this.epicTaux;
 		if (this.tragicTaux < 1 && this.oratTaux < 1) {
 			this.epicTaux += toAdd;
@@ -1388,14 +1695,24 @@ public class GameLg implements Listener{
 	}
 	
 	public int getTragic() {
+		if (!isRegistresActivated) {
+			return 0;
+		}
 		return this.tragicTaux;
 	}
 	public int getOrat() {
+		if (!isRegistresActivated) {
+			return 0;
+		}
 		return this.oratTaux;
 	}
 	public int getEpic() {
+		if (!isRegistresActivated) {
+			return 0;
+		}
 		return this.epicTaux;
 	}
+	
 	public Registre getRegister() {
 		if (epicTaux > 0) {
 			
@@ -1408,6 +1725,69 @@ public class GameLg implements Listener{
 		System.out.println("taux nul");
 		return new Registre(0, null);
 		
+	}
+	
+	public void checkWin() {
+		if (this.statut.equals(GameStatut.ENDED)) {
+			return;
+		}
+		Camp winning = null;
+		for (PlayerData p:this.getPlayerAlive()) {
+			if (winning == null) {
+				winning = p.camp;
+			} else {
+				if ((!winning.equals(p.camp) && !p.camp.equals(Camp.Uneffective)) || (winning.equals(Camp.Other) && this.getPlayerAlive().size() > 1)) {
+					return;
+				}
+			}
+			
+			
+		}
+		
+		if (winning != null) {
+			win(winning);
+			this.statut = GameStatut.ENDED;
+		}
+	}
+	
+	public void win(Camp camp) {
+		
+		
+		broadcoast("Le camp "+ camp.getName() + " a gagné.");
+		for (PlayerData p:players) {
+			String str = p.getName() + ": "+ p.getLgRole().getName();
+			if (p.infected) {
+				str = str + " infecté";
+			}
+			if (p.inLove) {
+				str = str+" en couple";
+			}
+			broadcoast(str);
+			if (toRegister) {
+				Main.strToPlayer.get(p.getName()).notes.add(new GameNote(this, this.name));
+				p.sendMessage("Partie ajoutée à votre historique");
+				int gain = 0;
+				
+				gain += p.getLgRole().winValue;
+				if (isMeetup) {
+					gain /= 2;
+				}
+				if (displayedRoles ) {
+					gain /= 5;
+				}
+				p.xp += gain;
+			}
+			
+			p.player.teleport(Main.world.getSpawnLocation());
+			
+		}
+		for (Player p: this.world.getPlayers()) {
+			p.teleport(Main.world.getSpawnLocation());
+		}
+		Bukkit.unloadWorld(this.world, false);
+			
+		this.world.getWorldFolder().delete();
+		Main.deleteDirectory(world.getWorldFolder());
 	}
 	
 	public boolean isDay() {
@@ -1452,9 +1832,9 @@ public class GameLg implements Listener{
 				for (PlayerData player:ps) {
 					switch (player.favRegister) {
 					case Epic:
-						if (player.team.equals(villTeam)) {
+						if (player.considVill) {
 							e++;
-						} else if (player.team.equals(lgTeam)) {
+						} else if (player.considWolf) {
 							e += 10;
 						} else {
 							e+=100;
@@ -1462,18 +1842,18 @@ public class GameLg implements Listener{
 						
 						break;
 					case Oratoire:
-						if (player.team.equals(villTeam)) {
+						if (player.considVill) {
 							o++;
-						} else if (player.team.equals(lgTeam)) {
+						} else if (player.considWolf) {
 							o += 10;
 						} else {
 							o+=100;
 						}
 						break;
 					case Tragic:
-						if (player.team.equals(villTeam)) {
+						if (player.considVill) {
 							t++;
-						} else if (player.team.equals(lgTeam)) {
+						} else if (player.considWolf) {
 							t += 10;
 						} else {
 							t+=100;
@@ -1600,7 +1980,7 @@ public class GameLg implements Listener{
 		world.getBlockAt(new Location(world, x, y, z+1)).setType(Material.BEDROCK);
 		world.getBlockAt(new Location(world, x, y+1, z)).setType(Material.ENDER_CHEST);
 		TreasureBlockData data = new TreasureBlockData(type);
-		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data);
+		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data, this, "ok");
 		Main.specialBlocks.add(b);
 	}
 	

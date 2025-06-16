@@ -34,22 +34,11 @@ public class PlayerUtil {
 		return null;
 	}
 	
-	public static PlayerData getDataPlayer(String name,  String spec) {
-		return PlayerUtil.getDataOfPlayer(PlayerUtil.getPlayer(name), "at getDataPlayer in PlayerUtil ");
-	}
 	
-	public static PlayerData getDataOfPlayer(Player ply, String spec) {
-		return GameLgUtil.getGameOfPlayer(ply, " at 36 PlayerUtil " + spec).getPlayer(ply.getName());
-	}
 	
-	public static PlayerData checkExist(String Name) {
-		if (PlayerUtil.getDataPlayer(Name, "in checkExist of PlayerUtil") !=null) {
-			return PlayerUtil.getDataPlayer(Name, "in checkExist of PlayerUtil");
-		}
-		
-		return null;
-		
-	}
+	
+	
+	
 	public static void don(PlayerData giver, PlayerData receiver, double give) {
 		double FinalGive = (give/100) * giver.getMaxHealth();
 		if (!receiver.inLife) {
@@ -69,12 +58,12 @@ public class PlayerUtil {
 		}
 		
 	}
-	public static void particle(Location loc, org.bukkit.Color color) {
+	public static void particle(Location loc, org.bukkit.Color color, String checkWorld, double radius) {
 		try {
 			for (int i = 0; i < 10; i++) { // Générer plus de particules en augmentant le nombre de répétitions
                 
 				
-				ParticleEffect.RED_DUST.sendColor(Main.server.getOnlinePlayers(), new Location(Main.world, loc.getX() + MathUtil.betweenNegOneAndOne() , loc.getY()+1+ MathUtil.betweenNegOneAndOne(), loc.getZ()+ MathUtil.betweenNegOneAndOne()), color, true);
+				ParticleEffect.RED_DUST.sendColor(Main.server.getOnlinePlayers(), new Location(loc.getWorld(), loc.getX() + MathUtil.betweenNegOneAndOne() * radius , loc.getY()+1+ MathUtil.betweenNegOneAndOne() * radius, loc.getZ()+ MathUtil.betweenNegOneAndOne() * radius), color, true);
 				
             }
 			
@@ -84,12 +73,36 @@ public class PlayerUtil {
 		}
 	}
 	
-	public static void particleFor(Player watcher, Location loc, org.bukkit.Color color) {
+    /**
+     * emmet des particules de couleur 
+     *
+     * @param loc localisation d'apparition des particules.
+     * @param color couleur des particules.
+     * @param checkWorld Avez vous bien vérifié le monde ?
+     * @param radius rayon de particules.
+     * @param force nombre de particules emises
+     */
+	public static void particle(Location loc, org.bukkit.Color color, String checkWorld, double radius, int force) {
+		try {
+			for (int i = 0; i < force; i++) { // Générer plus de particules en augmentant le nombre de répétitions
+                
+				
+				ParticleEffect.RED_DUST.sendColor(Main.server.getOnlinePlayers(), new Location(loc.getWorld(), loc.getX() + MathUtil.betweenNegOneAndOne() * radius , loc.getY()+1+ MathUtil.betweenNegOneAndOne() * radius, loc.getZ()+ MathUtil.betweenNegOneAndOne() * radius), color, true);
+				
+            }
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void particleFor(Player watcher, Location loc, org.bukkit.Color color, double radius) {
 		try {
 			for (int i = 0; i < 10; i++) { // Générer plus de particules en augmentant le nombre de répétitions
                 
 				
-				ParticleEffect.RED_DUST.sendColor(watcher, new Location(Main.world, loc.getX() + MathUtil.betweenNegOneAndOne() , loc.getY()+1+ MathUtil.betweenNegOneAndOne(), loc.getZ()+ MathUtil.betweenNegOneAndOne()), color, true);
+				ParticleEffect.RED_DUST.sendColor(watcher, new Location(Main.world, loc.getX() + MathUtil.betweenNegOneAndOne() * radius , loc.getY()+1+ MathUtil.betweenNegOneAndOne() * radius, loc.getZ()+ MathUtil.betweenNegOneAndOne() * radius), color, true);
             }
 			
 		} catch (Exception e) {

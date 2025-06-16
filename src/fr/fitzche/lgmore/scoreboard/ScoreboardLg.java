@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.scoreboard;
 
+import java.io.Serializable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -12,18 +14,18 @@ import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class ScoreboardLg {
+public class ScoreboardLg  implements Serializable{
 	public GameLg game;
 	public boolean istimeRunned = false;
 	public PlayerData player;
 
-	public Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-	public Objective objective;
+	
+	
 
 	public ScoreboardLg(GameLg game, PlayerData player) {
 		this.game = game;
-		
-		objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
+		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+		Objective objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
 		if (player != null ) {
 			this.player = player;
 			this.refresh();
@@ -32,6 +34,8 @@ public class ScoreboardLg {
 	}
 	
 	public void refresh() {
+		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+		Objective objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
 		for (String entry: objective.getScoreboard().getEntries()) {
 			objective.getScoreboard().resetScores(entry);
 		}
@@ -85,15 +89,22 @@ public class ScoreboardLg {
 	    	registrPoint = game.getEpic();
 	    	str = "Epique -- > ";
 	    }
-	    Score scoreReg = objective.getScore(ChatColor.GOLD+"  Registre: "+ChatColor.AQUA + str + Integer.toString(registrPoint));
-	    scoreReg.setScore(2);
+	    if (game.isRegistresActivated) {
+	    	Score scoreReg = objective.getScore(ChatColor.GOLD+"  Registre: "+ChatColor.AQUA + str + Integer.toString(registrPoint));
+	    	scoreReg.setScore(2);
+	    }
+	    
 	    
 	    
 	    if (player!=null&&player.player != null && player.isOnline) {
 	    	Score score5 = objective.getScore(ChatColor.GOLD+ "Kills: "+player.numberOfKill);
-		    player.player.setScoreboard(board);
+		    
+		    score5.setScore(7);
 		}
-	    
+	    player.player.setScoreboard(board);
+	    if (this.player.isOnline) {
+	    	this.player.player.setScoreboard(board);
+	    }
 	    
 	}
 	
@@ -101,6 +112,8 @@ public class ScoreboardLg {
 	
 	public void setgame(GameLg game) {
 		this.game = game;
+		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+		Objective objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
 		for (String entry: objective.getScoreboard().getEntries()) {
 			objective.getScoreboard().resetScores(entry);
 		}

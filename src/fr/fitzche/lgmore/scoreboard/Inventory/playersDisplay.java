@@ -107,7 +107,7 @@ public class playersDisplay implements Listener{
 						//System.out.println("equal !!");
 						
 						Player cupi = (Player) e.getWhoClicked();
-						if (!PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 1").getLgRole().equals(RolesLg.CUPIDON)){
+						if (!Main.getData(e.getWhoClicked().getName()).getLgRole().equals(RolesLg.CUPIDON)){
 							cupi.sendMessage("Vous n'etes pas cupidon !!");
 							return;
 						}
@@ -115,15 +115,23 @@ public class playersDisplay implements Listener{
 				
 						
 						if (this.Lo1 == null) {
-							this.Lo1 = PlayerUtil.getDataOfPlayer(PlayerUtil.getPlayer(item.getItemMeta().getDisplayName()), " at onInventoryClick of PlayerDisplay, 2");
+							if (Main.getData(item.getItemMeta().getDisplayName()) != null) {
+								this.Lo1 = Main.getData(item.getItemMeta().getDisplayName());
+							} else {
+								return;
+							}
+							
 							cupi.sendMessage(ChatColor.LIGHT_PURPLE+"Vous avez choisi " + item.getItemMeta().getDisplayName()+ " en premier");
 							return;
 						}else if (this.Lo2 == null) {
 							
 							
 							
-							
-							this.Lo2 = PlayerUtil.getDataOfPlayer(PlayerUtil.getPlayer(item.getItemMeta().getDisplayName()), " at onInventoryClick of PlayerDisplay, 2");
+							if (Main.getData(item.getItemMeta().getDisplayName()) != null) {
+								this.Lo2 = Main.getData(item.getItemMeta().getDisplayName());
+							} else {
+								return;
+							}
 							cupi.sendMessage(ChatColor.LIGHT_PURPLE+"Vous avez choisi " + item.getItemMeta().getDisplayName() + " en deuxième");
 							
 							if (Lo1.getName().equals(Lo2.getName())) {
@@ -142,8 +150,8 @@ public class playersDisplay implements Listener{
 								return;
 							}
 							
-							CUPIDON cupidon = (CUPIDON) PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 3").roleIn;
-							cupidon.createCouple(Lo1, Lo2, PlayerUtil.getDataOfPlayer(cupi, " at onInventoryClick of PlayerDisplay, 4"));
+							CUPIDON cupidon = (CUPIDON) Main.getData(cupi).roleIn;
+							cupidon.createCouple(Lo1, Lo2, Main.getData(cupi));
 							cupi.sendMessage("Vous avez tiré vos flèches sur "+ Lo2.getName() + " et " +Lo1.getName());
 							cupi.closeInventory();
 							

@@ -1,11 +1,14 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -24,7 +27,7 @@ public class COMEDIEN implements RoleInstance {
 	
 	public COMEDIEN(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at role creation: ");
+		this.game = player.game;
 		this.game.resCheckers.add(new ComedienChecker(this));
 	}
 	
@@ -55,14 +58,7 @@ public class COMEDIEN implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			
-			
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-			
-		}
+		
 		
 		
 	}
@@ -87,14 +83,14 @@ public class COMEDIEN implements RoleInstance {
 		if (game.getRegister().getType().equals(RegisterType.Tragic)) {
 			
 			PlayerData p = GameLgUtil.getAlPlayer(game);
-			if (MathUtil.pourcentage(game.getTragic())) {
+			if ((!game.isRegistresActivated && MathUtil.pourcentage(30))||MathUtil.pourcentage(game.getTragic())) {
 				playerWithRole.sendMessage(ChatColor.LIGHT_PURPLE+"L'aura du joueur "+ p.getName()+ " est "+p.aura.getName());
 			}
-			if (MathUtil.pourcentage(game.getTragic())) {
+			if ((!game.isRegistresActivated && MathUtil.pourcentage(30))||MathUtil.pourcentage(game.getTragic())) {
 				playerWithRole.sendMessage(ChatColor.LIGHT_PURPLE+"Le joueur "+ p.getName()+ " a tué "+p.numberOfKill+ " kills.");
 
 			}
-			if (MathUtil.pourcentage(game.getTragic())) {
+			if ((!game.isRegistresActivated && MathUtil.pourcentage(30))||MathUtil.pourcentage(game.getTragic())) {
 				for (PotionEffect ef:p.player.getActivePotionEffects()) {
 					
 					if (ef.getType().equals(PotionEffectType.DAMAGE_RESISTANCE)) {	
@@ -142,5 +138,11 @@ public class COMEDIEN implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 }

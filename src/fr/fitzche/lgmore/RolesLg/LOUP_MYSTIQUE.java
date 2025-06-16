@@ -1,6 +1,8 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -26,7 +28,7 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	public LOUP_MYSTIQUE (PlayerData player) {
 		this.playerWithRole = player;
 		
-		this.game = GameLgUtil.getGameOfPlayer(player, "at mystic lg location ");
+		this.game = player.game;
 		this.game.resCheckers.add(new MysticChecker(this, game));
 		
 		
@@ -115,7 +117,7 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	}
 	
 	public void voir() {
-		PlayerData playerToSee = GameLgUtil.getGameOfPlayer(playerWithRole, "at voir() of loup mystique 1").getPlayerAlive().get(MathUtil.generateAlInt(0, GameLgUtil.getGameOfPlayer(playerWithRole, "at voir() of loup mystique 2").getPlayerAlive().size() - 1));
+		PlayerData playerToSee = playerWithRole.game.getPlayerAlive().get(MathUtil.generateAlInt(0, playerWithRole.game.getPlayerAlive().size() - 1));
 		playerWithRole.sendMessage(ChatColor.GOLD + "Le rôle de "+ playerToSee.Name + ", qui est " + playerToSee.role);
 		if (playerToSee.inLove) {
 			playerWithRole.sendMessage(ChatColor.GOLD+"Celui-ci est en couple");
@@ -143,6 +145,13 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

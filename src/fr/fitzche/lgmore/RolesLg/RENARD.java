@@ -4,15 +4,20 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class RENARD implements RoleInstance{
@@ -25,7 +30,7 @@ public class RENARD implements RoleInstance{
 	public String name ="Renard";
 	public RENARD(PlayerData player) {
 		this.playerWithRole = player;
-		for (PlayerData playered :GameLgUtil.getGameOfPlayer(player, "at Renard()").getPlayerAlive()) {
+		for (PlayerData playered :player.game.getPlayerAlive()) {
 			players.put(playered.Name, 0);
 		}
 		
@@ -57,27 +62,31 @@ public class RENARD implements RoleInstance{
 
 	@Override
 	public void giveEffectAllTime() {
-		for (PlayerData ply:GameLgUtil.getGameOfPlayer(playerWithRole, "at giveAllTimeEffect of Renard").getPlayerAlive()) {
+		
+		for (PlayerData ply:playerWithRole.game.getPlayerAlive()) {
+			
 			if (LocationUtil.getDistanceBetween(playerWithRole, ply) < 21) {
-				getPlayerFlaire(ply.Name);
+				getPlayerFlaire(ply.getName());
+				
 			}
 		}
 		
 	}
 	
 	public void flairer(PlayerData player) {
-		if (players.get(player.Name) < 900 ) {
+		if (players.get(player.getName()) < 900 ) {
 			playerWithRole.sendMessage("Vous ne pouvez pas encore flairer ce joueur");
+			System.out.println("flairage à "+ players.get(player.getName()));
 			return;
 		} else {
-			GameLgUtil.getGameOfPlayer(playerWithRole, "at renard").addEpic(3, playerWithRole.getLocation());
+			playerWithRole.game.addEpic(3, playerWithRole.getLocation());
 			if (MathUtil.pourcentage(80 - (5*flaired))) {
 				System.out.println("80% yes");
 				playerWithRole.sendMessage(player.Name + " est probablement " + player.role.name());
 				
 			} else {
 				System.out.println("80% no");
-				playerWithRole.sendMessage(player.Name + " est probablement " + GameLgUtil.getGameOfPlayer(player, "at flairer() of renard").getRoles().get(MathUtil.generateAlInt(0, GameLgUtil.getGameOfPlayer(player, "at flairer() of renard 2").getRoles().size() - 1)).getName());
+				playerWithRole.sendMessage(player.Name + " est probablement " + playerWithRole.game.getRoles().get(MathUtil.generateAlInt(0, playerWithRole.game.getRoles().size() - 1)).getName());
 
 			}
 			this.flaired ++;
@@ -87,7 +96,7 @@ public class RENARD implements RoleInstance{
 	
 	public void getPlayerFlaire(String playerName) {
 			int x = players.get(playerName);
-			if (x < 600) {
+			if (x < 901) {
 				
 				players.put(playerName, x+1);
 			}
@@ -103,11 +112,7 @@ public class RENARD implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-		}
+		
 		
 	}
 	
@@ -142,7 +147,7 @@ public class RENARD implements RoleInstance{
 	public void blind(PlayerData origin) {
 		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Renard, tout ses flairages en court ont été remis à 0");
 		this.playerWithRole.sendMessage(ChatColor.GOLD+ "Vous avez été aveuglé, vos flairage ont été remis à 0");
-		for (PlayerData p:GameLgUtil.getGameOfPlayer(playerWithRole, "blind of renard").getPlayerAlive()) {
+		for (PlayerData p:origin.game.getPlayerAlive()) {
 			this.players.put(p.getName(), 0);
 		}
 	}
@@ -152,6 +157,23 @@ public class RENARD implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		 if (args[0].equals("flairer")) {
+				PlayerData target = Main.getData(args[1]);
+				Player player = (Player) sender;
+				PlayerData renard = Main.getData(sender);
+				if (renard.getName().equals(playerWithRole.getName())) {
+					
+					flairer(target);
+					
+				}
+				
+			}  
+		
 	}
 
 }

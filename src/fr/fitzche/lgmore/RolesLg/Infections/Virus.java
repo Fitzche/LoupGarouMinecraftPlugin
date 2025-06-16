@@ -16,7 +16,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
@@ -60,8 +60,10 @@ public class Virus {
 				
 				ArrayList<PlayerData> player = new ArrayList<PlayerData>();
 				player.add(owner);
-				owner.team.remove(owner);
-				owner.team = new Team("solo", Camp.TEAM, game, player, null, "at parasite of virus", null, null, true, false, false, false);
+				
+				if (!owner.camp.equals(Camp.Love)) {
+					owner.camp = Camp.Other;
+				}
 				owner.sendMessage(ChatColor.DARK_PURPLE+ "Le parasite vous a renté fou, vous devez gagner tout seul, il vous rend cependant plus résistant (2 coeur)");
 				owner.setMaxHealth(owner.getMaxHealth() + 4);
 				break;
@@ -112,7 +114,7 @@ public class Virus {
 	}
 	@Deprecated
 	public Virus(VirusType type, PlayerData owner, PlayerData infecter, int time) {
-		this.game = GameLgUtil.getGameOfPlayer(owner, "at virus creation");
+		this.game = owner.game;
 		this.owner = owner;
 		this.type = type;
 		this.infecter = infecter;
@@ -177,12 +179,14 @@ public class Virus {
 
 				@Override
 				public void run() {
-					owner.setMaxHealth(owner.getMaxHealth() - 1);
+					if (owner.isOnline) {
+						owner.player.damage(1);
+					}
 					removed ++;
 					
 				}
 				
-			}, /*4800, 4800*/ 200, 200);
+			}, 4800, 4800);
 			break;
 		default:
 			break;
@@ -215,7 +219,7 @@ public class Virus {
 				case POISON:
 					if (stopped&&poisonGuerison) {
 						poisonGuerison = false;
-						owner.setMaxHealth(owner.getMaxHealth() + removed);
+						
 					}
 					break;
 				default:

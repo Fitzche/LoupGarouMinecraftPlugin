@@ -1,13 +1,17 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -132,6 +136,25 @@ public class LOUP_GRIMEUR implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		 if (args[0].equals("grimmer")) {
+				
+			PlayerData senderPlD = Main.getData(args[2]);
+			if (senderPlD.role != null && senderPlD.getName().equals(playerWithRole.getName())) {
+					
+				PlayerData p = Main.getData(args[1]);
+				p.grimed = true;
+				sender.sendMessage(ChatColor.GOLD+"Vous avez grimmé "+ args[1]);
+			}
+		} 
+		
 	}
 
 }

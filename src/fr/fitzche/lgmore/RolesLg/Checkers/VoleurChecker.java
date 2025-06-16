@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
@@ -32,17 +33,27 @@ public class VoleurChecker implements ResCheck {
 		
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (voleur != null&&k.getName().equals(voleur.playerWithRole.Name)) {
-			voleur.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker"));
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		if (voleur != null&&k.getName().equals(voleur.playerWithRole.getName())) {
+			PlayerData stealed = Main.getData(e.getEntity());
+			if (stealed == null || stealed.game == null || voleur.playerWithRole.game == null || !stealed.game.name.equals(voleur.playerWithRole.game.name)) {
+				return "voleurNotSameGame";
+			}
+			voleur.steal(Main.getData(e.getEntity()));
+			return "VoleurSteal";
 		} else if (lg != null&&k.getName().equals(lg.playerWithRole.Name)) {
-			lg.steal(PlayerUtil.getDataOfPlayer(e.getEntity(), "at voleur checker for metamorphe"));
+			lg.steal(Main.getData(e.getEntity()));
+			voleur.playerWithRole.game.resCheckers.remove(this);
+			this.voleur = null;
+			return "Metamorph steal";
+		} else {
+			return "";
 		}
 
 	}
@@ -87,6 +98,16 @@ public class VoleurChecker implements ResCheck {
 	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "Voleur/Metamorph Checker";
 	}
 	
 

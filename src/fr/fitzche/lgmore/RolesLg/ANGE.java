@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,11 +16,12 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.RolesLg.Checkers.AngeChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -34,7 +37,7 @@ public class ANGE implements RoleInstance {
 
 	public ANGE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at angel creating");
+		this.game = player.game;
 		
 	}
 
@@ -54,10 +57,8 @@ public class ANGE implements RoleInstance {
 	public void giveEffectAllTime() {
 		if (version) {
 			if (game.getPlayerAlive().size() == 2 && playerWithRole.inLife && target.inLife) {
-				ArrayList<PlayerData> angels = new ArrayList<PlayerData>();
-				angels.add(playerWithRole);
-				angels.add(target);
-				Team team = new Team("angel team", Camp.Other, game, null, null, "null", null, null, true, false, false, false);
+				game.win(Camp.Other);
+				
 			}
 			
 		}
@@ -72,9 +73,9 @@ public class ANGE implements RoleInstance {
 
 		} else {
 			if (name.equals(playerWithRole.Name)) {
-				playerWithRole.sendMessage("Votre cible est morte de votre main, vous gagnez donc 3 coeurs ainsi que résistance 40% ");
+				playerWithRole.sendMessage("Votre cible est morte de votre main, vous gagnez donc 3 coeurs ainsi que résistance 10% ");
 				playerWithRole.changeHealth(6);
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 0));
+				playerWithRole.boostR5 += 2;
 				
 			} else {
 				playerWithRole.sendMessage("Votre cible est morte, mais pas de votre main, vous gagnez donc 3 coeurs");
@@ -165,19 +166,7 @@ public class ANGE implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 		
 	}
@@ -224,5 +213,25 @@ public class ANGE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("angechoose")) {
+			PlayerData player = Main.strToPlayer.getOrDefault(args[2], null);
+			if (player.getName().equals(playerWithRole.getName())) {
+				
+				switch (args[1]) {
+				case "d":
+					chooseVersion(false);
+
+				case "g":
+					chooseVersion(true);
+
+			}
+			}
+			
+		} 
+		
 	}
 }

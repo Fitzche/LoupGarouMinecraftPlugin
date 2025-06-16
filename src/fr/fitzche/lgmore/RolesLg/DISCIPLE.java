@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,6 +21,7 @@ import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -48,14 +52,14 @@ public class DISCIPLE implements RoleInstance {
 	
 	@Override
 	public String getName() {
-		return (this.camp.getColor() + name);
+		return (DISCIPLE.camp.getColor() + name);
 	}
 	
 	public String getDescription() {
 		if (sage != null) {
-			playerWithRole.sendMessage(ChatColor.GOLD + "Le vieux sage est "+ sage.Name);
+			playerWithRole.sendMessage(ChatColor.GOLD + "Le vieux sage est "+ sage.getName());
 		}
-		return (ChatColor.DARK_BLUE+"Vous êtes Disciple, vous devez gagner avec le village, pour cela vous connaissez le role du vieux sage, au bout de 20min avec lui, il obtiendra votre role, au bout de 30min, vous aurez accès à la commande /lg aura [nomDeJoueur] 2 fois qui vous permettra de connaitre l'aura d'un joueur, au bout de 45min vous obtiendrez speed permanent, vous pouvez retrouver le vieux sage avec la commande /lg trouver, cependant si le sage meure vous perdrez un coeur pour chaque phase passée");
+		return (ChatColor.DARK_BLUE+"Vous êtes Disciple, vous devez gagner avec le village, pour cela vous connaissez le role du vieux sage, au bout de 20min avec lui, il obtiendra votre role, au bout de 30min, vous aurez accès à la commande /lg aura [nomDeJoueur] 2 fois qui vous permettra de connaitre l'aura d'un joueur, au bout de 45min vous obtiendrez speed permanent, vous pouvez retrouver le vieux sage avec la commande /lg trouver");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 
@@ -79,7 +83,7 @@ public class DISCIPLE implements RoleInstance {
 	public void giveEffectAllTime() {
         if (thirdUnlock) {
             playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 0, false, false));
-        } else if (LocationUtil.getDistanceBetween(playerWithRole, sage) < 30) {
+        } else if (sage != null && LocationUtil.getDistanceBetween(playerWithRole, sage) < 30) {
             time += 1;
             if (time == 1200 ) {
                 sage.sendMessage(ChatColor.GOLD+"Votre Disciple est "+ playerWithRole.Name);
@@ -94,7 +98,7 @@ public class DISCIPLE implements RoleInstance {
             }
         }
 
-        if (sage.inLife) {
+        if (sage != null && sage.inLife) {
             this.sageLocation = sage.getLocation();
         }
         
@@ -108,11 +112,11 @@ public class DISCIPLE implements RoleInstance {
 
             @Override
             public void run() {
-                GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at giveRoleAndEffect of Disciple");
+                GameLg game = playerWithRole.game;
                 ArrayList<PlayerData> sages = RoleUtil.getPlayersWithRole(game, RolesLg.SAGE);
                 if (sages.size() != 0) {
                     sage = sages.get(MathUtil.generateAlInt(0, sages.size() -1));
-                    playerWithRole.sendMessage(ChatColor.ITALIC + "Le Vieux sage est "+ sage.Name);
+                    playerWithRole.sendMessage(ChatColor.ITALIC + "Le Vieux sage est "+ sage.getName());
                 } 
             }
 
@@ -122,19 +126,7 @@ public class DISCIPLE implements RoleInstance {
 	public static Camp camp = Camp.Villager;
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 		
 	}
@@ -182,5 +174,82 @@ public class DISCIPLE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("trouver")) {
+			
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = senderPlayerData.game;
+					if (gameOfSender != null) {
+						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
+							
+							sender.sendMessage(ChatColor.GOLD +"La dernière position connue du vieux sage est "+ sageLocation.getX() + "; "+ sageLocation.getY() + "; "+ sageLocation.getZ() );
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return;
+				}
+				
+			} else {
+				sender.sendMessage("Seul un joueur peut effectuer cette commande");
+				return;
+			}
+			
+			
+		
+		}
+		
+		if (args[0].equals("aura")) {
+			
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = senderPlayerData.game;
+					if (gameOfSender != null) {
+						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
+						
+							if (secondUnlock) {
+								PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
+								if (target == null) {
+									sender.sendMessage(ChatColor.RED +"[/lg aura] veuillez choisir un joueur valide");
+								} else {
+									if (!powerUsed) {
+										sender.sendMessage("L'aura du joueur "+ target.Name + " est "+ target.aura);
+										powerUsed = true;
+									} else {
+										sender.sendMessage("L'aura du joueur "+ target.Name + " est "+ target.aura);
+										secondUnlock = false;
+									}
+								}
+							}
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return;
+				}
+				
+			} else {
+				sender.sendMessage("Seul un joueur peut effectuer cette commande");
+				return;
+			}
+			
+			
+		
+		}
+		
 	}
 }

@@ -1,10 +1,13 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.RolesLg.Checkers.IDV_Checker;
@@ -19,7 +22,7 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 	
 	public IDIOT_DU_VILLAGE(PlayerData ply) {
 		this.playerWithRole = ply;
-		GameLgUtil.getGameOfPlayer(ply, "at idv creation").resCheckers.add(new IDV_Checker(this, GameLgUtil.getGameOfPlayer(ply, "at idv creation")));
+		ply.game.resCheckers.add(new IDV_Checker(this, ply.game));
 	}
 
 	@Override
@@ -59,11 +62,7 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-		}
+		
 		
 	}
 
@@ -107,6 +106,12 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

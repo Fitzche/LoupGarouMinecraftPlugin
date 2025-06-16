@@ -15,7 +15,7 @@ public class TreasureBlockData implements SpecialBlockData {
 	@Override
 	public SpecialBlockType getType() {
 		// TODO Auto-generated method stub
-		return SpecialBlockType.Vote;
+		return SpecialBlockType.Treasure;
 	}
 
 }

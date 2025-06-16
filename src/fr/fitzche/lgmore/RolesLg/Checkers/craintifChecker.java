@@ -18,17 +18,17 @@ public class craintifChecker implements ResCheck {
 	public GameLg game;
 	public craintifChecker(LOUP_CRAINTIF player) {
 		this.player = player;
-		this.game = GameLgUtil.getGameOfPlayer(player.playerWithRole, "at craintif checker creation");
+		this.game = player.game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 
 	}
 
@@ -36,6 +36,7 @@ public class craintifChecker implements ResCheck {
 	public boolean hide(PlayerDeathEvent e) {
 		if (e.getEntity().getName().equals(player.playerWithRole.getName())) {
 			System.out.println("mort craintif cachée: "+ e.getEntity().getName());
+			System.out.println("craintif hide");
 			return true;
 		}
 		return false;
@@ -56,7 +57,7 @@ public class craintifChecker implements ResCheck {
 				returned += 30;
 			} 
 			returned -= (player.nbOfPlayerAround * 7);
-			if (game.getOrat() > 20) {
+			if (game.isRegistresActivated&&  game.getOrat() > 20) {
 				returned -= 10;
 			}
 			
@@ -64,7 +65,7 @@ public class craintifChecker implements ResCheck {
 			if (game.isDay()) {
 				returned -= 20;
 			}
-			if (game.getTragic() > 20) {
+			if (game.isRegistresActivated&&game.getTragic() > 20) {
 				returned -= 5;
 			}
 			returned += (player.nbOfPlayerAround * 5);
@@ -100,6 +101,16 @@ public class craintifChecker implements ResCheck {
 	public void onAddOrat(int before, int after, Location loc) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "craintifChecker";
 	}
 
 }

@@ -1,8 +1,10 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import java.io.Serializable;
+
 import net.md_5.bungee.api.ChatColor;
 
-public enum Aura {
+public enum Aura implements Serializable {
 	OBSCUR(ChatColor.DARK_RED + "Obscur"),
 	NEUTRAL(ChatColor.YELLOW + "Neutre "),
 	LUMINOUS(ChatColor.GOLD+ "Lumineuse"), 

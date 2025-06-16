@@ -21,19 +21,21 @@ public class ParrainChecker implements ResCheck {
 		this.game = game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		if (e.getEntity().getName().equals(parrain.target.Name) ) {
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		if (e.getEntity().getName().equals(parrain.target.getName()) ) {
 			parrain.targetDeath(k.getName());
-			if (parrain.target.team.equals(game.villTeam)) {
+			if (parrain.target.considVill) {
 				game.addEpic(10, e.getEntity().getLocation());
 			}
+			return "ParrainTargetDeath";
 		}
+		return "";
 
 	}
 	@Override
@@ -77,6 +79,16 @@ public class ParrainChecker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "ParrainChecker";
 	}
 
 }

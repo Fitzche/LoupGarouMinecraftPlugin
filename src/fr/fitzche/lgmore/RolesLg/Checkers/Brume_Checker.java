@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.LOUP_BRUMEUX;
@@ -23,23 +24,24 @@ public class Brume_Checker implements ResCheck {
 	
 	public Brume_Checker(LOUP_BRUMEUX lg) {
 		this.brumeux = lg;
-		this.game = GameLgUtil.getGameOfPlayer(brumeux.playerWithRole, "at brumeux checker");
+		this.game = brumeux.game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 
 	}
 
 	@Override
 	public boolean hide(PlayerDeathEvent e) {
-		if (brumeux.toHide.contains(PlayerUtil.getDataOfPlayer(e.getEntity(), "at hide of brume checker"))) {
+		if (brumeux.toHide.contains(Main.getData(e.getEntity()))) {
+			System.out.println("brume hide");
 			return true;
 		}
 		return false;
@@ -86,6 +88,16 @@ public class Brume_Checker implements ResCheck {
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "BrumeChecker";
 	}
 
 }

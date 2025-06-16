@@ -1,6 +1,10 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -10,6 +14,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.PotionUtil;
+import fr.fitzche.lgmore.Util.WorldUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class PERFIDE implements RoleInstance{
@@ -58,13 +63,27 @@ public class PERFIDE implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		System.out.println("nk.1");
-		if (playerWithRole == null) {
-			System.out.println("effect can't be gived at null player");
-		}
-		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
+		
+		if (!(playerWithRole.considWolf)&& playerWithRole.isShooted) {
 			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
 
+		}
+		Player p = playerWithRole.player;
+		
+		boolean renew = false;
+		
+		
+		if (p.getInventory().getBoots() == null && p.getInventory().getChestplate() == null && p.getInventory().getLeggings() == null && p.getInventory().getHelmet() == null) {
+			for (PotionEffect effect:p.getActivePotionEffects()) {
+				if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
+					return;
+				}
+			}
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000, 0, false, false));
+			
+		} else {
+			
+			p.removePotionEffect(PotionEffectType.INVISIBILITY);
 		}
 		
 	}
@@ -108,9 +127,7 @@ public class PERFIDE implements RoleInstance{
 
 	@Override
 	public void giveNightEffectCheck() {
-		if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-			giveNightEffect();
-		}
+	
 		
 	}
 
@@ -124,6 +141,12 @@ public class PERFIDE implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

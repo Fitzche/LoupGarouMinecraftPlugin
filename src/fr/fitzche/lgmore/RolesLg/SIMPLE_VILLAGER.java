@@ -1,6 +1,8 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -22,7 +24,7 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	
 	public SIMPLE_VILLAGER(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at role creation: ");
+		this.game = player.game;
 		
 		if (MathUtil.pourcentage(50)) {
 			if (MathUtil.pourcentage(50)) {
@@ -71,14 +73,7 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			
-			
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-			}
-			
-		}
+		
 		
 		
 	}
@@ -125,5 +120,11 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 }

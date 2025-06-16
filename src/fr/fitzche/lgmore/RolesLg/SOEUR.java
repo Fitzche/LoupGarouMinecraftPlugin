@@ -2,6 +2,8 @@ package fr.fitzche.lgmore.RolesLg;
 
 import java.util.ArrayList;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -31,7 +33,7 @@ public class SOEUR implements RoleInstance {
 	public SOEUR(PlayerData player, ArrayList<PlayerData> sisters) {
 		playerWithRole = player;
 		this.sisters = sisters;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at sister creation");
+		this.game = player.game;
 		game.resCheckers.add(new SoeurChecker(this, game));
 		
 	}
@@ -56,7 +58,7 @@ public class SOEUR implements RoleInstance {
 	@Override
 	public void giveEffectAllTime() {
 		if (sisters == null||sisters.size()<2) {
-			sisters = RoleUtil.getPlayersWithRole(GameLgUtil.getGameOfPlayer(playerWithRole, "at giveEffectAllTime of Soeur"), RolesLg.SOEUR);
+			sisters = RoleUtil.getPlayersWithRole(game, RolesLg.SOEUR);
 		}
 		for (PlayerData ply:sisters) {
 			double distance = LocationUtil.getDistanceBetween(ply, playerWithRole);
@@ -87,7 +89,6 @@ public class SOEUR implements RoleInstance {
 
 	@Override
 	public void giveNightEffect() {
-		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
 
 		
 	}
@@ -100,8 +101,17 @@ public class SOEUR implements RoleInstance {
 
 	@Override
 	public void episodeEffect() {
-		if (GameLgUtil.getGameOfPlayer(playerWithRole, "at soeur episode effect").timer.temps > 1300) {
-			playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Votre soeur (ou une de vos soeur s'il y en a plus que 2)) est "+ sisters.get(MathUtil.generateAlInt(0, sisters.size() -1)).getName());
+		if (game.timer.temps > 1300) {
+			int tries = 0;
+			PlayerData sister;
+			do {
+				sister = sisters.get(MathUtil.generateAlInt(0, sisters.size() -1));
+				tries ++;
+			} while (tries <5 && sister.getName().equals(playerWithRole.getName()));
+			if (sister.getName().equals(playerWithRole.getName())) {
+				playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"pas d'autres soeur trouvé");
+			}
+			playerWithRole.sendMessage("Votre soeur (ou une de vos soeur s'il y en a plus que 2)) est "+ sister.getName());
 		}
 		
 	}
@@ -128,6 +138,12 @@ public class SOEUR implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -3,15 +3,22 @@ package fr.fitzche.lgmore.RolesLg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 
 
 public class CHASSEUR implements RoleInstance{
@@ -68,12 +75,7 @@ public class CHASSEUR implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-		}
+		
 		
 	}
 
@@ -100,7 +102,12 @@ public class CHASSEUR implements RoleInstance{
 		
 		target.isShooted = true;
 		Bukkit.broadcastMessage("Le chasseur a tiré sur " + target.getName());
-		target.player.damage(6);
+		if (target.player.getHealth() > 13) {
+			target.player.setHealth(target.player.getHealth() - 12);
+		} else {
+			target.player.setHealth(2);
+		}
+		
 	}
 
 	@Override
@@ -127,6 +134,19 @@ public class CHASSEUR implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("tirer")) {
+			PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
+			PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
+			if (p != null && target != null && p.getName().equals(playerWithRole.getName()) && p.game != null && target.Name != null&& p.game.name.equals(target.game.name) ) {
+			
+				shoot(target);
+			}
+		}
+		
 	}
 
 }

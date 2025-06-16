@@ -1,9 +1,12 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -22,7 +25,7 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	
 	public LOUP_METAMORPHE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = GameLgUtil.getGameOfPlayer(player, "at metamorph creation");
+		this.game = player.game;
 		this.game.resCheckers.add(new VoleurChecker(null, game, this));
 		
 	}
@@ -104,17 +107,14 @@ public class LOUP_METAMORPHE implements RoleInstance{
 				playerWithRole.addPotionEffect(effect);
 			}
 		}
-		stealed.player = playerWithRole.player;
-        
-		stealed.Name = playerWithRole.Name;
-		stealed.infected = true;
-		stealed.camp = playerWithRole.camp;
-		stealed.role.changeCampTo(playerWithRole.role.getCampOfRole());
-		playerWithRole.role = stealed.role;
+		playerWithRole.roleIn = stealed.roleIn;
+		stealed.roleIn.changeTo(playerWithRole);
 		
-		GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at steal of metamorph");
-		game.playerAlive.remove(playerWithRole);
-		playerWithRole.player = null;
+		this.playerWithRole.role = stealed.role;
+		this.playerWithRole = null;
+		
+		
+		
 	}
 
     @Override
@@ -132,6 +132,12 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

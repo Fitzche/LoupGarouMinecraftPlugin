@@ -1,5 +1,7 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -27,7 +29,7 @@ public class LOUP_BARBARE implements RoleInstance {
 	public LOUP_BARBARE(PlayerData p) {
 		p.boostS5 += 2;
 		this.playerWithRole = p;
-		this.game = GameLgUtil.getGameOfPlayer(p, "at lg barbare creation");
+		this.game = p.game;
 		this.game.resCheckers.add(new LgBarbare_Checker(p, this));
 		
 	}
@@ -106,6 +108,13 @@ public class LOUP_BARBARE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

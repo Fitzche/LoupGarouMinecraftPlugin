@@ -4,7 +4,10 @@ import java.awt.print.Book;
 import java.util.ArrayList;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -18,10 +21,11 @@ import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.InfinityStones.Stone;
 import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -35,6 +39,7 @@ public class THANOS implements RoleInstance {
 	public boolean hasAll = false;
 	
 	public boolean hasAllUsed = false;
+	public GameLg game;
 	
 	
 	
@@ -42,18 +47,16 @@ public class THANOS implements RoleInstance {
 		this.playerWithRole = player;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		GameLg game = GameLgUtil.getGameOfPlayer(player, "at thanos creating");
-		playerWithRole.team = new Team("Thanos", Camp.Other, game, players, null, "at wolf team creating at == 1200", null, null, true, false, false, false);
-		GameLgUtil.getGameOfPlayer(playerWithRole, "at assassin creating").teams.add(playerWithRole.team);	
+		this.game = player.game;
 		
 		
 		playerWithRole.changeHealth(4);
-		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.MIND));
-		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.SOUL));
-		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.TIME));
-		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.SPACE));
-		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.REALITY));
-		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true), new Stone(this, StonesType.POWER));
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true, game.world, game), new Stone(this, StonesType.MIND), game);
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true, game.world, game), new Stone(this, StonesType.SOUL), game);
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true, game.world, game), new Stone(this, StonesType.TIME), game);
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true, game.world, game), new Stone(this, StonesType.SPACE), game);
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true, game.world, game), new Stone(this, StonesType.REALITY), game);
+		Main.placeStoneStruct(LocationUtil.getAlLocAroundFarfrom(500, 1, true, game.world, game), new Stone(this, StonesType.POWER), game);
 	}
 	
 	@Override
@@ -95,19 +98,7 @@ public class THANOS implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 		
 	}
@@ -153,5 +144,32 @@ public class THANOS implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("thanos")) {
+			PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
+			if (p != null && p.getName().equals(playerWithRole.getName())) {
+				
+				if (hasAll && !hasAllUsed) {
+					for (PlayerData target:this.game.getPlayerAlive()) {
+						if (target.isOnline) {
+							target.sendMessage(ChatColor.DARK_RED+ "Thanos a réuni les 6 pierres d'infinités, chaque joueur a alors 50% de chance de subir 5 coeur de dégat");
+							if (MathUtil.pourcentage(50) && !target.getName().equals(p.getName())) {
+								if (target.player.getHealth() < 10 ) {
+									target.player.setHealth(3);
+								} else {
+									target.player.damage(10);
+								}
+							}
+						}
+						
+					}
+				}
+				
+			}
+		}
+		
 	}
 }

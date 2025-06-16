@@ -10,3 +10,11 @@ commands:
     description: multifonction admin
   lg:
     description: multifonction non admin  
+  flag:
+    description: flag
+  rejoin:
+    description: command to rejoin your game
+  star: 
+    description: command for mini-game star war
+  hub:
+    description: return to the lobby

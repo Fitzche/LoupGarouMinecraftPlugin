@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,9 +17,10 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -28,14 +32,13 @@ public class PYROMANE implements RoleInstance {
     public boolean powerUsed = false;
     public boolean inFire = false;
     public ArrayList<PlayerData> filled = new ArrayList<PlayerData>();
+    public GameLg game;
 
 	public PYROMANE(PlayerData player) {
 		this.playerWithRole = player;
-		GameLg game = GameLgUtil.getGameOfPlayer(player, "at pyromane creating");
+		this.game = player.game;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		playerWithRole.team = new Team("Pyromane", Camp.Other, game, players, null, "at wolf team creating at == 1200", null, null, true, false, false, false);
-		GameLgUtil.getGameOfPlayer(playerWithRole, "at pyromane creating").teams.add(playerWithRole.team);	
 		
 	}
 
@@ -43,8 +46,9 @@ public class PYROMANE implements RoleInstance {
     public void recouvrir(PlayerData player) {
         if (player != null && filled.size()< 3) {
             filled.add(player);
+            playerWithRole.sendMessage("Vous avez recouvert "+ player.getName() + " d'essence");
+
         }
-        playerWithRole.sendMessage("Vous avez recouvert "+ player.Name + " d'essence");
     }
 
     public void fireaspect() {
@@ -58,6 +62,10 @@ public class PYROMANE implements RoleInstance {
 
     @Deprecated
     public void allumer() {
+    	if (game == null) {
+    		playerWithRole.sendMessage("vous n'est pas dans une partie (erreur pyromane allumer()");
+    		return;
+    	}
         if (powerUsed == true) {
         	playerWithRole.sendMessage("Vous ne pouvez allumer vos cibles qu'une seule fois");
             return;
@@ -65,7 +73,7 @@ public class PYROMANE implements RoleInstance {
         playerWithRole.sendMessage("Vous avez allumé vos cibles");
         ArrayList<PlayerData> tempFired = new ArrayList<PlayerData>();
 
-        for (PlayerData target:GameLgUtil.getGameOfPlayer(playerWithRole, "at allumer() of Pyromane").getPlayerAlive()) {
+        for (PlayerData target:this.game.getPlayerAlive()) {
             if (LocationUtil.getDistanceBetween(target, filled.get(0) )< 20 ||LocationUtil.getDistanceBetween(target, filled.get(0) )< 20) {
                 tempFired.add(target);
             }
@@ -120,19 +128,7 @@ public class PYROMANE implements RoleInstance {
 	
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 		
 	}
@@ -181,5 +177,93 @@ public class PYROMANE implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("switchfire")) {
+			System.out.println("switch");
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = senderPlayerData.game;
+					if (gameOfSender != null) {
+						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
+							
+							fireaspect();
+							return;
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return;
+				}
+				
+			} else{
+				sender.sendMessage("Seul un joueur peut effectuer cette commande");
+				return;
+			} 
+		}
+		if (args[0].equals("enflammer")) {
+			System.out.println("enflammed");
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = senderPlayerData.game;
+					if (gameOfSender != null) {
+						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
+							
+							allumer();
+							return;
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return;
+				}
+				
+			} 
+		}
+		if (args[0].equals("recouvrir")) {
+			
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = senderPlayerData.game;
+					if (gameOfSender != null) {
+						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
+							PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
+							if (target == null) {
+								sender.sendMessage("Le joueur visé n'existe pas");
+								return;
+							}
+							
+							recouvrir(target);
+							return;
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return;
+				}
+				
+			}
+		}
+		
+		
+		
 	}
 }

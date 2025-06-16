@@ -12,20 +12,14 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.GameStatut;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
 
 public class GameLgUtil {
-	public static GameLg searchGame(String name) {
-		if (Main.game != null) {
-			return Main.game;
-		}
-		System.out.println("la game n'existe pas");
-		return null;
-	}
+	
 
 	public static PlayerData getAlPlayer(GameLg game) {
 		return game.getPlayerAlive().get(MathUtil.generateAlInt(0, game.getPlayerAlive().size() - 1));
@@ -103,26 +97,45 @@ public class GameLgUtil {
 	
 	public static void tpAl(PlayerData player) {
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(-500, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(-500, 500));
+		Location loc = new Location(player.game.world, MathUtil.generateAlInt(-500, 500), 200, MathUtil.generateAlInt(-500, 500));
 		player.player.teleport(loc);
+	}
+	
+	public static void tpAl(PlayerData player, int i) {
+		if (i < 0) {
+			i *= -1;
+		}
+		if (i < 10) {
+			i = 10;
+		}
+		player.addPotionEffect(PotionUtil.INVINCIBILITY);
+		Location loc = new Location(player.game.world, MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
+		player.player.teleport(loc);
+	}
+	public static void tpAl(ArrayList<PlayerData> players, int i) {
+		if (i < 0) {
+			i *= -1;
+		}
+		if (i < 10) {
+			i = 10;
+		}
+		for (PlayerData player:players) {
+			player.addPotionEffect(PotionUtil.INVINCIBILITY);
+			Location loc = new Location(player.game.world, MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
+			player.player.teleport(loc);
+		}
+		
 	}
 	public static void tpAl(Player player) {
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		Location loc = new Location(Main.server.getWorld("world"), MathUtil.generateAlInt(-500, 500), MathUtil.generateAlInt(100, 150), MathUtil.generateAlInt(-500, 500));
+		GameLg game = Main.getData(player).game;
+		Location loc = new Location(game.world, MathUtil.generateAlInt(-500, 500), 200, MathUtil.generateAlInt(-500, 500));
 		player.teleport(loc);
 	}
 	
 	
 	
-	public static GameLg getGameOfPlayer(Player player, String location) {
-		for (PlayerData ply:Main.game.playerAlive) {
-			if (player.equals(ply.player)) {
-				return Main.game;
-			}
-		}
-		System.out.println("partie du joueur " + player.getName() + " non trouvée at "+ location);
-		return null;
-	}
+	
 	
 	
 	public static void broadcoastTargeted(ArrayList<PlayerData> players, String message) {
@@ -135,7 +148,7 @@ public class GameLgUtil {
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		
 		if (camp.equals(Camp.Wolf)) {
-			players = game.getRealWolfAlive();
+			players = game.getFalseWolfAlive();
 		} else if (camp.equals(Camp.Villager)) {
 			players = game.getFalseVillagersAlive();
 		} else if (camp.equals(Camp.Other)) {
@@ -155,24 +168,9 @@ public class GameLgUtil {
 		
 	}
 	
-	public static GameLg getGameOfPlayer(Player player, String location, boolean x) {
-		for (PlayerData ply:Main.game.playerAlive) {
-			if (player.equals(ply.player)) {
-				return Main.game;
-			}
-		}
-		return null;
-	}
 	
-	public static GameLg getGameOfPlayer(PlayerData player, String location) {
-		for (PlayerData ply:Main.game.playerAlive) {
-			if (player.player.equals(ply.player)) {
-				return Main.game;
-			}
-		}
-		System.out.println("partie du joueur " + player.player.getName() + " non trouvée at "+location);
-		return null;
-	}
+	
+	
 	
 	public static int getHowManyRole(GameLg gm, RolesLg rol) {
 		int x = 0;

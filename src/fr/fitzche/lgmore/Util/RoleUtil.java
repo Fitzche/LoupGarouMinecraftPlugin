@@ -25,6 +25,7 @@ import fr.fitzche.lgmore.RolesLg.DEMON;
 import fr.fitzche.lgmore.RolesLg.DISCIPLE;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.ERMITE;
+import fr.fitzche.lgmore.RolesLg.FAUCONNIER;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
 import fr.fitzche.lgmore.RolesLg.INTERPRETE;
@@ -33,10 +34,14 @@ import fr.fitzche.lgmore.RolesLg.LOUP_BARBARE;
 import fr.fitzche.lgmore.RolesLg.LOUP_BRUMEUX;
 import fr.fitzche.lgmore.RolesLg.LOUP_CRAINTIF;
 import fr.fitzche.lgmore.RolesLg.LOUP_GRIMEUR;
+import fr.fitzche.lgmore.RolesLg.LOUP_HURLEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_MANIPULATEUR;
 import fr.fitzche.lgmore.RolesLg.LOUP_METAMORPHE;
 import fr.fitzche.lgmore.RolesLg.LOUP_MYSTIQUE;
+import fr.fitzche.lgmore.RolesLg.LOUP_SANGUINAIRE;
 import fr.fitzche.lgmore.RolesLg.MONTREUR;
+import fr.fitzche.lgmore.RolesLg.NECROMANCIEN;
+import fr.fitzche.lgmore.RolesLg.NEGOCIATEUR;
 import fr.fitzche.lgmore.RolesLg.PARRAIN;
 import fr.fitzche.lgmore.RolesLg.PERFIDE;
 import fr.fitzche.lgmore.RolesLg.PETITE_FILLE;
@@ -52,6 +57,7 @@ import fr.fitzche.lgmore.RolesLg.SORCIER;
 import fr.fitzche.lgmore.RolesLg.SORCIERE;
 import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.RolesLg.THIERCE_ANGE;
+import fr.fitzche.lgmore.RolesLg.TRAQUEUR;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 
@@ -265,6 +271,30 @@ public class RoleUtil {
 			THANOS role = new THANOS(player);
 			player.roleIn = role;
 			return role;
+		}else if (player.role.equals(RolesLg.TRAQUEUR)) {
+			TRAQUEUR role = new TRAQUEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.LOUP_HURLEUR)) {
+			LOUP_HURLEUR role = new LOUP_HURLEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.LOUP_SANGUINAIRE)) {
+			LOUP_SANGUINAIRE role = new LOUP_SANGUINAIRE(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.NEGOCIATEUR)) {
+			NEGOCIATEUR role = new NEGOCIATEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.NECROMANCIEN)) {
+			NECROMANCIEN role = new NECROMANCIEN(player);
+			player.roleIn = role;
+			return role;
+		}else if (player.role.equals(RolesLg.FAUCONNIER)) {
+			FAUCONNIER role = new FAUCONNIER(player);
+			player.roleIn = role;
+			return role;
 		}else{
 			return null;
 		}
@@ -339,7 +369,7 @@ public class RoleUtil {
 		
 		for (RolesLg role:game.dispoRoles) {
 		
-			if (role.getCampOfRole().equals(camp) || (camp.equals(Camp.Other) && role.getCampOfRole().equals(Camp.Love))) {
+			if (role.getCampOfRole().equals(camp) || (camp.equals(Camp.Other) && (!role.getCampOfRole().equals(Camp.Wolf) && !role.getCampOfRole().equals(Camp.Villager)))) {
 			
 				ArrayList<String> lore = new ArrayList<String>();
 				lore.add(String.valueOf((GameLgUtil.getHowManyRole(game, role)) ));

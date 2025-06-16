@@ -8,15 +8,30 @@ import org.bukkit.entity.Player;
 
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameLg;
+
 import org.bukkit.Material;
+import org.bukkit.World;
 
 public class LocationUtil {
 	public static double getDistanceBetween(PlayerData one, PlayerData Two) {
+		if (!one.getLocation().getWorld().equals(Two.getLocation().getWorld())) {
+			return 10000;
+		}
 		return one.getLocation().distance(Two.getLocation());
 	}
 	
 	public static double getDistanceBetween(Player one, Player Two) {
+		if (!one.getLocation().getWorld().equals(Two.getLocation().getWorld())) {
+			return 10000;
+		}
 		return one.getLocation().distance(Two.getLocation());
+	}
+	public static double getDistanceBetween(Player one, Location Two) {
+		if (!one.getLocation().getWorld().equals(Two.getWorld())) {
+			return 10000;
+		}
+		return one.getLocation().distance(Two);
 	}
 	
 	public static String toString(Location loc) {
@@ -24,7 +39,7 @@ public class LocationUtil {
 	}
 	
 
-	public static Location getAlLocAroundFarfrom(int r, int tr, boolean bol) {
+	public static Location getAlLocAroundFarfrom(int r, int tr, boolean bol, World world, GameLg game) {
 		if (tr > 10) {
 			return null;
 		}
@@ -37,35 +52,36 @@ public class LocationUtil {
 		do {
 			
 			
-			if (!new Location(Main.server.getWorld("world"), x, limit, z).getBlock().getType().equals(Material.AIR)) {
+			if (!new Location(world, x, limit, z).getBlock().getType().equals(Material.AIR) && !new Location(world, x, limit, z).getBlock().getType().equals(Material.LEAVES) && !new Location(world, x, limit, z).getBlock().getType().equals(Material.LEAVES_2) && !new Location(world, x, limit, z).getBlock().getType().equals(Material.WOOD)) {
 				empty = false;
 			}
 			limit --;
 		} while (empty && limit >49);
 		if (limit < 50) {
-			return getAlLocAroundFarfrom(r, tr+1, false);
+			return getAlLocAroundFarfrom(r, tr+1, false, world, game);
 		} else {
-			Location loc = new Location(Main.server.getWorld("world"), x, limit, z);
+			Location loc = new Location(world, x, limit, z);
 			boolean retry = false;
-			for (Location locT: Main.locBat) {
+			for (Location locT: game.locsBat) {
 				if ((new Location(loc.getWorld(), loc.getX(), 0, loc.getZ()).distance(new Location(loc.getWorld(), locT.getX(), 0, locT.getZ()))) <20) {
 					retry = true;
 				}
 			}
 			if (retry) {
-				return getAlLocAroundFarfrom(r, tr+1, false);
+				return getAlLocAroundFarfrom(r, tr+1, false, world, game);
 			}
 			System.out.println("loc = "+ loc.getBlockX()+ "; "+loc.getBlockY()+"; "+loc.getBlockZ());
+			loc.setWorld(world);
 			return loc;
 		}
 	}
 	
-	public static ArrayList<PlayerData> getClassByDistance( Location loc) {
-		ArrayList<PlayerData> gameP = Main.game.getPlayerAlive();
+	public static ArrayList<PlayerData> getClassByDistance( Location loc, String CheckWorld, GameLg game) {
+		ArrayList<PlayerData> gameP = game.getPlayerAlive();
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		
 		
-		for (PlayerData p:Main.game.getPlayerAlive()) {
+		for (PlayerData p:game.getPlayerAlive()) {
 			if (players.size() < 1) {
 				players.add(p);
 			} else {
@@ -76,10 +92,11 @@ public class LocationUtil {
 						players.add(index, p);
 						added = true;
 					}
-					if (index == players.size() -1) {
+					if (index == players.size() -1 && !added) {
 						players.add(index, p);
 						added = true;
 					}
+					index++;
 					
 				} while (index < players.size() && !added);
 			}

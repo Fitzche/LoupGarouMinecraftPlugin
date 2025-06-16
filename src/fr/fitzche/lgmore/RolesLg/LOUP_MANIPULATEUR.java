@@ -1,9 +1,16 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 
 public class LOUP_MANIPULATEUR implements RoleInstance {
 
@@ -92,6 +99,44 @@ public class LOUP_MANIPULATEUR implements RoleInstance {
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("aveugler")) {
+			
+			if (sender instanceof Player) {
+				Player senderPlayer = (Player) sender;
+				PlayerData senderPlayerData = Main.getData(sender);
+				if (senderPlayerData != null) {
+					GameLg gameOfSender = senderPlayerData.game;
+					if (gameOfSender != null) {
+						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
+							
+							
+							if (powerUsed == 0) {
+								sender.sendMessage(ChatColor.RED+"Il ne vous reste plus assez d'utilisation");
+								return;
+							}
+							Main.getData(args[1]).roleIn.blind(senderPlayerData);
+							if (!Main.getData(args[1]).roleIn.isInfoRole()) {
+								playerWithRole.sendMessage("Ce n'est pas un role à info");
+							}
+							powerUsed --;
+							gameOfSender.addorat(5, playerWithRole.getLocation());
+							return;
+						}
+					} else {
+						sender.sendMessage("Vous devez etre dans une partie pour effectuer cette commande");
+						return;
+					}
+				} else {
+					sender.sendMessage("Aucune info ne vous est associé, seul un joueur participant à une partie peut effectuer cette commande");
+					return;
+				}
+				
+			} 
+		}
+		
 	}
 
 }

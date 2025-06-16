@@ -1,11 +1,14 @@
 package fr.fitzche.lgmore.RolesLg;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import net.md_5.bungee.api.ChatColor;
@@ -55,16 +58,16 @@ public class CORBEAU implements RoleInstance{
 			playerWithRole.player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 4));
 
 		} else if (numberOfVote == 2) {
-			playerWithRole.changeHealth(4);
-		} 
+			playerWithRole.changeHealth(2);
+		} else if (numberOfVote == 3) {
+			playerWithRole.changeHealth(2);
+		}
 		numberOfVote++;
 	}
 
 	@Override
 	public void giveEffectAllTime() {
-		if (numberOfVote > 3) {
-			playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
-		}
+		
 		
 	}
 
@@ -76,12 +79,7 @@ public class CORBEAU implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-		}
+		
 		
 	}
 
@@ -119,6 +117,12 @@ public class CORBEAU implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

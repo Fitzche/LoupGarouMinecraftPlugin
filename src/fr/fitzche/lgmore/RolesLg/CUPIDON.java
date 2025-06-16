@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +19,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
-import fr.fitzche.lgmore.Love.Team;
+
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -26,9 +28,12 @@ import fr.fitzche.lgmore.Util.PlayerUtil;
 public class CUPIDON implements RoleInstance{
 	public PlayerData playerWithRole;
 	public boolean powerUsed;
-	Team couple;
+	
 	public Camp camp = Camp.Love;
 	public String name ="CUPIDON";
+	public PlayerData p1;
+	public PlayerData p2;
+	public PlayerData p3;
 
 	@Override
 	public String getName() {
@@ -67,8 +72,8 @@ public class CUPIDON implements RoleInstance{
 
 			@Override
 			public void run() {
-				if (couple == null) {
-					GameLg gm = GameLgUtil.getGameOfPlayer(playerWithRole, "at run of giveRoleAndEffect Cupidon");
+				if (p1 == null || p2 == null) {
+					GameLg gm = playerWithRole.game;
 					PlayerData one = MathUtil.getAlPlayer(gm);
 					createCouple(one, MathUtil.getAlPlayer(gm, one), playerWithRole);
 				}
@@ -84,58 +89,26 @@ public class CUPIDON implements RoleInstance{
 	
 	public void createCouple(PlayerData player, PlayerData player2, PlayerData Cupidon) {
 		System.out.println("create couple");
-		if (this.couple != null) {
+		if (p1 != null && p2!=null) {
 			return;
 		}
-		PlayerData playerTwo = player2;
-		GameLg game = GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating ");
-		ArrayList<PlayerData> members = new ArrayList<PlayerData>();
-		
-		if (MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating event mal visé").probasEvents.get("Mal visé"))) {
-			player = Cupidon;
-			playerTwo = GameLgUtil.getAlPlayerWithout(game, player);
-			Cupidon.sendMessage("Vous avez mal visé");
-
-		} else {
-			members.add(Cupidon);
-		}
-		System.out.println("couple null before creating");
-		
-		//FOR 2 MEMBER OF COUPLE
-		
-		members.add(playerTwo);
-		if (playerTwo.team != null) {
-			playerTwo.team.remove(player2);
-		}
-		
-		members.add(player);
-		if (player.team != null) {
-			player.team.remove(player);
-		}
-		
-		
-		
-		
-		ArrayList<PlayerData> couple = new ArrayList<PlayerData>();
-		couple.add(player2);
-		couple.add(player);
-		
-		
-		
+		p1 = player;
+		p2 = player2;
+		p1.camp = Camp.Love;
+		p2.camp = Camp.Love;
 		player.inLove = true;
 		player2.inLove = true;
-		System.out.println("proba of "+ MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(this.playerWithRole, "at couple creating").probasEvents.get("Trouple")));
-		if (MathUtil.pourcentage(GameLgUtil.getGameOfPlayer(this.playerWithRole, "at couple creating").probasEvents.get("Trouple"))) {
-			PlayerData third = GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating //trouple").getPlayerAlive().get(MathUtil.generateAlInt(0, GameLgUtil.getGameOfPlayer(playerWithRole, "at couple creating 2//trouple").getPlayerAlive().size()));
+		System.out.println("proba of "+ MathUtil.pourcentage(playerWithRole.game.probasEvents.get("Trouple")));
+		if (MathUtil.pourcentage(playerWithRole.game.probasEvents.get("Trouple"))) {
+			PlayerData third = playerWithRole.game.getPlayerAlive().get(MathUtil.generateAlInt(0, playerWithRole.game.getPlayerAlive().size()));
 			System.out.println("trouple");
 			
-			members.add(third);
-			third.team.remove(third);
+			p3 = third;
+			p3.camp = Camp.Love;
 			
-			couple.add(third);
-			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
-			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ third.Name);
-			third.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
+			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
+			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ third.Name);
+			third.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
 			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + ", "+third.Name+" et "+ player2.Name + " en couple");
 
 			third.inLove = true;
@@ -143,12 +116,10 @@ public class CUPIDON implements RoleInstance{
 
 		} else {
 			System.out.println("no trouple");
-			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
-			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
+			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
+			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
 			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + " et "+ player2.Name + " en couple");
 		}
-		this.couple = new Team(ChatColor.LIGHT_PURPLE+"Couple", Camp.Love, GameLgUtil.getGameOfPlayer(playerWithRole, "at Couple creating"), members, null, "at Couple creating", null, couple, true, false, false, true);
-		GameLgUtil.getGameOfPlayer(playerWithRole, "at Couple creating 2").teams.add(this.couple);
 		
 		
 		
@@ -165,12 +136,7 @@ public class CUPIDON implements RoleInstance{
 
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-		}
+		
 		
 	}
 
@@ -216,6 +182,12 @@ public class CUPIDON implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

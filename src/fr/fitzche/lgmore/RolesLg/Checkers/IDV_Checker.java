@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
@@ -21,25 +22,29 @@ public class IDV_Checker implements ResCheck{
 		this.game = game;
 	}
 	@Override
-	public boolean checkRes(PlayerDeathEvent e) {
-		if (e.getEntity().getKiller() == null || PlayerUtil.getDataOfPlayer(e.getEntity().getKiller(), "at idv checker death").camp != Camp.Villager || idv.powerUsed ) {
-			return false;
-		}else {
+	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
+		if (killer != null 
+				&& !killer.considWolf
+				&& !idv.powerUsed
+				&& e.getEntity().getName().equals(idv.playerWithRole.getName())) {
 			idv.playerWithRole.sendMessage("Vous avez été tué, vous bénéficiez cependant d'une 2e chance car votre assassin est un membre du village");
 			for (PlayerData p: game.getPlayerAlive()) {
 				p.sendMessage(ChatColor.GREEN+"Le joueur "+ idv.playerWithRole.Name + " a été tué par un villageois, il est cependant réssucité car il était Idiot Du Village");
 			}
 			idv.playerWithRole.setMaxHealth(idv.playerWithRole.getMaxHealth() - 4);
 			idv.powerUsed= true;
+			System.out.println("idv ressut");
 			return true;
+		} else {
+			return false;
 		}
 		
 		
 	} 
 
 	@Override
-	public void runDeathAction(PlayerDeathEvent e, Player k) {
-		// TODO Auto-generated method stub
+	public String runDeathAction(PlayerDeathEvent e, Player k) {
+		return "";
 		
 	}
 	@Override
@@ -83,6 +88,16 @@ public class IDV_Checker implements ResCheck{
 	public boolean brume(PlayerDeathEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public boolean checkRes(PlayerDeathEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public String getTypeName() {
+		// TODO Auto-generated method stub
+		return "IdvChecker";
 	}
 
 }

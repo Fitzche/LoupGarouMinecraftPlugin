@@ -31,8 +31,8 @@ public class PlayerDisplay implements Listener{
 	this.gm = gm;
 		
 	ArrayList<Player> players = new ArrayList<Player>();
-	for (Player pl: fr.fitzche.lgmore.Main.server.getOnlinePlayers()) {
-		players.add(pl);
+	for (PlayerData pl: gm.players) {
+		players.add(pl.player);
 	}
 	
 	int x = 0;
@@ -53,32 +53,12 @@ public class PlayerDisplay implements Listener{
 				
 				//System.out.println("mm3.0");
 				
-				boolean present = false;
-				if (gm.ListPlayer().contains(player.getName())) {
-					present = true;
-					//System.out.println(gm.ListPlayer() + " contain "+ player.getName());
-				} else {
-					//System.out.println(gm.ListPlayer() + " not contain "+ player.getName());
-
-				}
 				
-				if (gm.players.size() > 0) {
-					//System.out.println("aucun joueur");
-				}
-				//System.out.println("mm2");
-
 				
-				if (present) {
-					l.add("ce joueur est présent dans cette partie");
-					//System.out.println("present ici");
-				} else {
-					l.add("ce joueur n'est pas présent dans cette partie");
-					//System.out.println("no present ici");
-
-				}
+				
 				//System.out.println("mm1");
 
-				meta.setLore(l);
+				
 				head.setItemMeta(meta);
 				
 				this.inv.setItem(x, head);

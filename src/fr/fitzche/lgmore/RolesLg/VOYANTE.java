@@ -1,14 +1,22 @@
 package fr.fitzche.lgmore.RolesLg;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
+import fr.fitzche.lgmore.commands.FutureAction;
 import net.md_5.bungee.api.ChatColor;
 
 public class VOYANTE implements RoleInstance{
@@ -52,19 +60,7 @@ public class VOYANTE implements RoleInstance{
 	public static Camp camp = Camp.Villager;
 	@Override
 	public void giveNightEffect() {
-		if (this.playerWithRole.infected) {
-			System.out.println("nk.1");
-			if (playerWithRole == null) {
-				System.out.println("effect can't be gived at null player");
-			}
-			if (!(playerWithRole.camp.equals(Camp.Wolf)&& playerWithRole.isShooted)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 79, 0, false, false));
-
-			}
-			
-			//VOIR SCHEDULER + EFFECT = ERROR ???
-			System.out.println("nk.2");
-		}
+		
 		
 		
 	}
@@ -127,5 +123,60 @@ public class VOYANTE implements RoleInstance{
 	public boolean isInfoRole() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+
+
+	@Override
+	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
+		if (args[0].equals("voir")) {
+			
+			Player player = (Player) sender;
+			
+			if (!sender.getName().equals(playerWithRole.getName())) {
+				
+				return;
+			}
+			
+			
+			if (powerUsed) {
+				player.sendMessage(ChatColor.BLACK + "vous avez déjà utilisé votre pouvoir !!!");
+				return;
+			
+			}
+			PlayerData ply = Main.getData(sender);
+			
+			if (ply.camp.equals(Camp.Villager)) {
+				player.damage(10);
+				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 6000, 0, false, false));
+				ply.boostS5 -= 3;
+				ply.game.futuresActions.add(new FutureAction(new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						ply.boostS5 += 3;
+						
+					}
+					
+				}, 300));
+		
+				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role);
+			}  else {
+				Location loc = ply.getLocation();
+				player.sendMessage(ChatColor.BLUE + ply.Name + " est "+ ply.role.getName()+ ", il se trouve en "+loc.getBlockX()+ ", "+loc.getBlockY() + ", " + loc.getBlockZ()+ "; (x/y/z)");
+
+			}
+			
+			powerUsed = true;
+			
+			
+			
+			
+			
+			
+			
+			
+		}
+		
 	}
 }
