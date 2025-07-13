@@ -26,7 +26,7 @@ public class ANCIEN implements RoleInstance{
 	
 	public ANCIEN(PlayerData player) {
 		playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg) player.game;
 		this.game.resCheckers.add(new AncienChecker(this, game));
 
 	}

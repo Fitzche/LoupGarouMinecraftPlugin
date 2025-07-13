@@ -14,6 +14,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
@@ -150,7 +151,7 @@ public class VOYANTE implements RoleInstance{
 				player.damage(10);
 				player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 6000, 0, false, false));
 				ply.boostS5 -= 3;
-				ply.game.futuresActions.add(new FutureAction(new BukkitRunnable() {
+				((GameLg)ply.game).futuresActions.add(new FutureAction(new BukkitRunnable() {
 
 					@Override
 					public void run() {

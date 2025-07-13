@@ -27,7 +27,7 @@ public class ERMITE implements RoleInstance {
 	
 	public ERMITE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		game.resCheckers.add(new ErmiteChecker(this));
 	}
 	

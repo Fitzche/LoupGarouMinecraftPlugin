@@ -36,7 +36,7 @@ public class PYROMANE implements RoleInstance {
 
 	public PYROMANE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game =(GameLg) player.game;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
 		
@@ -188,7 +188,7 @@ public class PYROMANE implements RoleInstance {
 				Player senderPlayer = (Player) sender;
 				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
 				if (senderPlayerData != null) {
-					GameLg gameOfSender = senderPlayerData.game;
+					GameLg gameOfSender = (GameLg) senderPlayerData.game;
 					if (gameOfSender != null) {
 						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
 							
@@ -215,7 +215,7 @@ public class PYROMANE implements RoleInstance {
 				Player senderPlayer = (Player) sender;
 				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
 				if (senderPlayerData != null) {
-					GameLg gameOfSender = senderPlayerData.game;
+					GameLg gameOfSender = (GameLg) senderPlayerData.game;
 					if (gameOfSender != null) {
 						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
 							
@@ -239,7 +239,7 @@ public class PYROMANE implements RoleInstance {
 				Player senderPlayer = (Player) sender;
 				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
 				if (senderPlayerData != null) {
-					GameLg gameOfSender = senderPlayerData.game;
+					GameLg gameOfSender = (GameLg)senderPlayerData.game;
 					if (gameOfSender != null) {
 						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
 							PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);

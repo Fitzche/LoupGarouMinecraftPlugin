@@ -17,7 +17,7 @@ public class ErmiteChecker implements ResCheck {
 	public GameLg game;
 	public ErmiteChecker(ERMITE player) {
 		this.player = player;
-		this.game = player.playerWithRole.game;
+		this.game = (GameLg)player.playerWithRole.game;
 	}
 	@Override
 	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {

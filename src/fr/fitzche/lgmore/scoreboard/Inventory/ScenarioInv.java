@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -135,70 +136,71 @@ public class ScenarioInv implements InvFunct {
 	}
 	
 	
-	public void click(PlayerData p, GameLg game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
+		GameLg game1 = (GameLg) game;
 		switch (clickedName) {
 			case "Théâtre":
 				
-				if (!game.scenarioAct.getOrDefault("Théâtre", false)) {
-					game.scenarioAct.put("Théâtre", true);
+				if (!game1.scenarioAct.getOrDefault("Théâtre", false)) {
+					game1.scenarioAct.put("Théâtre", true);
 					p.sendMessage("registres activés");
 				} else {
-					game.scenarioAct.put("Théâtre", false);
+					game1.scenarioAct.put("Théâtre", false);
 					p.sendMessage("registres désactivés");
 				}
 				break;
 			case "DirectFights":
 				 
-				if (!game.scenarioAct.getOrDefault("DirectFights", false)) {
-					game.scenarioAct.put("DirectFights", true);
+				if (!game1.scenarioAct.getOrDefault("DirectFights", false)) {
+					game1.scenarioAct.put("DirectFights", true);
 					p.sendMessage("direct fight activés");
 				} else {
-					game.scenarioAct.put("DirectFights", false);
+					game1.scenarioAct.put("DirectFights", false);
 					p.sendMessage("direct fight désactivés");
 				}
 				break;
 			case "Necromancie":
-				if (!game.scenarioAct.getOrDefault("Necromancie", false)) {
-					game.scenarioAct.put("Necromancie", true);
+				if (!game1.scenarioAct.getOrDefault("Necromancie", false)) {
+					game1.scenarioAct.put("Necromancie", true);
 					p.sendMessage("Necromancie activée");
 				} else {
-					game.scenarioAct.put("Necromancie", false);
+					game1.scenarioAct.put("Necromancie", false);
 					p.sendMessage("Necromancie désactivés");
 				}
 				break;
 			case "SwapperDouble":
-				if (!game.scenarioAct.getOrDefault("SwapperDouble", false)) {
-					game.scenarioAct.put("SwapperDouble", true);
+				if (!game1.scenarioAct.getOrDefault("SwapperDouble", false)) {
+					game1.scenarioAct.put("SwapperDouble", true);
 					p.sendMessage("Swapper double activée");
 				} else {
-					game.scenarioAct.put("SwapperDouble", false);
+					game1.scenarioAct.put("SwapperDouble", false);
 					p.sendMessage("Swapper double désactivés");
 				}
 				break;
 			case "SwapperTrio":
-				if (!game.scenarioAct.getOrDefault("SwapperTrio", false)) {
-					game.scenarioAct.put("SwapperTrio", true);
+				if (!game1.scenarioAct.getOrDefault("SwapperTrio", false)) {
+					game1.scenarioAct.put("SwapperTrio", true);
 					p.sendMessage("Swapper trio activée");
 				} else {
-					game.scenarioAct.put("SwapperTrio", false);
+					game1.scenarioAct.put("SwapperTrio", false);
 					p.sendMessage("Swapper trio désactivés");
 				}
 				break;
 			case "SwapperQuadrio":
-				if (!game.scenarioAct.getOrDefault("SwapperQuatuor", false)) {
-					game.scenarioAct.put("SwapperQuatuor", true);
+				if (!game1.scenarioAct.getOrDefault("SwapperQuatuor", false)) {
+					game1.scenarioAct.put("SwapperQuatuor", true);
 					p.sendMessage("Swapper quadrio activée");
 				} else {
-					game.scenarioAct.put("SwapperQuatuor", false);
+					game1.scenarioAct.put("SwapperQuatuor", false);
 					p.sendMessage("Swapper quadrio désactivés");
 				}
 				break;
 			case "SwapperFive":
-				if (!game.scenarioAct.getOrDefault("SwapperFive", false)) {
-					game.scenarioAct.put("SwapperFive", true);
+				if (!game1.scenarioAct.getOrDefault("SwapperFive", false)) {
+					game1.scenarioAct.put("SwapperFive", true);
 					p.sendMessage("Swapper five activée");
 				} else {
-					game.scenarioAct.put("SwapperFive", false);
+					game1.scenarioAct.put("SwapperFive", false);
 					p.sendMessage("Swapper five désactivés");
 				}
 				break;

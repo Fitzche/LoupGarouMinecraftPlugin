@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -43,7 +44,7 @@ public class PlayerGameListInv implements InvFunct{
 			}
 			ItemUtil.setName(item, name);
 			String role = "";
-			role = note.getStrRole(p.getName());
+			role = ChatColor.GOLD + ""+ChatColor.GOLD+note.getStrRole(p.getName());
 			ItemUtil.setLore(item, new ArrayList<String>(Arrays.asList(role)));
 			items.add(item);
 			
@@ -62,7 +63,7 @@ public class PlayerGameListInv implements InvFunct{
 	
 	
 	@Override
-	public void click(PlayerData p, GameLg game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
 		int x = -1;
 		x = Integer.valueOf(lores.get(0));
 		if (lores != null && lores.size() > 0 && x >= 0 && p.isOnline) {

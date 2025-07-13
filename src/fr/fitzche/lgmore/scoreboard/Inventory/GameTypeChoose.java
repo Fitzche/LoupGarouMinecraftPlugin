@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
+import fr.fitzche.lgmore.Lg.GameType;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
@@ -29,11 +31,12 @@ public class GameTypeChoose implements InvFunct {
 		StringChooseInv inv = new StringChooseInv(p, items, backInv, this);
 	}
 	@Override
-	public void click(PlayerData p, GameLg game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
 		if (clickedName.equals(ChatColor.DARK_RED+ ""+ChatColor.BOLD + "Loup Garou")) {
 			String gameName = "gameLg-"+ MathUtil.generateAlInt(0, 10000);
 			String[] args0 = new String[] {"Game" , "create" , gameName};
 			CommandUtil.runCommand("lga", p.player, args0);
+			Main.strToGame.get(gameName).gameType = GameType.LoupGarou;
 			
 			
 			
@@ -43,14 +46,15 @@ public class GameTypeChoose implements InvFunct {
 			String gameName2 = "gameLg-"+ MathUtil.generateAlInt(0, 10000);
 			String[] args2 = new String[] {"Game" , "create" , gameName2};
 			CommandUtil.runCommand("lga", p.player, args2);
+			Main.strToGame.get(gameName2).gameType = GameType.TeamSwapper;
 			
 			
 			
 			String[] args3 = new String[] {"Game" , "config" , gameName2};
 			
 			
-			p.game.swapper = true;
-			p.game.swapperPente = true;
+			((GameLg)p.game).swapper = true;
+			((GameLg)p.game).swapperPente = true;
 			CommandUtil.runCommand("lga", p.player, args3);
 		}
 		

@@ -29,7 +29,7 @@ public class LOUP_BARBARE implements RoleInstance {
 	public LOUP_BARBARE(PlayerData p) {
 		p.boostS5 += 2;
 		this.playerWithRole = p;
-		this.game = p.game;
+		this.game = (GameLg)p.game;
 		this.game.resCheckers.add(new LgBarbare_Checker(p, this));
 		
 	}

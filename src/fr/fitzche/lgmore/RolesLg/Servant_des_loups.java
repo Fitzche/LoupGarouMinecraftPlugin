@@ -23,7 +23,7 @@ public class Servant_des_loups implements RoleInstance {
 	public Servant_des_loups(PlayerData p, PlayerData playerWithRole) {
 		this.master = p;
 		this.playerWithRole = playerWithRole;
-		this.game = p.game;
+		this.game = (GameLg) p.game;
 		this.game.resCheckers.add(new servantLgChecker(this));
 		playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Vous êtes devenu servant des loups, si votre maitre meurt, vous mourrez à sa place, vous apparaissez comme un loup et avez la liste mais vous n'avez pas d'effet, votre maitre est "+ master.Name);
 		if (!playerWithRole.inLove) {

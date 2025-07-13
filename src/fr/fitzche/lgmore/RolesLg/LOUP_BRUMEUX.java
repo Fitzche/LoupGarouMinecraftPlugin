@@ -32,7 +32,7 @@ public class LOUP_BRUMEUX implements RoleInstance {
 	
 	public LOUP_BRUMEUX(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		game.resCheckers.add(new Brume_Checker(this));
 	}
 	

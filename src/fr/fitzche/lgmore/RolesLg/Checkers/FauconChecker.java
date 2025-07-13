@@ -9,6 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.FAUCONNIER;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
@@ -45,7 +46,7 @@ public class FauconChecker implements ResCheck {
 		for (Location loc:fauc.spottedPoint) {
 			if (LocationUtil.getDistanceBetween(k, loc) < 50) {
 				int n = 0;
-				for (PlayerData p:fauc.playerWithRole.game.playerAlive) {
+				for (PlayerData p:((GameLg)fauc.playerWithRole.game).playerAlive) {
 					if (LocationUtil.getDistanceBetween(p.player, loc) < 50) {
 						n++;
 					}

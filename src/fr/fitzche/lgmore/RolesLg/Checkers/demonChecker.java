@@ -25,7 +25,7 @@ public class demonChecker implements ResCheck {
 	
 	public demonChecker(DEMON demon) {
 		this.player = demon.playerWithRole;
-		this.game = demon.playerWithRole.game;
+		this.game = (GameLg) demon.playerWithRole.game;
 		this.demon = demon;
 	}
 

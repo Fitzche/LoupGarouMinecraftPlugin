@@ -27,7 +27,7 @@ public class COMEDIEN implements RoleInstance {
 	
 	public COMEDIEN(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		this.game.resCheckers.add(new ComedienChecker(this));
 	}
 	

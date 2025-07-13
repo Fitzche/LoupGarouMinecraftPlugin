@@ -26,7 +26,7 @@ public class VOLEUR implements RoleInstance{
 	
 	public VOLEUR(PlayerData player) {
 		this.playerWithRole = player;
-		GameLg game = player.game;
+		GameLg game = (GameLg) player.game;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
 		
@@ -108,12 +108,12 @@ public class VOLEUR implements RoleInstance{
 		if (stealed.role.getCampOfRole().equals(Camp.Wolf)) {
 			
 			
-			for (PlayerData p: stealed.game.getFalseWolfAlive()) {
+			for (PlayerData p: ((GameLg)stealed.game).getFalseWolfAlive()) {
 				p.sendMessage(ChatColor.RED+"Le Joueur "+ playerWithRole.getName()+ " a rejoint votre camp");
 			}
 		}
 		playerWithRole.sendMessage(ChatColor.GOLD+"Vous avez volé le role de "+ stealed.getName() + " qui était "+ stealed.role.getName());
-		playerWithRole.game.setRole(playerWithRole, stealed.role);
+		((GameLg)playerWithRole.game).setRole(playerWithRole, stealed.role);
 		
 		
 		

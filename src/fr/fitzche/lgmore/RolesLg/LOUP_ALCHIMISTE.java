@@ -36,7 +36,7 @@ public class LOUP_ALCHIMISTE implements RoleInstance {
 	public LOUP_ALCHIMISTE(PlayerData player) {
 		this.playerWithRole = player;
 		
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		for (PlayerData p:game.getPlayerAlive()) {
 			players.put(p, 0);
 		}

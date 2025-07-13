@@ -24,9 +24,13 @@ public class Hub implements CommandExecutor {
 		}
 		
 		if (p.game != null) {
-			if (p.player.getLocation().getWorld().equals(p.game.world)) {
+			if (p.player.getLocation().getWorld().equals(p.game.getWorld())) {
 				p.rejoinLoc = p.player.getLocation();
 			}
+		}
+		
+		if (p.bedGame != null && p.bedGame.getWorld().equals(p.getLocation().getWorld()) ) {
+			p.rejoinLoc = p.getLocation();
 		}
 		p.player.teleport(Main.world.getSpawnLocation());
 		

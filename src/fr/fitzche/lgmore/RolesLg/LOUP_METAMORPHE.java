@@ -25,7 +25,7 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	
 	public LOUP_METAMORPHE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		this.game.resCheckers.add(new VoleurChecker(null, game, this));
 		
 	}

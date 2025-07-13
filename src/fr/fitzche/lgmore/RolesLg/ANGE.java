@@ -37,7 +37,7 @@ public class ANGE implements RoleInstance {
 
 	public ANGE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg) player.game;
 		
 	}
 

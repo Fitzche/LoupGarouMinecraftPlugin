@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.Lga;
+import fr.fitzche.lgmore.commands.Star;
 
 public class CommandUtil {
 
@@ -15,6 +16,9 @@ public class CommandUtil {
 			
 		} else if (commandBase.equals("lga")) {
 			Lga ex = new Lga();
+			ex.onCommand(sender, null, null, args);
+		} else if (commandBase.equals("star")) {
+			Star ex = new Star();
 			ex.onCommand(sender, null, null, args);
 		}
 		

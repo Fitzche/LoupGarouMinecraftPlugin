@@ -73,7 +73,7 @@ public class CUPIDON implements RoleInstance{
 			@Override
 			public void run() {
 				if (p1 == null || p2 == null) {
-					GameLg gm = playerWithRole.game;
+					GameLg gm = (GameLg)playerWithRole.game;
 					PlayerData one = MathUtil.getAlPlayer(gm);
 					createCouple(one, MathUtil.getAlPlayer(gm, one), playerWithRole);
 				}
@@ -98,9 +98,9 @@ public class CUPIDON implements RoleInstance{
 		p2.camp = Camp.Love;
 		player.inLove = true;
 		player2.inLove = true;
-		System.out.println("proba of "+ MathUtil.pourcentage(playerWithRole.game.probasEvents.get("Trouple")));
-		if (MathUtil.pourcentage(playerWithRole.game.probasEvents.get("Trouple"))) {
-			PlayerData third = playerWithRole.game.getPlayerAlive().get(MathUtil.generateAlInt(0, playerWithRole.game.getPlayerAlive().size()));
+		System.out.println("proba of "+ MathUtil.pourcentage(((GameLg)playerWithRole.game).probasEvents.get("Trouple")));
+		if (MathUtil.pourcentage(((GameLg)playerWithRole.game).probasEvents.get("Trouple"))) {
+			PlayerData third = ((GameLg)playerWithRole.game).getPlayerAlive().get(MathUtil.generateAlInt(0, ((GameLg)playerWithRole.game).getPlayerAlive().size()));
 			System.out.println("trouple");
 			
 			p3 = third;

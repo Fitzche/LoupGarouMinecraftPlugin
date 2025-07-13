@@ -32,7 +32,7 @@ public class ASSASSIN implements RoleInstance {
 		this.playerWithRole = player;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		GameLg game = player.game;
+		GameLg game = (GameLg) player.game;
 		
 	}
 	

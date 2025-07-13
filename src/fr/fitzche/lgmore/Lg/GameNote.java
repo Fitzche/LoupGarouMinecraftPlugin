@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.PlayerData;
 import net.md_5.bungee.api.ChatColor;
 
@@ -18,14 +19,14 @@ public class GameNote implements Listener, Serializable {
 	public ArrayList<String> winners = new ArrayList<String>();
 	public String name;
 	
-	public GameNote(GameLg game, String name) {
+	public GameNote(Game game, String name) {
 		
 		this.name = name;
-		for (PlayerData p:game.getPlayerAlive()) {
+		for (PlayerData p:game.getWinners()) {
 			winners.add(p.getName());
 			winningCamp = p.camp;
 		}
-		for (PlayerData p:game.players) {
+		for (PlayerData p:game.getPlayers()) {
 			plysNote.add(new PlayerNote(p.getName(), p.role, p.numberOfKill, p.inLove, p.infected, p.inLife));
 		}
 	}
@@ -40,11 +41,11 @@ public class GameNote implements Listener, Serializable {
 	
 	public String getStrRole(String named) {
 		for (PlayerNote n:plysNote) {
-			if (n.name.equals(named)) {
+			if (n.name.equals(named) && n.role != null) {
 				return n.role.getName();
 			}
 		}
-		return "erreur";
+		return "Role Introuvable";
 	}
 
 	public void open(Player whoClicked) {

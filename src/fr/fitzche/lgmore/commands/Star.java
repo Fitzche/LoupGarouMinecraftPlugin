@@ -30,8 +30,15 @@ public class Star implements CommandExecutor {
 					p.roleStar = role;
 					p.roleSta = StarUtil.createRole(role, p);
 					p.roleSta.onRole();
+					if (p.board != null) {
+						p.board.refresh();
+					}
+					
 				}
 			}
+		}
+		if (args[0].equals("forceStart")) {
+			Main.getData(sender).starParty.start();
 		}
 		if (args[0].equals("role")) {
 			PlayerData p = Main.getData(sender);
@@ -45,7 +52,9 @@ public class Star implements CommandExecutor {
 			}
 		}
 		if (args[0].equals("play")) {
-			
+			if (!Main.getData(sender).isFree()) {
+				return false;
+			}
 			
 			for (StarParty party:Main.parties) {
 				if (!party.started && party.players.size() < 17) {

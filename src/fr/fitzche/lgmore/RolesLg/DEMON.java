@@ -34,7 +34,7 @@ public class DEMON implements RoleInstance {
 	public PlayerData playerWithRole;
 	public String name ="Démon";
 	public Camp camp = Camp.Other;
-	
+	public GameLg game;
 	public ArrayList<String> namesChoosen = new ArrayList<String>();
 	
 	public ArrayList<PlayerData> pactedPlayers = new ArrayList<PlayerData>();
@@ -48,9 +48,9 @@ public class DEMON implements RoleInstance {
 		this.playerWithRole = player;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		GameLg game = player.game;
 		
 		
+		this.game = game;
 		
 		game.resCheckers.add(new demonChecker(this));
 	}
@@ -85,7 +85,7 @@ public class DEMON implements RoleInstance {
 		int c = 0;
 		for (int i = 0; i < 3; i++ ) {
 			c++;
-			String name = player.game.getPlayerAlive().get(MathUtil.generateAlInt(0, player.game.getPlayerAlive().size() -1)).getName();
+			String name = ((GameLg)player.game).getPlayerAlive().get(MathUtil.generateAlInt(0, ((GameLg)player.game).getPlayerAlive().size() -1)).getName();
 			
 			boolean already = false;
 			for (String str:namesChoosen) {
@@ -189,7 +189,7 @@ public class DEMON implements RoleInstance {
 			target.aura = Aura.LUMINOUS;
 			target.camp = Camp.Villager;
 			
-			PlayerData revealed = GameLgUtil.getAlPlayer(this.playerWithRole.game);
+			PlayerData revealed = GameLgUtil.getAlPlayer(this.game);
 			target.sendMessage(ChatColor.RED+"Le joueur "+ revealed.getName()+ " est "+revealed.role.getCampOfRole().getColor()+ revealed.role.getName());
 			
 			if (!target.isOnline) {
@@ -238,11 +238,11 @@ public class DEMON implements RoleInstance {
 				target.player.spigot().sendMessage(text);
 				
 				int tries = 0;
-				if (playerWithRole.game.getNumberOfPlayer() > 4) {
+				if (game.getNumberOfPlayer() > 4) {
 					PlayerData choosen;
 					do {
 						tries++;
-						choosen = playerWithRole.game.getPlayerAlive().get(MathUtil.generateAlInt(0, playerWithRole.game.getPlayerAlive().size() - 1));
+						choosen = game.getPlayerAlive().get(MathUtil.generateAlInt(0, game.getPlayerAlive().size() - 1));
 					} while ((choosen.getName().equals(demon.getName() )||namesChoosen.contains(choosen.getName()))&& tries < 5);
 					
 					if (choosen.getName().equals(demon.getName() )) {

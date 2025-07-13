@@ -31,7 +31,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
 import fr.fitzche.lgmore.Camp;
-
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
@@ -65,6 +65,7 @@ import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
+import fr.fitzche.lgmore.minecraft.GameListener;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
@@ -76,10 +77,12 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 
-public class GameLg implements Listener, Serializable{
+public class GameLg implements Listener, Serializable, Game{
 	public GameStatut statut;
 	public Timer timer;
 	public String name;
+	
+	public GameType type;
 	
 	
 	private int epicTaux = 0;
@@ -166,11 +169,13 @@ public class GameLg implements Listener, Serializable{
 	
 	public World world;
 	public boolean isWorldGenerated = false;
+	public GameType gameType;
 
 	
 	public GameLg(String name) {
 		
 		this.stopped = false;
+		this.type = type;
 		Main.server.getPluginManager().registerEvents(events, Main.plug);
 		
 		for (String str: Main.eventsLgNames) {
@@ -200,7 +205,7 @@ public class GameLg implements Listener, Serializable{
 		players = new ArrayList<PlayerData>();
 		this.board = new ScoreboardLg(this, null);
 		for (PlayerData p:getPlayerAlive()) {
-			p.board = new ScoreboardLg(this, p);
+			p.board.refresh();
 		}
 
 		this.dispoRoles.addAll(RoleUtil.existingRoles);
@@ -278,12 +283,12 @@ public class GameLg implements Listener, Serializable{
 			
 			if (swapperDuel || swapperPente || swapperQuadrio || swapperTrio) {
 				swapper = true;
+				
 			}
 			
 			
 			for (PlayerData p:getPlayerAlive()) {
-				p.board = new ScoreboardLg(game, p);
-				p.board.setgame(game);
+			
 				p.board.refresh();
 				if (displayedRoles) {
 					p.setDisplayName();
@@ -300,10 +305,15 @@ public class GameLg implements Listener, Serializable{
 			int rayon = 300;
 			boolean bat = true;
 			
+			
+			
+			//si swapper
 			if (swapper) {
 				bat = false;
 				this.displayedRoles = true;
 			}
+			
+			//Seulement game lg
 			if (bat) {
 				Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true, this.world, this), this);
 				Main.placeVoteStruct(LocationUtil.getAlLocAroundFarfrom(rayon, 2, true, this.world, this), this);
@@ -449,27 +459,27 @@ public class GameLg implements Listener, Serializable{
 				
 				for (PlayerData p:playerAlive) {
 					switch (p.camp) {
-					case BLUE:
-						bs.add(p);
-						break;
+						case BLUE:
+							bs.add(p);
+							break;
 
-					case GREEN:
-						vs.add(p);
-						break;
+						case GREEN:
+							vs.add(p);
+							break;
 
 
-					case PINK:
-						ros.add(p);
-						break;
-					case RED:
-						rs.add(p);
-						break;
+						case PINK:
+							ros.add(p);
+							break;
+						case RED:
+							rs.add(p);
+							break;
 
-					case YELLOW:
-						ys.add(p);
-						break;
-					default:
-						break;
+						case YELLOW:
+							ys.add(p);
+							break;
+						default:
+							break;
 					
 					}
 				}
@@ -933,6 +943,8 @@ public class GameLg implements Listener, Serializable{
 	}
 	
 	public void addPlayer(String name) {
+		
+		
 		PlayerData toAdd;
 		if (isBanned.getOrDefault(name, false)) {
 			return;
@@ -951,8 +963,12 @@ public class GameLg implements Listener, Serializable{
 			}
 			
 		}
+		if (toAdd.isFree() == false) {
+			toAdd.sendMessage("Vous ne pouvez pas rejoindre cette partie car vous êtes en partie");
+			return;
+		}
 		toAdd.clearLgGameVar();
-		toAdd.board = new ScoreboardLg(this, toAdd);
+		toAdd.board.refresh();
 		toAdd.game = this;
 		toAdd.isInLgGame = true;
 		
@@ -1371,7 +1387,7 @@ public class GameLg implements Listener, Serializable{
 			addTragic(8, loc);
 		} 
 
-		GameLg gm1 = player1.game;
+		GameLg gm1 = (GameLg) player1.game;
 		if (gm1 == null ||gm1.name != this.name ) {
 			return;
 		}
@@ -1402,7 +1418,7 @@ public class GameLg implements Listener, Serializable{
 			moreInfo = moreInfo+ (" (en couple) ");
 		} 
 
-		GameLg gm1 = player1.game;
+		GameLg gm1 = (GameLg) player1.game;
 		if (gm1 == null || gm1.name != this.name) {
 			return;
 		}
@@ -1982,6 +1998,48 @@ public class GameLg implements Listener, Serializable{
 		TreasureBlockData data = new TreasureBlockData(type);
 		SpecialBlock b = new SpecialBlock(new Location(world, x, y+1, z), SpecialBlockType.Treasure, data, this, "ok");
 		Main.specialBlocks.add(b);
+	}
+
+	@Override
+	public ArrayList<PlayerData> getWinners() {
+		// TODO Auto-generated method stub
+		return getPlayerAlive();
+	}
+
+	@Override
+	public ArrayList<PlayerData> getPlayers() {
+		// TODO Auto-generated method stub
+		return players;
+	}
+
+	@Override
+	public GameType getType() {
+		// TODO Auto-generated method stub
+		return type;
+	}
+
+	@Override
+	public World getWorld() {
+		// TODO Auto-generated method stub
+		return world;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
+
+	@Override
+	public void setWorld(World world) {
+		this.world = world;
+		
+	}
+
+	@Override
+	public GameListener getListener() {
+		// TODO Auto-generated method stub
+		return listener;
 	}
 	
 	

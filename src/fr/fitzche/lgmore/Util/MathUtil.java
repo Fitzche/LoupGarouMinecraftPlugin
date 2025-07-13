@@ -15,6 +15,8 @@ public class MathUtil {
 		return (number<max+1 && number >min-1);
 	}
 	
+	
+	
 	public static int probasFivePossib(int a, int b, int c, int d, int e ) {
 		if (a+b+c+d+e != 100) {
 			System.out.println("erreur de paramètres");

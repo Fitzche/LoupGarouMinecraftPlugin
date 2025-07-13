@@ -32,7 +32,7 @@ public class VoteChecker implements ResCheck {
 		if (p == null) {
 			return "";
 		}
-		GameLg game = p.game;
+		GameLg game = (GameLg) p.game;
 		if (game == null || !game.equals(gameOfVote) ) {
 			return "";
 		}

@@ -13,6 +13,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -71,11 +72,11 @@ public class MONTREUR implements RoleInstance {
 	
 	public void renifle() {
 		Location loc = this.playerWithRole.getLocation();
-		for (PlayerData target:playerWithRole.game.playerAlive) {
+		for (PlayerData target:((GameLg) playerWithRole.game).playerAlive) {
 			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
-				playerWithRole.game.playSoundMO();
-				playerWithRole.game.addorat(5, playerWithRole.getLocation());
+				((GameLg)playerWithRole.game).playSoundMO();
+				((GameLg)playerWithRole.game).addorat(5, playerWithRole.getLocation());
 			}
 		}
 	}

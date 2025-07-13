@@ -114,7 +114,7 @@ public class Virus {
 	}
 	@Deprecated
 	public Virus(VirusType type, PlayerData owner, PlayerData infecter, int time) {
-		this.game = owner.game;
+		this.game = (GameLg) owner.game;
 		this.owner = owner;
 		this.type = type;
 		this.infecter = infecter;

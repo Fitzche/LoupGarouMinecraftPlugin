@@ -74,7 +74,11 @@ public class Lg implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 		PlayerData senderData = Main.strToPlayer.getOrDefault(sender.getName(), null);
-		GameLg game = senderData.game;
+		GameLg game = null;
+		if (senderData.game != null && senderData.game instanceof GameLg)  {
+			game = (GameLg) senderData.game;
+		}
+		
 		
 		if (args.length == 0) {
 			for (Entry<String, GameLg> entry: Main.strToGame.entrySet()) {
@@ -635,8 +639,8 @@ public class Lg implements CommandExecutor {
 				}
 				if (Main.strToPlayer.getOrDefault(sender.getName(), null) != null) {
 					PlayerData player = Main.strToPlayer.get(sender.getName());
-					if (player.game != null && player.isInLgGame && (player.game.statut.equals(GameStatut.BEFORE_ROLE) || player.game.statut.equals(GameStatut.IN_GAME))) {
-						player.game.checkWin();
+					if (game != null && player.isInLgGame && (game.statut.equals(GameStatut.BEFORE_ROLE) || game.statut.equals(GameStatut.IN_GAME))) {
+						game.checkWin();
 						player.sendMessage("Vérification des conditions de victoires, vous perdez 5% de force");
 						player.boostR5 --;
 					} else {
@@ -655,6 +659,8 @@ public class Lg implements CommandExecutor {
 				} else {
 					sender.sendMessage("Vous n'êtes pas un joueur");
 				}
+			} else if (args[0].equals("wolfy")) {
+				game.playSoundWolf(senderData);
 			}
 		
 		

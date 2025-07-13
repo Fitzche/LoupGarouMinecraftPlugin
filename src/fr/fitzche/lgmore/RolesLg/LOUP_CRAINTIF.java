@@ -28,7 +28,7 @@ public class LOUP_CRAINTIF implements RoleInstance {
 	
 	public LOUP_CRAINTIF(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		game.resCheckers.add(new craintifChecker(this));
 		
 		

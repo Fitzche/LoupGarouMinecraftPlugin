@@ -21,6 +21,21 @@ public class LocationUtil {
 		return one.getLocation().distance(Two.getLocation());
 	}
 	
+	
+	public static void tpAl(PlayerData player, int i) {
+		if (!player.isOnline) {
+			System.out.println("can't tp alea offline player: "+player.getName());
+		}
+		if (i < 0) {
+			i *= -1;
+		}
+		if (i < 10) {
+			i = 10;
+		}
+		player.addPotionEffect(PotionUtil.INVINCIBILITY);
+		Location loc = new Location(player.player.getLocation().getWorld(), MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
+		player.player.teleport(loc);
+	}
 	public static double getDistanceBetween(Player one, Player Two) {
 		if (!one.getLocation().getWorld().equals(Two.getLocation().getWorld())) {
 			return 10000;

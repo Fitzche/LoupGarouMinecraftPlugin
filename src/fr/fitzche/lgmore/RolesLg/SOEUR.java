@@ -33,7 +33,7 @@ public class SOEUR implements RoleInstance {
 	public SOEUR(PlayerData player, ArrayList<PlayerData> sisters) {
 		playerWithRole = player;
 		this.sisters = sisters;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		game.resCheckers.add(new SoeurChecker(this, game));
 		
 	}

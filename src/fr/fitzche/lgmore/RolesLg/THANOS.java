@@ -47,7 +47,7 @@ public class THANOS implements RoleInstance {
 		this.playerWithRole = player;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		this.game = player.game;
+		this.game = (GameLg) player.game;
 		
 		
 		playerWithRole.changeHealth(4);

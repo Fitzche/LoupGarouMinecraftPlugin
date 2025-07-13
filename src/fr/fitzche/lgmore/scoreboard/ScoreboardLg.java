@@ -14,7 +14,7 @@ import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class ScoreboardLg  implements Serializable{
+public class ScoreboardLg implements GameBoard{
 	public GameLg game;
 	public boolean istimeRunned = false;
 	public PlayerData player;
@@ -25,7 +25,8 @@ public class ScoreboardLg  implements Serializable{
 	public ScoreboardLg(GameLg game, PlayerData player) {
 		this.game = game;
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
+		Objective objective = board.registerNewObjective((ChatColor.RED 		+"LG More"   ), "dummy");
+		
 		if (player != null ) {
 			this.player = player;
 			this.refresh();
@@ -34,6 +35,9 @@ public class ScoreboardLg  implements Serializable{
 	}
 	
 	public void refresh() {
+		if (player.starParty != null) {
+			player.board = new StarBoard(player);
+		}
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective objective = board.registerNewObjective((ChatColor.RED 		+"Loup Garou UHC"   ), "dummy");
 		for (String entry: objective.getScoreboard().getEntries()) {

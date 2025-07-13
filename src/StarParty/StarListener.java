@@ -85,6 +85,8 @@ public class StarListener implements GameListener, Listener {
 		}
 		return 1;
 	}
+	
+	
 
 	@Override
 	public double kill(PlayerData killed, PlayerData killer) {

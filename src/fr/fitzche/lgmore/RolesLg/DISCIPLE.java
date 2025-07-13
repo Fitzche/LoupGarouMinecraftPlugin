@@ -112,7 +112,7 @@ public class DISCIPLE implements RoleInstance {
 
             @Override
             public void run() {
-                GameLg game = playerWithRole.game;
+                GameLg game = (GameLg)playerWithRole.game;
                 ArrayList<PlayerData> sages = RoleUtil.getPlayersWithRole(game, RolesLg.SAGE);
                 if (sages.size() != 0) {
                     sage = sages.get(MathUtil.generateAlInt(0, sages.size() -1));
@@ -184,7 +184,7 @@ public class DISCIPLE implements RoleInstance {
 				Player senderPlayer = (Player) sender;
 				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
 				if (senderPlayerData != null) {
-					GameLg gameOfSender = senderPlayerData.game;
+					GameLg gameOfSender = (GameLg)senderPlayerData.game;
 					if (gameOfSender != null) {
 						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
 							
@@ -214,7 +214,7 @@ public class DISCIPLE implements RoleInstance {
 				Player senderPlayer = (Player) sender;
 				PlayerData senderPlayerData = Main.strToPlayer.getOrDefault(sender.getName(), null);
 				if (senderPlayerData != null) {
-					GameLg gameOfSender = senderPlayerData.game;
+					GameLg gameOfSender = (GameLg)senderPlayerData.game;
 					if (gameOfSender != null) {
 						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
 						

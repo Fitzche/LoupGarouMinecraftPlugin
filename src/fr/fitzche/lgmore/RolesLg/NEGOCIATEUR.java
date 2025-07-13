@@ -30,12 +30,14 @@ public class NEGOCIATEUR implements RoleInstance {
 	public Camp camp = Camp.Other;
 	public ArrayList<PlayerData> killedByNeg = new ArrayList<PlayerData>();
 	public boolean solo = false;
+	GameLg game;
 	
 	public NEGOCIATEUR(PlayerData player) {
 		this.playerWithRole = player;
 		ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 		players.add(player);
-		GameLg game = player.game;
+		GameLg game = (GameLg)player.game;
+		this.game = game;
 		
 			
 		
@@ -139,7 +141,7 @@ public class NEGOCIATEUR implements RoleInstance {
 	}
 	
 	public boolean checkCanWin() {
-		for (PlayerData p:playerWithRole.game.getPlayerAlive()) {
+		for (PlayerData p:game.getPlayerAlive()) {
 			if (p.timeWithPlayers.get(playerWithRole.getName()) > 600) {
 				for (PlayerData p2:killedByNeg) {
 					if (p.timeWithPlayers.get(p2.getName()) > 299) {

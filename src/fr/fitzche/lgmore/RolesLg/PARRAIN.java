@@ -34,7 +34,7 @@ public class PARRAIN implements RoleInstance {
 
 	public PARRAIN(PlayerData player) {
 		this.playerWithRole = player;
-        this.game = player.game;
+        this.game =(GameLg) player.game;
         this.game.resCheckers.add(new ParrainChecker(game, this));
 
 	}

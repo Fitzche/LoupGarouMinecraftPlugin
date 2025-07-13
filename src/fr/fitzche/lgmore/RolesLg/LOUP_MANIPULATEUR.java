@@ -108,7 +108,7 @@ public class LOUP_MANIPULATEUR implements RoleInstance {
 				Player senderPlayer = (Player) sender;
 				PlayerData senderPlayerData = Main.getData(sender);
 				if (senderPlayerData != null) {
-					GameLg gameOfSender = senderPlayerData.game;
+					GameLg gameOfSender = (GameLg)senderPlayerData.game;
 					if (gameOfSender != null) {
 						if (senderPlayerData.getName().equals(playerWithRole.getName())) {
 							

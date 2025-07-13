@@ -28,7 +28,7 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	public LOUP_MYSTIQUE (PlayerData player) {
 		this.playerWithRole = player;
 		
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		this.game.resCheckers.add(new MysticChecker(this, game));
 		
 		
@@ -117,7 +117,7 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	}
 	
 	public void voir() {
-		PlayerData playerToSee = playerWithRole.game.getPlayerAlive().get(MathUtil.generateAlInt(0, playerWithRole.game.getPlayerAlive().size() - 1));
+		PlayerData playerToSee = game.getPlayerAlive().get(MathUtil.generateAlInt(0, game.getPlayerAlive().size() - 1));
 		playerWithRole.sendMessage(ChatColor.GOLD + "Le rôle de "+ playerToSee.Name + ", qui est " + playerToSee.role);
 		if (playerToSee.inLove) {
 			playerWithRole.sendMessage(ChatColor.GOLD+"Celui-ci est en couple");

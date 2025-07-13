@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.NecroChecker;
 import net.md_5.bungee.api.ChatColor;
 
@@ -15,10 +16,12 @@ public class NECROMANCIEN implements RoleInstance {
 	public PlayerData playerWithRole;
 	public PlayerData target;
 	public boolean powerUsed = false;
+	public GameLg game;
 	
 	public NECROMANCIEN(PlayerData player) {
 		this.playerWithRole = player;
-		player.game.resCheckers.add(new NecroChecker(this));
+		((GameLg)player.game).resCheckers.add(new NecroChecker(this));
+		game = (GameLg) player.game;
 	}
 	@Override
 	public String getName() {
@@ -28,7 +31,7 @@ public class NECROMANCIEN implements RoleInstance {
 
 	@Override
 	public String getDescription() {
-		if (playerWithRole.game.necrom) {
+		if (game.necrom) {
 			return ChatColor.GOLD + "Vous êtes "+ ChatColor.GREEN + "Nécromancien" + "\n"+ChatColor.GOLD + "NECROMANCIE activée"+ "\n"+ "Vous devez gagner tout seul avec 12 coeurs, les joueurs que vous tuerez réssuciteront avec 7 coeurs et devront gagner avec vous (vous perdrez 1 coeur).";
 		}
 		return ChatColor.GOLD + "Vous êtes "+ ChatColor.GREEN + "Nécromancien" + "\n"+ ChatColor.GOLD + ", "
@@ -103,7 +106,7 @@ public class NECROMANCIEN implements RoleInstance {
 
 	@Override
 	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
-		if (args[0].equals("necro") && args.length == 2 && !playerWithRole.game.necrom && sender.getName().equals(playerWithRole.getName()) && powerUsed) {
+		if (args[0].equals("necro") && args.length == 2 && !game.necrom && sender.getName().equals(playerWithRole.getName()) && powerUsed) {
 			PlayerData p = Main.getData(args[1]);
 			if (p==null ) {
 				return;

@@ -105,7 +105,7 @@ public class SALVATEUR implements RoleInstance{
 		this.powerUsed = true;
 		
 		if (this.playerWithRole.getName().equals(target.Name)) {
-			playerWithRole.game.addEpic(10, playerWithRole.getLocation());
+			((GameLg)playerWithRole.game).addEpic(10, playerWithRole.getLocation());
 		}
 	}
 	@Override
@@ -131,7 +131,7 @@ public class SALVATEUR implements RoleInstance{
 		 if (args[0].equals("proteger")) {
 			 PlayerData p = Main.getData(args[1]);
 			if (PlayerUtil.getPlayer(args[1]) != null && p != null && p.inLife) {
-				GameLg gameOfTarget = p.game;
+				GameLg gameOfTarget =(GameLg) p.game;
 				PlayerData target = p;
 					
 				if (sender.getName().equals(playerWithRole.getName())) {

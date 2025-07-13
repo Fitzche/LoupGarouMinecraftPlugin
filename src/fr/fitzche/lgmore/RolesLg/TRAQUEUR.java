@@ -31,7 +31,7 @@ public class TRAQUEUR implements RoleInstance {
 	
 	public TRAQUEUR(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		this.game.resCheckers.add(new TrackRes(this));
 		
 		

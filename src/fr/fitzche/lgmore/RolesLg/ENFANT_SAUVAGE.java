@@ -29,7 +29,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 	public String name ="Enfant Sauvage";
 	@Deprecated
 	public ENFANT_SAUVAGE(PlayerData player) {
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		this.playerWithRole = player;
 		this.game.resCheckers.add(new EnfantChecker(this, game));
 		playerWithRole.sendMessage(ChatColor.DARK_PURPLE+"Vous pouvez choisir un modèle avec la commande /lg choose [nomDuJoueur], si ce modèle meure vous devenez loup garou");

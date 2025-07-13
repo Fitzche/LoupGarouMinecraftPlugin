@@ -14,6 +14,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
@@ -28,11 +29,13 @@ public class RENARD implements RoleInstance{
 	public int flaired = 0;
 	public static Camp camp = Camp.Villager;
 	public String name ="Renard";
+	GameLg game;
 	public RENARD(PlayerData player) {
 		this.playerWithRole = player;
-		for (PlayerData playered :player.game.getPlayerAlive()) {
+		for (PlayerData playered :((GameLg)player.game).getPlayerAlive()) {
 			players.put(playered.Name, 0);
 		}
+		this.game = (GameLg) player.game;
 		
 	}
 	
@@ -63,7 +66,7 @@ public class RENARD implements RoleInstance{
 	@Override
 	public void giveEffectAllTime() {
 		
-		for (PlayerData ply:playerWithRole.game.getPlayerAlive()) {
+		for (PlayerData ply:game.getPlayerAlive()) {
 			
 			if (LocationUtil.getDistanceBetween(playerWithRole, ply) < 21) {
 				getPlayerFlaire(ply.getName());
@@ -79,14 +82,14 @@ public class RENARD implements RoleInstance{
 			System.out.println("flairage à "+ players.get(player.getName()));
 			return;
 		} else {
-			playerWithRole.game.addEpic(3, playerWithRole.getLocation());
+			game.addEpic(3, playerWithRole.getLocation());
 			if (MathUtil.pourcentage(80 - (5*flaired))) {
 				System.out.println("80% yes");
 				playerWithRole.sendMessage(player.Name + " est probablement " + player.role.name());
 				
 			} else {
 				System.out.println("80% no");
-				playerWithRole.sendMessage(player.Name + " est probablement " + playerWithRole.game.getRoles().get(MathUtil.generateAlInt(0, playerWithRole.game.getRoles().size() - 1)).getName());
+				playerWithRole.sendMessage(player.Name + " est probablement " + game.getRoles().get(MathUtil.generateAlInt(0, game.getRoles().size() - 1)).getName());
 
 			}
 			this.flaired ++;
@@ -147,7 +150,7 @@ public class RENARD implements RoleInstance{
 	public void blind(PlayerData origin) {
 		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Renard, tout ses flairages en court ont été remis à 0");
 		this.playerWithRole.sendMessage(ChatColor.GOLD+ "Vous avez été aveuglé, vos flairage ont été remis à 0");
-		for (PlayerData p:origin.game.getPlayerAlive()) {
+		for (PlayerData p:((GameLg)origin.game).getPlayerAlive()) {
 			this.players.put(p.getName(), 0);
 		}
 	}

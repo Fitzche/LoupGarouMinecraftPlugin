@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import net.md_5.bungee.api.ChatColor;
 
 public class SWAPPER implements RoleInstance {
@@ -25,7 +26,7 @@ public class SWAPPER implements RoleInstance {
 		playerWithRole.camp = camp;
 		playerWithRole.appCamp = camp;
 		playerWithRole.setDisplayName();
-		playerWithRole.game.broadcoast(ChatColor.GOLD + "Le joueur "+ ChatColor.RED + playerWithRole.Name + ChatColor.GOLD + " a rejoint le camp "+ camp.getColor() + camp.getName());
+		((GameLg)playerWithRole.game).broadcoast(ChatColor.GOLD + "Le joueur "+ ChatColor.RED + playerWithRole.Name + ChatColor.GOLD + " a rejoint le camp "+ camp.getColor() + camp.getName());
 	}
 	@Override
 	public String getName() {

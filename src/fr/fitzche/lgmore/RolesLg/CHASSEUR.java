@@ -26,6 +26,7 @@ public class CHASSEUR implements RoleInstance{
 	public PlayerData playerWithRole;
 	public static Camp camp = Camp.Villager;
 	public String name ="Chasseur";
+	GameLg game;
 
 	
 	
@@ -50,6 +51,7 @@ public class CHASSEUR implements RoleInstance{
 	
 	public CHASSEUR(PlayerData player) {
 		this.playerWithRole = player;
+		this.game = (GameLg) player.game;
 		
 	}
 
@@ -141,7 +143,7 @@ public class CHASSEUR implements RoleInstance{
 		if (args[0].equals("tirer")) {
 			PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
 			PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
-			if (p != null && target != null && p.getName().equals(playerWithRole.getName()) && p.game != null && target.Name != null&& p.game.name.equals(target.game.name) ) {
+			if (p != null && target != null && p.getName().equals(playerWithRole.getName()) && p.game != null && target.Name != null&& p.game.getName().equals(target.game.getName()) ) {
 			
 				shoot(target);
 			}

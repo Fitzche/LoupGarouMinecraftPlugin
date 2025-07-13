@@ -24,7 +24,7 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	
 	public SIMPLE_VILLAGER(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg) player.game;
 		
 		if (MathUtil.pourcentage(50)) {
 			if (MathUtil.pourcentage(50)) {

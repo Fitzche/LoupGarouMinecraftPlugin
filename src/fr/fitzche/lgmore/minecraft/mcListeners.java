@@ -51,6 +51,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ANGE;
@@ -67,6 +68,7 @@ import fr.fitzche.lgmore.RolesLg.SOEUR;
 import fr.fitzche.lgmore.RolesLg.SWAPPER;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.Util.*;
+import fr.fitzche.lgmore.bedwars.BedListener;
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.scoreboard.Inventory.VoteInv;
@@ -170,17 +172,17 @@ public class mcListeners implements Listener {
 		//
 		
 		
-		GameLg game = killedData.game;
+		Game game = killedData.game;
 		if (game != null) {
 			
 		
 		//A REMPLACER, INUTILE, UTILISER DES CHECKERS
 		
 		
-		
+			
 		//CHECKER AV MORT
 			if (killedData.game != null && killerData.game != null && killerData.game.equals(killedData.game)) {
-				killedData.game.listener.rez(killedData, killerData, loc, e);
+				killedData.game.getListener().rez(killedData, killerData, loc, e);
 			} 
 		
 		
@@ -192,7 +194,7 @@ public class mcListeners implements Listener {
 			@Override
 			public void run() {
 				if (killedData.game != null && killerData.game != null && killerData.game.equals(killedData.game)) {
-					killedData.game.listener.rez2(killedData, killerData, loc, e, items);
+					killedData.game.getListener().rez2(killedData, killerData, loc, e, items);
 				} 
 					
 			        
@@ -228,11 +230,11 @@ public class mcListeners implements Listener {
 	@EventHandler
 	public void onPlayerChat(PlayerChatEvent e) {
 		PlayerData plyD = Main.strToPlayer.getOrDefault(e.getPlayer().getName(), null);
-		if (plyD != null && plyD.game!= null && !plyD.game.statut.equals(GameStatut.NOT_STARTED)) {
+		if (plyD.game instanceof GameLg &&plyD != null && plyD.game!= null && !((GameLg)plyD.game).statut.equals(GameStatut.NOT_STARTED)) {
 			
-			if (plyD.game.isInDisc == true && plyD.considWolf) {
+			if (((GameLg) plyD.game).isInDisc == true && plyD.considWolf) {
 				
-				GameLg game = plyD.game;
+				GameLg game = (GameLg) plyD.game;
 				
 				ArrayList<PlayerData> receiver = new ArrayList<PlayerData>();
 				receiver.addAll(game.getRealWolfAlive());
@@ -342,8 +344,8 @@ public class mcListeners implements Listener {
 		
 		
 		double finalDamage = e.getDamage();
-		if (damager.game != null && damaged.game != null && !damager.game.statut.equals(GameStatut.NOT_STARTED) && damaged.game.equals(damager.game)) {
-			finalDamage = damaged.game.listener.damagePbyP(damager, damaged, finalDamage, isArrow);
+		if (damager.game != null && damaged.game != null && damaged.game.equals(damager.game)) {
+			finalDamage = damaged.game.getListener().damagePbyP(damager, damaged, finalDamage, isArrow);
 		}
 
 		
@@ -434,6 +436,34 @@ public class mcListeners implements Listener {
 		System.out.println("resis damage: " + e.getDamage());
 		
 		
+		if (damaged.game != null) {
+			if (damaged.game != null && damager.game.getName().equals(damaged.game.getName())) {
+				finalDamage = damaged.game.getListener().damagePbyP(damager, damaged, finalDamage, isArrow);
+			} else {
+				finalDamage = 0;
+				return;
+			}
+		}
+		if (damaged.starParty != null) {
+			if (damaged.starParty != null && damager.starParty.name.equals(damaged.starParty.name)) {
+				finalDamage = damaged.starParty.listener.damagePbyP(damager, damaged, finalDamage, isArrow);
+			} else {
+				finalDamage = 0;
+				return;
+			}
+		}
+		if (damaged.bedGame != null) {
+			if (damaged.bedGame != null && damager.bedGame.name.equals(damaged.bedGame.name)) {
+				finalDamage = damaged.bedGame.listener.damagePbyP(damager, damaged, finalDamage, isArrow);
+				BedListener list = (BedListener) damaged.bedGame.listener;
+				if (list.damageCancel(damager, damaged, finalDamage, isArrow)) {
+					e.setCancelled(true);
+				}
+			} else {
+				finalDamage = 0;
+				return;
+			}
+		}
 		
 		
 		
@@ -545,7 +575,7 @@ public class mcListeners implements Listener {
 		
 		PlayerData plyD = Main.strToPlayer.getOrDefault(e.getWhoClicked().getName(), null);
 		
-		if (plyD.game != null&& e.getInventory().equals(plyD.game.invVote)) {
+		if (plyD.game != null&& plyD.game instanceof GameLg && e.getInventory().equals(((GameLg)plyD.game).invVote)) {
 			
 			e.setCancelled(true);
 			if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta().hasLore()) {
@@ -557,7 +587,7 @@ public class mcListeners implements Listener {
 				
 				
 				
-				VoteInv inv = new VoteInv((Player) e.getWhoClicked(), plyD.game, e.getSlot());
+				VoteInv inv = new VoteInv((Player) e.getWhoClicked(), (GameLg )plyD.game, e.getSlot());
 				
 			}
 		}

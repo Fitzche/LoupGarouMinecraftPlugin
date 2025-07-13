@@ -13,6 +13,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -23,9 +24,12 @@ public class ALLUMEUR implements RoleInstance {
     HashMap<PlayerData, Integer>  tauxConversion = new HashMap<PlayerData, Integer>();
 	public String name ="Allumeur de lampadaire";
 	public Camp camp = Camp.Villager;
+	public GameLg game;
 	public ALLUMEUR(PlayerData player) {
 		this.playerWithRole = player;
-        for (PlayerData p: player.game.getPlayerAlive()) {
+		this.game = (GameLg) player.game;
+		
+        for (PlayerData p: ((GameLg) player.game).getPlayerAlive()) {
             this.tauxConversion.put(player, 0);
         }
 	}
@@ -42,7 +46,7 @@ public class ALLUMEUR implements RoleInstance {
 
 	
 	public void giveEffectAllTime() {
-		for (PlayerData player:playerWithRole.game.getPlayerAlive()) {
+		for (PlayerData player:game.getPlayerAlive()) {
             if (LocationUtil.getDistanceBetween(player, playerWithRole) < 20) {
             	int x = 0;
             	if (this.tauxConversion.get(player) != null) {
@@ -122,7 +126,7 @@ public class ALLUMEUR implements RoleInstance {
 	@Override
 	public void blind(PlayerData origin) {
 		origin.sendMessage(ChatColor.GOLD + "Ce joueur est Allumeur de Lampadaire, ses taux de conversion pour corriger l'aura de son entourage ont donc été remis à 0, à son insu...");
-		for (PlayerData p: origin.game.getPlayerAlive()) {
+		for (PlayerData p: ((GameLg)origin.game).getPlayerAlive()) {
 			this.tauxConversion.put(p, 0);
 		}
 		

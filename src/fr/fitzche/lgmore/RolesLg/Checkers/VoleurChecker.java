@@ -42,14 +42,14 @@ public class VoleurChecker implements ResCheck {
 	public String runDeathAction(PlayerDeathEvent e, Player k) {
 		if (voleur != null&&k.getName().equals(voleur.playerWithRole.getName())) {
 			PlayerData stealed = Main.getData(e.getEntity());
-			if (stealed == null || stealed.game == null || voleur.playerWithRole.game == null || !stealed.game.name.equals(voleur.playerWithRole.game.name)) {
+			if (stealed == null || stealed.game == null || voleur.playerWithRole.game == null || !stealed.game.getName().equals(voleur.playerWithRole.game.getName())) {
 				return "voleurNotSameGame";
 			}
 			voleur.steal(Main.getData(e.getEntity()));
 			return "VoleurSteal";
 		} else if (lg != null&&k.getName().equals(lg.playerWithRole.Name)) {
 			lg.steal(Main.getData(e.getEntity()));
-			voleur.playerWithRole.game.resCheckers.remove(this);
+			((GameLg) voleur.playerWithRole.game).resCheckers.remove(this);
 			this.voleur = null;
 			return "Metamorph steal";
 		} else {

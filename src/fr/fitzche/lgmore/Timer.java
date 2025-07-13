@@ -33,9 +33,7 @@ public class Timer {
 		} else if (i==300||i==900) {
 			Main.server.getWorld("world").setTime(13000);
 		}
-		for (PlayerData p: this.game.getPlayerAlive()) {
-			p.board.refresh();
-		}
+		
 		return x != getEpisode();
 		
 		

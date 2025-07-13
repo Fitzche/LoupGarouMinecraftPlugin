@@ -82,6 +82,10 @@ public class SpecialBlock implements Listener, Serializable{
 			
 			return;
 		}
+		PlayerData toCheck = Main.getData(e.getPlayer());
+		if (toCheck.game == null || !(toCheck.game instanceof GameLg)) {
+			return;
+		}
 		
 		
 		
@@ -93,10 +97,10 @@ public class SpecialBlock implements Listener, Serializable{
 			if (this.type.equals(SpecialBlockType.Vote)) {
 				
 				
-				if (Main.getData(e.getPlayer()).game.invVote == null) {
+				if (((GameLg)Main.getData(e.getPlayer()).game).invVote == null) {
 					return;
 				}
-				e.getPlayer().openInventory(Main.getData(e.getPlayer()).game.invVote);
+				e.getPlayer().openInventory(((GameLg)Main.getData(e.getPlayer()).game).invVote);
 				Main.getData(e.getPlayer()).lastVoteOpen = this;
 			}
 			if (this.type.equals(SpecialBlockType.Accuse)) {

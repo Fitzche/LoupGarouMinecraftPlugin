@@ -6,6 +6,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
+import fr.fitzche.lgmore.Lg.*;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.NECROMANCIEN;
 import fr.fitzche.lgmore.Util.VoteEvent;
@@ -20,7 +21,7 @@ public class NecroChecker implements ResCheck {
 	}
 	@Override
 	public boolean checkRes(PlayerDeathEvent e, PlayerData killler) {
-		if (killler.getName().equals(necro.playerWithRole.getName()) && necro.playerWithRole.game.necrom) {
+		if (killler.getName().equals(necro.playerWithRole.getName()) && ((GameLg) necro.playerWithRole.game).necrom) {
 			
 			PlayerData p = Main.getData(e.getEntity());
 			if (p == null) {

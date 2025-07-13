@@ -42,7 +42,7 @@ public class THIERCE_ANGE implements RoleInstance {
 
 	public THIERCE_ANGE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg)player.game;
 		game.resCheckers.add(new thierceAnge_Checker(this));
 		
 	}

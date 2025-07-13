@@ -11,6 +11,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.SanguinaireChecker;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -24,7 +25,7 @@ public class LOUP_SANGUINAIRE implements RoleInstance {
 	
 	public LOUP_SANGUINAIRE(PlayerData player) {
 		this.playerWithRole = player;
-		playerWithRole.game.resCheckers.add(new SanguinaireChecker(this));
+		((GameLg)playerWithRole.game).resCheckers.add(new SanguinaireChecker(this));
 		
 		
 	}

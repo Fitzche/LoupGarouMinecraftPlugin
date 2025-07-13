@@ -15,11 +15,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import WorldEditUtil.EmptyWorldGenerator;
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Lg.GameType;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.minecraft.GameListener;
+import fr.fitzche.lgmore.scoreboard.StarBoard;
+import net.minecraft.server.v1_8_R3.WorldGenTallPlant;
 
-public class StarParty implements Listener{
+public class StarParty implements Listener,Game{
 
 	public ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 	public boolean started = false;
@@ -56,6 +61,10 @@ public class StarParty implements Listener{
 		}
 		players.add(p);
 		p.sendMessage("ajouté à la game de star party: "+ name);
+		
+		for (PlayerData ply:players) {
+			ply.sendMessage("["+players.size()+"/17]");
+		}
 		p.starParty = this;
 		if (players.size() == 17) {
 			start();
@@ -156,6 +165,29 @@ public class StarParty implements Listener{
 						
 						));
 				break;
+			
+		}
+		if (players.size() < 15) {
+			roles = new ArrayList<RolesStar>(Arrays.asList(
+					RolesStar.ObiWan,
+					RolesStar.Yoda, 
+					RolesStar.Windu,
+					RolesStar.Luke, 
+					RolesStar.HanSolo,
+					RolesStar.Chewbaca, 
+					RolesStar.Leila,
+					RolesStar.QuiGon,
+					RolesStar.DarkMaul ,
+					RolesStar.DarkVador, 
+					RolesStar.Palpa, 
+					RolesStar.Dooku, 
+					RolesStar.Grievou, 
+					RolesStar.Impe, 
+					RolesStar.Impe,
+					RolesStar.Stormtrooper,
+					RolesStar.Jango
+					
+					));
 		}
 		if (roles.size() == 0) {
 			broad("Erreur quand au lancement, vous êtes ejecté de la partie");
@@ -181,6 +213,7 @@ public class StarParty implements Listener{
 			loc.setWorld(world);
 			p.player.teleport(loc);
 			p.roleSta.onRole();
+			StarBoard board = new StarBoard(p);
 		}
 	}
 	
@@ -232,5 +265,63 @@ public class StarParty implements Listener{
 				death(p);
 			}
 		}
+	}
+
+
+	@Override
+	public ArrayList<PlayerData> getWinners() {
+		// TODO Auto-generated method stub
+		return getPlayers();
+	}
+
+
+	@Override
+	public ArrayList<PlayerData> getPlayers() {
+		// TODO Auto-generated method stub
+		return players;
+	}
+
+
+	@Override
+	public GameType getType() {
+		// TODO Auto-generated method stub
+		return GameType.StarParty;
+	}
+
+
+	@Override
+	public World getWorld() {
+		// TODO Auto-generated method stub
+		return world;
+	}
+
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
+
+
+	@Override
+	public void broadcoast(String message) {
+		for (PlayerData p:players) {
+			p.sendMessage(message);
+		}
+		
+	}
+
+
+	@Override
+	public void setWorld(World world) {
+		this.world = world;
+		
+	}
+
+
+	@Override
+	public GameListener getListener() {
+		// TODO Auto-generated method stub
+		return this.listener;
 	}
 }

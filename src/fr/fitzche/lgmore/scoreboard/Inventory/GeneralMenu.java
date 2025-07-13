@@ -17,6 +17,7 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
+import fr.fitzche.lgmore.bedwars.Bedwars;
 import net.md_5.bungee.api.ChatColor;
 
 public class GeneralMenu implements Listener {
@@ -39,7 +40,10 @@ public class GeneralMenu implements Listener {
 				ChatColor.RED + "▪"+ ChatColor.WHITE+"xp: "+ChatColor.AQUA+ ""+ ChatColor.BOLD +p.xp , 
 				ChatColor.LIGHT_PURPLE + "▪"+ChatColor.WHITE + "feather: "+ ChatColor.AQUA+""+ChatColor.BOLD +p.feathers))));
 
-		
+		inv.setItem(16, ItemUtil.getItem(Material.BOW, 1, ChatColor.DARK_PURPLE+ ""+ChatColor.BOLD+ "Star War Party", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"   ▪Parties courtes ) 15/16/17 joueurs", ChatColor.GRAY+"   ▪Deux camp: jedi et sith s'affrontent à roles découverts sur une petite map.", ChatColor.GRAY+"   ▪PvP pur et rapide"))));
+		inv.setItem(17, ItemUtil.getItem(Material.BED, 1, ChatColor.DARK_PURPLE+ ""+ChatColor.BOLD+ "BedWar", new ArrayList<String>(Arrays.asList(""))));
+
+	
 	}
 	
 	public void open(PlayerData p) {
@@ -62,9 +66,23 @@ public class GeneralMenu implements Listener {
 				chose.open(p, e.getInventory());
 			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals( ChatColor.GOLD+""+ChatColor.BOLD+"Config")) {
 				if (p.game != null && (p.hoster || p.Name.equals("FITZCHE") || p.Name.equals("Fitzche"))) {
-					CommandUtil.runCommand("lga", (Player) e.getWhoClicked(), new String[] {"Game", "config", p.game.name});
+					CommandUtil.runCommand("lga", (Player) e.getWhoClicked(), new String[] {"Game", "config", p.game.getName()});
 					
 				}
+			}else if (e.getCurrentItem().getItemMeta().getDisplayName().equals( ChatColor.GOLD + "" +ChatColor.BOLD+""+"Profil")) {
+				CommandUtil.runCommand("lg", (Player) e.getWhoClicked(), new String[] {"stat", p.getName()});
+
+			}else if (e.getCurrentItem().getItemMeta().getDisplayName().equals( ChatColor.DARK_PURPLE+ ""+ChatColor.BOLD+ "Star War Party")) {
+				CommandUtil.runCommand("star", (Player) e.getWhoClicked(), new String[] {"play"});
+
+			}else if (e.getCurrentItem().getItemMeta().getDisplayName().equals( ChatColor.DARK_PURPLE+ ""+ChatColor.BOLD+ "BedWar")) {
+				for (Bedwars bed:Main.bedwars) {
+					if (bed.nbOfPlayers < bed.players.size()) {
+						bed.addPlayer(p);
+						return;
+					}
+				}
+
 			}
 			
 		}

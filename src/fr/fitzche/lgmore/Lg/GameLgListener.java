@@ -29,7 +29,9 @@ import fr.fitzche.lgmore.minecraft.ResCheck;
 import net.md_5.bungee.api.ChatColor;
 
 public class GameLgListener implements GameListener {
-
+	public GameLgListener() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public GameLg game;
 	@Override
@@ -204,7 +206,7 @@ public class GameLgListener implements GameListener {
     		}
     		if (killed.infected && killed.relive) {
     			killed.player.sendMessage(ChatColor.AQUA +"Vous avez été infecté, vous devez maintenant gagner avec les loups, vous possédez également force de nuit, faites /lg role pour connaitre la liste des loups garou");
-    			killed.game.checkWin();
+    			((GameLg)killed.game).checkWin();
     		}
     		
     		Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plug, new BukkitRunnable() {

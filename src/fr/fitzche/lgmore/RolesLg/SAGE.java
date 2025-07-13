@@ -24,7 +24,7 @@ public class SAGE implements RoleInstance {
 	public String name ="Vieux Sage";
 	public SAGE(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game =(GameLg) player.game;
 		
 	}
 	

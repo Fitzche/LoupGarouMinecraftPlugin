@@ -99,6 +99,7 @@ import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
+import fr.fitzche.lgmore.bedwars.Bedwars;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.commands.Rejoin;
 import fr.fitzche.lgmore.commands.Star;
@@ -109,6 +110,7 @@ import fr.fitzche.lgmore.commands.LgTab;
 import fr.fitzche.lgmore.minecraft.GameListener;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.mcListeners;
+import fr.fitzche.lgmore.scoreboard.DefaultBoard;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import fr.fitzche.lgmore.scoreboard.Inventory.GameTypeChoose;
 import fr.fitzche.lgmore.scoreboard.Inventory.GeneralMenu;
@@ -149,6 +151,8 @@ public class Main extends JavaPlugin implements Listener {
 	
 	
 	public static ArrayList<StarParty> parties = new ArrayList<StarParty>();
+	public static ArrayList<Bedwars> bedwars = new ArrayList<Bedwars>();
+	
 
 	public JavaPlugin getPlugin() {
 		return this;
@@ -168,6 +172,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static String playersDataFilePath = "lgData/playersData";
 	@SuppressWarnings("unchecked")
 	@Override
+	@Deprecated
 	public void onEnable() {
 		// TODO Auto-generated method stub
 		super.onEnable();
@@ -356,6 +361,18 @@ public class Main extends JavaPlugin implements Listener {
 		
 		Main2.onEnable();
 		
+		Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plug, new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				for (Player p:Bukkit.getOnlinePlayers()) {
+					strToPlayer.get(p.getName()).board.refresh();
+				}
+				
+			}
+			
+		}, 20, 20);
+		
 	}
 	
 	
@@ -363,7 +380,7 @@ public class Main extends JavaPlugin implements Listener {
 	
 	
 	public static boolean sameGame(PlayerData a, PlayerData b) {
-		if (a.game != null && b.game != null && b.game.name.equals(a.game.name)) {
+		if (a.game != null && b.game != null && b.game.getName().equals(a.game.getName())) {
 			return true;
 		} 
 		return false;
@@ -461,6 +478,8 @@ public class Main extends JavaPlugin implements Listener {
 			strToPlayer.get(e.getPlayer().getName()).player = e.getPlayer();
 			strToPlayer.get(e.getPlayer().getName()).setDisplayName();
 			strToPlayer.get(e.getPlayer().getName()).isOnline = true;
+			strToPlayer.get(e.getPlayer().getName()).board = new DefaultBoard(strToPlayer.get(e.getPlayer().getName()));
+			strToPlayer.get(e.getPlayer().getName()).board.refresh();
 		}
 		
 		
@@ -482,42 +501,47 @@ public class Main extends JavaPlugin implements Listener {
 			return;
 		}
 		player.leftInv = e.getPlayer().getInventory();
-		GameLg gm1 = player.game;
+		Game gm1 = player.game;
 		
-		System.out.println(gm1.name + " is the game ");
+		System.out.println(gm1.getName() + " is the game ");
 
-		gm1.playersLeft.put(player.getName(), new PlayerDataLeft(player));
+		if (gm1 instanceof GameLg) {
+			((GameLg) gm1).playersLeft.put(player.getName(), new PlayerDataLeft(player));
+			
+			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					System.out.println("online?");
+					
+					
+					if (!player.isOnline && ((GameLg) gm1).timer.temps > 1199) {
+						System.out.println(player.Name+ " not online");
+						((GameLg) gm1).announceDeath(player, false, false);
+					}
+					
+					
+					
+				}
+				
+			}, 6000);
+			
+		}
 		player.player = null;
 		player.isOnline = false;
 		
-		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				System.out.println("online?");
-				
-				
-				if (!player.isOnline && gm1.timer.temps > 1199) {
-					System.out.println(player.Name+ " not online");
-					gm1.announceDeath(player, false, false);
-				}
-				
-				
-				
-			}
-			
-		}, 6000);
+		
 	}
-	public static void placeVoteStruct(Location loc, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeVoteStruct(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
 		placeBat(loc, game);
-		Location voteB = new Location(game.world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		Location voteB = new Location(game.getWorld(), loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeVoteBlock(voteB, game);
 	}
-	public static void placeAccuseStruct(Location loc, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeAccuseStruct(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
 		placeBat(loc, game);
-		Location voteB = new Location(game.world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		Location voteB = new Location(game.getWorld(), loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeAccuseBlock(voteB, game);
 	}
 	public static void placeTreasureStruct(Location loc, TreasureBlockType type, GameLg game) {
@@ -526,16 +550,16 @@ public class Main extends JavaPlugin implements Listener {
 		Location specialB = new Location(game.world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeTreasureBlock(specialB, type, game);
 	}
-	public static void placeCauldronStruct(Location loc, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeCauldronStruct(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
 		placeBat(loc, game);
-		Location specialB = new Location(game.world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		Location specialB = new Location(game.getWorld(), loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeCauldronBlock(specialB, game);
 	}
-	public static void placeStoneStruct(Location loc, Stone stone, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeStoneStruct(Location loc, Stone stone, Game game) {
+		loc.setWorld(game.getWorld());
 		placeBat(loc, game);
-		Location specialB = new Location(game.world, loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
+		Location specialB = new Location(game.getWorld(), loc.getX()+Main.decalageBatX, loc.getY()+Main.decalageBatY, loc.getZ()+Main.decalageBatZ);
 		placeStoneBlock(stone,specialB, game);
 	}
 	
@@ -677,11 +701,14 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	
-	public static void placeBat(Location loc, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeBat(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
 		try {
-			StructureLoader.place(loc, StructureLoader.load(new File("schems/urne.schematic")), game.world, BukkitUtil.getLocalWorld(game.world).getWorldData());
-			game.locsBat.add(loc);
+			StructureLoader.place(loc, StructureLoader.load(new File("schems/urne.schematic")), game.getWorld(), BukkitUtil.getLocalWorld(game.getWorld()).getWorldData());
+			if (game instanceof GameLg) {
+				((GameLg) game).locsBat.add(loc);
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -697,12 +724,22 @@ public class Main extends JavaPlugin implements Listener {
 			e.printStackTrace();
 		}
 	}
-	public static void placeVoteBlock(Location loc, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeMap(Location loc, World world, String path) {
+		loc.setWorld(world);
+		try {
+			StructureLoader.place(loc, StructureLoader.load(new File(path)), world, BukkitUtil.getLocalWorld(world).getWorldData());
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void placeVoteBlock(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
 		System.out.println("bloc vote placé");
-		game.world.getBlockAt(loc).setType(Material.JUKEBOX);
-		game.world.getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Vote, new VoteBlockData(5), game, "ok"));
+		game.getWorld().getBlockAt(loc).setType(Material.JUKEBOX);
+		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Vote, new VoteBlockData(5), (GameLg) game, "ok"));
 		
 	}
 	public static void deleteDirectory(File file) {
@@ -715,42 +752,42 @@ public class Main extends JavaPlugin implements Listener {
 	    }
 	    file.delete();
 	}
-	public static void placeCauldronBlock(Location loc, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeCauldronBlock(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
 		System.out.println("bloc vote placé");
-		game.world.getBlockAt(loc).setType(Material.CAULDRON);
-		game.world.getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Cauldron, new VoteBlockData(5), game, "ok"));
+		game.getWorld().getBlockAt(loc).setType(Material.CAULDRON);
+		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Cauldron, new VoteBlockData(5), (GameLg) game, "ok"));
 		
 	}
 	
-	public static void placeStoneBlock(Stone stone, Location loc, GameLg game) {
-		loc.setWorld(game.world);
-		game.world.getBlockAt(loc).setType(Material.ENDER_CHEST);
-		game.world.getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Stone, new StoneBlockData(stone), game, "ok"));
+	public static void placeStoneBlock(Stone stone, Location loc, Game game) {
+		loc.setWorld(game.getWorld());
+		game.getWorld().getBlockAt(loc).setType(Material.ENDER_CHEST);
+		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Stone, new StoneBlockData(stone), (GameLg) game, "ok"));
 	}
-	public static void placeAccuseBlock(Location loc, GameLg game) {
-		loc.setWorld(game.world);
-		game.world.getBlockAt(loc).setType(Material.ANVIL);
-		game.world.getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+	public static void placeAccuseBlock(Location loc, Game game) {
+		loc.setWorld(game.getWorld());
+		game.getWorld().getBlockAt(loc).setType(Material.ANVIL);
+		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
 
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Accuse, new AccuseBlockData(), game, "ok"));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Accuse, new AccuseBlockData(), (GameLg) game, "ok"));
 		
 		
 	}
-	public static void placeTreasureBlock(Location loc, TreasureBlockType type, GameLg game) {
-		loc.setWorld(game.world);
+	public static void placeTreasureBlock(Location loc, TreasureBlockType type, Game game) {
+		loc.setWorld(game.getWorld());
 		if (type == null) {
 			System.out.println("TYPE NULL");
 			return;
 		}
 		
 		
-		game.world.getBlockAt(loc).setType(Material.ENDER_CHEST);
-		game.world.getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
+		game.getWorld().getBlockAt(loc).setType(Material.ENDER_CHEST);
+		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
 
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Treasure, new TreasureBlockData(type), game, "ok"));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Treasure, new TreasureBlockData(type), (GameLg) game, "ok"));
 		
 		
 	}

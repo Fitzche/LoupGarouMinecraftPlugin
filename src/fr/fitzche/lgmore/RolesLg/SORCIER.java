@@ -31,7 +31,7 @@ public class SORCIER implements RoleInstance {
 	
 	public SORCIER(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg) player.game;
 		
 		if (MathUtil.pourcentage(50)) {
 			

@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
@@ -45,13 +46,18 @@ public class PresetFunct implements InvFunct {
 	}
 
 	@Override
-	public void click(PlayerData p, GameLg game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
+		
+		if (!(game instanceof GameLg)) {
+			return;
+		}
+		GameLg game1 = (GameLg) game;
 		switch (clickedName) {
 		case "Classic":
 			
-			switch (game.players.size()) {
+			switch (game1.players.size()) {
 				case 25:
-					game.roles = new ArrayList<RolesLg>(Arrays.asList(
+					game1.roles = new ArrayList<RolesLg>(Arrays.asList(
 							RolesLg.DISCIPLE,
 							RolesLg.SAGE,
 							RolesLg.MONTREUR,
@@ -88,13 +94,13 @@ public class PresetFunct implements InvFunct {
 							
 							));
 					
-					game.probasEvents.put("Exposed"	, 20);
-					game.probasEvents.put("Brume"	, 5);
-					game.probasEvents.put("Premonition"	, 5);
-					game.probasEvents.put("Loup Solitaire"	, 20);
-					game.probasEvents.put("Nombre Batiments Leurre"	, 10);
-					game.probasEvents.put("Nombre Batiments à Bonus"	, 10);
-					game.probasEvents.put("AutomaticCheckWin"	, 100);
+					game1.probasEvents.put("Exposed"	, 20);
+					game1.probasEvents.put("Brume"	, 5);
+					game1.probasEvents.put("Premonition"	, 5);
+					game1.probasEvents.put("Loup Solitaire"	, 20);
+					game1.probasEvents.put("Nombre Batiments Leurre"	, 10);
+					game1.probasEvents.put("Nombre Batiments à Bonus"	, 10);
+					game1.probasEvents.put("AutomaticCheckWin"	, 100);
 					
 					break;
 			}

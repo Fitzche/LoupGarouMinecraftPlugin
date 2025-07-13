@@ -27,7 +27,7 @@ public class LOUP_HURLEUR implements RoleInstance {
 	
 	public LOUP_HURLEUR(PlayerData player) {
 		this.playerWithRole = player;
-		this.game = player.game;
+		this.game = (GameLg) player.game;
 		
 		
 	}

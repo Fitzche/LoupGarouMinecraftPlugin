@@ -28,15 +28,17 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
+import fr.fitzche.lgmore.bedwars.BedTeam;
+import fr.fitzche.lgmore.bedwars.Bedwars;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
+import fr.fitzche.lgmore.scoreboard.GameBoard;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
+import fr.fitzche.lgmore.scoreboard.StarBoard;
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerData implements Serializable{
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -5021567793654652540L;
 	public String Name;
 	public boolean isOnline = true;
@@ -49,6 +51,11 @@ public class PlayerData implements Serializable{
 	public transient Location rejoinLoc;
 	
 	
+	public transient Bedwars bedGame;
+	public transient BedTeam bedTeam;
+	
+	
+	
 	
 	public transient StarParty starParty;
 	public transient RolesStar roleStar;
@@ -58,7 +65,9 @@ public class PlayerData implements Serializable{
 	
 	
 	
-	public transient GameLg game;
+	
+	public transient Game game;
+	public transient GameBoard board;
 	
 	public transient RoleInstance roleIn;
 	public transient Camp appCamp;
@@ -88,7 +97,6 @@ public class PlayerData implements Serializable{
 	public transient boolean instantDeath;
 	public transient boolean grimed = false;
 	public transient int numberOfKill = 0;
-	public transient ScoreboardLg board;
 	public transient HashMap<String, Integer> timeWithPlayers = new HashMap<String, Integer>();
 	public transient HashMap<Player, Boolean> hasStrenghtAgainst = new HashMap<Player, Boolean>();
 	public transient boolean canAccuse = false;
@@ -151,6 +159,9 @@ public class PlayerData implements Serializable{
 		role = null;
 		camp = null;
 		
+		bedGame = null;
+		bedTeam = null;
+		
 		hasRes = false;
 		inLove = false;
 		infected = false;
@@ -165,6 +176,7 @@ public class PlayerData implements Serializable{
 		grimed = false;
 		numberOfKill = 0;
 		board = null;
+	
 		timeWithPlayers = new HashMap<String, Integer>();
 		hasStrenghtAgainst = new HashMap<Player, Boolean>();
 		canAccuse = false;
@@ -212,7 +224,8 @@ public class PlayerData implements Serializable{
 	}
 	public void setDisplayName() {
 		String setted = "";
-		if (game != null && role != null) {
+		if (game != null && role != null && game instanceof GameLg) {
+			GameLg game = (GameLg) this.game;
 			if (game.statut.equals(GameStatut.IN_GAME) && game.displayedRoles) {
 				if (role.getCampOfRole().equals(Camp.Love) ) {
 					setted = Camp.Villager.getColor() + setted;
@@ -227,6 +240,12 @@ public class PlayerData implements Serializable{
 				
 			}
 		}
+		
+		
+		if (bedGame != null && bedTeam != null) {
+			setted = bedTeam.getChatColor() + setted;
+		}
+		
 		setted = setted + getName();
 		if (isOnline) {
 			try {
@@ -321,7 +340,7 @@ public class PlayerData implements Serializable{
 		if (this.isOnline) {
 			return this.player.getLocation();
 		}
-		return new Location(this.game.world, 10000, 10000, 10000);
+		return new Location(this.game.getWorld(), 10000, 10000, 10000);
 	}
 	
 	public void addPotionEffect(PotionEffect effect) {
@@ -456,7 +475,7 @@ public class PlayerData implements Serializable{
 				recents.add(note);
 			}
 		}
-		for (GameNote note:recent) {
+		for (GameNote note:recents) {
 			if (note.winners.contains(getName())) {
 				win ++;
 			}
@@ -473,6 +492,11 @@ public class PlayerData implements Serializable{
 		}
 		return x;
 	}
+	
+	public boolean isFree() {
+		return (starParty != null || game != null || bedGame != null);
+	}
+	
 	
 	
 	

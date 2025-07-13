@@ -59,6 +59,7 @@ import de.inventivegames.particle.ParticleEffect;
 import org.bukkit.command.TabCompleter.*;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.InfinityStones.Stone;
@@ -144,30 +145,50 @@ public class Lga implements CommandExecutor  {
 			p.game.broadcoast(ChatColor.ITALIC + mess);
 			return true;
 		} else if (args[0].equals("epic")) {
+			
 			if (args.length > 1) {
 				PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
-				if (p == null || p.game == null) {
+				GameLg game = null;
+				if (p.game != null && p.game instanceof GameLg) {
+					game = (GameLg) p.game;
+				} else {
+					return false;
+				}
+				if (p == null || game == null) {
 					return true;
 				}
 				
-				p.game.addEpic(Integer.valueOf(args[1]), ((Player) sender).getLocation());
+				game.addEpic(Integer.valueOf(args[1]), ((Player) sender).getLocation());
 			}
 			
 		}else if (args[0].equals("tragic")) {
+			
 			if (args.length > 1) {
 				PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
-				if (p == null || p.game == null) {
+				GameLg game = null;
+				if (p.game != null && p.game instanceof GameLg) {
+					game = (GameLg) p.game;
+				} else {
+					return false;
+				}
+				if (p == null || game == null) {
 					return true;
 				}
-				p.game.addTragic(Integer.valueOf(args[1]), ((Player) sender).getLocation());
+				game.addTragic(Integer.valueOf(args[1]), ((Player) sender).getLocation());
 			}
 		}else if (args[0].equals("oratoire")) {
 			if (args.length > 1) {
 				PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
-				if (p == null || p.game == null) {
+				GameLg game = null;
+				if (p.game != null && p.game instanceof GameLg) {
+					game = (GameLg) p.game;
+				} else {
+					return false;
+				}
+				if (p == null || game == null) {
 					return true;
 				}
-				p.game.addorat(Integer.valueOf(args[1]), ((Player) sender).getLocation());
+				game.addorat(Integer.valueOf(args[1]), ((Player) sender).getLocation());
 			}
 		} else if (args[0].equals("loc1")) {
 			Player p = (Player) sender;
@@ -265,15 +286,21 @@ public class Lga implements CommandExecutor  {
 					return false;
 				}
 				PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
-				if (p == null || p.game == null) {
+				GameLg game = null;
+				if (p.game != null && p.game instanceof GameLg) {
+					game = (GameLg) p.game;
+				} else {
+					return false;
+				}
+				if (p == null || game == null) {
 					return true;
 				}
-				if (p.game == null) {
+				if (game == null) {
 					sender.sendMessage("Vous devez etre dans une game pour effectuer cette commande");
 					return false;
 				}
 				
-				p.game.setGroupsTo(g);
+				game.setGroupsTo(g);
 			}
 		}else if (args[0].equals("placeVote")) {
 			PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
@@ -288,11 +315,18 @@ public class Lga implements CommandExecutor  {
 			}
 			Main.placeAccuseStruct(((Player) sender).getLocation(), p.game);
 		} else if (args[0].equals("auraDisplay")) {
+			
 			PlayerData p = Main.strToPlayer.getOrDefault(sender.getName(), null);
-			if (p == null || p.game == null) {
+			GameLg game = null;
+			if (p.game != null && p.game instanceof GameLg) {
+				game = (GameLg) p.game;
+			} else {
+				return false;
+			}
+			if (p == null || game == null) {
 				return true;
 			}
-			p.game.futuresActions.add(new FutureAction(new BukkitRunnable() {
+			game.futuresActions.add(new FutureAction(new BukkitRunnable() {
 				
 				@Override
 				public void run() {
@@ -345,8 +379,14 @@ public class Lga implements CommandExecutor  {
 		}
 		if (args[0].equals("generer")) {
 			PlayerData p = Main.getData(sender);
+			GameLg game = null;
+			if (p.game != null && p.game instanceof GameLg) {
+				game = (GameLg) p.game;
+			} else {
+				return false;
+			}
 			if (p != null && p.game != null) {
-				WorldCreator c = new WorldCreator("world"+p.game.name).generator(Main.world.getGenerator());
+				WorldCreator c = new WorldCreator("world"+p.game.getName()).generator(Main.world.getGenerator());
 				c.generator(Main.world.getGenerator());
 				World copied = Main.plug.getServer().getWorld("world");
 				copied = Main.world;
@@ -359,10 +399,12 @@ public class Lga implements CommandExecutor  {
 				World worldGen = c.createWorld();
 				
 				
-				p.game.world = worldGen;
+				p.game.setWorld(worldGen);
 				
+				if (game instanceof GameLg) {
+					((GameLg) game).isWorldGenerated = true;
+				}
 				
-				p.game.isWorldGenerated = true;
 				
 				
 				sender.sendMessage("map générée");
@@ -375,11 +417,11 @@ public class Lga implements CommandExecutor  {
 				return false;
 			}
 			
-			GameLg game = p.game;
+			Game game = p.game;
 			if (game == null) {
 				return false;
 			} else {
-				p.player.teleport(game.world.getSpawnLocation());
+				p.player.teleport(game.getWorld().getSpawnLocation());
 			}
 		}
 		if (args[0].equals("kick")) {
@@ -390,8 +432,15 @@ public class Lga implements CommandExecutor  {
 			if (p == null) {
 				return true;
 			}
-			if (p.game != null && p.game.name.equals(Main.getData(sender).game.name)) {
-				p.game.removePlayer(p, " at remove command");
+			if (p.game != null && p.game.getName().equals(Main.getData(sender).game.getName())) {
+				
+				GameLg game = null;
+				if (p.game != null && p.game instanceof GameLg) {
+					game = (GameLg) p.game;
+				} else {
+					return false;
+				}
+				game.removePlayer(p, " at remove command");
 			}
 		}
 		if (args[0].equals("addXp")) {
@@ -442,7 +491,12 @@ public class Lga implements CommandExecutor  {
 		if (args[0].equals("invite")) {
 			
 			
-			GameLg game = Main.strToPlayer.get(sender.getName()).game;
+			GameLg game = null;
+			if (Main.getData(sender).game != null && Main.getData(sender).game instanceof GameLg) {
+				game = (GameLg) Main.getData(sender).game;
+			} else {
+				return false;
+			}
 			
 			if (game == null) {
 				if (sender instanceof Player) {
@@ -486,11 +540,18 @@ public class Lga implements CommandExecutor  {
 		}
 		
 		if (args[0].equals("noscore")) {
+			
 			PlayerData p = Main.getData(sender);
+			GameLg game = null;
+			if (p.game != null && p.game instanceof GameLg) {
+				game = (GameLg) p.game;
+			} else {
+				return false;
+			}
 			if (p != null && p.game != null) {
 				
-				p.game.toRegister = !p.game.toRegister;
-				if (p.game.toRegister) {
+				game.toRegister = !game.toRegister;
+				if (game.toRegister) {
 					sender.sendMessage("partie à enregister");
 				} else {
 					sender.sendMessage("partie à ne pas enregister");
@@ -647,9 +708,15 @@ public class Lga implements CommandExecutor  {
 				if (p == null || p.game == null) {
 					return true;
 				}
-				if (p.game != null) {
-					p.game.toRegister = !p.game.toRegister;
-					if (p.game.toRegister) {
+				GameLg game = null;
+				if (p.game != null && p.game instanceof GameLg) {
+					game = (GameLg) p.game;
+				} else {
+					return false;
+				}
+				if (game != null) {
+					game.toRegister = !game.toRegister;
+					if (game.toRegister) {
 						sender.sendMessage("Enregistrement de la partie activé");
 					} else {
 						sender.sendMessage("Enregistrement de la partie désactivé");
@@ -716,14 +783,27 @@ public class Lga implements CommandExecutor  {
 			
 			if (args[1].equals("bl") ) {
 				if (args.length > 1) {
-					GameLg game = Main.strToPlayer.get(sender.getName()).game;
+					PlayerData p = Main.getData(sender);
+					GameLg game = null;
+					if (p.game != null && p.game instanceof GameLg) {
+						game = (GameLg) p.game;
+					} else {
+						return false;
+					}
+					
 					game.isBanned.put(args[2], true);
 					sender.sendMessage("Le joueur "+args[2]+ " est blacklist");
 				}
 			}
 			if (args[1].equals("wl")) {
 				if (args.length > 1) {
-					GameLg game = Main.strToPlayer.get(sender.getName()).game;
+					PlayerData p = Main.getData(sender);
+					GameLg game = null;
+					if (p.game != null && p.game instanceof GameLg) {
+						game = (GameLg) p.game;
+					} else {
+						return false;
+					}
 					game.isBanned.put(args[2], false);
 					sender.sendMessage("Le joueur "+args[2]+ " est whitelist");
 				}

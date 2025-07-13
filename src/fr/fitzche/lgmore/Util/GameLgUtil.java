@@ -11,6 +11,7 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.GameStatut;
 
 import fr.fitzche.lgmore.RolesLg.INFECT_PERE_DES_LOUPS;
@@ -97,7 +98,7 @@ public class GameLgUtil {
 	
 	public static void tpAl(PlayerData player) {
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		Location loc = new Location(player.game.world, MathUtil.generateAlInt(-500, 500), 200, MathUtil.generateAlInt(-500, 500));
+		Location loc = new Location(player.game.getWorld(), MathUtil.generateAlInt(-500, 500), 200, MathUtil.generateAlInt(-500, 500));
 		player.player.teleport(loc);
 	}
 	
@@ -109,7 +110,7 @@ public class GameLgUtil {
 			i = 10;
 		}
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		Location loc = new Location(player.game.world, MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
+		Location loc = new Location(player.game.getWorld(), MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
 		player.player.teleport(loc);
 	}
 	public static void tpAl(ArrayList<PlayerData> players, int i) {
@@ -121,15 +122,15 @@ public class GameLgUtil {
 		}
 		for (PlayerData player:players) {
 			player.addPotionEffect(PotionUtil.INVINCIBILITY);
-			Location loc = new Location(player.game.world, MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
+			Location loc = new Location(player.game.getWorld(), MathUtil.generateAlInt(-i, i), 200, MathUtil.generateAlInt(-i, i));
 			player.player.teleport(loc);
 		}
 		
 	}
 	public static void tpAl(Player player) {
 		player.addPotionEffect(PotionUtil.INVINCIBILITY);
-		GameLg game = Main.getData(player).game;
-		Location loc = new Location(game.world, MathUtil.generateAlInt(-500, 500), 200, MathUtil.generateAlInt(-500, 500));
+		Game game = Main.getData(player).game;
+		Location loc = new Location(game.getWorld(), MathUtil.generateAlInt(-500, 500), 200, MathUtil.generateAlInt(-500, 500));
 		player.teleport(loc);
 	}
 	

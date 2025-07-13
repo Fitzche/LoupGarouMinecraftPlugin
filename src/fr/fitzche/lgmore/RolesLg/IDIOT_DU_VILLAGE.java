@@ -10,6 +10,7 @@ import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.IDV_Checker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -22,7 +23,7 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 	
 	public IDIOT_DU_VILLAGE(PlayerData ply) {
 		this.playerWithRole = ply;
-		ply.game.resCheckers.add(new IDV_Checker(this, ply.game));
+		((GameLg)ply.game).resCheckers.add(new IDV_Checker(this, (GameLg)ply.game));
 	}
 
 	@Override
