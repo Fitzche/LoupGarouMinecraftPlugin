@@ -6,11 +6,18 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import com.sk89q.worldedit.Vector;
 
 import WorldEditUtil.EmptyWorldGenerator;
 import fr.fitzche.lgmore.Camp;
@@ -18,9 +25,11 @@ import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameType;
+import fr.fitzche.lgmore.Minage.MinageWorld;
 import fr.fitzche.lgmore.RolesLg.SWAPPER;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.minecraft.GameListener;
+import net.minecraft.server.v1_8_R3.EntityArmorStand;
 
 public class Bedwars implements Game {
 
@@ -43,6 +52,10 @@ public class Bedwars implements Game {
 	public ArrayList<Location> emeralds = new ArrayList<Location>();
 	public ArrayList<Location> trader = new ArrayList<Location>();
 	public ArrayList<Location> traderD = new ArrayList<Location>();
+	
+	final public static int timeOnDeath = 8;
+	
+	
 	
 	
 	
@@ -83,18 +96,51 @@ public class Bedwars implements Game {
 			}else if (loc.type.equals(BedLocType.DiamondGenerator)) {
 				this.traderD.add(loc.loc);
 			}
+			
+			
 		}
 		
 		for (Entry<BedTeam, Integer> entry:lifeOfTeams.entrySet()) {
 			lifeOfTeams.put(entry.getKey(), 10);
 		}
+		for (Entry<BedTeam, Location> entry:cartOfTeams.entrySet()) {
+			ArmorStand stand =entry.getValue().getWorld().spawn(entry.getValue(), ArmorStand.class);
+			stand.setMetadata("unbreakable", Main.unbreakableMeta);
+			stand.setMetadata("bedTeam", entry.getKey().getMetaValue());
+			
+		}
 		
 	}
 	
+	@Deprecated
 	public boolean addPlayer(PlayerData p) {
 		if (p.isFree()) {
 			p.clearLgGameVar();
-			players.add(p);
+			
+			if (players.size() >= nbOfPlayers) {
+				p.sendMessage(ChatColor.RED+"Cette partie est pleine");
+			} else {
+				players.add(p);
+			}
+			
+			
+			
+			
+			if (players.size() == nbOfPlayers) {
+				broad("Début dans 15 secs si assez de joueurs");
+				Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						if (players.size() == nbOfPlayers  && !started) {
+							start();
+							
+						}
+						
+					}
+					
+				}, 300);
+			}
 			return true;
 			
 		} else {
@@ -108,15 +154,31 @@ public class Bedwars implements Game {
 		}
 	}
 	
+	@Deprecated
 	public void start() {
-		for (PlayerData p:players) {
-			p.rejoinLoc = spawnOfTeams.get(p.bedTeam);
-			if (p.isOnline) {
-				p.player.teleport(spawnOfTeams.get(p.bedTeam));
+		MinageWorld min = new MinageWorld(new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				tpSpawn();
+				
+				
+				
 			}
-		}
+			
+		}, new ArrayList<Material>(Arrays.asList(
+				Material.DIAMOND, 
+				Material.LAPIS_ORE,
+				Material.GOLD_INGOT,
+				Material.IRON_INGOT,
+				Material.EMERALD, 
+				Material.REDSTONE, 
+				Material.COAL
+				
+				)), 1200, 3, 4, 2.5, false, 1000, players);
 	}
 	
+	@Deprecated
 	public void tpSpawn() 
 	{
 		
@@ -124,20 +186,22 @@ public class Bedwars implements Game {
 			p.rejoinLoc = spawnOfTeams.get(p.bedTeam);
 			if (p.isOnline) {
 				p.player.teleport(spawnOfTeams.get(p.bedTeam));
+				p.player.sendTitle(ChatColor.GOLD+"Début de la Phase: ", ChatColor.RED+"Combat");
 			}
 		}
+		
+		
 	}
 	
 	
-	ici
+	
 	/*
 	 *
-	 * gerer respawn
-	 * gerer couche 0 = mort
-	 * mort = respawn mais immobil 8 secs ( changeable )
-	 * start partie auto
-	 * fin = vie 0 + mort
-	 * victoire
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * spawn du minecart
 	 * 
 	 * 
@@ -228,6 +292,24 @@ public class Bedwars implements Game {
 	public GameListener getListener() {
 		// TODO Auto-generated method stub
 		return this.listener;
+	}
+	
+	public void win(BedTeam team) {
+		int kills = 0;
+		for (PlayerData p:players) {
+			if (p.bedTeam.equals(team)) {
+				kills+=p.numberOfKill;
+			}
+		}
+		broad("L'équipe "+team.getName()+ " a gagné avec "+kills+" kill;");
+		
+	}
+	
+	public void damageBed(BedTeam  team) {
+		lifeOfTeams.put(team, lifeOfTeams.getOrDefault(team, 10) - 1);
+		if (lifeOfTeams.get(team) <= 0) {
+			broadcoast(ChatColor.GOLD + "Le point de Respawn de l'équipe "+ team.getName() + " a été détruit");
+		}
 	}
 	
 

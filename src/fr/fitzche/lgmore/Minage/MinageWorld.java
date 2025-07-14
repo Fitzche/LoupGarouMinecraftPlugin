@@ -8,6 +8,7 @@ import org.apache.logging.log4j.core.util.Integers;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import WorldEditUtil.EmptyWorldGenerator;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
@@ -39,6 +41,10 @@ public class MinageWorld implements Listener{
 	HashMap<String, Integer> limitD = new HashMap<String, Integer>();
 	ArrayList<PlayerData> ps;
 	
+	/*
+	 * 
+	 * 
+	 * */
 	@Deprecated
 	public MinageWorld(BukkitRunnable run, ArrayList<Material> autorized, int timeInSec,double boostGold ,double boostIron, double boostDiamond, boolean removeArmor, int limitDiamond, ArrayList<PlayerData> ps) {
 		this.run = run;
@@ -51,6 +57,9 @@ public class MinageWorld implements Listener{
 		this.ps = ps;
 		this.limitDiamond = limitDiamond;
 		
+		WorldCreator c = new WorldCreator("worldMinage"+MathUtil.generateAlInt(0, 99999)).generator(Main.world.getGenerator());
+		c.generator(new EmptyWorldGenerator());
+		this.world = c.createWorld();
 		for (PlayerData p:ps) {
 			if (p.game != null) {
 				LocationUtil.tpAl(p, 1000);
@@ -77,12 +86,18 @@ public class MinageWorld implements Listener{
 					
 					if (time >= timeInSec) {
 						for (PlayerData p:ps) {
+							
 							if (p.isOnline) {
 								for (ItemStack item:p.player.getInventory().getContents()) {
+									boolean toRemove = false;
 									for (Material mat:autorized) {
 										if (!mat.equals(item.getType())) {
-											p.player.getInventory().remove(item);
+											toRemove = true;
 										}
+									}
+									
+									if (toRemove) {
+										p.player.getInventory().remove(item);
 									}
 								}
 							}

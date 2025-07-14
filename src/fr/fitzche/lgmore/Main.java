@@ -153,6 +153,8 @@ public class Main extends JavaPlugin implements Listener {
 	public static ArrayList<StarParty> parties = new ArrayList<StarParty>();
 	public static ArrayList<Bedwars> bedwars = new ArrayList<Bedwars>();
 	
+	
+	public final static FixedMetadataValue unbreakableMeta = new FixedMetadataValue(plug, "unbreakable");
 
 	public JavaPlugin getPlugin() {
 		return this;
@@ -367,11 +369,16 @@ public class Main extends JavaPlugin implements Listener {
 			public void run() {
 				for (Player p:Bukkit.getOnlinePlayers()) {
 					strToPlayer.get(p.getName()).board.refresh();
+					if (p.getLocation().getY() < -1) {
+						p.damage(300);
+					}
 				}
+				
 				
 			}
 			
 		}, 20, 20);
+		
 		
 	}
 	

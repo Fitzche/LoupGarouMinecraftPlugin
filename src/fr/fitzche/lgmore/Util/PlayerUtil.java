@@ -33,11 +33,19 @@ public class PlayerUtil {
 	
 		return null;
 	}
+
 	
+	public static void survival(Player p) {
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "gamemode "+p.getName() + " survival");
+	}
 	
+	public static void adventure(Player p) {
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "gamemode "+p.getName() + " adventure");
+	}
 	
-	
-	
+	public static void spectator(Player p) {
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "gamemode "+p.getName() + " spectator");
+	}
 	
 	public static void don(PlayerData giver, PlayerData receiver, double give) {
 		double FinalGive = (give/100) * giver.getMaxHealth();
