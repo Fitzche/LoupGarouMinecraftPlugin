@@ -3,12 +3,15 @@ package fr.fitzche.lgmore.bedwars;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
@@ -135,9 +138,30 @@ public class BedListener implements GameListener, Listener {
 
 	@EventHandler
 	public void onEntityBreak(VehicleDestroyEvent event) {
-	    if (event.getVehicle() instanceof ArmorStand && event.getVehicle().getMetadata("unbreakable").equals("true")) {
+	    if (event.getVehicle() instanceof ArmorStand && event.getVehicle().getMetadata("unbreakable").get(0).equals("true")) {
 	        event.setCancelled(true);
+	        
 	    }
 	}
+	@EventHandler
+	public void onCraft(CraftItemEvent e) {
+		if (e.getWhoClicked().getLocation().getWorld().equals(bed.getWorld())) {
+			e.setCancelled(true);
+			e.getWhoClicked().sendMessage("Vous ne pouvez rien craft ici");
+			
+		}
+	}
+	
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent e) {
+		if (e.getBlock().getMetadata("unbreakable").get(0).equals(Main.unbreakableMeta)) {
+	        e.setCancelled(true);
+	        
+	    }
+		
+	}
+	
+	
+	
 
 }

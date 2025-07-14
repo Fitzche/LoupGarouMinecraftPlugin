@@ -76,6 +76,14 @@ public class Bedwars implements Game {
 		world.getBlockAt(new Location(world, 0, 101, 0)).setType(Material.AIR);
 		world.getBlockAt(new Location(world, 0, 102, 0)).setType(Material.AIR);
 		
+		for (int x = 0; x <= 400;x++ ) {
+			for (int y = 0; y <= 400;y++ ) {
+				for (int z = 0; z <= 100; z++) {
+					world.getBlockAt(x-200, y-200, z+50).setMetadata("unbreakable", Main.unbreakableMeta);
+				}
+			}
+		}
+		
 		nbOfPlayers = map.nbOfPlayerTeam * map.nbOfTeam;
 		
 		
@@ -298,7 +306,7 @@ public class Bedwars implements Game {
 		int kills = 0;
 		for (PlayerData p:players) {
 			if (p.bedTeam.equals(team)) {
-				kills+=p.numberOfKill;
+				kills += p.numberOfKill;
 			}
 		}
 		broad("L'équipe "+team.getName()+ " a gagné avec "+kills+" kill;");
