@@ -63,7 +63,7 @@ public class PlayerGameListInv implements InvFunct{
 	
 	
 	@Override
-	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores, ItemStack returnedItem) {
 		int x = -1;
 		x = Integer.valueOf(lores.get(0));
 		if (lores != null && lores.size() > 0 && x >= 0 && p.isOnline) {

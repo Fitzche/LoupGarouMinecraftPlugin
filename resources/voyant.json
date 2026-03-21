@@ -1,0 +1,30 @@
+{
+    "name": "Voyant",
+    "camp": "Village",
+    "strenght": 1.0,
+    "resistance": 1.0,
+
+    "reliveTry": 0,
+    "lostStrenght": 0.0,
+    "lostResis": 0.0,
+    "lostHealth": 0.0,
+
+    "conditionKilledBy": "",
+    "conditionKilledByCamp": "",
+
+    "infoPowers": [
+        {
+            "type": "seeCaract",
+            "object": {
+                "distance": 1000,
+                "probaTrue": 100,
+                "use": 3,
+                "all": false,
+                "knowWho": true,
+                "timeAlea": false,
+                "caract": "camp",
+                "command": "voircamp"
+            }
+        }
+    ]
+}

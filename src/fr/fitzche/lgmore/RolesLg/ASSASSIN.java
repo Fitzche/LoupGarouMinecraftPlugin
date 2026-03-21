@@ -42,7 +42,7 @@ public class ASSASSIN implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous êtes ASSASSIN !!! (Royal) Vous devez gagner tout seul, vous possédez les livre efficency III, sharpness III, et protection III, vous pouvez également fabriquer une épée tranchant IV, et vous possédez force le jour");
+		return (Main.info +ChatColor.BLUE+"Vous êtes ASSASSIN !!! (Royal) Vous devez gagner tout seul, vous possédez les livre efficency III, sharpness III, et protection III, vous pouvez également fabriquer une épée tranchant IV, et vous possédez force le jour");
 	}
 	public static ItemStack logo = new ItemStack(Material.GOLD_SWORD);
 
@@ -88,7 +88,7 @@ public class ASSASSIN implements RoleInstance {
 
 	@Override
 	public void giveDayEffect() {
-		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60, 0, false, false));
+		playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 61, 0, false, false));
 		
 	}
 

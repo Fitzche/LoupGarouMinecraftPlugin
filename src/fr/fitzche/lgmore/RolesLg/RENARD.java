@@ -54,7 +54,7 @@ public class RENARD implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour cela, vous pouvez obtenir le rôle d'un joueur avec /lg flairer [nomDuJoueur], vous avez cependant uniquement 85% de chance d'avoir son role exact, moins 5% par personne que vous avez déjà flairé" + "\n"+ "Cependant pour flairer un joueur vous devez etre resté minimum 15min à coté de celui-ci";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec le village, pour cela, vous pouvez obtenir le rôle d'un joueur avec /lg flairer [nomDuJoueur], vous avez cependant uniquement 85% de chance d'avoir son role exact, moins 5% par personne que vous avez déjà flairé" + "\n"+ "Cependant pour flairer un joueur vous devez etre resté minimum 15min à coté de celui-ci";
 	}
 
 	@Override

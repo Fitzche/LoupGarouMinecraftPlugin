@@ -136,7 +136,7 @@ public class ScenarioInv implements InvFunct {
 	}
 	
 	
-	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores, ItemStack returnedItem) {
 		GameLg game1 = (GameLg) game;
 		switch (clickedName) {
 			case "Théâtre":

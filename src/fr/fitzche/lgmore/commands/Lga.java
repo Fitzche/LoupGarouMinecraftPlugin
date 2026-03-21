@@ -3,7 +3,12 @@ package fr.fitzche.lgmore.commands;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -43,12 +48,12 @@ import org.mozilla.javascript.tools.shell.Environment;
 
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
-import com.khorn.terraincontrol.TerrainControl;
-import com.khorn.terraincontrol.TerrainControlEngine;
+
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.utils.WorldManager;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 
 import WorldEditUtil.BiomeChanger;
@@ -71,10 +76,11 @@ import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.GameStatut;
-
+import fr.fitzche.lgmore.RolesLg.LOUP_BRUMEUX;
 import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.THANOS;
+import fr.fitzche.lgmore.Util.BooksUtils;
 import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
@@ -89,6 +95,11 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.BiomeDecorator;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+
 
 
 public class Lga implements CommandExecutor  {
@@ -102,17 +113,216 @@ public class Lga implements CommandExecutor  {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 		
+		//getHead
 		if (args[0].equals("head")) {
 			((Player) sender).getInventory().addItem(ItemUtil.getCustomHead("FITZCHE"));
-			;
-		}
-		if (args[0].equals("setRole")) {
+			
+		}else if (args[0].equals("jsonTest")) {
+			
+			InputStream is = getClass().getClassLoader().getResourceAsStream(args[1]);
+			BooksUtils.loadRoleAndOpenBook((Player) sender, args[1], is);
+			
+			
+			
+		} if (args[0].equals("resetGames")) {
+			for (Player p:Bukkit.getOnlinePlayers()) {
+				Main.getData(p).clearLgGameVar();
+				Hub.sendHub(Main.getData(p));
+			}
+		}else if (args[0].equals("addS5")) {
+			if (args.length < 3) {
+				sender.sendMessage("erreur de commande");
+				return true;
+			}
+			int added = Integer.valueOf(args[2]);
+			Main.getData(args[1]).boostS5 += added;
+		}else if (args[0].equals("addR5")) {
+			if (args.length < 3) {
+				sender.sendMessage("erreur de commande");
+				return true;
+			}
+			int added = Integer.valueOf(args[2]);
+			Main.getData(args[1]).boostR5 += added;
+		}else if (args[0].equals("remS5")) {
+			if (args.length < 3) {
+				sender.sendMessage("erreur de commande");
+				return true;
+			}
+			int added = Integer.valueOf(args[2]);
+			Main.getData(args[1]).boostS5 -= added;
+		}else if (args[0].equals("remR5")) {
+			if (args.length < 3) {
+				sender.sendMessage("erreur de commande");
+				return true;
+			}
+			int added = Integer.valueOf(args[2]);
+			Main.getData(args[1]).boostR5 -= added;
+		}else if (args[0].equals("infGojoBlue")) {
+			ItemStack dash = new ItemStack(Material.FEATHER);
+			ItemUtil.setName(dash, ChatColor.UNDERLINE+"Infinite Blue");
+			ItemUtil.addAppaEnchant(dash);
+			
+			Player p = (Player) sender;
+			p.getInventory().addItem(dash);
+		} else if (args[0].equals("infDashGive")) {
+			ItemStack dash = new ItemStack(Material.FEATHER);
+			ItemUtil.setName(dash, ChatColor.UNDERLINE+"DashInf");
+			ItemUtil.addAppaEnchant(dash);
+			int a = 0;
+			if (args.length > 1) {
+				a = Integer.valueOf(args[1]);
+				switch (a) {
+					case 1:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, a);
+						break;
+					case 2:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, a);
+						break;
+					case 3:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, a);
+						break;
+					case 4:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+						break;
+				
+					
+				
+				}
+				if (args.length > 2) {
+					dash.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 1);
+				}
+			
+			}
+			Player p = (Player) sender;
+			p.getInventory().addItem(dash);
+		}else if (args[0].equals("dashGive")) {
+			ItemStack dash = new ItemStack(Material.FEATHER);
+			ItemUtil.setName(dash, ChatColor.UNDERLINE+"Dash");
+			ItemUtil.addAppaEnchant(dash);
+			
+			int a1 = 0;
+			if (args.length > 1) {
+				a1 = Integer.valueOf(args[1]);
+				switch (a1) {
+					case 1:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, a1);
+						break;
+					case 2:
+						
+						dash.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, a1);
+						break;
+					case 3:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, a1);
+						break;
+					case 4:
+						dash.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+						break;
+				
+					
+				
+				}
+				if (args.length > 2) {
+					dash.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 1);
+				}
+			
+			}
+			
+			Player p = (Player) sender;
+			p.getInventory().addItem(dash);
+		}else if (args[0].equals("pvp")) {
+			String name ="pvpGame-"+MathUtil.generateAlInt(0, 1000);
+			GameLg game = new GameLg(name);
+			Main.strToGame.put(name, game);
+			Player playerd = (Player )sender;
+			playerd.sendMessage(ChatColor.DARK_BLUE +"game created: " + ChatColor.DARK_RED+ name);
+			game.board.setgame(game);
+			game.addPlayer(playerd.getName());
+			
+			ArrayList<RolesLg> roles = new ArrayList<RolesLg>(Arrays.asList(
+				
+					RolesLg.ANCIEN,
+					RolesLg.ANGE,
+					RolesLg.ASSASSIN,
+					RolesLg.LOUP_SANGUINAIRE,
+					RolesLg.BIENFAITEUR,
+					RolesLg.CHASSEUR,
+				
+					RolesLg.CUPIDON,
+				
+					RolesLg.ENFANT_SAUVAGE,
+					
+					RolesLg.INFECT_PERE_DES_LOUPS,
+				
+					RolesLg.LOUP_ALCHIMISTE,
+					RolesLg.LOUP_BARBARE,
+					 
+					
+					
+					RolesLg.LOUP_HURLEUR,
+					RolesLg.LOUP_METAMORPHE, 
+					
+					
+				 
+					RolesLg.PARRAIN,
+					
+					RolesLg.PYROMANE, 
+					 
+					
+					RolesLg.ERMITE,
+					RolesLg.LOUP_CRAINTIF,
+					
+					RolesLg.SALVATEUR, 
+					
+					RolesLg.SIMPLE_VILLAGER, 
+					RolesLg.NECROMANCIEN,
+					RolesLg.SIMPLE_WOLF,
+					
+					
+					RolesLg.SORCIERE, 
+					RolesLg.VOLEUR,
+					
+					RolesLg.LOUP_BRUMEUX,
+					RolesLg.DEMON,
+					RolesLg.THANOS
+					
+					
+					
+					));
+			
+			
+			ArrayList<RolesLg> rolesFinal = new ArrayList<RolesLg>();
+			while (rolesFinal.size() < Bukkit.getOnlinePlayers().size()) {
+				rolesFinal.add(roles.get(MathUtil.generateAlInt(0, roles.size() - 1)));
+			}
+			
+			for (Player p:Bukkit.getOnlinePlayers()) {
+				game.addPlayer(p.getName());
+			}
+			game.roles = rolesFinal;
+			game.isMeetup = true;
+			game.necrom = MathUtil.pourcentage(50);
+			game.allDifferent = true;
+			game.scenarioAct.put("DirectFights", true);
+			
+			
+			String[] args1 = new String[] {"generer"};
+			CommandUtil.runCommand("lga", playerd, args1);
+
+			String[] args2 = new String[] {"Game", "start", game.getName()};
+			CommandUtil.runCommand("lga", playerd, args2);
+
+
+		}else if (args[0].equals("worldId")) {
+			sender.sendMessage(((Player) sender).getLocation().getWorld().getUID().toString());
+		}else if (args[0].equals("worldName")) {
+			sender.sendMessage(((Player) sender).getLocation().getWorld().getName());
+		}else if (args[0].equals("setRole")) {
 			if (args.length < 3) {
 				sender.sendMessage("manque d'arguments");
 				return true;
 			}
 			
-			PlayerData target = Main.strToPlayer.getOrDefault(args[0], null);
+			PlayerData target = Main.strToPlayer.getOrDefault(args[1], null);
 			if (target == null) {
 				sender.sendMessage("Le joueur "+args[1]+ " n'existe pas ou n'est pas dans une partie");
 				return true;
@@ -126,8 +336,7 @@ public class Lga implements CommandExecutor  {
 				}
 			}
 			
-		}
-		if (args[0].equals("say")) {
+		}else if (args[0].equals("say")) {
 			
 			ArrayList<String> args2 = new ArrayList<String>();
 			for (String str: args) {
@@ -204,6 +413,29 @@ public class Lga implements CommandExecutor  {
 			} else {
 				
 				StructureLoader.save(Main.loc1, Main.loc2, new File("schems/"+args[1] + ".schematic"));
+			}
+		}else if (args[0].equals("loadStruct")) {
+			if (args.length < 2) {
+				System.out.println("lenght not enought big");
+				
+				
+			} else {
+				
+				try {
+					StructureLoader.place(((Player) sender).getLocation(), StructureLoader.load(new File("schems/"+args[1] + ".schematic")),((Player) sender).getLocation().getWorld(), BukkitUtil.getLocalWorld(((Player) sender).getLocation().getWorld()).getWorldData());				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}else if (args[0].equals("openWorld")) {
+			if (args.length < 2) {
+				System.out.println("lenght not enought big");
+				
+				
+			} else {
+				World world = Bukkit.getWorld(args[1]);
+				
+				((Player) sender).teleport(world.getSpawnLocation());
 			}
 		}else if (args[0].equals("addNote")) {
 			Main.strToPlayer.get(sender.getName()).notes.add(new GameNote(""));
@@ -335,6 +567,8 @@ public class Lga implements CommandExecutor  {
 					
 				}
 			}, 5));
+		} else if (args[0].equals("testDescr")) {
+			sender.sendMessage(new LOUP_BRUMEUX(null).getDescription());
 		} else if (args[0].equals("auraDisplayPotion")) {
 			Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
 			ItemStack item = potion.toItemStack(1);
@@ -387,17 +621,15 @@ public class Lga implements CommandExecutor  {
 			}
 			if (p != null && p.game != null) {
 				WorldCreator c = new WorldCreator("world"+p.game.getName()).generator(Main.world.getGenerator());
-				c.generator(Main.world.getGenerator());
-				World copied = Main.plug.getServer().getWorld("world");
-				copied = Main.world;
 				
-				
-				c.copy(copied);
-				
-				//c.generatorSettings("{\"coordinateScale\":684.412,\"heightScale\":684.412,\"lowerLimitScale\":512.0,\"upperLimitScale\":512.0,\"depthNoiseScaleX\":200.0,\"depthNoiseScaleZ\":200.0,\"depthNoiseScaleExponent\":0.5,\"mainNoiseScaleX\":80.0,\"mainNoiseScaleY\":160.0,\"mainNoiseScaleZ\":80.0,\"baseSize\":8.5,\"stretchY\":12.0,\"biomeDepthWeight\":1.0,\"biomeDepthOffset\":0.0,\"biomeScaleWeight\":1.0,\"biomeScaleOffset\":0.0,\"seaLevel\":63,\"useCaves\":true,\"useDungeons\":true,\"dungeonChance\":8,\"useStrongholds\":true,\"useVillages\":true,\"useMineShafts\":true,\"useTemples\":true,\"useMonuments\":true,\"useRavines\":true,\"useWaterLakes\":true,\"waterLakeChance\":4,\"useLavaLakes\":true,\"lavaLakeChance\":80,\"useLavaOceans\":false,\"fixedBiome\":26,\"biomeSize\":4,\"riverSize\":4,\"dirtSize\":33,\"dirtCount\":10,\"dirtMinHeight\":0,\"dirtMaxHeight\":256,\"gravelSize\":33,\"gravelCount\":8,\"gravelMinHeight\":0,\"gravelMaxHeight\":256,\"graniteSize\":33,\"graniteCount\":0,\"graniteMinHeight\":0,\"graniteMaxHeight\":80,\"dioriteSize\":33,\"dioriteCount\":0,\"dioriteMinHeight\":0,\"dioriteMaxHeight\":80,\"andesiteSize\":33,\"andesiteCount\":0,\"andesiteMinHeight\":0,\"andesiteMaxHeight\":80,\"coalSize\":17,\"coalCount\":25,\"coalMinHeight\":0,\"coalMaxHeight\":128,\"ironSize\":12,\"ironCount\":25,\"ironMinHeight\":0,\"ironMaxHeight\":64,\"goldSize\":9,\"goldCount\":4,\"goldMinHeight\":0,\"goldMaxHeight\":32,\"redstoneSize\":15,\"redstoneCount\":13,\"redstoneMinHeight\":0,\"redstoneMaxHeight\":16,\"diamondSize\":8,\"diamondCount\":2,\"diamondMinHeight\":0,\"diamondMaxHeight\":16,\"lapisSize\":7,\"lapisCount\":3,\"lapisCenterHeight\":16,\"lapisSpread\":16}");
-				Bukkit.getLogger().info(c.generatorSettings());
-				World worldGen = c.createWorld();
-				
+				World worldGen;
+				if (game.displayedRoles && game.isMeetup) {
+					World starWorld = Bukkit.getWorld("worldLgRun");
+					worldGen = WorldUtil.createNewWorld(starWorld);
+				} else {
+					World starWorld = Bukkit.getWorld("world");
+					worldGen = WorldUtil.createNewWorld(starWorld);
+				}
 				
 				p.game.setWorld(worldGen);
 				
@@ -409,9 +641,7 @@ public class Lga implements CommandExecutor  {
 				
 				sender.sendMessage("map générée");
 			}
-		}
-		
-		if (args[0].equals("map")) {
+		}else if (args[0].equals("map")) {
 			PlayerData p = Main.getData(sender);
 			if (p == null) {
 				return false;
@@ -423,8 +653,7 @@ public class Lga implements CommandExecutor  {
 			} else {
 				p.player.teleport(game.getWorld().getSpawnLocation());
 			}
-		}
-		if (args[0].equals("kick")) {
+		}else if (args[0].equals("kick")) {
 			if (args.length < 3) {
 				return false;
 			}
@@ -442,8 +671,7 @@ public class Lga implements CommandExecutor  {
 				}
 				game.removePlayer(p, " at remove command");
 			}
-		}
-		if (args[0].equals("addXp")) {
+		}else if (args[0].equals("addXp")) {
 			if (args.length < 3) {
 				return false;
 			}
@@ -472,8 +700,7 @@ public class Lga implements CommandExecutor  {
 				return true;
 			}
 			p.removeXp(x);
-		}
-		if (args[0].equals("setXp")) {
+		}else if (args[0].equals("setXp")) {
 			if (args.length < 3) {
 				return false;
 			}
@@ -487,8 +714,7 @@ public class Lga implements CommandExecutor  {
 				return true;
 			}
 			p.setXp(x);
-		}
-		if (args[0].equals("invite")) {
+		}else if (args[0].equals("invite")) {
 			
 			
 			GameLg game = null;
@@ -504,6 +730,13 @@ public class Lga implements CommandExecutor  {
 					player.sendMessage("La partie " + args[2] + " n'existe pas");
 					
 				}return true;
+			}
+			
+			if (args[1].equals("@a")) {
+				for (Player p:Bukkit.getOnlinePlayers()) {
+					String[] args2 = {"invite", p.getName()};
+					onCommand(sender, cmd, msg, args2);
+				}
 			}
 			
 			for (PlayerData ply: game.playerAlive) {
@@ -537,9 +770,7 @@ public class Lga implements CommandExecutor  {
 			return true;
 			
 			
-		}
-		
-		if (args[0].equals("noscore")) {
+		}else if (args[0].equals("noscore")) {
 			
 			PlayerData p = Main.getData(sender);
 			GameLg game = null;
@@ -559,8 +790,7 @@ public class Lga implements CommandExecutor  {
 				
 				
 			}
-		}
-		if (args[0].equals("transfer") ) {
+		}else if (args[0].equals("transfer") ) {
 			PlayerData old = Main.strToPlayer.getOrDefault(args[1], null);
 			if (old == null) {
 				return true;
@@ -581,15 +811,19 @@ public class Lga implements CommandExecutor  {
 				ne.addPotionEffect(effet);
 				ne.getInventory().setContents(old.player.getInventory().getContents());
 			}
-			old.Name = ne.getName();
-			old.player = ne;
+			PlayerData newPlayer = Main.getData(ne);
+			newPlayer.role = old.role;
+			newPlayer.roleIn = old.roleIn;
+			newPlayer.infected = old.infected;
+			newPlayer.boostR5 = old.boostR5;
+			newPlayer.boostR5 = old.boostS5;
+			newPlayer.appCamp = old.appCamp;
+			newPlayer.camp = old.camp;
 						
 			
 			
 			
-		}
-		
-		if (args[0].equals("Game")) {
+		}else if (args[0].equals("Game")) {
 			if (args[1].equals("config")) {
 				
 				if (args.length < 3) {
@@ -794,8 +1028,7 @@ public class Lga implements CommandExecutor  {
 					game.isBanned.put(args[2], true);
 					sender.sendMessage("Le joueur "+args[2]+ " est blacklist");
 				}
-			}
-			if (args[1].equals("wl")) {
+			}else if (args[1].equals("wl")) {
 				if (args.length > 1) {
 					PlayerData p = Main.getData(sender);
 					GameLg game = null;
@@ -807,10 +1040,7 @@ public class Lga implements CommandExecutor  {
 					game.isBanned.put(args[2], false);
 					sender.sendMessage("Le joueur "+args[2]+ " est whitelist");
 				}
-			}
-			
-			
-			if (args[1].equals("removePlayer")) {
+			}else if (args[1].equals("removePlayer")) {
 				if (args[3]==null) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
@@ -842,7 +1072,7 @@ public class Lga implements CommandExecutor  {
 						
 					}return true;
 				}
-				game.playerAlive.remove(game.getPlayerDataWithName(args[3]));
+				game.playerAlive.remove(game.getPlayer(args[3]));
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					player.sendMessage("Joueur removed: "+ playerToRemove.getDisplayName());
@@ -1010,6 +1240,15 @@ public class Lga implements CommandExecutor  {
 			}
 		}
 		return false;
+	}
+	
+	
+	public static boolean checkNbOfArg(int nb, String[] args, Player sender) {
+		if (args.length< nb) {
+			sender.sendMessage(Main.exclamation + " Il manque un argument à votre commande");
+			
+		} 
+		return (!(args.length< nb));
 	}
 	
 

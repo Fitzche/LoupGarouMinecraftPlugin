@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="module" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="ParticleAPI_v2.1.1.jar"/>
-	<classpathentry kind="lib" path="worldedit-bukkit-6.1.jar"/>
-	<classpathentry kind="lib" path="spigot.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Utilisateur/Documents/MyCodes/GitHub/LoupGarouMinecraftPlugin/Multiverse-Core-2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Utilisateur/Documents/MyCodes/GitHub/LoupGarouMinecraftPlugin/TerrainControl (1).jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry exported="true" kind="lib" path="ParticleAPI_v2.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="worldedit-bukkit-6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilisateur/Desktop/RB/Dev/MyCodes/GitHub/LoupGarouMinecraftPlugin/Multiverse-Core-2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Utilisateur/Desktop/RB/Dev/MyCodes/GitHub/LoupGarouMinecraftPlugin/EffectLib-4.1.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Utilisateur/Desktop/RB/Dev/MyCodes/GitHub/LoupGarouMinecraftPlugin/spigot.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

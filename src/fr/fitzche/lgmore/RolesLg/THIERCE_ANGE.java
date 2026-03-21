@@ -55,7 +55,7 @@ public class THIERCE_ANGE implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.GOLD+"Vous gagnez seul, pour cela vous pouvez fabriquer une épée sharpness 4, de plus, si un joueur vous accuse d'etre un traitre au village via la commande /lg accuse, il n'obtiendra pas d'effet contre vous, et vous obtiendrez 20% de force contre lui ainsi que son role, ainsi que 1 coeur permanents supplémentaire et 5% de résistance. Si vous venez à le tuer, il n'y aura pas d'annonce de sa mort.");
+		return (Main.info +ChatColor.BLUE+"Vous gagnez seul, pour cela vous pouvez fabriquer une épée sharpness 4, de plus, si un joueur vous accuse d'etre un traitre au village via la commande /lg accuse, il n'obtiendra pas d'effet contre vous, et vous obtiendrez 20% de force contre lui ainsi que son role, ainsi que 1 coeur permanents supplémentaire et 5% de résistance. Si vous venez à le tuer, il n'y aura pas d'annonce de sa mort.");
 	}
 	public static ItemStack logo = new ItemStack(Material.FEATHER);
 

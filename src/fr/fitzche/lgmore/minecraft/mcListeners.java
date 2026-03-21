@@ -69,9 +69,10 @@ import fr.fitzche.lgmore.RolesLg.SWAPPER;
 import fr.fitzche.lgmore.RolesLg.VOLEUR;
 import fr.fitzche.lgmore.Util.*;
 import fr.fitzche.lgmore.bedwars.BedListener;
+import fr.fitzche.lgmore.bedwars.Bedwars;
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.Lga;
-import fr.fitzche.lgmore.scoreboard.Inventory.VoteInv;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -155,7 +156,7 @@ public class mcListeners implements Listener {
 
 		e.setKeepInventory(true);
 		e.setDeathMessage("");
-		if (killedData.game != null && killerData.game != null && killedData.role != null && killerData.role != null) {
+		if (killedData != null &&killedData.game != null && killerData != null&& killerData.game != null && killedData.role != null && killerData.role != null) {
 			log.append("killed: "+ killedData.role.getName()+ "; "+killedData.getName());
 		}
 		
@@ -164,7 +165,7 @@ public class mcListeners implements Listener {
 			log.append("killer null"+ "\n");
 		
 		} else {
-			if (killedData.game != null && killerData.game != null && killedData.role != null && killerData.role != null) {
+			if (killedData.game != null && killer != null&& killerData.game != null && killedData.role != null && killerData.role != null) {
 				log.append("killer: "+ killerData.role.getName()+ "; "+killerData.getName());
 
 			}
@@ -230,7 +231,7 @@ public class mcListeners implements Listener {
 	@EventHandler
 	public void onPlayerChat(PlayerChatEvent e) {
 		PlayerData plyD = Main.strToPlayer.getOrDefault(e.getPlayer().getName(), null);
-		if (plyD.game instanceof GameLg &&plyD != null && plyD.game!= null && !((GameLg)plyD.game).statut.equals(GameStatut.NOT_STARTED)) {
+		if (plyD.game != null && plyD.game instanceof GameLg &&plyD != null && plyD.game!= null && !((GameLg)plyD.game).statut.equals(GameStatut.NOT_STARTED)) {
 			
 			if (((GameLg) plyD.game).isInDisc == true && plyD.considWolf) {
 				
@@ -297,6 +298,10 @@ public class mcListeners implements Listener {
 		boolean byPlayer;
 		Player attacker = null;
 		
+		if (e.getEntity().getLocation().getWorld().getName().equals(Main.world.getName())) {
+			e.setCancelled(true);
+		}
+		
 
 		//CHECK DAMAGER == PLAYER/ARROW
 		if (!(e.getDamager() instanceof Arrow || e.getDamager() instanceof Player) || !(e.getEntity() instanceof Player)) {
@@ -360,10 +365,8 @@ public class mcListeners implements Listener {
 				effects.add(p);
 			}
 
-			//CREATE BOOST R or S WITH PLAYERS BOOST
-			less += (0.05*damaged.boostR5);
-			System.out.println("less = "+ less);
-			more += (0.05*damager.boostS5);
+			
+			
 
 
 			//CHECK STRENGHT
@@ -387,6 +390,14 @@ public class mcListeners implements Listener {
 				more += 0.2;
 			}
 
+
+
+			//CREATE BOOST R or S WITH PLAYERS BOOST
+			less += (0.05*damaged.boostR5);
+			System.out.println("less = "+ less);
+			more += (0.05*damager.boostS5);
+			System.out.println("more = "+ more);
+
 			if (damager.role == null) {
 				return;	
 			}
@@ -396,6 +407,7 @@ public class mcListeners implements Listener {
 
 
 			//SET DAMAGE WITH MORE
+			System.out.println("base damage: "+ finalDamage + " into "+ finalDamage * (1 + more));
 			finalDamage *= (1+more);
 			
 		}
@@ -417,7 +429,7 @@ public class mcListeners implements Listener {
 			if (ef.getType().equals(PotionEffectType.DAMAGE_RESISTANCE)) {
 				
 				System.out.println("has resistance");
-				finalDamage  *= 1.25;
+				finalDamage  /= 1.25;
 				hasRes = true;
 				System.out.println("correct resis"+e.getDamage());
 				
@@ -428,12 +440,14 @@ public class mcListeners implements Listener {
 
 		//ADD IF RESIS at More
 		if (hasRes) {
+			
 			less += 0.2;
 		}
 	
 		//SET DAMAGE WITH LESS
+		System.out.println("base damage: "+ finalDamage + " into "+ finalDamage * (1 - less));
 		finalDamage *= (1 - less);
-		System.out.println("resis damage: " + e.getDamage());
+		
 		
 		
 		if (damaged.game != null) {
@@ -452,10 +466,10 @@ public class mcListeners implements Listener {
 				return;
 			}
 		}
-		if (damaged.bedGame != null) {
-			if (damaged.bedGame != null && damager.bedGame.name.equals(damaged.bedGame.name)) {
-				finalDamage = damaged.bedGame.listener.damagePbyP(damager, damaged, finalDamage, isArrow);
-				BedListener list = (BedListener) damaged.bedGame.listener;
+		if (damaged.game != null && damaged.game instanceof Bedwars) {
+			if (damaged.game != null && damager.game.getName().equals(damaged.game.getName())) {
+				finalDamage = damaged.game.getListener().damagePbyP(damager, damaged, finalDamage, isArrow);
+				BedListener list = (BedListener) damaged.game.getListener();
 				if (list.damageCancel(damager, damaged, finalDamage, isArrow)) {
 					e.setCancelled(true);
 				}
@@ -469,6 +483,18 @@ public class mcListeners implements Listener {
 		
 		finalDamage *=0.89;
 		e.setDamage(finalDamage);
+		System.out.println("damage: "+e.getDamage() + "; final damage: "+e.getFinalDamage());
+		
+		
+		if (e.getEntity() instanceof Player && e.getFinalDamage() > ((Player) e.getEntity()).getHealth() && e.getEntity().getLocation().getWorld().getName().equals("pvpWorld")) {
+			e.setDamage(0);
+			((Player) e.getEntity()).getInventory().clear();
+			e.getEntity().teleport(Main.world.getSpawnLocation());
+		}
+		if (e.getEntity() instanceof Player && e.getEntity().getLocation().getWorld().getName().equals("world")) {
+			e.setDamage(0);
+			
+		}
 	}
 	
 	
@@ -575,21 +601,6 @@ public class mcListeners implements Listener {
 		
 		PlayerData plyD = Main.strToPlayer.getOrDefault(e.getWhoClicked().getName(), null);
 		
-		if (plyD.game != null&& plyD.game instanceof GameLg && e.getInventory().equals(((GameLg)plyD.game).invVote)) {
-			
-			e.setCancelled(true);
-			if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta().hasLore()) {
-				if (e.getCurrentItem().getItemMeta().getLore().contains("utilisé")) {
-					return;
-				}
-			}
-			if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta() != null && e.getCurrentItem().getItemMeta().getDisplayName().equals("Voter") ) {
-				
-				
-				
-				VoteInv inv = new VoteInv((Player) e.getWhoClicked(), (GameLg )plyD.game, e.getSlot());
-				
-			}
-		}
+		
 	}
 }

@@ -43,7 +43,7 @@ public class LOUP_SANGUINAIRE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit. De plus à chaque kill, il gagnera 1 coeur de manière permanente. Enfin à chaque mort, le loup sanguinaire gagnera 2 coeur d'absorbsion");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit. De plus à chaque kill, il gagnera 1 coeur de manière permanente. Enfin à chaque mort, le loup sanguinaire gagnera 2 coeur d'absorbsion");
 	}
 
 	@Override

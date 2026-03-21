@@ -31,7 +31,7 @@ public class GameTypeChoose implements InvFunct {
 		StringChooseInv inv = new StringChooseInv(p, items, backInv, this);
 	}
 	@Override
-	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores, ItemStack returnedItem) {
 		if (clickedName.equals(ChatColor.DARK_RED+ ""+ChatColor.BOLD + "Loup Garou")) {
 			String gameName = "gameLg-"+ MathUtil.generateAlInt(0, 10000);
 			String[] args0 = new String[] {"Game" , "create" , gameName};

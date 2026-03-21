@@ -100,7 +100,7 @@ public class PYROMANE implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner tout seul, pour cela vous avez 15% de chance d'enflammer toute personne que vous taper ou toucher avec une flèche (pouvoir activable/desactivable avec /lg switchfire), de plus vous pouvez 3 fois dans la partie recouvrir d'essence un joueur à moins de 20 blocs (avec la commande /lg recouvrir nomDuJoueur), puis enflammer tous les joueurs recouverts avec /lg enflammer, ce qui aura pour effet de mettre en feu le joueur pendant 20s ainsi que tous les joueurs se trouvant à moins de 20 blocs de celui-ci, vous possédez fire protection de manière permanente ");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner tout seul, pour cela vous avez 15% de chance d'enflammer toute personne que vous taper ou toucher avec une flèche (pouvoir activable/desactivable avec /lg switchfire), de plus vous pouvez 3 fois dans la partie recouvrir d'essence un joueur à moins de 20 blocs (avec la commande /lg recouvrir nomDuJoueur), puis enflammer tous les joueurs recouverts avec /lg enflammer, ce qui aura pour effet de mettre en feu le joueur pendant 20s ainsi que tous les joueurs se trouvant à moins de 20 blocs de celui-ci, vous possédez fire protection de manière permanente ");
 	}
 	
 

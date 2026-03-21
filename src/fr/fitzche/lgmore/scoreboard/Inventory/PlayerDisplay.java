@@ -22,6 +22,9 @@ import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
+
+
+//InvFunct to add or remove player (obsolete), lg
 public class PlayerDisplay implements Listener{
 	public Inventory inv;
 	public GameLg gm;

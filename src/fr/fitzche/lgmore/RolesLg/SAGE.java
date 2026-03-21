@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -37,7 +38,7 @@ public class SAGE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// 
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour cela vous obtenez à chaque episode un taux de présence pour chaque aura (lumineuse, neutre, obscure) qui augmente en fonction de l'aura des joueurs que vous fréquentez, une aura dangereuse augmente très fortement le taux d'aura obscure.";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec le village, pour cela vous obtenez à chaque episode un taux de présence pour chaque aura (lumineuse, neutre, obscure) qui augmente en fonction de l'aura des joueurs que vous fréquentez, une aura dangereuse augmente très fortement le taux d'aura obscure.";
 	}
 
 	@Override

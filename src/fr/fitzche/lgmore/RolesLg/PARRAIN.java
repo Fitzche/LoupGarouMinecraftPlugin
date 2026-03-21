@@ -40,7 +40,7 @@ public class PARRAIN implements RoleInstance {
 	}
 
     public void setNexTarget(PlayerData playerD) {
-        playersList = new ArrayList<>();
+        playersList = new ArrayList<PlayerData>();
         int x = 1;
         if (GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size()<1) {
         	x = GameLgUtil.getPlayersWithOutCamp(game, playerD.camp).size();
@@ -70,7 +70,7 @@ public class PARRAIN implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez, 3 fois par partie, avec la commande /lg prime [nomDuJoueur], la prime sera envoyé à 1 joueurs au hasard du camp adverse à celui du joueur visé, si la cible est tué par ce joueur, vous et le tueur gagnerez chacun 1/2 coeur et 5% de force");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez, 3 fois par partie, avec la commande /lg prime [nomDuJoueur], la prime sera envoyé à 1 joueurs au hasard du camp adverse à celui du joueur visé, si la cible est tué par ce joueur, vous et le tueur gagnerez chacun 1/2 coeur et 5% de force");
 	}
 	public static ItemStack logo = new ItemStack(Material.STONE_SWORD);
 
@@ -164,25 +164,30 @@ public class PARRAIN implements RoleInstance {
 	@Override
 	public void command(CommandSender sender, Command cmd, String msg, String[] args) {
 		 if (args[0].equals("prime")){
-				PlayerData target = Main.getData(args[1]);
-				Player player = (Player) sender;
-				PlayerData parrain = Main.getData(sender);
-				if (!Main.sameGame(target, parrain)) {
-					sender.sendMessage("vous n'etes pas dans la meme partie que ce joueur");
-					return;
-				}
-				if (parrain.getName().equals(playerWithRole.getName())) {
-					
-					if (using <= 0) {
-						player.sendMessage("Vous devez attendre pour pouvoir mettre un prime sur un joueur");
-						
-					} else {
-						setNexTarget(target);
-					}
-					
-					return;
-				}
+
+			if (args.length < 2) {
+				sender.sendMessage(Main.exclamation+"Il manque un ou plusieurs arguments à votre commande (format: /lg prime [nomDeLaCible])");
+				return;
 			}
+			PlayerData target = Main.getData(args[1]);
+			Player player = (Player) sender;
+			PlayerData parrain = Main.getData(sender);
+			if (!Main.sameGame(target, parrain)) {
+				sender.sendMessage("vous n'etes pas dans la meme partie que ce joueur");
+				return;
+			}
+			if (parrain.getName().equals(playerWithRole.getName())) {
+					
+				if (using <= 0) {
+					player.sendMessage("Vous devez attendre pour pouvoir mettre un prime sur un joueur");
+						
+				} else {
+					setNexTarget(target);
+				}
+					
+				return;
+			}
+		}
 		
 	}
 }

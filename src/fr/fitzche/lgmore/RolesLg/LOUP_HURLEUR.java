@@ -45,7 +45,7 @@ public class LOUP_HURLEUR implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit. De plus vous pouvez hurler 2 fois (commande /lg hurler): tous les loups aux alentours entendront alors un hurlement, et vous gagnerez 1 demi coeur d'absorbsion pour chaque loups autour.");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit. De plus vous pouvez hurler 2 fois (commande /lg hurler): tous les loups aux alentours entendront alors un hurlement, et vous gagnerez 1 demi coeur d'absorbsion pour chaque loups autour.");
 	}
 
 	@Override

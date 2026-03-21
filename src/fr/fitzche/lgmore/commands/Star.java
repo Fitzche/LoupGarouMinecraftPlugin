@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,6 +40,12 @@ public class Star implements CommandExecutor {
 		}
 		if (args[0].equals("forceStart")) {
 			Main.getData(sender).starParty.start();
+		}
+		if (args[0].equals("map")) {
+			((Player) sender).teleport(Main.getData(sender).starParty.world.getSpawnLocation());
+		}
+		if (args[0].equals("mapB")) {
+			((Player) sender).teleport(Main.getData(sender).game.getWorld().getSpawnLocation());
 		}
 		if (args[0].equals("role")) {
 			PlayerData p = Main.getData(sender);

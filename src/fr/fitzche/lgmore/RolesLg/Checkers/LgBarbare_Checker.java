@@ -33,7 +33,7 @@ public class LgBarbare_Checker implements ResCheck {
 	public String runDeathAction(PlayerDeathEvent e, Player k) {
 		
 		if (k.getName().equals(owner.getName())) {
-			owner.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 2400, 0, false, false));
+			owner.boostR5 ++;
 			owner.changeHealth(-2);
 			lg.sup =+ 4;
 			return "barbareIsKiller";

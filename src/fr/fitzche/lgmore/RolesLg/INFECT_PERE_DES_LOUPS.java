@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -54,7 +55,7 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous êtes Infect Père des Loups, vous devez gagner avec les Loups Garou, vous possédez la liste de vos alliés loups, pour cela vous obtenez Force I la Nuit, de plus, une fois par partie vous pourrez infecter un joueur en cliquant sur un message qui vous sera envoyé avant l'annonce de sa mort, celui-ci deviendra loup garou mais gardera les pouvoirs de son role");
+		return (Main.info +ChatColor.BLUE+"Vous êtes Infect Père des Loups, vous devez gagner avec les Loups Garou, vous possédez la liste de vos alliés loups, pour cela vous obtenez Force I la Nuit, de plus, une fois par partie vous pourrez infecter un joueur en cliquant sur un message qui vous sera envoyé avant l'annonce de sa mort, celui-ci deviendra loup garou mais gardera les pouvoirs de son role");
 	}
 
 	@Override
@@ -101,16 +102,15 @@ public class INFECT_PERE_DES_LOUPS implements RoleInstance {
 	}
 	
 	public void infect(PlayerData player, PlayerData killer) {
-		System.out.println("*1*1*1*0");
 		
+		if (player == null || killer == null) {
+			return;
+		}
 		if (player.getName().equals(this.playerWithRole.getName())) {
 			System.out.println("ne peut pas s'auto-rez");
 			return;
 		}
-		if (killer==null) {
-			System.out.println("pas de killer");
-			return;
-		}
+		
 		if (!killer.role.getCampOfRole().equals(Camp.Wolf)) {
 			System.out.println("tueur non loups");
 			return;

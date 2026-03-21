@@ -114,10 +114,10 @@ public class StringChooseInv implements Listener{
 				event.getWhoClicked().openInventory(invs.get(invs.indexOf(event.getInventory()) - 1));
 				return;
 				
-			} else if (event.getCurrentItem() != null && event.getCurrentItem().getItemMeta() != null && event.getCurrentItem().getItemMeta().getDisplayName().equals("Suivant") && invs.indexOf(event.getInventory()) + 1 < invs.size()) {
+			} else if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() &&event.getCurrentItem().getItemMeta().hasDisplayName() && event.getCurrentItem().getItemMeta().getDisplayName().equals("Suivant") && invs.indexOf(event.getInventory()) + 1 < invs.size()) {
 				event.getWhoClicked().openInventory(invs.get(invs.indexOf(event.getInventory()) + 1));
 				return;
-			}else if (event.getCurrentItem() != null && event.getCurrentItem().getItemMeta() != null && event.getCurrentItem().getItemMeta().getDisplayName().equals("Retour")) {
+			}else if (event.getCurrentItem() != null && event.getCurrentItem().getItemMeta() != null && event.getCurrentItem().getItemMeta().hasDisplayName()&& event.getCurrentItem().getItemMeta().getDisplayName().equals("Retour")) {
 				event.getWhoClicked().openInventory(backInv);
 				return;
 			}
@@ -137,8 +137,12 @@ public class StringChooseInv implements Listener{
 					for (String s:event.getCurrentItem().getItemMeta().getLore()) {
 						lores.add(s);
 					}
-					
-					this.functer.click(p, p.game, event.getCurrentItem().getItemMeta().getDisplayName(), lores);
+					String name = event.getCurrentItem().toString();
+					if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+						name = event.getCurrentItem().getItemMeta().getDisplayName();
+					}
+					this.functer.click(p, p.game, name, lores, event.getCurrentItem());
+					System.out.println("click of "+ p.getName() + " on "+name);
 					
 
 				}

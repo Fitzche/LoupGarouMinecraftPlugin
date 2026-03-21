@@ -49,7 +49,7 @@ public class ANGE implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez choisir entre ange gardien et ange déchu, vous obtenez un message sur lequel vous devez cliquer pour choisir.");
+		return (Main.info +ChatColor.BLUE+"Vous devez choisir entre ange gardien et ange déchu, vous obtenez un message sur lequel vous devez cliquer pour choisir.");
 	}
 	public static ItemStack logo = new ItemStack(Material.FEATHER);
 

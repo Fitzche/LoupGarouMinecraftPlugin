@@ -44,7 +44,7 @@ public class PETITE_FILLE implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE +"Vous devez gagner avec le village, pour cela vous pourvez devenir invisible 5 minutes par nuit en enlevant votre armure"+ "\n"+" vous pouvez également consulter le chat des loups-garou";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec le village, pour cela vous pourvez devenir invisible 5 minutes par nuit en enlevant votre armure"+ "\n"+" vous pouvez également consulter le chat des loups-garou";
 	}
 
 	@Override
@@ -69,6 +69,9 @@ public class PETITE_FILLE implements RoleInstance{
 		if (p.getInventory().getBoots() == null && p.getInventory().getChestplate() == null && p.getInventory().getLeggings() == null && p.getInventory().getHelmet() == null) {
 			for (PotionEffect effect:p.getActivePotionEffects()) {
 				if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
+					if (effect.getDuration() < 40) {
+						p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000, 0, false, false));
+					}
 					return;
 				}
 			}

@@ -27,7 +27,7 @@ import net.md_5.bungee.api.ChatColor;
 public class DAMNE implements RoleInstance {
 	public PlayerData playerWithRole;
 	public String name ="Damné";
-	public Camp camp = Camp.Other;
+	public Camp camp = Camp.DEMON;
 	public DEMON demon;
 	public DAMNE(PlayerData player) {
 		this.playerWithRole = player;

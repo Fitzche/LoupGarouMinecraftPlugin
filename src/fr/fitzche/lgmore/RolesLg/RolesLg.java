@@ -9,7 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Role;
+import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
@@ -65,6 +67,8 @@ public enum RolesLg implements Role, Serializable{
 	NEGOCIATEUR(Camp.Other, "Négociateur", 110, Material.BOOK_AND_QUILL, Aura.LUMINOUS, "Le négociateur peut gagner avec les villageois et les loups à condition que les joueurs restant à la fin de la partie aient passé au moins 10min à coté du négociateur et que les joueurs tués par le négociateur du même camp que celui restant aient passé moins de 15min à coté des joueurs encore en vie. Aura lumineuse", false, false),
 	LOUP_HURLEUR(Camp.Wolf, "Loup Garou Hurleur", 85, Material.BONE, Aura.OBSCUR, "Le loup hurleur gagne avec les loups, il possède une aura obscure. Deux fois dans la partie, il peut hurler avec la commande /lg hurler. Les loups aux alentours entendront le hurlement et gagneront tous un effet de régénération léger. Pour chaque loup aux alentours, le hurleur 5 secondes de régénération.", true, false),
 	NECROMANCIEN(Camp.Died, "Nécromancien", 130, Material.ROTTEN_FLESH, Aura.OBSCUR, "description à faire", false, false),
+	ANALYSTE(Camp.Villager, "Analyste", 90, Material.GLASS, Aura.LUMINOUS, "L'analyste gagne avec les villageois, il possède 2 commandes. La première est /lg analyse utilisable une fois par épisode permet de connaitre la somme des pourcentage d'effet de tous les joueurs dans les 20 blocs alentours, l'analyste exclus. La deuxième /lg analysePlus utilisable à une seule occasion permet de connaitre la somme des pourcentage d'effet de force et (séparément) de résistance des joueurs alentours. Aura lumineuse", false, true),
+	ARAIGNEE(Camp.Other, "Araignée", 130, Material.WEB, Aura.LUMINOUS, "L'araignée gagne toute seule. Pour cela elle possède une jauge de manipulation pour chaque joueur qui augmente de 0.1% à chaque seconde lorsqu'elle se trouve à moins de 20 blocs du joueur et de 10% si ce joueur fait un kill à moins de 20 blocs. Si cette jauge atteint 100%, le joueur perdra 1/2 coeur que l'araignée récupérera au début de chaque épisode où les deux joueurs sont éloignés de moins de 20 blocs. De plus l'araigné peut utiliser la commande /lg aveugler [nomduJoueur] à deux reprise pour aveugler un role à information. Enfin, l'araignée peut réssuciter une seule fois si elle se fait tuer par un joueur manipulé à 100%. Aura lumineuse.", false, true),
 	SIMPLE_WOLF(Camp.Wolf, "Simple Loup Garou", 100, Material.DIAMOND_SWORD, Aura.OBSCUR, "Le loup garou simple gagne avec les loups, et possède la force des loups. Aura obscure", true, false);//correspondant
 	
 	private Camp roleCamp;
@@ -131,5 +135,210 @@ public enum RolesLg implements Role, Serializable{
 		ArrayList<String> lores = new ArrayList<String>();
 		lores.add(String.valueOf( RoleUtil.getPlayersWithRole(gameScore, this).size()));
 		meta.setLore(lores);
+	}
+	
+	
+	
+	public RoleInstance createRoleOfPlayerRoles(PlayerData player) {
+		if (this.equals(RolesLg.SIMPLE_VILLAGER)) {
+			SIMPLE_VILLAGER role = new SIMPLE_VILLAGER(player);
+			player.roleIn = role;
+			return role;
+		} else if (this.equals(RolesLg.SIMPLE_WOLF)) {
+			SIMPLE_WOLF role = new SIMPLE_WOLF(player);
+			player.roleIn = role;
+			return role;
+		} else if (this.equals(RolesLg.INFECT_PERE_DES_LOUPS)) {
+			INFECT_PERE_DES_LOUPS role = new INFECT_PERE_DES_LOUPS(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.VOYANTE)) {
+			VOYANTE role = new VOYANTE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.SORCIERE)){
+			SORCIERE role = new SORCIERE(player);
+			player.roleIn = role;
+			return role;
+		} else if (this.equals(RolesLg.CUPIDON)) {
+			CUPIDON role = new CUPIDON(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.MONTREUR)) {
+			MONTREUR role = new MONTREUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.PETITE_FILLE)) {
+			PETITE_FILLE role = new PETITE_FILLE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.CHASSEUR)) {
+			CHASSEUR role = new CHASSEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.SALVATEUR)) {
+			SALVATEUR role = new SALVATEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.CORBEAU)) {
+			CORBEAU role = new CORBEAU(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.SOEUR)) {
+			SOEUR role = new SOEUR(player, null);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.BIENFAITEUR)) {
+			BIENFAITEUR role = new BIENFAITEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.IDIOT_DU_VILLAGE)) {
+			IDIOT_DU_VILLAGE role = new IDIOT_DU_VILLAGE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_MYSTIQUE)) {
+			LOUP_MYSTIQUE role = new LOUP_MYSTIQUE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.VOLEUR)) {
+			VOLEUR role = new VOLEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.RENARD)) {
+			RENARD role = new RENARD(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ANCIEN)) {
+			ANCIEN role = new ANCIEN(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ENFANT_SAUVAGE)) {
+			ENFANT_SAUVAGE role = new ENFANT_SAUVAGE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.INTERPRETE)) {
+
+			INTERPRETE role = new INTERPRETE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.SAGE)) {
+			SAGE role = new SAGE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.DISCIPLE)) {
+			DISCIPLE role = new DISCIPLE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_METAMORPHE)) {
+			LOUP_METAMORPHE role = new LOUP_METAMORPHE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.PYROMANE)) {
+			PYROMANE role = new PYROMANE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.PERFIDE)) {
+			PERFIDE role = new PERFIDE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ASSASSIN)) {
+			ASSASSIN role = new ASSASSIN(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ALLUMEUR)) {
+			ALLUMEUR role = new ALLUMEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.PARRAIN)) {
+			PARRAIN role = new PARRAIN(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ANGE)) {
+			ANGE role = new ANGE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_ALCHIMISTE)) {
+			LOUP_ALCHIMISTE role = new LOUP_ALCHIMISTE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_BARBARE)) {
+			LOUP_BARBARE role = new LOUP_BARBARE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_MANIP)) {
+			LOUP_MANIPULATEUR role = new LOUP_MANIPULATEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_GRIMEUR)) {
+			LOUP_GRIMEUR role = new LOUP_GRIMEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ANGE_THIERCE)) {
+			THIERCE_ANGE role = new THIERCE_ANGE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_BRUMEUX)) {
+			LOUP_BRUMEUX role = new LOUP_BRUMEUX(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ERMITE)) {
+			ERMITE role = new ERMITE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_CRAINTIF)) {
+			LOUP_CRAINTIF role = new LOUP_CRAINTIF(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.COMEDIEN)) {
+			COMEDIEN role = new COMEDIEN(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.SORCIER)) {
+			SORCIER role = new SORCIER(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.DEMON)) {
+			DEMON role = new DEMON(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.THANOS)) {
+			THANOS role = new THANOS(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.TRAQUEUR)) {
+			TRAQUEUR role = new TRAQUEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_HURLEUR)) {
+			LOUP_HURLEUR role = new LOUP_HURLEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.LOUP_SANGUINAIRE)) {
+			LOUP_SANGUINAIRE role = new LOUP_SANGUINAIRE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.NEGOCIATEUR)) {
+			NEGOCIATEUR role = new NEGOCIATEUR(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.NECROMANCIEN)) {
+			NECROMANCIEN role = new NECROMANCIEN(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.FAUCONNIER)) {
+			FAUCONNIER role = new FAUCONNIER(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ANALYSTE)) {
+			ANALYSTE role = new ANALYSTE(player);
+			player.roleIn = role;
+			return role;
+		}else if (this.equals(RolesLg.ARAIGNEE)) {
+			ARAIGNEE role = new ARAIGNEE(player);
+			player.roleIn = role;
+			return role;
+		}else{
+			return null;
+		}
 	}
 }

@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -41,7 +42,7 @@ public class SOEUR implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, à la mort d'une de vos soeur vous obtiendrez le nom de son tueur, vous possédez l'effet force quand vous etes à moins de 20 blocs d'une de vos soeurs / de votre soeur, vous connaissez une de vos soeurs.";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec les villageois, à la mort d'une de vos soeur vous obtiendrez le nom de son tueur, vous possédez l'effet force quand vous etes à moins de 20 blocs d'une de vos soeurs / de votre soeur, vous connaissez une de vos soeurs.";
 	}
 
 	@Override
@@ -60,14 +61,20 @@ public class SOEUR implements RoleInstance {
 		if (sisters == null||sisters.size()<2) {
 			sisters = RoleUtil.getPlayersWithRole(game, RolesLg.SOEUR);
 		}
+		
+		
+	}
+	
+	public int R5resisBonusSister() {
+		int x = 0;
 		for (PlayerData ply:sisters) {
 			double distance = LocationUtil.getDistanceBetween(ply, playerWithRole);
 			if (distance < 21 && !ply.Name.equals(playerWithRole.Name)) {
-				playerWithRole.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false, false));
-				return;
+				x++;
+				
 			}
 		}
-		
+		return -x;
 	}
 	
 	public void deathMessage(String name) {

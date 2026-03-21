@@ -180,6 +180,7 @@ public class StarListener implements GameListener, Listener {
 		
 	}
 	
+	@EventHandler
 	public void onEntityShootBow(EntityShootBowEvent e) {
 		if (!party.started && false) {
 			return;
@@ -241,8 +242,8 @@ public class StarListener implements GameListener, Listener {
 
 	
 	@Deprecated
-	 @EventHandler
-	 public void onPlayerInteract(PlayerInteractEvent event) {
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
 	        // Vérifie que l'action est un clic droit (dans l'air ou sur un bloc)
 	        Action action = event.getAction();
 	        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {

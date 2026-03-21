@@ -51,36 +51,36 @@ public class ScoreboardLg implements GameBoard{
 		
 		
 		////System.out.println("LgScoreboard 1");
-	    Score score = objective.getScore("  "+game.timer.getStringTime());
+	    Score score = objective.getScore(ChatColor.WHITE+ "  "+ChatColor.BOLD+game.timer.getStringTime());
 	    ////System.out.println(game.timer.getStringTime());
 	    ////System.out.println(Integer.toString(game.timer.temps));
 	    score.setScore(4);
 	   // //System.out.println("LgScoreboard 2");
 	   // //System.out.println("Episode: "+Integer.toString(game.timer.getEpisode()));
-	    Score scoreBase = objective.getScore(ChatColor.DARK_BLUE+ "     INFORMATION:");
-	    scoreBase.setScore(6);
-	    Score score1 = objective.getScore(ChatColor.GOLD+"  Episode: "+ChatColor.AQUA+ 		Integer.toString(game.timer.getEpisode()));
+	    Score scoreBase = objective.getScore(ChatColor.DARK_BLUE+ ""+ChatColor.BOLD+  "     ❶"+ChatColor.DARK_RED+" INFORMATION"+ChatColor.DARK_BLUE+" ❶:");
+	    scoreBase.setScore(60);
+	    Score score1 = objective.getScore(ChatColor.BOLD+"  Episode: "+ChatColor.GOLD+ 		Integer.toString(game.timer.getEpisode()));
 	    score1.setScore(3);
 	    
 	    String nJoueur = Integer.toString(game.getNumberOfPlayer());
 	    ////System.out.println("LgScoreboard 3");
-	    Score score2 = objective.getScore(ChatColor.GOLD+"  Joueurs: "+ChatColor.AQUA + nJoueur);
+	    Score score2 = objective.getScore(ChatColor.BOLD+"  Joueurs: "+ChatColor.GOLD + nJoueur);
 	    score2.setScore(5);
 	    ////System.out.println("LgScoreboard 4");
 	    
 	    
 	    String groupe = Integer.toString(game.groupe);
-	    Score score3 = objective.getScore(ChatColor.GOLD+"  Groupes: "+ChatColor.AQUA+ groupe);
+	    Score score3 = objective.getScore(ChatColor.BOLD+"  Groupes: "+ChatColor.GOLD+ groupe);
 	    score3.setScore(1);
 	    ////System.out.println("LgScoreboard 5");  /**/
 	    
 	    
 	    
 	    String time = WorldUtil.getTime(Main.server.getWorld("world"));
-	    Score score4 = objective.getScore(ChatColor.GOLD+"  Horaire: "+ChatColor.AQUA + time);
+	    Score score4 = objective.getScore(ChatColor.BOLD+"  Horaire: "+ChatColor.GOLD + time);
 	    score4.setScore(2);
 	    
-	    String register = WorldUtil.getTime(Main.server.getWorld("world"));
+	   
 	    int registrPoint = 0;
 	    String str = "nul --> ";
 	    if (game.getTragic() > 0) {
@@ -94,16 +94,16 @@ public class ScoreboardLg implements GameBoard{
 	    	str = "Epique -- > ";
 	    }
 	    if (game.isRegistresActivated) {
-	    	Score scoreReg = objective.getScore(ChatColor.GOLD+"  Registre: "+ChatColor.AQUA + str + Integer.toString(registrPoint));
+	    	Score scoreReg = objective.getScore(ChatColor.BOLD+"  Registre: "+ChatColor.GOLD + str + Integer.toString(registrPoint));
 	    	scoreReg.setScore(2);
 	    }
 	    
 	    
 	    
 	    if (player!=null&&player.player != null && player.isOnline) {
-	    	Score score5 = objective.getScore(ChatColor.GOLD+ "Kills: "+player.numberOfKill);
+	    	Score score5 = objective.getScore(ChatColor.BOLD+"  Kills: "+ ChatColor.GOLD+player.numberOfKill);
 		    
-		    score5.setScore(7);
+		    score5.setScore(1);
 		}
 	    player.player.setScoreboard(board);
 	    if (this.player.isOnline) {

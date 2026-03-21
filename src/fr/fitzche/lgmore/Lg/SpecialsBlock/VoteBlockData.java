@@ -1,15 +1,28 @@
 package fr.fitzche.lgmore.Lg.SpecialsBlock;
 
-import java.util.HashMap;
+import fr.fitzche.lgmore.Lg.GameLg;
 
 public class VoteBlockData implements SpecialBlockData {
 
-	public int nbOfVote;
-	public HashMap<String, String> hasVotedFor = new HashMap<String, String>();
-	
-	public VoteBlockData(int nbOfVote) {
-		this.nbOfVote = nbOfVote;
+	public int groupe;
+	public GameLg game;
+	boolean blocked = true;
+	public int voteAvaible;
+	public VoteBlockData(int groupe, GameLg game) {
+		this.game = game;
+		setVoteParam();
 	}
+	
+	public void setVoteParam() {
+		
+		this.groupe = this.game.groupe;
+		this.voteAvaible = groupe;
+	}
+	
+	public void launch() {
+		blocked = false;
+	}
+
 	@Override
 	public SpecialBlockType getType() {
 		// TODO Auto-generated method stub

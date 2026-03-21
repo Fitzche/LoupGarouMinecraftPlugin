@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
@@ -55,6 +57,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.inventivetalent.particle.ParticlePlugin;
 
+
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
@@ -77,12 +80,14 @@ import fr.fitzche.lgmore.InfinityStones.Stone;
 import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.AccuseBlockData;
+import fr.fitzche.lgmore.Lg.SpecialsBlock.CauldronBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.StoneBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
+import fr.fitzche.lgmore.Minage.Trades;
 import fr.fitzche.lgmore.RolesLg.ANCIEN;
 import fr.fitzche.lgmore.RolesLg.ENFANT_SAUVAGE;
 import fr.fitzche.lgmore.RolesLg.IDIOT_DU_VILLAGE;
@@ -100,10 +105,15 @@ import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.bedwars.Bedwars;
+import fr.fitzche.lgmore.bedwars.CW;
+import fr.fitzche.lgmore.clocktower.ClockCommand;
+import fr.fitzche.lgmore.clocktower.ClockTower;
 import fr.fitzche.lgmore.commands.Lga;
 import fr.fitzche.lgmore.commands.Rejoin;
+import fr.fitzche.lgmore.commands.SpecialItemHolder;
 import fr.fitzche.lgmore.commands.Star;
-
+import fr.fitzche.lgmore.custom.CustomGame;
+import fr.fitzche.lgmore.custom.CustomGameType;
 import fr.fitzche.lgmore.commands.Hub;
 import fr.fitzche.lgmore.commands.Lg;
 import fr.fitzche.lgmore.commands.LgTab;
@@ -115,6 +125,7 @@ import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
 import fr.fitzche.lgmore.scoreboard.Inventory.GameTypeChoose;
 import fr.fitzche.lgmore.scoreboard.Inventory.GeneralMenu;
 import net.md_5.bungee.api.ChatColor;
+
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -143,6 +154,28 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public final static ItemStack guillHead = ItemUtil.getCustomHead("TheGuill84");
 	public final static ItemStack myHead = ItemUtil.getCustomHead("FITZCHE");
+
+
+	public static final String defaultJsonRoleSTring = "{\r\n"
+			+ "  \"name\": \"Joueur\",\r\n"
+			+ "  \"camp\": \"Village\",\r\n"
+			+ "  \"roleListName\": \"joueur\",\r\n"
+			+ "  \r\n"
+			+ "  \"strenght\": 1.0,\r\n"
+			+ "  \"resistance\": 1.0,\r\n"
+			+ "  \"boostHealth\": 0,\r\n"
+			+ "\r\n"
+			+ "  \"reliveTry\": 0,\r\n"
+			+ "  \"lostStrenght\": 0.0,\r\n"
+			+ "  \"lostResis\": 0.0,\r\n"
+			+ "  \"lostHealth\": 0.0,\r\n"
+			+ "\r\n"
+			+ "  \"conditionKilledBy\": \"\",\r\n"
+			+ "  \"conditionKilledByCamp\": \"\",\r\n"
+			+ "\r\n"
+			+ "  \"infoPowers\": []\r\n"
+			+ "}\r\n"
+			+ "";
 	
 	public static HashMap<String, GameLg> strToGame = new HashMap<String, GameLg>();
 	
@@ -152,10 +185,23 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public static ArrayList<StarParty> parties = new ArrayList<StarParty>();
 	public static ArrayList<Bedwars> bedwars = new ArrayList<Bedwars>();
+	public static ArrayList<ClockTower> clocks = new ArrayList<ClockTower>();
+	
+	public static FixedMetadataValue unbreakableMeta = null;
 	
 	
-	public final static FixedMetadataValue unbreakableMeta = new FixedMetadataValue(plug, "unbreakable");
+	public static HashMap<CustomGameType, ArrayList<CustomGame>> games = new HashMap<CustomGameType, ArrayList<CustomGame>>();
 
+	
+	
+	
+	//STRING HELP
+	public static String exclamation = "" +ChatColor.GOLD+"["+ChatColor.RED+ "!"+ ChatColor.GOLD+"] ";
+	public static String info = "" +ChatColor.GOLD+"["+ChatColor.GREEN+ "➤➤"+ ChatColor.GOLD+"] ";
+	public static String lgmoreMark = "" +ChatColor.GOLD+"["+ChatColor.GREEN+ ChatColor.BOLD+"LgMore"+ChatColor.RESET+ ChatColor.GOLD+"] ";
+	
+	
+	
 	public JavaPlugin getPlugin() {
 		return this;
 	}
@@ -172,6 +218,30 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	public static String playersDataFilePath = "lgData/playersData";
+
+
+	private static HashMap<String, PlayerDataLeft> playersLeft = new HashMap<String, PlayerDataLeft>();
+
+
+	public static ArrayList<String> dispoGamemodes = new ArrayList<String>();
+
+
+	public static String defaultJsonGamemodeString = "{\r\n"
+			+ "  \"hasMinageinage\": false,\r\n"
+			+ "  \"minageTime\": 10,\r\n"
+			+ "  \"boostMinage\": 1,\r\n"
+			+ "\r\n"
+			+ "  \"roleListNames\": [\r\n"
+			+ "    {\r\n"
+			+ "      \"listName\": \"unreferenced\",\r\n"
+			+ "      \"timeApplication\": 10\r\n"
+			+ "    }\r\n"
+			+ "  ]\r\n"
+			+ "}\r\n"
+			+ "";
+
+
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	@Deprecated
@@ -179,12 +249,19 @@ public class Main extends JavaPlugin implements Listener {
 		// TODO Auto-generated method stub
 		super.onEnable();
 		
+		WorldCreator worldStarCreator = new WorldCreator("worldStar");
+		World world = Bukkit.createWorld(worldStarCreator);
 		
-		
+		WorldCreator worldBedC = new WorldCreator("bedMap");
+		World worldBed = Bukkit.createWorld(worldBedC);
 		File file = new File(playersDataFilePath);
 		if (!file.getParentFile().exists()) {
 			file.getParentFile().mkdirs();
 		}
+		
+		
+		
+		
 		
 		if (!file.exists()) {
 			System.out.println("playersData file doesn't exist, creating it");
@@ -221,7 +298,16 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}
 		
+		File gamemodes = new File("Gamemodes");
+		if (!gamemodes.exists()) {
+			gamemodes.mkdirs();
+		} else {
+			for (File gamemode:gamemodes.listFiles()) {
+				this.dispoGamemodes.add(gamemode.getName());
+			}
+		}
 		
+		Trades.initialize();
 		lgop = new Permission("lgop");
 		
 		Main.server = this.getServer();
@@ -238,6 +324,11 @@ public class Main extends JavaPlugin implements Listener {
 		
 		getCommand("hub").setExecutor(new Hub());
 		getCommand("rejoin").setExecutor(new Rejoin());
+		getCommand("cw").setExecutor(new CW());
+		
+		getCommand("clock").setExecutor(new ClockCommand());
+		
+		getCommand("color").setExecutor(new fr.fitzche.lgmore.uhc_color.Color());
 		
 		mcListeners listener = new mcListeners();
 		this.listeners = listener;
@@ -252,7 +343,7 @@ public class Main extends JavaPlugin implements Listener {
 		
 		Main.world = getServer().getWorld("world");
 		
-		
+		this.unbreakableMeta = new FixedMetadataValue(plug, "unbreakable");
 		
 		
 	    
@@ -267,9 +358,7 @@ public class Main extends JavaPlugin implements Listener {
 	    }
 		
 	    
-	    
-	    
-	    
+	
 	   
 		ArrayList<RolesLg> list = new ArrayList<RolesLg>(Arrays.asList(
 				RolesLg.ALLUMEUR,
@@ -320,8 +409,9 @@ public class Main extends JavaPlugin implements Listener {
 				RolesLg.THANOS,
 				RolesLg.FAUCONNIER,
 				RolesLg.SWAPPER,
-				RolesLg.VOYANTE
-				
+				RolesLg.VOYANTE,
+				RolesLg.ANALYSTE,
+				RolesLg.ARAIGNEE
 				
 				));
 		RoleUtil.existingRoles.addAll(list);
@@ -360,15 +450,18 @@ public class Main extends JavaPlugin implements Listener {
 		eventsLgNames.add("AutomaticCheckWin");
 		descriptionsLgEvent.put("AutomaticCheckWin", "Probabilité que la victoire soit vérifiée à la mort d'un joueur (100% par défaut)");
 		
-		
+		World bedWorld = Bukkit.getWorld("pvpWorld");
 		Main2.onEnable();
-		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plug, new BukkitRunnable() {
+		Bukkit.getPluginManager().registerEvents(new SpecialItemHolder(), plug);
+		Bukkit.getScheduler().runTaskTimer(Main.plug, new BukkitRunnable() {
 			
 			@Override
 			public void run() {
 				for (Player p:Bukkit.getOnlinePlayers()) {
-					strToPlayer.get(p.getName()).board.refresh();
+					if (strToPlayer.get(p.getName()).board != null) {
+						strToPlayer.get(p.getName()).board.refresh();
+					}
+					
 					if (p.getLocation().getY() < -1) {
 						p.damage(300);
 					}
@@ -408,6 +501,23 @@ public class Main extends JavaPlugin implements Listener {
 				
 				World worldD = entry.getValue().world;
 				if (entry .getValue() != null && entry.getValue().world != null && worldD != null) {
+					Bukkit.unloadWorld(worldD, false);
+			
+					worldD.getWorldFolder().delete();
+					Main.deleteDirectory(worldD.getWorldFolder());
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		for (Bedwars bedwar:bedwars) {
+			try {
+				
+				
+				World worldD = bedwar.getWorld();
+				if (bedwar != null && bedwar.getWorld() != null && worldD != null) {
 					Bukkit.unloadWorld(worldD, false);
 			
 					worldD.getWorldFolder().delete();
@@ -461,7 +571,10 @@ public class Main extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		
-		e.getPlayer().sendMessage(ChatColor.GOLD + ""+ ChatColor.ITALIC+ "Faites /lg help et /lg info pour avoir plus d'info sur le plugin lgmore, /lg whisper [message] pour envoyer un message non anonyme aux joueurs op. Les description de roles n'indiquent pas forcement qu'il faut mettre un nom derrière la commande si la commande vise un joueur à choisir, les seules commandes ne necessitant pas de nom mais demandant un choix de joueur sont /color et /lg couple (pour cupidon). ");
+		e.getPlayer().sendMessage(
+			
+			
+			Main.info + "Vous rejoingnez un serveur équipé de lgmore. Ce plugin possède plusieurs mods de jeu aboutis... ou non (loup-garou uhc, team swapper, starWar party, bedwars. N'hésitez pas à aider en participant aux tests qui sont indispensables pour pouvoir corriger tous les bugs."+ "\n" +ChatColor.GOLD + ""+ ChatColor.ITALIC+ "Faites /lg help et /lg info pour avoir plus d'info sur le plugin lgmore, /lg whisper [message] pour envoyer un message non anonyme aux joueurs op. Bon jeu");
 		
 		e.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Faites /rejoin pour rejoindre une partie que vous n'avez pas finit");
 		
@@ -494,6 +607,8 @@ public class Main extends JavaPlugin implements Listener {
 		
 	}
 	
+	public HashMap<String, Integer> hasQuitSince = new HashMap<String, Integer>();
+	
 	@Deprecated
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
@@ -504,36 +619,53 @@ public class Main extends JavaPlugin implements Listener {
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" left");
 		PlayerData player = strToPlayer.get(e.getPlayer().getName());
 		if (player.game == null) {
-			System.out.println("game null (quit event)");
+			
 			return;
 		}
 		player.leftInv = e.getPlayer().getInventory();
 		Game gm1 = player.game;
+		gm1.playerQuit(player.getName());
 		
-		System.out.println(gm1.getName() + " is the game ");
+		
+		
+		
 
 		if (gm1 instanceof GameLg) {
-			((GameLg) gm1).playersLeft.put(player.getName(), new PlayerDataLeft(player));
-			
+			Main.playersLeft.put(player.getName(), new PlayerDataLeft(player));
 			Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
-
 				@Override
 				public void run() {
-					System.out.println("online?");
-					
-					
+					System.out.println("online?");	
 					if (!player.isOnline && ((GameLg) gm1).timer.temps > 1199) {
 						System.out.println(player.Name+ " not online");
 						((GameLg) gm1).announceDeath(player, false, false);
 					}
-					
-					
-					
+				}	
+			}, 6000);	
+		}
+		
+		
+		Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				if (!player.isOnline) {
+					if (player.game != null) {
+						player.game.playerDefinitlyQuit(player.getName());
+					}
 				}
 				
-			}, 6000);
+				
+				
+			}
 			
-		}
+		}, 6000);
+		
+		
+		
+		
+		
+		
 		player.player = null;
 		player.isOnline = false;
 		
@@ -641,71 +773,9 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent event) {
-	        // Vérifie que l'action est un clic droit (dans l'air ou sur un bloc)
-		Action action = event.getAction();
-		if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-			ItemStack item = event.getItem();
-			if (item.getItemMeta() == null || item.getItemMeta().getDisplayName() == null) {
-				return;
-			}
-			// Récupération de l'item en main
-			
-			if (item != null) {
-				Material type = item.getType();
-				// Vérifie que l'item est une épée.
-				// On peut comparer directement ou utiliser endsWith("_SWORD")
-				if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"AtaruInf")) {
-					PlayerData p = Main.getData(event.getPlayer());
-					for (Player ply:Bukkit.getOnlinePlayers()) {
-						
-						if (!p.getName().equals(ply.getName())&&p.getLocation().distance(ply.getLocation()) < 3) {
-							ply.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE	, 250, 100));
-							LineLocationHelper.applyKnockback(ply, p.player, (3 - p.getLocation().distance(ply.getLocation())) * 3);
-							
-						}
-					}
-				}
-			}
-			
-			if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"LightningInf")) {
-            	PlayerData p = Main.getData(event.getPlayer());
-            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 40, 0.2, 0.1);
-        		if (r.p != null) {
-        			
-        			r.p.getLocation().getWorld().strikeLightningEffect(r.p.getLocation());
-        			r.p.player.damage(4, p.player);
-        			r.p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW	, 30, 3));
-        		}
-			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"StrangleInf")) {
-            	PlayerData p = Main.getData(event.getPlayer());
-            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 40, 0.2, 0.1);
-        		if (r.p != null) {
-        			p.sendMessage("Vous étrangler "+ r.p.getName());
-        			p.player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 1, false, false));
-        			r.p.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 2, false, false));
-        			r.p.player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 2, false, false));
-        			r.p.player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 1, false, false));
-        			r.p.sendMessage("Vous êtes affecté par l'étranglement de Dark Vador");
-        			PlayerUtil.particle(r.p.getLocation(), Color.BLACK, "ok", 1);
-        		
-        		}
-            } else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"SithInf")) {
-            	PlayerData p = Main.getData(event.getPlayer());
-            	p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE	, 200, 0));
-        		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED	, 200, 3));
-        	
-            }else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Navigation")) {
-            	PlayerData p = Main.getData(event.getPlayer());
-            	if (p== null) {
-            		return;
-            	}
-            	(new GeneralMenu(p) ).open(p);
-            }
-			
-		}
-	}
+	
+	
+	
 	
 	
 	public static void placeBat(Location loc, Game game) {
@@ -724,7 +794,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static void placeStarMap(Location loc, World world) {
 		loc.setWorld(world);
 		try {
-			StructureLoader.place(loc, StructureLoader.load(new File("schems/starmap.schematic")), world, BukkitUtil.getLocalWorld(world).getWorldData());
+			StructureLoader.place(loc, StructureLoader.load(new File("schems/spawn9777954.schematic")), world, BukkitUtil.getLocalWorld(world).getWorldData());
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -746,7 +816,7 @@ public class Main extends JavaPlugin implements Listener {
 		System.out.println("bloc vote placé");
 		game.getWorld().getBlockAt(loc).setType(Material.JUKEBOX);
 		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Vote, new VoteBlockData(5), (GameLg) game, "ok"));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Vote, new VoteBlockData(((GameLg) game).groupe, (GameLg) game), (GameLg) game, ""));
 		
 	}
 	public static void deleteDirectory(File file) {
@@ -764,7 +834,7 @@ public class Main extends JavaPlugin implements Listener {
 		System.out.println("bloc vote placé");
 		game.getWorld().getBlockAt(loc).setType(Material.CAULDRON);
 		game.getWorld().getBlockAt(loc).setMetadata("specialBlock-lgFitzche", new FixedMetadataValue(Main.plug, true));
-		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Cauldron, new VoteBlockData(5), (GameLg) game, "ok"));
+		Main.specialBlocks.add(new SpecialBlock(loc, SpecialBlockType.Cauldron, new CauldronBlockData(), (GameLg) game, "ok"));
 		
 	}
 	

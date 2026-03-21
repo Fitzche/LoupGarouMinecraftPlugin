@@ -40,7 +40,7 @@ public class IDIOT_DU_VILLAGE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+ "Vous devez gagner avec le village, pour cela vous pourrez réssuciter une fois avec 2 coeur en moins si le village vous élimine par erreur.";
+		return Main.info +ChatColor.BLUE+ "Vous devez gagner avec le village, pour cela vous pourrez réssuciter une fois avec 2 coeur en moins si le village vous élimine par erreur.";
 	}
 
 	@Override

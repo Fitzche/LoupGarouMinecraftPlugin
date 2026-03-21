@@ -28,7 +28,7 @@ public class ParrainChecker implements ResCheck {
 
 	@Override
 	public String runDeathAction(PlayerDeathEvent e, Player k) {
-		if (e.getEntity().getName().equals(parrain.target.getName()) ) {
+		if (e.getEntity() !=  null && e.getEntity().getName() != null &&  parrain != null && parrain.target != null && e.getEntity().getName().equals(parrain.target.getName()) ) {
 			parrain.targetDeath(k.getName());
 			if (parrain.target.considVill) {
 				game.addEpic(10, e.getEntity().getLocation());

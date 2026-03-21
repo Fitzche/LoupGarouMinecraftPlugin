@@ -15,7 +15,7 @@ public class BedBoard implements GameBoard{
 	}
 	@Override
 	public void refresh() {
-		if (p.bedGame == null) {
+		if (p.game == null ) {
 			p.board = new DefaultBoard(p);
 		} else {
 			Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();

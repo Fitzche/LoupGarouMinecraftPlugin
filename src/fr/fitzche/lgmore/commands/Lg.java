@@ -24,6 +24,8 @@ import fr.fitzche.lgmore.GameStatut;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
+import fr.fitzche.lgmore.CharactUHC.CharactRole;
+import fr.fitzche.lgmore.CharactUHC.CharactUHC;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.GameNote;
 import fr.fitzche.lgmore.Lg.RegisterType;
@@ -55,6 +57,7 @@ import fr.fitzche.lgmore.RolesLg.TRAQUEUR;
 import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
 import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
+import fr.fitzche.lgmore.Util.BooksUtils;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
@@ -62,9 +65,12 @@ import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
+import fr.fitzche.lgmore.custom.CustomGame;
+import fr.fitzche.lgmore.custom.RoleSet;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import fr.fitzche.lgmore.scoreboard.Inventory.PlayerGameListInv;
-import fr.fitzche.lgmore.scoreboard.Inventory.playersDisplay;
+import fr.fitzche.lgmore.scoreboard.Inventory.cupidonPlayersDisplay;
+import fr.fitzche.lgmore.settlerGame.SettlerGame;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -101,6 +107,56 @@ public class Lg implements CommandExecutor {
 			senderData.sendMessage("Vous avez "+senderData.xp+ "xp");
 			return true;
 		}
+		if (args[0].equals("startCharact")) {
+			if (Main.getData(sender).game != null && (Main.getData(sender).game instanceof CustomGame || Main.getData(sender).game instanceof CharactUHC)) {
+				CharactUHC uhc = (CharactUHC) Main.getData(sender).game;
+				if (uhc.hoster.equals(sender.getName())) {
+					uhc.start();
+				}
+			}
+		} else if (args[0].equals("settlerStart")) {
+			PlayerData p = Main.getData(sender);
+			if (p.game == null) {
+				System.out.println("game of player null");
+				return true;
+			} else if (!(p.game instanceof SettlerGame)) {
+				System.out.println("game of player not settlerGame");
+				return true;
+			} else {
+				SettlerGame gameSettler = (SettlerGame) p.game;
+				gameSettler.start();
+			}
+		} else if (args[0].equals("chooseSettlerTeam")) {
+			if (args.length < 2) {
+				return true;
+			} else {
+				PlayerData p = Main.getData(sender);
+				if (p.game == null) {
+					System.out.println("game of player null");
+					return true;
+				} else if (!(p.game instanceof SettlerGame)) {
+					System.out.println("game of player not settlerGame");
+					return true;
+				} else {
+					SettlerGame gameSettler = (SettlerGame) p.game;
+					gameSettler.teamOfPlayers.put(sender.getName(), args[1]);
+					sender.sendMessage("Vous avez rejoint la team "+ args[1]);
+				}
+			}
+			
+			
+		} else if (args[0].equals("charact")) {
+			if (args.length < 2) {
+				return true;
+			} else {
+				CharactUHC uhc =(CharactUHC) Main.getData(sender).game;
+				for (RoleSet set:uhc.rolesSet()) {
+					CharactRole role = (CharactRole) (set.rolesOfPlayer().get(sender.getName()));
+					role.command(args);
+				}
+			}
+		}
+		
 		if (args[0].equals("revive")) {
 			if (game == null || senderData == null) {
 				return true;
@@ -186,7 +242,7 @@ public class Lg implements CommandExecutor {
 			}
 			
 			
-			playersDisplay display = new playersDisplay(game.players, null);
+			cupidonPlayersDisplay display = new cupidonPlayersDisplay(game.players, null);
 			Player p = (Player) sender;
 			display.display(p, null);
 			Main.server.getPluginManager().registerEvents(display, Main.plug);
@@ -204,7 +260,7 @@ public class Lg implements CommandExecutor {
 				sender.sendMessage("Le couple est aléatoire");
 			}
 			
-			playersDisplay choose = new playersDisplay(game.getPlayerAlive(), "/couple ");
+			cupidonPlayersDisplay choose = new cupidonPlayersDisplay(game.getPlayerAlive(), "/couple ");
 			Main.server.getPluginManager().registerEvents(choose, Main.plug);
 
 			choose.display((Player) sender, args);
@@ -247,62 +303,6 @@ public class Lg implements CommandExecutor {
 			
 			System.out.println(args[1]);
 			
-		} else if (args[0].equals("voteCmd")){
-			if (game == null || senderData == null) {
-				return true;
-			}
-			if (args.length < 3) {
-				return true;
-			}
-			
-			
-			ItemStack item = game.invVote.getItem(Integer.valueOf(args[2]));
-			if (item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().contains("utilisé")) {
-				sender.sendMessage(ChatColor.GOLD+"Cette enveloppe à vote est déjà utilisée");
-				return true;
-			}
-			if (!game.isInVote) {
-				sender.sendMessage(ChatColor.GOLD +"Ce n'est pas l'heure du vote");
-				return true;
-			} 
-			
-			
-			PlayerData voted = Main.strToPlayer.getOrDefault(args[1], null);
-			if (voted == null) {
-				sender.sendMessage("erreur sur le joueur voté >> voteCmd");
-			}
-			if (game.cannotBeVoted.contains(sender)) {
-				sender.sendMessage(ChatColor.RED+"Vous ne pouvez pas voter");
-				return true;
-			}
-			
-			if (senderData.timeWithPlayers.getOrDefault(voted.getName(), 0) < 1) {
-				sender.sendMessage(ChatColor.GOLD +"Vous n'avez pas croisé ce joueur, vous ne pouvez donc pas voter pour celui-ci");
-				return true;
-
-			}
-			if (senderData.lastVoteOpen != null && senderData.lastVoteOpen.data.getType().equals(SpecialBlockType.Vote)) {
-				VoteBlockData data = (VoteBlockData) senderData.lastVoteOpen.data;
-				if (data.nbOfVote < 1) {
-					sender.sendMessage(ChatColor.GOLD +"L'urne à vote que vous avez ouverte est pleine...");
-					return true;
-				}
-				data.hasVotedFor.put(sender.getName(), voted.getName());
-				data.nbOfVote --;
-			}
-			
-			if (senderData.voted != null) {
-				senderData.voted.vote --;
-			}
-			
-			senderData.voted = voted;
-			sender.sendMessage("Vous avez voté pour "+ voted.Name +"");
-			voted.vote ++;
-			
-			
-			ArrayList<String> str = new ArrayList<String>();
-			str.add("utilisé");
-			ItemUtil.setLore(game.invVote.getItem(Integer.valueOf(args[2])), str);
 		}  else if (args[0].equals("conferer")) {
 			if (game == null || senderData == null) {
 				return true;
@@ -450,7 +450,7 @@ public class Lg implements CommandExecutor {
 					if (name.equals(role.getName()) ) {
 						sender.sendMessage(role.getCampOfRole().getColor()+ role.getName() + ChatColor.GOLD + role.getDescription() );
 						System.out.println(name + " equals "+ role.getName());
-
+						BooksUtils.openBook((Player) sender, role.getDescription(), role.getCampOfRole().getColor()+ role.getName());
 						break;
 					} else {
 						System.out.println(name + " doesn't equal "+ role.getName());

@@ -14,6 +14,7 @@ import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.RolesLg.Checkers.ErmiteChecker;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -37,17 +38,20 @@ public class ERMITE implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, vous possédez 30% de force le jour et 20% de résistance la nuit, mais pour chaque joueur autour de vous, vous perdez 5% de force, le jour et 3% de resistance la nuit, vous pouvez donc avoir un malus. Si le registre est tragique, vous gagnez 10% de résistance, s'il est oratoire, vous perdez 10% de force. Votre mort ne sera pas annoncée.");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, vous possédez 30% de force le jour et 20% de résistance la nuit, mais pour chaque joueur autour de vous, vous perdez 5% de force, le jour et 3% de resistance la nuit, vous pouvez donc avoir un malus. Si le registre est tragique, vous gagnez 10% de résistance, s'il est oratoire, vous perdez 10% de force. Votre mort ne sera pas annoncée.");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 
 	
 	public void giveEffectAllTime() {
+		if (playerWithRole == null) {
+			return;
+		}
 		if (tempo > 4) {
 			tempo = 0;
 			this.nbOfPlayerAround = 0;
 			for (PlayerData p:game.getPlayerAlive()) {
-				if (playerWithRole.getLocation().distance(p.getLocation()) <= 20 && !playerWithRole.getName().equals(p.getName())) {
+				if (LocationUtil.getDistanceBetween(p, playerWithRole) <= 20 && !playerWithRole.getName().equals(p.getName())) {
 					nbOfPlayerAround ++;
 				}
 			}

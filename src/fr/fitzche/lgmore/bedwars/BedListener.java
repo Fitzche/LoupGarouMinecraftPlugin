@@ -1,11 +1,14 @@
 package fr.fitzche.lgmore.bedwars;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -14,6 +17,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +26,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Minage.TradeInv;
+import fr.fitzche.lgmore.Minage.Trades;
+import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.minecraft.GameListener;
 
@@ -108,7 +115,7 @@ public class BedListener implements GameListener, Listener {
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
-		if (Main.getData(e.getWhoClicked()).bedGame != null && Main.getData(e.getWhoClicked()).bedGame.name.equals(bed.name) && e.getInventory().equals(e.getWhoClicked().getInventory())) {
+		if (Main.getData(e.getWhoClicked()).game != null && Main.getData(e.getWhoClicked()).game instanceof Bedwars && Main.getData(e.getWhoClicked()).game.getName().equals(bed.name) && e.getInventory().equals(e.getWhoClicked().getInventory())) {
 			if (e.getSlotType().equals(SlotType.ARMOR) && bed.started) {
 				e.getWhoClicked().sendMessage("Vous ne pouvez pas retirer votre armure en partie de bedwars");
 				e.setCancelled(true);
@@ -118,7 +125,10 @@ public class BedListener implements GameListener, Listener {
 	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-	    if (event.getEntity() instanceof ArmorStand && event.getEntity().getMetadata("unbreakable").get(0).equals(Main.unbreakableMeta)) {
+		if (event.getEntity().hasMetadata("unbreakable") && event.getEntity().getMetadata("unbreakable").get(0).equals(Main.unbreakableMeta)) {
+			event.setCancelled(true);
+		}
+	    if (event.getEntity() instanceof ArmorStand ) {
 	        if (event.getEntity().hasMetadata("bedTeam") && event.getEntity().getLocation().getWorld().equals(bed.getWorld())) {
 	        	if (event.getEntity().getMetadata("bedTeam").get(0).equals(BedTeam.blueMeta)) {
 	        		bed.damageBed(BedTeam.Blue);
@@ -154,11 +164,36 @@ public class BedListener implements GameListener, Listener {
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
-		if (e.getBlock().getMetadata("unbreakable").get(0).equals(Main.unbreakableMeta)) {
+		if (e.getBlock().hasMetadata("unbreakable")&& e.getBlock().getMetadata("unbreakable").get(0).equals(Main.unbreakableMeta)) {
 	        e.setCancelled(true);
 	        
 	    }
 		
+	}
+	
+	@EventHandler
+	public void onInteract(PlayerInteractEntityEvent event) {
+	    if (event.getRightClicked() instanceof Villager) {
+	        Villager villager = (Villager) event.getRightClicked();
+	        if (villager.hasMetadata("traderMeta")) {
+	        	event.setCancelled(true);
+            	if (villager.getMetadata("traderMeta").get(0).equals(BedLocType.BTraderMeta)) {
+            		
+            		
+            		TradeInv inv = new TradeInv(Trades.basicMap, Main.getData(event.getPlayer()));
+            	} else if (villager.getMetadata("traderMeta").get(0).equals(BedLocType.DTraderMeta)) {
+            		
+            		TradeInv inv = new TradeInv(Trades.DiamondMap, Main.getData(event.getPlayer()));
+            	
+            	} else if (villager.getMetadata("traderMeta").get(0).equals(BedLocType.ETraderMeta)) {
+            		
+            		TradeInv inv = new TradeInv(Trades.EmerMap, Main.getData(event.getPlayer()));
+            	} else if (villager.getMetadata("traderMeta").get(0).equals(BedLocType.UTraderMeta)) {
+            		
+            		TradeInv inv = new TradeInv(Trades.UpMap, Main.getData(event.getPlayer()));
+            	}
+            }
+	    }
 	}
 	
 	

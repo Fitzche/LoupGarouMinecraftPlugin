@@ -48,7 +48,7 @@ public class VOLEUR implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner tout seul"+ "\n"+ "Pour cela vous posséder force de manière permanente, et vous prendrez l'identité et le role du premier joueur que vous tuerez.";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner tout seul"+ "\n"+ "Pour cela vous posséder force de manière permanente, et vous prendrez l'identité et le role du premier joueur que vous tuerez.";
 	}
 
 	@Override

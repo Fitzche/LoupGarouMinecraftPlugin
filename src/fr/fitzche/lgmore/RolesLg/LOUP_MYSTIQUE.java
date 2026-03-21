@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -53,7 +54,7 @@ public class LOUP_MYSTIQUE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous êtes Loup-Garou, vous devez gagner avec les Loups Garou, vous possédez la liste de vos alliés loups, pour cela vous obtenez Force I la Nuit ainsi que le nom et le rôle d'un joueur aléatoire de la partie à chaque fois qu'un loup-garou meure");
+		return (Main.info +ChatColor.BLUE+"Vous êtes Loup-Garou, vous devez gagner avec les Loups Garou, vous possédez la liste de vos alliés loups, pour cela vous obtenez Force I la Nuit ainsi que le nom et le rôle d'un joueur aléatoire de la partie à chaque fois qu'un loup-garou meure");
 	}
 
 	@Override

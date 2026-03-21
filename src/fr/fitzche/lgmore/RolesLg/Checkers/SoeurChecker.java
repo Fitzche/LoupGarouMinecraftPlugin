@@ -55,8 +55,8 @@ public class SoeurChecker implements ResCheck {
 	}
 	@Override
 	public int onPlayerDamage(PlayerData attacker, PlayerData attacked) {
-		// TODO Auto-generated method stub
-		return 0;
+		return soeur.R5resisBonusSister();
+	
 	}
 	@Override
 	public void onVoteEvent(VoteEvent e) {

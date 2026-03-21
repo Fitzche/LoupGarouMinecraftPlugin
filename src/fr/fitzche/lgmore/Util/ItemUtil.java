@@ -151,10 +151,37 @@ public class ItemUtil {
 		return h;
 	}
 	
+	public static int howManyOf(Inventory inv, Material mat, String name) {
+		int h = 0;
+		for (ItemStack item:inv.getContents()) {
+			
+			if (item != null &&item.getType().equals(mat) && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(name)) {
+				h += item.getAmount();
+				System.out.println("mat +"+ item.getAmount());
+			}
+		}
+		return h;
+	}
+	
 	public static void takeInInv(Inventory inv, Material mat, int amount) {
 		int taken = 0;
 		for (ItemStack item:inv.getContents()) {
 			if (item != null && item.getType().equals(mat)) {
+				do {
+					item.setAmount(item.getAmount() - 1);
+					taken ++;
+					
+				} while (item.getAmount() > 0 && taken < amount);
+				if (item.getAmount()<0) {
+					inv.remove(item);
+				}
+			}
+		}
+	}
+	public static void takeInInv(Inventory inv, Material mat, String name, int amount) {
+		int taken = 0;
+		for (ItemStack item:inv.getContents()) {
+			if (item != null && item.getType().equals(mat) && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(name)) {
 				do {
 					item.setAmount(item.getAmount() - 1);
 					taken ++;

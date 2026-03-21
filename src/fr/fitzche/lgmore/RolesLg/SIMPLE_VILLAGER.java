@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -52,7 +53,7 @@ public class SIMPLE_VILLAGER implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, vous ne possédez qu'un pouvoir aléatoire parmis 4. ");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, vous ne possédez qu'un pouvoir aléatoire parmis 4. ");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 

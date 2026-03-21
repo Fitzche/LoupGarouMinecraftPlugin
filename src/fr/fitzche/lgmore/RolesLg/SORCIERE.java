@@ -11,6 +11,7 @@ import org.bukkit.potion.Potion.Tier;
 import org.bukkit.potion.PotionType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Util.PotionUtil;
@@ -40,7 +41,7 @@ public class SORCIERE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec les villageois, pour cela vous pouvez une fois dans la partie ressuciter un joueur en cliquant sur un message qui vous sera envoyé, vous posédez également une potion de instant heal, une potion de regeneration, et une potion de instant damage";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec les villageois, pour cela vous pouvez une fois dans la partie ressuciter un joueur en cliquant sur un message qui vous sera envoyé, vous posédez également une potion de instant heal, une potion de regeneration, et une potion de instant damage";
 	}
 
 

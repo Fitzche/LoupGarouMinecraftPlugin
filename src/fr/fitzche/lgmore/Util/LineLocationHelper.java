@@ -13,6 +13,7 @@ import fr.fitzche.lgmore.PlayerData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class LineLocationHelper {
 
@@ -33,6 +34,8 @@ public class LineLocationHelper {
         // Normalisation de la direction pour que la multiplication par "step" soit précise.
         Vector direction = start.getDirection().normalize();
         World world = start.getWorld();
+        
+       
 
         // Parcourt la trajectoire de 0 jusqu'à maxDistance.
         for (double distance = 0; distance <= maxDistance; distance += step) {
@@ -107,6 +110,15 @@ public class LineLocationHelper {
     }
     
     
+    public static Location invertSymetricalToLoc(Location loc, Location axeLoc) {
+    	double x = axeLoc.getX() - (loc.getX() -axeLoc.getX());
+    	double y = axeLoc.getY() - (loc.getY() -axeLoc.getY());
+    	double z = axeLoc.getZ() - (loc.getZ() -axeLoc.getZ());
+    	return new Location(axeLoc.getWorld(), x, y, z);
+    	
+    }
+    
+    
     public static PlayerData focus(Player p) {
     	
     	return getLineLocations(p, 50, 0.2, 0.1).p;
@@ -135,6 +147,40 @@ public class LineLocationHelper {
         
         // Applique le vecteur résultant au joueur cible
         target.setVelocity(knockbackDirection);
+    }
+    public static void applyForce(Player target, Location dir, double strength) {
+        // Calcule le vecteur allant de la source vers le target
+        Vector knockbackDirection = dir.toVector().subtract(target.getLocation().toVector());
+        
+        // On peut choisir d'ignorer la composante verticale pour un knockback purement horizontal :
+        knockbackDirection.setY(0);
+        // Normalisation pour obtenir une direction unitaire
+        knockbackDirection.normalize();
+        
+        // Optionnel : ajouter une petite impulsion verticale pour un effet plus réaliste (exemple : 0.3)
+        
+        
+        
+        // Multiplie le vecteur par la force souhaitée
+        knockbackDirection.multiply(strength);
+        
+        // Applique le vecteur résultant au joueur cible
+        target.setVelocity(knockbackDirection);
+    }
+    
+    
+    public static Vector getRandomDirectionVector(double magnitude) {
+        Random random = new Random();
+
+        // Génère une direction aléatoire dans l'espace 3D
+        double x = random.nextDouble() * 2 - 1; // entre -1 et 1
+        double y = random.nextDouble() * 2 - 1;
+        double z = random.nextDouble() * 2 - 1;
+
+        Vector direction = new Vector(x, y, z);
+
+        // Normalise pour obtenir une direction unitaire, puis multiplie par la magnitude
+        return direction.normalize().multiply(magnitude);
     }
 }
 

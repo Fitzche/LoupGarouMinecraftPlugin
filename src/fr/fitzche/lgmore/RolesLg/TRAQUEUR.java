@@ -43,7 +43,7 @@ public class TRAQUEUR implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez choisir un joueur à traquer avec la commande /lg traquer [nomDuJoueur] (rayon de 20 blocs). Vous pourrez alors connaitre ses coordonnées avec la commande /lg traque. Vous obtiendrez également son nombre de kill. Vous pourrez choisir un autre joueur à traquer si le traqué vient à mourir ");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez choisir un joueur à traquer avec la commande /lg traquer [nomDuJoueur] (rayon de 20 blocs). Vous pourrez alors connaitre ses coordonnées avec la commande /lg traque. Vous obtiendrez également son nombre de kill. Vous pourrez choisir un autre joueur à traquer si le traqué vient à mourir ");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 

@@ -49,7 +49,7 @@ public class CUPIDON implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous etes Cupidon, "
+		return Main.info +ChatColor.BLUE+"Vous etes Cupidon, "
 				+ "\n"+ "Vous devez gagner tous seul ou avec le couple, que vous choisirez avant 25minutes avec la commande /lg couple (choisissez ensuite les membres du couple un par un) . Vous possédez également un arc enchanté "+ChatColor.UNDERLINE+" Punch I PowerII";
 	}
 	
@@ -106,19 +106,19 @@ public class CUPIDON implements RoleInstance{
 			p3 = third;
 			p3.camp = Camp.Love;
 			
-			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
-			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ third.Name);
-			third.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
-			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + ", "+third.Name+" et "+ player2.Name + " en couple");
+			player.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET  +ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ChatColor.BLUE+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
+			player2.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET  +ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ChatColor.BLUE+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ third.Name);
+			third.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET  +ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ChatColor.BLUE+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
+			Cupidon.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET  +ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + ", "+third.Name+" et "+ player2.Name + " en couple");
 
 			third.inLove = true;
 
 
 		} else {
 			System.out.println("no trouple");
-			player.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
-			player2.sendMessage(ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
-			Cupidon.sendMessage(ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + " et "+ player2.Name + " en couple");
+			player.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET+ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ChatColor.BLUE+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player2.Name);
+			player2.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET+ChatColor.LIGHT_PURPLE + "Vous êtes amoureux..." + "\n"+ChatColor.BLUE+ "Vous devez gagner vous votre amoureux et le cupidon, pour cela vous pouvez lui faire don d'une partie de votre vie avec la commande /lg don [pourcentage de votre vie], cependant, s'il meure, vous le rejoindrez dans sa tombe..." + "\n"+ "Votre amoureux est "+ player.Name);
+			Cupidon.sendMessage(ChatColor.BOLD + ""+ChatColor.RED+"♡ "+ChatColor.RESET+ChatColor.LIGHT_PURPLE +"Vous avez mis "+ player.Name + " et "+ player2.Name + " en couple");
 		}
 		
 		

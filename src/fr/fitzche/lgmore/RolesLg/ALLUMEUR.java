@@ -40,7 +40,7 @@ public class ALLUMEUR implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela, vous influencer l'aura des personnes autours de vous pour que celle-ci corresponde à leur camp (10min pour rendre une aura correcte)");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, pour cela, vous influencer l'aura des personnes autours de vous pour que celle-ci corresponde à leur camp (10min pour rendre une aura correcte)");
 	}
 	public static ItemStack logo = new ItemStack(Material.TORCH);
 

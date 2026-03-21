@@ -17,6 +17,7 @@ public enum Camp implements Serializable{
 	BLUE(ChatColor.DARK_BLUE, "Bleu"),
 	GREEN(ChatColor.DARK_GREEN, "Vert"),
 	PINK(ChatColor.LIGHT_PURPLE, "Rose"),
+	DEMON(ChatColor.DARK_RED, "Démon"),
 
 	Uneffective(ChatColor.DARK_GRAY, "Invisible");
 	

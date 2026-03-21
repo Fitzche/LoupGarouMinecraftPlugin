@@ -8,6 +8,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Camp;
 import fr.fitzche.lgmore.Main;
@@ -17,6 +18,7 @@ import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.PotionUtil;
+import fr.fitzche.lgmore.commands.FutureAction;
 import net.md_5.bungee.api.ChatColor;
 
 public class SALVATEUR implements RoleInstance{
@@ -35,7 +37,7 @@ public class SALVATEUR implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+ "Vous devez gagner avec le village, pour ce faire vous posséder 2 potion de instant heal, et, à chaque épisode vous pourrez protéger un joueur pendant 20 minutes avec la commande /lg proteger [nomDuJoueur], celui-ci obtiendra resistance I";
+		return Main.info +ChatColor.BLUE+ "Vous devez gagner avec le village, pour ce faire vous posséder 2 potion de instant heal, et, à chaque épisode vous pourrez protéger un joueur pendant 20 minutes avec la commande /lg proteger [nomDuJoueur], celui-ci obtiendra resistance I";
 	}
 
 	@Override
@@ -97,10 +99,16 @@ public class SALVATEUR implements RoleInstance{
 
 	
 	public void proteger(PlayerData target) {
-		target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0, false, false));
-		target.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 24000, 0, false, false));
-		target.sendMessage(ChatColor.DARK_GREEN+ "Le Salvateur vous a protégé, vous obtenez donc résistance et no fall pendant 20 minutes");
-
+		target.boostR5 += 4;
+		target.sendMessage(ChatColor.DARK_GREEN+ "Le Salvateur vous a protégé, vous obtenez donc résistance pendant 20 minutes");
+		((GameLg) playerWithRole.game).futuresActions.add(new FutureAction(new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				target.boostR5 -= 4;
+				
+			}
+		}, 1200));
 		this.playerWithRole.sendMessage(ChatColor.DARK_GREEN+"vous avez protégé "+ target.Name);
 		this.powerUsed = true;
 		

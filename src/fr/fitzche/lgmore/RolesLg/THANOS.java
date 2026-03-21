@@ -65,12 +65,12 @@ public class THANOS implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous êtes Thanos... Oui oui Thanos.... Vous gagner tout seul, pour cela vous pouvez récupérer les pierres d'infinités dans les batiment bonus. Si un joueur en récupère une, vous obtiendrez son pseudo, et vous devrez le tuer pour la récupérer. Chaque pierre vous confère un bonus:"
-				+ "\n"+ChatColor.RED+ "Pierre de Réalité:"+ChatColor.DARK_BLUE+" vous pouvez (avec la commande /lg reality) donner un effet de jump boost 2 pendant 3min à tous les autres joueurs dans un rayon de 15 à 30 bloc"
-				+ "\n"+ChatColor.YELLOW+"Pierre de L'Esprit: "+ChatColor.DARK_BLUE+"Vous pouvez (avec la commande /lg esprit [nomDuJoueur]) changer l'aura et le camp visible d'un joueur de manière à ce qu'il soit vu comme loup"
-				+ "\n"+ChatColor.DARK_GREEN+"Pierre du Temps: "+ChatColor.DARK_BLUE + "Vous pouvez (avec la commande /lg time) avancer le temps de 2min"
-				+ "\n"+ChatColor.DARK_PURPLE+"Pierre du Pouvoir: "+ChatColor.DARK_BLUE+"Vous possédez 10% de force supplémentaire"
-				+ "\n"+ChatColor.GOLD+"Pierre de L'Ame: "+ ChatColor.DARK_BLUE+"Vous pouvez (avec la commande /lg ame [nomDuJoueur]) afficher l'aura d'un joueur aux yeux de tout le monde (particules autour du joueur)"
+		return (Main.info +ChatColor.BLUE+"Vous êtes Thanos... Oui oui Thanos.... Vous gagner tout seul, pour cela vous pouvez récupérer les pierres d'infinités dans les batiment bonus. Si un joueur en récupère une, vous obtiendrez son pseudo, et vous devrez le tuer pour la récupérer. Chaque pierre vous confère un bonus:"
+				+ "\n"+ChatColor.RED+ "Pierre de Réalité:"+Main.info +ChatColor.BLUE+" vous pouvez (avec la commande /lg reality) donner un effet de jump boost 2 pendant 3min à tous les autres joueurs dans un rayon de 15 à 30 bloc"
+				+ "\n"+ChatColor.YELLOW+"Pierre de L'Esprit: "+Main.info +ChatColor.BLUE+"Vous pouvez (avec la commande /lg esprit [nomDuJoueur]) changer l'aura et le camp visible d'un joueur de manière à ce qu'il soit vu comme loup"
+				+ "\n"+ChatColor.DARK_GREEN+"Pierre du Temps: "+Main.info +ChatColor.BLUE + "Vous pouvez (avec la commande /lg time) avancer le temps de 2min"
+				+ "\n"+ChatColor.DARK_PURPLE+"Pierre du Pouvoir: "+Main.info +ChatColor.BLUE+"Vous possédez 10% de force supplémentaire"
+				+ "\n"+ChatColor.GOLD+"Pierre de L'Ame: "+ Main.info +ChatColor.BLUE+"Vous pouvez (avec la commande /lg ame [nomDuJoueur]) afficher l'aura d'un joueur aux yeux de tout le monde (particules autour du joueur)"
 				+ "\n"+ChatColor.BLUE+"Pierre de L'espace: "+"Vous pouvez (avec la commande /lg space) obtenir speed 2 pendant 3min"
 				+ "\n"+ChatColor.UNDERLINE+"Toutes les Pierres: "+"Vous gagner 20% de résistance, et vous avez la possibilité (avec la commande /lg thanos) d'infliger 5 coeurs à chaque joueurs (50% de chance de se produire pour chaque joueur)");
 	}

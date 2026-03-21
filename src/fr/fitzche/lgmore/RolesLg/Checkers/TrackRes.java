@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.TRAQUEUR;
@@ -36,8 +37,9 @@ public class TrackRes implements ResCheck {
 
 	@Override
 	public String runDeathAction(PlayerDeathEvent e, Player k) {
-		if (owner != null && e.getEntity().getName().equals(owner.tracked.getName())) {
+		if (owner != null && owner.tracked != null && e.getEntity().getName().equals(owner.tracked.getName())) {
 			owner.tracked = null;
+			owner.playerWithRole.sendMessage(Main.info +ChatColor.GRAY  +"Vous pouvez choisir une nouvelle cible à traquer");
 			return "tracked mort";
 		}
 		return "";

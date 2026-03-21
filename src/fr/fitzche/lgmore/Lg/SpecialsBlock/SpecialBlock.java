@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -29,6 +30,10 @@ import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
+import fr.fitzche.lgmore.scoreboard.Inventory.InvFunct;
+import fr.fitzche.lgmore.scoreboard.Inventory.PlayerVoteChoose;
+import fr.fitzche.lgmore.scoreboard.Inventory.StringChooseInv;
+import fr.fitzche.lgmore.scoreboard.Inventory.cupidonPlayersDisplay;
 import fr.fitzche.lgmore.scoreboard.Inventory.sorcierInv;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -36,20 +41,42 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class SpecialBlock implements Listener, Serializable{
 
-	
+	//Loc of block in the world
 	public Location loc;
+	//type
 	public SpecialBlockType type;
+	//specific id to not have troubles
 	public String id;
+	//Data of block, interfaced on SpecialBlockData
 	public SpecialBlockData data;
+	//corresponding game
 	public GameLg game;
 	
+	
+	/*
+	 * serve to get the Data of the block
+	 * @return will be a class interfacing SpecialBlockData
+	 * 
+	 * 
+	*/
 	public SpecialBlockData getData() {
 		return data;
 	}
+	
+	/*
+	 * serve to create a special block
+	 * @param loc loc of the block
+	 * @param type type of the block
+	 * @param data data of the block
+	 * @param game game of the block
+	 * 
+	 * 
+	*/
 	public SpecialBlock(Location loc, SpecialBlockType type, SpecialBlockData data, GameLg game, String checkLoc) {
 		this.loc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		this.data = data;
 		this.type = type;
+		this.game = game;
 		Main.server.getPluginManager().registerEvents(this, Main.plug);
 		this.id = Integer.toString(loc.getBlockX()) +"-"+ Integer.toString(loc.getBlockY()) +"-"+ Integer.toString(loc.getBlockZ());
 	}
@@ -74,6 +101,7 @@ public class SpecialBlock implements Listener, Serializable{
         }
     }
 	
+	@SuppressWarnings("unused")
 	@Deprecated
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
@@ -89,21 +117,32 @@ public class SpecialBlock implements Listener, Serializable{
 		
 		
 		
+		
+		//TEST POSSIBILITIES FOR THE TYPE OF THE BLOCK AND RUN ACTION:
+		
 		if (e.getClickedBlock().getLocation().equals(this.loc)) {
-			
-			
 			e.setCancelled(true);
+			
+			
 			
 			if (this.type.equals(SpecialBlockType.Vote)) {
 				
-				
-				if (((GameLg)Main.getData(e.getPlayer()).game).invVote == null) {
-					return;
+				//check if there's available vote in the vote Block and open vote Inv if yes
+				if (((VoteBlockData) this.data).voteAvaible > 0) {
+					PlayerVoteChoose chose = new PlayerVoteChoose((VoteBlockData) this.data, toCheck);
 				}
-				e.getPlayer().openInventory(((GameLg)Main.getData(e.getPlayer()).game).invVote);
+				
+				
 				Main.getData(e.getPlayer()).lastVoteOpen = this;
-			}
-			if (this.type.equals(SpecialBlockType.Accuse)) {
+				
+				
+				
+				
+				
+			}else if (this.type.equals(SpecialBlockType.Accuse)) {
+				
+				
+				//DEAD FEATURE
 				if (true) {
 					e.getPlayer().sendMessage("désactivé");
 					return;
@@ -122,9 +161,15 @@ public class SpecialBlock implements Listener, Serializable{
 					}
 				
 				}, 600);
-			}
-			
-			if (this.type.equals(SpecialBlockType.Treasure)) {
+				
+				
+				
+				
+				
+			}else if (this.type.equals(SpecialBlockType.Treasure)) {
+				
+				
+				
 				TreasureBlockData data = (TreasureBlockData) this.data;
 				if (data.type == null) {
 					return;
@@ -134,10 +179,23 @@ public class SpecialBlock implements Listener, Serializable{
 					e.getPlayer().sendMessage("Déjà utilisé");
 					return;
 				}
+				
+				
+				//CHECK WHAT TYPE OF TREASURE THIS IS
+				
+				if (data.type.equals(TreasureBlockType.NULL)) {
+					return;
+				}
 				if (data.type.equals(TreasureBlockType.RegisterModifier)) {
+				
+					//DEAD FEATURE
 					
 					System.out.println("register modifier act in special b");
 					if (true) {
+						e.getPlayer().sendMessage("Cette feature est désactivée, vous recevez 1 gapple en compensation");
+						e.getPlayer().getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 1));
+						data.type = TreasureBlockType.NULL;
+						
 						return;
 					}
 					
@@ -193,8 +251,13 @@ public class SpecialBlock implements Listener, Serializable{
 						e.getPlayer().sendMessage("Votre groupe a trouvé un camp, chacun sa manière de jouer la scène !! En tout cas chaque joueur reçoit un message, et doit choisir un registre (30s), le registre le + choisi gagnera 20%, cependant, les loups et surtout les solos ont une influence énorme sur ce choix. Réflechissez bien avant d'activer ce camp en clicquant une deuxième fois dessus car si un traitre se trouve parmis vous, il pourra facilement vous utiliser pour avantager le registre de son choix.");
 						data.playersClickedOne.add(e.getPlayer().getName());
 						
+						
+						
+						
+						
 					}
 				} else if (data.type.equals(TreasureBlockType.AuraAnalyser)) {
+					
 					System.out.println("auraAnalyser found (at special block interact event)");
 					List<PlayerData> psList = LocationUtil.getClassByDistance(this.loc, "ok",game).subList(0,game.groupe-1);
 					ArrayList<PlayerData> ps = new ArrayList<PlayerData>(); 
@@ -203,18 +266,26 @@ public class SpecialBlock implements Listener, Serializable{
 					}
 					for (PlayerData p2:ps) {
 						if (p2.getLocation().distance(loc) > 5) {
-							e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+"Il faut plus de joueurs à moins de 5 blocs de ce camp pour l'activer,");
+							e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+"Il faut plus de joueurs à moins de 5 blocs de ce bonus pour l'activer,");
 							return;
 						}
 					}
 					
 					game.groupAuraEstimation(ps);
 					data.used = true;
+					
+					
+					
+					
 				} else if (data.type.equals(TreasureBlockType.Bienfaisance)) {
 					System.out.println("bienfaisance found (at special block interact event)");
 					e.getPlayer().sendMessage(ChatColor.DARK_PURPLE+ "Vous avez trouvé un coeur à conférer à un joueur avec la commande /lg conferer [nomDuJoueur], maintenant, à vous de temporairement prendre le role du bienfaiteur au bienfaiteur !!");
 					Main.getData(e.getPlayer()).bienfaisance ++;
 					data.used = true;
+					
+					
+					
+					
 				} else if (data.type.equals(TreasureBlockType.AuraPotion)) {
 					System.out.println("auraPotion found (at special block interact event)");
 					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
@@ -225,6 +296,11 @@ public class SpecialBlock implements Listener, Serializable{
 					Player p = e.getPlayer();
 					p.getInventory().addItem(item);
 					data.used = true;
+					
+					
+					
+					
+					
 				} else if (data.type.equals(TreasureBlockType.ParalysiePotion)) {
 					System.out.println("Paralysie found (at special block interact event)");
 					Potion potion = new Potion(PotionType.WATER_BREATHING, 1, true);
@@ -235,6 +311,10 @@ public class SpecialBlock implements Listener, Serializable{
 					Player p = e.getPlayer();
 					p.getInventory().addItem(item);
 					data.used = true;
+					
+					
+					
+					
 				} else if (data.type.equals(TreasureBlockType.TeleporterPotion)) {
 					
 					System.out.println("tpPotion found (at special block interact event)");
@@ -250,8 +330,7 @@ public class SpecialBlock implements Listener, Serializable{
 				}
 
 				
-			} 
-			if (this.type.equals(SpecialBlockType.Cauldron)) {
+			} else if (this.type.equals(SpecialBlockType.Cauldron)) {
 				Player p = e.getPlayer();
 				PlayerData plyD = Main.getData(p);
 				System.out.println("cauldron block");
@@ -262,9 +341,7 @@ public class SpecialBlock implements Listener, Serializable{
 				} 
 				sorcierInv inv = new sorcierInv(p, game);
 				
-			}
-			
-			if (this.type.equals(SpecialBlockType.Stone)) {
+			}else if (this.type.equals(SpecialBlockType.Stone)) {
 				StoneBlockData data = (StoneBlockData) this.data;
 				if (data.taken) {
 					e.getPlayer().sendMessage("Déjà Pris");

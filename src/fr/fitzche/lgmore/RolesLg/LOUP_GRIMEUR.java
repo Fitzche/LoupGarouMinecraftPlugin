@@ -43,7 +43,7 @@ public class LOUP_GRIMEUR implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit, de plus vous aurez la possibilité d'afficher les joueurs que vous tuez comme loup garou à leurs morts");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit, de plus vous aurez la possibilité d'afficher les joueurs que vous tuez comme loup garou à leurs morts");
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public class ENFANT_SAUVAGE implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous êtes enfant sauvage, vous devez gagner avce le village, cependant si le modèle que vous aurez choisi meure, vous deviendrez loup-garou";
+		return Main.info +ChatColor.BLUE+"Vous êtes enfant sauvage, vous devez gagner avce le village, cependant si le modèle que vous aurez choisi meure, vous deviendrez loup-garou";
 	}
 
 	@Override

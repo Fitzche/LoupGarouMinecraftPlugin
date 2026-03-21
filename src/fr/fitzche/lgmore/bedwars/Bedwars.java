@@ -15,6 +15,10 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldedit.Vector;
@@ -28,6 +32,7 @@ import fr.fitzche.lgmore.Lg.GameType;
 import fr.fitzche.lgmore.Minage.MinageWorld;
 import fr.fitzche.lgmore.RolesLg.SWAPPER;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.minecraft.GameListener;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 
@@ -64,25 +69,19 @@ public class Bedwars implements Game {
 		
 		Bukkit.getPluginManager().registerEvents(listener, Main.plug);
 		this.map = map;
-		this.name = "bedwar-|map"+ map.getName()+ "|"+ MathUtil.generateAlInt(0, 10000);
 		
-		WorldCreator c = new WorldCreator("world"+this.name).generator(Main.world.getGenerator());
-		c.generator(new EmptyWorldGenerator());
-		this.world = c.createWorld();
 		
-		Main.placeMap(new Location(world, 0, 100, 0), world, map.path);
+		World bedWorld = Bukkit.getWorld("bedMap");
+		this.world = WorldUtil.createNewWorld(bedWorld);
+
+
 		world.getBlockAt(new Location(world, 0, 99, 0)).setType(Material.BEDROCK);
 		world.getBlockAt(new Location(world, 0, 100, 0)).setType(Material.AIR);
 		world.getBlockAt(new Location(world, 0, 101, 0)).setType(Material.AIR);
 		world.getBlockAt(new Location(world, 0, 102, 0)).setType(Material.AIR);
 		
-		for (int x = 0; x <= 400;x++ ) {
-			for (int y = 0; y <= 400;y++ ) {
-				for (int z = 0; z <= 100; z++) {
-					world.getBlockAt(x-200, y-200, z+50).setMetadata("unbreakable", Main.unbreakableMeta);
-				}
-			}
-		}
+		
+		
 		
 		nbOfPlayers = map.nbOfPlayerTeam * map.nbOfTeam;
 		
@@ -101,8 +100,10 @@ public class Bedwars implements Game {
 				this.emeralds.add(loc.loc);
 			}else if (loc.type.equals(BedLocType.BaseTrader)) {
 				this.trader.add(loc.loc);
-			}else if (loc.type.equals(BedLocType.DiamondGenerator)) {
+				trader(loc.loc, BedLocType.BaseTrader);
+			}else if (loc.type.equals(BedLocType.DiamondTrader)) {
 				this.traderD.add(loc.loc);
+				trader(loc.loc, BedLocType.DiamondTrader);
 			}
 			
 			
@@ -120,15 +121,43 @@ public class Bedwars implements Game {
 		
 	}
 	
+	public void trader(Location loc, BedLocType type) {
+		FixedMetadataValue meta = null;
+		switch (type) {
+		case BaseTrader:
+			meta = BedLocType.BTraderMeta;
+			break;
+		
+		case UpgradingTrader:
+			meta = BedLocType.UTraderMeta;
+			break;
+		default:
+			break;
+		
+		}
+		
+		Villager vill = loc.getWorld().spawn(loc, Villager.class);
+		vill.setMetadata("traderMeta", BedLocType.BTraderMeta);
+		vill.setMetadata("unbreakable", Main.unbreakableMeta);
+		vill.setMaxHealth(2047);
+		vill.setHealth(2047);
+		vill.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2000000, 255, false, false));
+	
+	}
+	
 	@Deprecated
 	public boolean addPlayer(PlayerData p) {
+		
 		if (p.isFree()) {
+			System.out.println("Free");
 			p.clearLgGameVar();
 			
 			if (players.size() >= nbOfPlayers) {
 				p.sendMessage(ChatColor.RED+"Cette partie est pleine");
 			} else {
 				players.add(p);
+				p.sendMessage("Vous avez été ajouté à "+name);
+				p.game = this;
 			}
 			
 			
@@ -152,6 +181,7 @@ public class Bedwars implements Game {
 			return true;
 			
 		} else {
+			p.sendMessage("Vous êtes déjà en partie");
 			return false;
 		}
 		
@@ -183,7 +213,11 @@ public class Bedwars implements Game {
 				Material.REDSTONE, 
 				Material.COAL
 				
-				)), 1200, 3, 4, 2.5, false, 1000, players);
+				)), 20, 3, 4, 2.5, false, 10, players);
+	}
+	
+	public void startForce() {
+		tpSpawn();
 	}
 	
 	@Deprecated
@@ -210,10 +244,10 @@ public class Bedwars implements Game {
 	 * 
 	 * 
 	 * 
-	 * spawn du minecart
 	 * 
 	 * 
-	 * gérer attaque sur minecart --> vie
+	 * 
+	 * 
 	 * marchands 
 	 * 
 	 * */
@@ -318,6 +352,40 @@ public class Bedwars implements Game {
 		if (lifeOfTeams.get(team) <= 0) {
 			broadcoast(ChatColor.GOLD + "Le point de Respawn de l'équipe "+ team.getName() + " a été détruit");
 		}
+	}
+
+	@Override
+	public int getMaxNBOfPlayer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getActualNbOfPlayer() {
+		// TODO Auto-generated method stub
+		return players.size();
+	}
+
+	@Override
+	public void playerQuit(String name) {
+		if (!this.started) {
+			this.removePlayer(Main.getData(name));
+			Main.getData(name).clearLgGameVar();
+		}
+		
+	}
+
+	@Override
+	public void playerDefinitlyQuit(String playerName) {
+		if (!this.started) {
+			this.removePlayer(Main.getData(playerName));
+			
+		} else {
+			this.alives.remove(Main.getData(playerName));
+			this.players.remove(Main.getData(playerName));
+		}
+		Main.getData(name).clearLgGameVar();
+		
 	}
 	
 

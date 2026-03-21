@@ -23,6 +23,8 @@ public enum BedTeam {
 	public final static FixedMetadataValue GreenMeta = new FixedMetadataValue(Main.plug, "green");
 	public final static FixedMetadataValue RedMeta = new FixedMetadataValue(Main.plug, "red");
 	
+	
+	
 	private BedTeam(Color color, ChatColor chatColor, String name) {
 		this.color = color;
 		this.chatColor = chatColor;

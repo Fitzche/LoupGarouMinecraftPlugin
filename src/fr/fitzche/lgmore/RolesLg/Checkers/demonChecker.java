@@ -15,6 +15,8 @@ import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class demonChecker implements ResCheck {
 	
@@ -31,30 +33,20 @@ public class demonChecker implements ResCheck {
 
 	@Override
 	public boolean checkRes(PlayerDeathEvent e, PlayerData killer) {
-		PlayerData toRemove = null;
-		boolean remove = false;
-		for (PlayerData p:demon.pactedPlayers) {
-			if (p.getName().equals(e.getEntity().getName())) {
-				demon.playerWithRole.sendMessage(ChatColor.DARK_RED+"Le joueur "+ p.getName()+ " est mort, vous récupérez donc son âme, il doit gagner avec vous, mais possède weakness de manière permanente, il était "+ p.role.getName());
-
-				p.role = RolesLg.DAMNE;
-				p.aura = Aura.OBSCUR;
-				p.roleIn = new DAMNE(p);
-				DAMNE damn = (DAMNE) p.roleIn;
-				damn.demon = demon;
-				
-				p.boostS5 -= 4;
-				
-				demon.playerWithRole.changeHealth(2);
-				p.camp = Camp.Uneffective;
-				p.sendMessage(ChatColor.DARK_RED+ "Vous êtes mort, votre âme revient donc au démon avec qui vous avez passé un pacte, faites /lg role pour plus d'info");
-				remove = true;
-				toRemove = p;
-			}
-		}
-		if (remove) {
-			demon.pactedPlayers.remove(toRemove);
-			System.out.println("demon ressut");
+		
+		
+		if (killer.getName().equals(player.getName()) && demon.toRevive.getOrDefault(e.getEntity().getName(), false)) {
+			PlayerData p = Main.getData(e.getEntity());
+			p.role = RolesLg.DAMNE;
+			
+			
+			p.considVill = RolesLg.DAMNE.isConsidVill();
+			p.considWolf = RolesLg.DAMNE.isConsidWolf();
+			p.camp = Camp.DEMON;
+			p.appCamp = Camp.DEMON;
+			p.sendMessage(Main.info+ "Vous êtes mort de la main du démon, vous devenez donc une âme damnée et devez gagner avec celui-ci");
+			player.sendMessage(Main.info+ "Le joueur "+ p.getName() + " est passée à votre service");
+			p.changeHealth(-4);
 			return true;
 		}
 		return false;
@@ -62,20 +54,7 @@ public class demonChecker implements ResCheck {
 
 	@Override
 	public String runDeathAction(PlayerDeathEvent e, Player k) {
-		boolean hasPacted = false;
-		if (e.getEntity().getName().equals(demon.playerWithRole.getName())) {
-			for (PlayerData p:demon.pactedPlayers) {
-				p.sendMessage(ChatColor.DARK_RED+ "Le démon avez qui vous avez pactisé est mort, vous regagnez donc 1 coeur permanent sans perdre vos avantages");
-				p.changeHealth(2);
-				
-				hasPacted = true;
-			}
-		}
-		if (hasPacted) {
-			return "pactedHealthGainDemonDeath";
-		} else {
-			return "";
-		}
+		return "";
 		
 	}
 
@@ -87,7 +66,15 @@ public class demonChecker implements ResCheck {
 
 	@Override
 	public void beforeDie(PlayerDeathEvent e) {
-		// TODO Auto-generated method stub
+		if (!e.getEntity().getName().equals(player.getName()) && !Main.getData(e.getEntity()).role.equals(RolesLg.DAMNE)) {
+			TextComponent text = new TextComponent();
+			text.setText(Main.exclamation + ChatColor.DARK_RED+ "Le joueur "+e.getEntity().getName() + " en cliquant sur ce message, vous perdrez alors 2 coeurs permanants, celui ci deviendra un damné");
+			text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/lg demonRevive "+player.Name)));
+			if (player.isOnline) {
+				player.player.spigot().sendMessage(text);
+			}
+			
+		}
 
 	}
 
@@ -129,32 +116,6 @@ public class demonChecker implements ResCheck {
 
 	@Override
 	public boolean checkRes(PlayerDeathEvent e) {
-		PlayerData toRemove = null;
-		boolean remove = false;
-		for (PlayerData p:demon.pactedPlayers) {
-			if (p.getName().equals(e.getEntity().getName())) {
-				demon.playerWithRole.sendMessage(ChatColor.DARK_RED+"Le joueur "+ p.getName()+ " est mort, vous récupérez donc son âme, il doit gagner avec vous, mais possède weakness de manière permanente, il était "+ p.role.getName());
-
-				p.role = RolesLg.DAMNE;
-				p.aura = Aura.OBSCUR;
-				p.roleIn = new DAMNE(p);
-				DAMNE damn = (DAMNE) p.roleIn;
-				damn.demon = demon;
-				
-				p.boostS5 -= 4;
-				
-				demon.playerWithRole.changeHealth(2);
-				p.sendMessage(ChatColor.DARK_RED+ "Vous êtes mort, votre âme revient donc au démon avec qui vous avez passé un pacte, faites /lg role pour plus d'info");
-				p.camp = Camp.Uneffective;
-				remove = true;
-				toRemove = p;
-			}
-		}
-		if (remove) {
-			demon.pactedPlayers.remove(toRemove);
-			System.out.println("demon ressut");
-			return true;
-		}
 		return false;
 	}
 

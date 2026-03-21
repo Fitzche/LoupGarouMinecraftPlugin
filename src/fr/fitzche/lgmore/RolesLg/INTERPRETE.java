@@ -66,7 +66,7 @@ public class INTERPRETE implements RoleInstance{
 	@Override
 	public String getDescription() {
 		
-		String t = ChatColor.DARK_BLUE + "Vous devez gagner avec le village, pour cela vous pouvez interpréter un role parmis 3 roles qui vous seront communiqué peu avant chaque épisode, vous posséderez les effets et pouvoirs de ce role, chaque rôle ne peut être interprété qu'une seule fois";
+		String t = Main.info +ChatColor.BLUE + "Vous devez gagner avec le village, pour cela vous pouvez interpréter un role parmis 3 roles qui vous seront communiqué peu avant chaque épisode, vous posséderez les effets et pouvoirs de ce role, chaque rôle ne peut être interprété qu'une seule fois";
 		if (roleAct != null) {
 			String fal = "Vous êtes "+ roleAct.getName() +roleAct.getDescription();
 			return t + "\n" + fal;

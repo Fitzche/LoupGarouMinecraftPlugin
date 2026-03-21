@@ -31,6 +31,9 @@ public class LOUP_BRUMEUX implements RoleInstance {
 	public ArrayList<PlayerData> toHide = new ArrayList<PlayerData>();
 	
 	public LOUP_BRUMEUX(PlayerData player) {
+		if (player == null) {
+			return;
+		}
 		this.playerWithRole = player;
 		this.game = (GameLg)player.game;
 		game.resCheckers.add(new Brume_Checker(this));
@@ -49,7 +52,7 @@ public class LOUP_BRUMEUX implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez Force I la Nuit");
 	}
 
 	@Override

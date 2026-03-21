@@ -37,7 +37,7 @@ public class COMEDIEN implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela, votre pouvoir change en fonction du registre de la pièce. Si le registre tragique est à 20%, vous aurez 20% de chance de connaitre l'aura d'un joueur, 20% de chance de connaitre son nombre de kill, et 20% de chance de savoir s'il a un effet. Vous avez une résistance proportionnelle à taux d'Epique, (20% d'epique = 4% de resistance, 50% = 10% et 100% = 20%). Pour un taux de oratoire à 20%, vous aurez 20% de chance de connaitre l'ensemble des pseudo des joueurs ayant voté pour la personne la + votée.");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, pour cela, votre pouvoir change en fonction du registre de la pièce. Si le registre tragique est à 20%, vous aurez 20% de chance de connaitre l'aura d'un joueur, 20% de chance de connaitre son nombre de kill, et 20% de chance de savoir s'il a un effet. Vous avez une résistance proportionnelle à taux d'Epique, (20% d'epique = 4% de resistance, 50% = 10% et 100% = 20%). Pour un taux de oratoire à 20%, vous aurez 20% de chance de connaitre l'ensemble des pseudo des joueurs ayant voté pour la personne la + votée.");
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 

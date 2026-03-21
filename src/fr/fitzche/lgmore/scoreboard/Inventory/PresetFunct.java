@@ -46,7 +46,7 @@ public class PresetFunct implements InvFunct {
 	}
 
 	@Override
-	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores) {
+	public void click(PlayerData p, Game game, String clickedName, ArrayList<String> lores,  ItemStack returnedItem) {
 		
 		if (!(game instanceof GameLg)) {
 			return;

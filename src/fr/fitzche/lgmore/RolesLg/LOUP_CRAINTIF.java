@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.fitzche.lgmore.Camp;
+import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.RoleInstance;
 import fr.fitzche.lgmore.Lg.GameLg;
@@ -48,7 +49,7 @@ public class LOUP_CRAINTIF implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez 30% de force la nuit et 20% de résistance le jour, moins 5% de résistance le jour par loup-garou proche de vous, et moins 7% de force par loup-garou proche la nuit. Si le registre est oratoire, vous perdez 10% de force, s'il est tragic vous gagnez 5% de résistance. Votre mort est cachée");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Loups Garou (vous possédez la liste de vos alliés loups), pour cela vous obtenez 30% de force la nuit et 20% de résistance le jour, moins 5% de résistance le jour par loup-garou proche de vous, et moins 7% de force par loup-garou proche la nuit. Si le registre est oratoire, vous perdez 10% de force, s'il est tragic vous gagnez 5% de résistance. Votre mort est cachée");
 	}
 
 	@Override

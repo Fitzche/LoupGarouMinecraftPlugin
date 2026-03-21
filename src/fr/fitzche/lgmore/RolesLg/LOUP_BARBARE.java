@@ -36,7 +36,7 @@ public class LOUP_BARBARE implements RoleInstance {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_AQUA+"Vous gagnez avec les loups garou, pour cela vous possédez force 0.5 de manière permanente, et vous avez 5% de chance d'infliger un dégat supplémentaire de 1/2 coeur à chaque coup, pourcentage qui augmentera de 4% à chaque kill,  cependant vous perdrez 1 coeur permanent à chaque kill. Vous obtenez 2min de résistance à chaque kill.";
+		return ChatColor.DARK_AQUA+"Vous gagnez avec les loups garou, pour cela vous possédez force 0.5 de manière permanente, et vous avez 5% de chance d'infliger un dégat supplémentaire de 1/2 coeur à chaque coup, pourcentage qui augmentera de 4% à chaque kill,  cependant vous perdrez 1 coeur permanent à chaque kill. Vous obtenez 5% de résistance à chaque kill.";
 	}
 
 	@Override

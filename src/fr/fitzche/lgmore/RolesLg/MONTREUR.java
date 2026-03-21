@@ -37,7 +37,7 @@ public class MONTREUR implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous êtes Montreur D'ours, vous devez gagner avec les Villageois, à chaque épisode apparaitra un ''GRRRR'' pour chaque loups dans un rayon de 50 blocs autour de vous");
+		return (Main.info +ChatColor.BLUE+"Vous êtes Montreur D'ours, vous devez gagner avec les Villageois, à chaque épisode apparaitra un ''GRRRR'' pour chaque loups dans un rayon de 50 blocs autour de vous");
 	}
 	public static ItemStack logo = new ItemStack(Material.CARROT_ITEM);
 

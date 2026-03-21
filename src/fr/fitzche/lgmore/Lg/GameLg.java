@@ -42,6 +42,7 @@ import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.VoteBlockData;
+
 import org.bukkit.WorldCreator;
 
 import fr.fitzche.lgmore.RolesLg.Aura;
@@ -65,6 +66,7 @@ import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.Util.VoteEvent;
 import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.commands.FutureAction;
+import fr.fitzche.lgmore.commands.Hub;
 import fr.fitzche.lgmore.minecraft.GameListener;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.minecraft.ResCheck;
@@ -109,7 +111,8 @@ public class GameLg implements Listener, Serializable, Game{
 	public boolean swapperQuadrio = false;
 	public boolean swapperPente = false;
 	public boolean swapper = false;
-	
+	//5) all people are solo
+	public boolean allDifferent = false;
 	
 	
 	public ArrayList<PlayerData> playerAlive;
@@ -140,7 +143,6 @@ public class GameLg implements Listener, Serializable, Game{
 	
 	
 	
-	public HashMap<String, PlayerDataLeft> playersLeft = new HashMap<String, PlayerDataLeft>();
 	
 	public ArrayList<RolesLg> dispoRoles = new ArrayList<RolesLg>();
 	
@@ -158,14 +160,14 @@ public class GameLg implements Listener, Serializable, Game{
 	
 	
 	public ConfigDisplay config = new ConfigDisplay(this);
-	public GameLgListener listener = new GameLgListener();
+	public GameLgListener listener;
 	
 	
 	public boolean isMeetup = false;
 	public boolean hasMoreVote = false;
 	public boolean toRegister = true;
 	
-	public Inventory invVote;
+	
 	
 	public World world;
 	public boolean isWorldGenerated = false;
@@ -176,6 +178,7 @@ public class GameLg implements Listener, Serializable, Game{
 		
 		this.stopped = false;
 		this.type = type;
+		this.listener = new GameLgListener(this);
 		Main.server.getPluginManager().registerEvents(events, Main.plug);
 		
 		for (String str: Main.eventsLgNames) {
@@ -221,13 +224,17 @@ public class GameLg implements Listener, Serializable, Game{
 	}
 	
 	
-	
+	/*
+	 * applyInvicibility on a player for 10s
+	 * */
 	public void applyInvicibility(PlayerData joueur) {
 		joueur.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 10, false, false));
 
 	}
 	
-	
+	/*
+	 * remove 1 to the timer of every futures actions in the list futuresActions, and run it if it arrive to 0
+	 * */
 	public void askRunFuturesActions() {
 		ArrayList<FutureAction> toRemove = new ArrayList<FutureAction>();
 		
@@ -243,10 +250,21 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 	}
 	
+	
+	
+	/*
+	 * change the groupe size
+	 * */
 	public void setGroupsTo(int g) {
 		this.groupe = g;
 		this.broadcoast(ChatColor.ITALIC+"Groupes à "+ Integer.toString(g));
 	}
+	
+	
+	/*
+	 * get the player corresponding to a name
+	 * @param name the name
+	 * */
 	public PlayerData getPlayer(String name) {
 		for (PlayerData ply:this.getPlayerAlive() ) {
 			if (ply.getName().equals(name)) {
@@ -258,6 +276,13 @@ public class GameLg implements Listener, Serializable, Game{
 	}
 	
 
+	
+	/*
+	 * action every second
+	 * 1 if time is not runned, start: scenarion activated, tp players, place structure, 
+	 * time = -10: give kit
+	 * 
+	 * */
 	@Deprecated
 	public void everySec() {
 		GameLg game = this;
@@ -381,7 +406,11 @@ public class GameLg implements Listener, Serializable, Game{
 						GameLgUtil.tpAl(ply, 100);
 						isMeetup = true;
 					} else {
-						GameLgUtil.tpAl(ply, 1000);
+						int r = 1000;
+						if (allDifferent) {
+							r = 100;
+						}
+						GameLgUtil.tpAl(ply, r);
 					}
 				} 
 				
@@ -424,6 +453,8 @@ public class GameLg implements Listener, Serializable, Game{
 					ItemStack bow = new ItemStack(Material.BOW);
 					bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
 					ItemStack arrows = new ItemStack(Material.ARROW, 64);
+					ItemStack[] blocks = {new ItemStack(Material.COBBLESTONE, 64), new ItemStack(Material.COBBLESTONE, 64), new ItemStack(Material.COBBLESTONE, 64), new ItemStack(Material.COBBLESTONE, 64), new ItemStack(Material.COBBLESTONE, 64), new ItemStack(Material.COBBLESTONE, 64)};
+					
 					
 					if (p.isOnline) {
 						p.player.getInventory().addItem(legging);
@@ -436,6 +467,9 @@ public class GameLg implements Listener, Serializable, Game{
 						p.player.getInventory().addItem(arrows);
 						p.player.getInventory().addItem(new ItemStack(Material.ANVIL));
 						p.player.giveExpLevels(1000);
+						for (ItemStack b:blocks) {
+							p.player.getInventory().addItem(b);
+						}
 					}
 				}
 				for (int i = 0; i <= 1199; i++) {
@@ -573,6 +607,9 @@ public class GameLg implements Listener, Serializable, Game{
 	}
 	
 	
+	/*
+	 * refresh the board of every player
+	 * */
 	public void playersRefresh() {
 		for (PlayerData ply:this.playerAlive) {
 			for (PlayerData ply1:this.playerAlive) {
@@ -587,6 +624,12 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 		
 	}
+	
+	
+	
+	/*
+	 * accusation, obsolète
+	 * */
 	@Deprecated
 	public void accusation(PlayerData accuser, PlayerData accused) {
 		
@@ -634,6 +677,11 @@ public class GameLg implements Listener, Serializable, Game{
 		}, 12000);
 	}
 	
+	
+	
+	
+	/*
+	 * remove a player from the vote list of every player*/
 	public void removeFromVote(PlayerData p) {
 		for (PlayerData player:this.getPlayerAlive()) {
 			if (p.canVoted.contains(player)) {
@@ -648,6 +696,10 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 	}
 	
+	
+	/*
+	 * 
+	 * tell a message to everyone*/
 	public void broadcoast(String message ) {
 		
 		for (PlayerData p:this.getPlayerAlive()) {
@@ -660,6 +712,10 @@ public class GameLg implements Listener, Serializable, Game{
 		return this.roles;
 	}
 	
+	
+	
+	/*
+	 * run the lg chat*/
 	@Deprecated
 	public void setChat() {
 		this.isInDisc = true;
@@ -679,6 +735,10 @@ public class GameLg implements Listener, Serializable, Game{
 		
 	}
 	
+	
+	
+	/*
+	 * give a role to all players*/
 	public void attributeRoleToAll() {
 		if (this.roles.size() == this.playerAlive.size() && !swapper) {
 			ArrayList<RolesLg> exe = this.getRoles();
@@ -844,7 +904,9 @@ public class GameLg implements Listener, Serializable, Game{
 	}
 	
 	
-	
+	/*
+	 * 
+	 * get the roles alives*/
 	public String getRolesAlive() {
 		StringBuilder builder = new StringBuilder();
 		if (roles == null) {
@@ -859,6 +921,8 @@ public class GameLg implements Listener, Serializable, Game{
 		
 	}
 	
+	
+	
 	public String ListPlayer() {
 		StringBuilder string = new StringBuilder();
 		for (PlayerData player: playerAlive) {
@@ -866,6 +930,10 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 		return string.toString();
 	}
+	
+	
+	
+	
 	
 	@SuppressWarnings("deprecation")
 	public void playEpisode() {
@@ -964,21 +1032,30 @@ public class GameLg implements Listener, Serializable, Game{
 			
 		}
 		if (toAdd.isFree() == false) {
-			toAdd.sendMessage("Vous ne pouvez pas rejoindre cette partie car vous êtes en partie");
+			toAdd.sendMessage("Vous ne pouvez pas rejoindre cette partie car vous êtes en partie, ou vous l'avez déjà rejointe");
 			return;
 		}
 		toAdd.clearLgGameVar();
+		if (toAdd.board == null) {
+			toAdd.board = new ScoreboardLg(this, toAdd);
+		}
 		toAdd.board.refresh();
 		toAdd.game = this;
 		toAdd.isInLgGame = true;
 		
 		this.playerAlive.add(toAdd);
 		this.players.add(toAdd);
+		toAdd.sendMessage(ChatColor.DARK_RED+ "Ajouté à la game "+ name + " ("+ChatColor.GREEN+"type LoupGarou Uhc"+ChatColor.DARK_RED+ ")");
 	}
+	
+	
 	
 	public ArrayList<PlayerData> getPlayerAlive() {
 		return this.playerAlive;
 	}
+	
+	
+	
 	public ArrayList<PlayerData> getRealVillagerAlive() {
 		ArrayList<PlayerData> returneds = new ArrayList<PlayerData>();
 		
@@ -999,6 +1076,7 @@ public class GameLg implements Listener, Serializable, Game{
 		for (PlayerData player: this.getPlayerAlive()) {
 			
 			if (player.camp.equals(Camp.Wolf)) {
+				
 				returneds.add(player);
 			}
 		}
@@ -1038,15 +1116,7 @@ public class GameLg implements Listener, Serializable, Game{
 		return returneds;
 	}
 	
-	public PlayerData getPlayerDataWithName(String name) {
-		for (PlayerData player: playerAlive) {
-			if (player.Name.equals(name)) {
-				return player;
-			}
-		}
-		
-		return null;
-	}
+	
 	
 	
 	
@@ -1058,6 +1128,7 @@ public class GameLg implements Listener, Serializable, Game{
 		ply.isInLgGame = false;
 		System.out.println(ply.Name +" removed at "+ spec);
 	}
+	
 	
 	public void setRole(PlayerData p, RolesLg role) {
 		p.setMaxHealth(20);
@@ -1095,7 +1166,10 @@ public class GameLg implements Listener, Serializable, Game{
 					playerAlive.remove(ply);
 					roles.remove(ply.role);
 					rolesIn.remove(ply.roleIn);
+					ply.player.getInventory().clear();
 					ply.inLife = false;
+					ply.clearLgGameVar();
+					Hub.sendHub(ply);
 				}
 				
 			}, 500);
@@ -1103,7 +1177,10 @@ public class GameLg implements Listener, Serializable, Game{
 			playerAlive.remove(ply);
 			roles.remove(ply.role);
 			rolesIn.remove(ply.roleIn);
+			ply.player.getInventory().clear();
 			ply.inLife = false;
+			ply.clearLgGameVar();
+			Hub.sendHub(ply);
 		}
 	
 		
@@ -1139,22 +1216,21 @@ public class GameLg implements Listener, Serializable, Game{
 
 	@Deprecated
 	public void startVote() {
-		this.invVote = Bukkit.createInventory(null, 36);
 		
-		int nbVoter = this.getNumberOfPlayer() * 2 / 3;
+		
+	
 		for (SpecialBlock bloc:Main.specialBlocks) {
 			if (bloc.getData() != null && bloc.getData().getType() !=null  &&bloc.getData().getType().equals(SpecialBlockType.Vote)) {
-				((VoteBlockData) bloc.getData()).nbOfVote = 5;
+				if (bloc.game.getName().equals(getName())) {
+					
+					((VoteBlockData) bloc.getData()).setVoteParam();
+					((VoteBlockData) bloc.getData()).launch();
+				}
+					
 			}
 		}
-		if (getPlayerAlive().size() < 5) {
-			nbVoter = getPlayerAlive().size();
-		}
-		for (int i = 0; i < nbVoter; i++) {
-			ItemStack item = new ItemStack(Material.EMERALD);
-			ItemUtil.setName(item, "Voter");
-			this.invVote.setItem(i, item);
-		}
+		
+		
 		
 		for (PlayerData player: this.playerAlive) {
 			player.askVoted();
@@ -1320,6 +1396,8 @@ public class GameLg implements Listener, Serializable, Game{
 		return number;
 	}
 
+	
+	/*Premonition event, à refaire mal fait*/
 	@Deprecated
 	public void decideTimeEvent() {
 		int x = MathUtil.generateAlInt(0, 1200);
@@ -1368,40 +1446,10 @@ public class GameLg implements Listener, Serializable, Game{
 	
 	public void announceDeath(PlayerData player1, boolean brumed, boolean hidden) {
 		
-		
-		
-		ChatColor color = ChatColor.RED;
-		if (brumed) {
-			color = ChatColor.MAGIC;
-		}
-		String moreInfo = "";
-		if (player1.infected) {
-			moreInfo = moreInfo+ (" (loup garou) ");
-		} 
-		if (player1.inLove) {
-			moreInfo = moreInfo+ (" (en couple) ");
-			Location loc = player1.getLocation();
-			if (loc == null) {
-				loc = new Location(Main.world, 0, 0, 0);
-			}
-			addTragic(8, loc);
-		} 
-
-		GameLg gm1 = (GameLg) player1.game;
-		if (gm1 == null ||gm1.name != this.name ) {
+		if (hidden) {
 			return;
 		}
-		
-		if (MathUtil.pourcentage(probasEvents.get("Brume"))) {
-			return;
-		}
-		
-
-		Main.server.broadcastMessage(ChatColor.DARK_BLUE +"___________________________" + "\n" +
-							color + player1.getName() + " est mort |"+ "\n"  +
-								" il était "+ player1.camp.getColor() + 
-								player1.getLgRole() + ChatColor.GOLD + moreInfo + "|" + "\n"+ChatColor.DARK_BLUE +"___________________________");
-		
+		announceDeath(player1, player1.role, brumed);
 	}
 	
 	public void announceDeath(PlayerData player1, RolesLg role, boolean brumed) {
@@ -1461,7 +1509,9 @@ public class GameLg implements Listener, Serializable, Game{
 	
 
 	
-	
+/*
+ * check for pf and perfide
+ * */	
 	@EventHandler
 	public void onPlayerClick(InventoryClickEvent e) {
 		
@@ -1573,9 +1623,9 @@ public class GameLg implements Listener, Serializable, Game{
 			
 		}
 		
-		broadcoast(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Le Role du joueur "+ player.getName() + " se trouve parmi les suivant: ");
+		broadcoast(ChatColor.DARK_RED+Main.exclamation+ "  Expose  " + ChatColor.WHITE+Main.info+"  Le Role du joueur "+ player.getName() + " se trouve parmi les suivant: ");
 		for (String str:rolesStr) {
-			broadcoast(ChatColor.GOLD+"-"+str);
+			broadcoast(ChatColor.GRAY+"-"+str);
 		}
 		
 		
@@ -1592,11 +1642,11 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 
 		
-		broadcoast(ChatColor.DARK_RED+ "//EXPOSED//" + ChatColor.DARK_GREEN+"Les Roles des joueurs:se trouvent parmis les suivants: ");
+		broadcoast(ChatColor.DARK_RED+ Main.exclamation+"  Expose:  "+ "\n" + ChatColor.WHITE+Main.info+"  Les Roles des joueurs suivants se trouvent parmis les suivants: ");
 		for (PlayerData p:players) {
 			broadcoast(ChatColor.DARK_GREEN+"-"+p.getName() );
 		}
-		broadcoast(ChatColor.DARK_GREEN+"se trouvent parmis les suivants: ");
+		broadcoast(ChatColor.DARK_GREEN+";   ");
 
 		int x = MathUtil.generateAlInt(0, rolesStr.size() - 1);
 		do {
@@ -1747,6 +1797,14 @@ public class GameLg implements Listener, Serializable, Game{
 		if (this.statut.equals(GameStatut.ENDED)) {
 			return;
 		}
+		
+		if (allDifferent) {
+			if (playerAlive.size() == 1) {
+				win(playerAlive.get(0).camp);
+				
+			}
+			return;
+		}
 		Camp winning = null;
 		for (PlayerData p:this.getPlayerAlive()) {
 			if (winning == null) {
@@ -1761,6 +1819,7 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 		
 		if (winning != null) {
+			if (allDifferent && winning.equals(Camp.Villager) || winning.equals(Camp.Wolf))
 			win(winning);
 			this.statut = GameStatut.ENDED;
 		}
@@ -1779,8 +1838,19 @@ public class GameLg implements Listener, Serializable, Game{
 				str = str+" en couple";
 			}
 			broadcoast(str);
+			String sup = "";
+			if (necrom ) {
+				sup = sup+ ChatColor.DARK_PURPLE+"-Necromancie-";
+			}
+			if (allDifferent) {
+				sup = sup + ChatColor.GOLD+ "-PvP Game-";
+			}
+			if (swapper) {
+				sup = sup + ChatColor.BLUE + "-Swapper-";
+			}
+			
 			if (toRegister) {
-				Main.strToPlayer.get(p.getName()).notes.add(new GameNote(this, this.name));
+				Main.strToPlayer.get(p.getName()).notes.add(new GameNote(this, this.name + sup));
 				p.sendMessage("Partie ajoutée à votre historique");
 				int gain = 0;
 				
@@ -1788,22 +1858,35 @@ public class GameLg implements Listener, Serializable, Game{
 				if (isMeetup) {
 					gain /= 2;
 				}
+				if (allDifferent && p.camp.equals(camp)) {
+					gain += 10;
+				}
 				if (displayedRoles ) {
 					gain /= 5;
 				}
 				p.xp += gain;
 			}
 			
-			p.player.teleport(Main.world.getSpawnLocation());
+			
+			p.clearLgGameVar();
+			p.player.getInventory().clear();
+			Hub.sendHub(p);
 			
 		}
-		for (Player p: this.world.getPlayers()) {
-			p.teleport(Main.world.getSpawnLocation());
-		}
+		
 		Bukkit.unloadWorld(this.world, false);
 			
 		this.world.getWorldFolder().delete();
-		Main.deleteDirectory(world.getWorldFolder());
+		try {
+			Main.deleteDirectory(world.getWorldFolder());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		this.stopped = true;
+		this.statut = GameStatut.ENDED;
+		
+		
+		
 	}
 	
 	public boolean isDay() {
@@ -1815,6 +1898,7 @@ public class GameLg implements Listener, Serializable, Game{
 	}
 	
 	
+	//OBSOLETE
 	@Deprecated
 	public void groupInfluenceRegistre(ArrayList<PlayerData> ps, Location loc) {
 		System.out.println("groupInfluenceRegistre act");
@@ -2040,6 +2124,34 @@ public class GameLg implements Listener, Serializable, Game{
 	public GameListener getListener() {
 		// TODO Auto-generated method stub
 		return listener;
+	}
+
+	@Override
+	public int getMaxNBOfPlayer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getActualNbOfPlayer() {
+		if (statut.equals(GameStatut.NOT_STARTED)) {
+			return this.players.size();
+		}
+		return this.playerAlive.size();
+	}
+
+	@Override
+	public void playerQuit(String name) {
+		if (!board.istimeRunned) {
+			this.players.remove(Main.getData(name));
+		}
+		
+	}
+
+	@Override
+	public void playerDefinitlyQuit(String playerName) {
+		this.announceDeath(Main.getData(playerName), true, false);
+		
 	}
 	
 	

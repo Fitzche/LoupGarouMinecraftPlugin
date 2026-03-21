@@ -51,7 +51,7 @@ public class NEGOCIATEUR implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous êtes négociateur, vous gagnez tout seul. Cependant vous pouvez également gagner avec le village ou avec les loups deux conditions: la première est que vous devez avoir passé 10min avec les joueurs encore en vie à la fin, la deuxième est que vous ne devez pas avoir tué un membre du camp restant avec qui ceux-ci ont passé plus de 15min. Vous pouvez pouvez renoncer à la négociation et gagner obligatoirement tout seul avec la commande /lg solo. Vous gagnerez alors 15% de résistance.");
+		return (Main.info +ChatColor.BLUE+"Vous êtes négociateur, vous gagnez tout seul. Cependant vous pouvez également gagner avec le village ou avec les loups deux conditions: la première est que vous devez avoir passé 10min avec les joueurs encore en vie à la fin, la deuxième est que vous ne devez pas avoir tué un membre du camp restant avec qui ceux-ci ont passé plus de 15min. Vous pouvez pouvez renoncer à la négociation et gagner obligatoirement tout seul avec la commande /lg solo. Vous gagnerez alors 15% de résistance.");
 	}
 	public static ItemStack logo = new ItemStack(Material.GOLD_SWORD);
 

@@ -44,7 +44,7 @@ public class BIENFAITEUR implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec le village, pour cela vous pouvez 4 fois conférer 1 coeur à un joueur de votre choix avec la commande /lg conferer [nomDuJoueur], de plus vous posséder 2 livre protection 2";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec le village, pour cela vous pouvez 4 fois conférer 1 coeur à un joueur de votre choix avec la commande /lg conferer [nomDuJoueur], de plus vous posséder 2 livre protection 2";
 	}
 
 	@Override

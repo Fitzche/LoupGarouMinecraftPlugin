@@ -14,12 +14,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
+
 import WorldEditUtil.EmptyWorldGenerator;
 import fr.fitzche.lgmore.Game;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Lg.GameType;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.WorldUtil;
 import fr.fitzche.lgmore.minecraft.GameListener;
 import fr.fitzche.lgmore.scoreboard.StarBoard;
 import net.minecraft.server.v1_8_R3.WorldGenTallPlant;
@@ -36,6 +39,9 @@ public class StarParty implements Listener,Game{
 		Bukkit.getPluginManager().registerEvents(this, Main.plug);
 		this.name = name;
 		Bukkit.getPluginManager().registerEvents(listener, Main.plug);
+		World starWorld = Bukkit.getWorld("worldStar");
+		this.world = WorldUtil.createNewWorld(starWorld);
+		
 		
 	}
 	
@@ -86,9 +92,8 @@ public class StarParty implements Listener,Game{
 	}
 	
 	public void start() {
-		WorldCreator c = new WorldCreator("world"+this.name).generator(Main.world.getGenerator());
-		c.generator(new EmptyWorldGenerator());
-		this.world = c.createWorld();
+		
+		
 		
 		Main.placeStarMap(new Location(world, 0, 100, 0), world);
 		world.getBlockAt(new Location(world, 0, 99, 0)).setType(Material.BEDROCK);
@@ -99,6 +104,7 @@ public class StarParty implements Listener,Game{
 		ArrayList<RolesStar> roles = new ArrayList<RolesStar>();
 		broad("La partie commence");
 		switch (players.size()) {
+		
 			case 15:
 				roles = new ArrayList<RolesStar>(Arrays.asList(
 						RolesStar.ObiWan,
@@ -121,6 +127,37 @@ public class StarParty implements Listener,Game{
 						
 						));
 				break;
+			case 5:
+				roles = new ArrayList<RolesStar>(Arrays.asList(
+						RolesStar.Jango,
+						RolesStar.DarkVador, 
+						RolesStar.Palpa, 
+						RolesStar.ObiWan,
+						RolesStar.HanSolo
+						));
+				break;
+			case 6:
+				roles = new ArrayList<RolesStar>(Arrays.asList(
+						RolesStar.Grievou,
+						RolesStar.Windu,
+						RolesStar.DarkVador, 
+						RolesStar.Palpa, 
+						RolesStar.ObiWan,
+						RolesStar.HanSolo
+						));
+				break;
+			case 7:
+				roles = new ArrayList<RolesStar>(Arrays.asList(
+						RolesStar.Jango,
+						RolesStar.Yoda,
+						RolesStar.Grievou,
+						RolesStar.DarkVador, 
+						RolesStar.Palpa, 
+						RolesStar.ObiWan,
+						RolesStar.HanSolo
+						));
+				break;
+				
 			case 16:
 				roles = new ArrayList<RolesStar>(Arrays.asList(
 						RolesStar.ObiWan,
@@ -195,9 +232,9 @@ public class StarParty implements Listener,Game{
 			return;
 		}
 		int trie = 0;
-		ArrayList<PlayerData> copie = new ArrayList<PlayerData>();
+		ArrayList<PlayerData> copie = new ArrayList<PlayerData>(this.players);
 		while (copie.size() > 0 && trie < 100) {
-			int x =MathUtil.generateAlInt(0, players.size() - 1);
+			int x =MathUtil.generateAlInt(0, copie.size() - 1);
 			copie.get(x).roleStar = roles.get(0);
 			copie.get(x).sendMessage("Vous êtes "+ roles.get(0).getName() + "\n"+ roles.get(0).getDescription());
 
@@ -210,6 +247,7 @@ public class StarParty implements Listener,Game{
 		
 		for (PlayerData p:players) {
 			Location loc = p.roleStar.getLoc();
+			p.roleSta = StarUtil.createRole(p.roleStar, p);
 			loc.setWorld(world);
 			p.player.teleport(loc);
 			p.roleSta.onRole();
@@ -323,5 +361,33 @@ public class StarParty implements Listener,Game{
 	public GameListener getListener() {
 		// TODO Auto-generated method stub
 		return this.listener;
+	}
+
+
+	@Override
+	public int getMaxNBOfPlayer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public int getActualNbOfPlayer() {
+		// TODO Auto-generated method stub
+		return this.players.size();
+	}
+
+
+	@Override
+	public void playerQuit(String playerName) {
+		this.death(Main.getData(playerName));
+		
+	}
+
+
+	@Override
+	public void playerDefinitlyQuit(String playerName) {
+		this.players.remove(Main.getData(playerName));
+		
 	}
 }

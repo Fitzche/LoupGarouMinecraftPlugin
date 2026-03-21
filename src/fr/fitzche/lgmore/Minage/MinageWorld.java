@@ -25,6 +25,10 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class MinageWorld implements Listener{
 
@@ -40,6 +44,10 @@ public class MinageWorld implements Listener{
 	World world;
 	HashMap<String, Integer> limitD = new HashMap<String, Integer>();
 	ArrayList<PlayerData> ps;
+	
+	
+	
+	
 	
 	/*
 	 * 
@@ -58,29 +66,27 @@ public class MinageWorld implements Listener{
 		this.limitDiamond = limitDiamond;
 		
 		WorldCreator c = new WorldCreator("worldMinage"+MathUtil.generateAlInt(0, 99999)).generator(Main.world.getGenerator());
-		c.generator(new EmptyWorldGenerator());
+		
 		this.world = c.createWorld();
 		for (PlayerData p:ps) {
 			if (p.game != null) {
-				LocationUtil.tpAl(p, 1000);
+				LocationUtil.tpAl(p, 1000, world);
 			}
 		}
 		
 		Bukkit.getPluginManager().registerEvents(this, Main.plug);
 		
 		
-		Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plug, new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskTimer(Main.plug, new BukkitRunnable() {
 			
 			@Override
 			public void run() {
 				if (time < timeInSec) {
 					time ++;
 					for (PlayerData p:ps) {
-						Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-						Objective obj = board.registerNewObjective("vie", "health");
-						obj.setDisplayName("" + time + " / "+timeInSec + "  ||  "+ "diamond: "+ limitD.getOrDefault(p.getName(), 0) + " / "+ limitDiamond);
+						
 						if (p.isOnline) {
-							p.player.setScoreboard(board);
+							PlayerUtil.sendActionBar(p.player, "" + time + " / "+timeInSec + "  ||  "+ "diamond: "+ limitD.getOrDefault(p.getName(), 0) + " / "+ limitDiamond);
 						}
 					}
 					
@@ -91,7 +97,7 @@ public class MinageWorld implements Listener{
 								for (ItemStack item:p.player.getInventory().getContents()) {
 									boolean toRemove = false;
 									for (Material mat:autorized) {
-										if (!mat.equals(item.getType())) {
+										if (item != null && !mat.equals(item.getType())) {
 											toRemove = true;
 										}
 									}
@@ -118,17 +124,22 @@ public class MinageWorld implements Listener{
 			if (((Player) e.getEntity()).getHealth() < e.getDamage()) {
 				e.setCancelled(true);
 				
-				LocationUtil.tpAl(Main.getData(e.getEntity()), 1000);
+				LocationUtil.tpAl(Main.getData(e.getEntity()), 1000, world);
 			}
 		}
 	}
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
+		
 		if (event.getBlock().getLocation().getWorld().equals(this.world)) {
+			if (event.getBlock().getType().equals(Material.DIAMOND_ORE)) {
+				
+			}
 			switch (event.getBlock().getType()) {
 			case DIAMOND_ORE:
 				int x = 0;
+				
 				
 				while (this.boostDiamond >= x && boostDiamond != 0) {
 					x++;

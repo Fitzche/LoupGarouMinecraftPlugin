@@ -27,9 +27,16 @@ import fr.fitzche.lgmore.RolesLg.Aura;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.THANOS;
 import fr.fitzche.lgmore.Util.GameLgUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.Util.RoleUtil;
 import fr.fitzche.lgmore.bedwars.BedTeam;
 import fr.fitzche.lgmore.bedwars.Bedwars;
+import fr.fitzche.lgmore.clocktower.ClockRole;
+import fr.fitzche.lgmore.clocktower.ClockRoleData;
+import fr.fitzche.lgmore.clocktower.ClockTower;
+import fr.fitzche.lgmore.custom.CustomGame;
+import fr.fitzche.lgmore.custom.CustomRole;
+import fr.fitzche.lgmore.custom.RoleSet;
 import fr.fitzche.lgmore.minecraft.PlayerDataLeft;
 import fr.fitzche.lgmore.scoreboard.GameBoard;
 import fr.fitzche.lgmore.scoreboard.ScoreboardLg;
@@ -51,7 +58,7 @@ public class PlayerData implements Serializable{
 	public transient Location rejoinLoc;
 	
 	
-	public transient Bedwars bedGame;
+	
 	public transient BedTeam bedTeam;
 	
 	
@@ -126,6 +133,17 @@ public class PlayerData implements Serializable{
 	public boolean hasMindUsed = false;
 	public RolesLg settedRole = null;
 	
+	
+	public ClockTower clockGame;
+	public ClockRole clockRole;
+	public ClockRoleData dataClock;
+	public boolean isLeure = false;
+	public boolean isPoisonned = false;
+	public boolean isProtected = false;
+	public int gojoIt = 150;
+	public double gojoLoop = 5;
+	
+	
 	public PlayerData coupleL;
 	public void clearLgGameVar() {
 		coupleL = null;
@@ -138,6 +156,8 @@ public class PlayerData implements Serializable{
 		hasMind = false;
 		considWolf = false;
 		considVill = false;
+		
+		clockGame = null;
 		
 		
 		hasSpaceUsed = false;
@@ -159,7 +179,7 @@ public class PlayerData implements Serializable{
 		role = null;
 		camp = null;
 		
-		bedGame = null;
+		
 		bedTeam = null;
 		
 		hasRes = false;
@@ -224,7 +244,7 @@ public class PlayerData implements Serializable{
 	}
 	public void setDisplayName() {
 		String setted = "";
-		if (game != null && role != null && game instanceof GameLg) {
+		if (this.game != null && role != null && game instanceof GameLg) {
 			GameLg game = (GameLg) this.game;
 			if (game.statut.equals(GameStatut.IN_GAME) && game.displayedRoles) {
 				if (role.getCampOfRole().equals(Camp.Love) ) {
@@ -242,17 +262,31 @@ public class PlayerData implements Serializable{
 		}
 		
 		
-		if (bedGame != null && bedTeam != null) {
+		if (game != null && game instanceof Bedwars&& bedTeam != null) {
 			setted = bedTeam.getChatColor() + setted;
 		}
 		
 		setted = setted + getName();
+		setDisplayName(setted);
+	}
+	
+	public void setDisplayName(String setted) {
 		if (isOnline) {
 			try {
 				player.setDisplayName(setted);
 				player.setCustomName(setted);
 				player.setCustomNameVisible(true);
 				player.setPlayerListName(setted);
+				if (game != null) {
+					for (PlayerData p: game.getPlayers()) {
+						if (p.isOnline) {
+							PlayerUtil.setTargetToColor(p.player, player, role.getCampOfRole().getColor());
+						}
+					
+					}
+				}
+				
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -422,7 +456,11 @@ public class PlayerData implements Serializable{
 	}
 	
 	public double getWinRate() {
-		return getNumberOfWin() / notes.size();
+		int s = 0;
+		if (notes.size() == 0) {
+			s ++;
+		}
+		return getNumberOfWin() / (notes.size() + s);
 	}
 	
 	public double getWinRate(int last) {
@@ -459,6 +497,8 @@ public class PlayerData implements Serializable{
 		if (recents.size() <= 0) {
 			return "0 parties jouée";
 		}
+		
+		
 		return ChatColor.AQUA+ ""+ChatColor.BOLD+ ""+getNumberOfWin(x) +ChatColor.RESET+ChatColor.WHITE+" victoires pour les "+ChatColor.AQUA+ChatColor.BOLD+recents.size()+ChatColor.RESET+ChatColor.WHITE+ " parties les + récentes";
 	}
 	
@@ -494,7 +534,25 @@ public class PlayerData implements Serializable{
 	}
 	
 	public boolean isFree() {
-		return (starParty != null || game != null || bedGame != null);
+		if (starParty != null) {
+			sendMessage("Vous êtes déjà en partie (starParty)");
+		} 
+		if (game != null) {
+			sendMessage("Vous êtes déjà en partie (Game Classique)");
+		}
+		
+		return !(starParty != null || game != null);
+	}
+
+
+	public void setCustomRole(CustomGame game, CustomRole customRole, RoleSet set) {
+		set.setRolesOfPlayer(this.Name, customRole);
+		
+		sendMessage(Main.info+" Vous êtes "+ customRole.name() + " et appartenez au camp "+ customRole.campName());
+		customRole.setPlayer(this);
+		customRole.attribution();
+		set.setVictoryOfPlayer(this.Name, customRole.campName());
+		
 	}
 	
 	

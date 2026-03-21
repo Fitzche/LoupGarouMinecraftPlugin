@@ -11,16 +11,16 @@ import fr.fitzche.lgmore.Lg.GameLg;
 
 public class StarBoard implements GameBoard{
 
-	public Scoreboard board;
-	public PlayerData p;
-	public Objective obj;
+	
 	
 	public StarBoard(PlayerData p) {
 		
 		this.p = p;
 		refresh();
 	}
-	
+	public Scoreboard board;
+	public PlayerData p;
+	public Objective obj;
 	public void refresh() {
 		if (p.starParty == null) {
 			if (p.game != null && p.game instanceof GameLg) {

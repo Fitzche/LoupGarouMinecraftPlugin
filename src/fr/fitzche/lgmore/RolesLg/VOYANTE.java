@@ -47,7 +47,7 @@ public class VOYANTE implements RoleInstance{
 	
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez connaitre un role de joueur par épisode avec la commande /lg voir [nomDuJoueur], votre écoperez cependant d'un malus (5 coeurs de dégat et 5min de faiblesse) si vous faites erreur et que vous espionnez un villageois");
+		return (Main.info +ChatColor.BLUE+"Vous devez gagner avec les Villageois, pour cela vous pouvez connaitre un role de joueur par épisode avec la commande /lg voir [nomDuJoueur], votre écoperez cependant d'un malus (5 coeurs de dégat et 5min de faiblesse) si vous faites erreur et que vous espionnez un villageois");
 	}
 	
 	public void giveEffectAllTime() {
@@ -138,6 +138,9 @@ public class VOYANTE implements RoleInstance{
 				
 				return;
 			}
+			if (args.length < 2) {
+				sender.sendMessage("Erreur de commande: /lg voir [nomDuJoueur]");
+			}
 			
 			
 			if (powerUsed) {
@@ -145,7 +148,7 @@ public class VOYANTE implements RoleInstance{
 				return;
 			
 			}
-			PlayerData ply = Main.getData(sender);
+			PlayerData ply = Main.getData(args[1]);
 			
 			if (ply.camp.equals(Camp.Villager)) {
 				player.damage(10);

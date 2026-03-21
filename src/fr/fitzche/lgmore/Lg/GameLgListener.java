@@ -29,8 +29,8 @@ import fr.fitzche.lgmore.minecraft.ResCheck;
 import net.md_5.bungee.api.ChatColor;
 
 public class GameLgListener implements GameListener {
-	public GameLgListener() {
-		// TODO Auto-generated constructor stub
+	public GameLgListener(GameLg game) {
+		this.game = game;
 	}
 	
 	public GameLg game;
@@ -41,7 +41,12 @@ public class GameLgListener implements GameListener {
 		
 		double more = 1;
 		double finalDamage = damage;
-		if (damager.role.equals(RolesLg.CHASSEUR) && damaged.considWolf ) {
+
+		if (damager ==null || damaged == null) {
+			System.out.println("damager or damaged is null");
+			return finalDamage;
+		}
+		if (damager.role != null && damager.role.equals(RolesLg.CHASSEUR) && damaged.considWolf ) {
 			more += 0.2;
 			System.out.println("TEMP//augmented ");
 		}
@@ -49,7 +54,7 @@ public class GameLgListener implements GameListener {
 		if (damager.role.equals(RolesLg.LOUP_BARBARE)) {
 			LOUP_BARBARE lg = (LOUP_BARBARE) damager.roleIn;
 			if (MathUtil.pourcentage(lg.sup)) {
-				finalDamage++;
+				finalDamage *= 20;
 			}
 		}
 
@@ -177,7 +182,7 @@ public class GameLgListener implements GameListener {
 			//MORT
 			for (ItemStack item: items) {
 				if (item != null && !item.getType().equals(Material.AIR)) {
-					Main.server.getWorld("world").dropItemNaturally(loc, item);
+					killed.game.getWorld().dropItemNaturally(loc, item);
 
 				}
 			}
@@ -309,7 +314,7 @@ public class GameLgListener implements GameListener {
 			
     		for (ItemStack item: items) {
     			if (item != null && !item.getType().equals(Material.AIR)) {
-    				Main.server.getWorld("world").dropItemNaturally(loc, item);
+    				killed.game.getWorld().dropItemNaturally(loc, item);
 
     			}
     		}

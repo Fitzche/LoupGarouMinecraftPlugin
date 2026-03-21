@@ -60,9 +60,9 @@ public class Timer {
 			hours++;
 		}
 		if (this.temps < 3600) {
-			return (ChatColor.GOLD+"Horloge: " +ChatColor.AQUA+ String.valueOf(min - 60*hours) + " min " + String.valueOf((sec-60*min) + " s"));
+			return ("Horloge: " +ChatColor.GOLD+ String.valueOf(min - 60*hours) + " min " + String.valueOf((sec-60*min) + " s"));
 
 		}
-		return (ChatColor.GOLD+"Horloge: " +ChatColor.AQUA+ String.valueOf(hours) + "H " + String.valueOf(min - 60*hours) + " min " + String.valueOf((sec-60*min) + " s"));
+		return ("Horloge: " +ChatColor.GOLD+ String.valueOf(hours) + "H " + String.valueOf(min - 60*hours) + " min " + String.valueOf((sec-60*min) + " s"));
 	}
 }

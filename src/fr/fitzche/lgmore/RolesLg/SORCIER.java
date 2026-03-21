@@ -54,7 +54,7 @@ public class SORCIER implements RoleInstance {
 	}
 	
 	public String getDescription() {
-		return (ChatColor.DARK_BLUE+"Le sorcier a 50% de gagner tout seul, et 50% de gagner avec le village, il peut créer des potions avec certains matériaux (1 gap, 3blocs de lapis et 30 redstone --> potion tp) (1 gap, 30 lapis, et 10 plumes --> potion révélation d'aura) (2 gaps, 5 chairs putréfiés, 3 fils et 3 silexs --> potion de paralysie) . Ces potions ont des effets divers, ce sont celles que des joueurs normaux trouverait dans des batiments bonus. Votre laboratoire se trouve en "+ this.labLoc.getBlockX() + ";"+ this.labLoc.getBlockZ());
+		return (Main.info +ChatColor.BLUE+"Le sorcier a 50% de gagner tout seul, et 50% de gagner avec le village, il peut créer des potions avec certains matériaux (1 gap, 3blocs de lapis et 30 redstone --> potion tp) (1 gap, 30 lapis, et 10 plumes --> potion révélation d'aura) (2 gaps, 5 chairs putréfiés, 3 fils et 3 silexs --> potion de paralysie) . Ces potions ont des effets divers, ce sont celles que des joueurs normaux trouverait dans des batiments bonus. Votre laboratoire se trouve en "+ this.labLoc.getBlockX() + ";"+ this.labLoc.getBlockZ());
 	}
 	public static ItemStack logo = new ItemStack(Material.WHEAT);
 

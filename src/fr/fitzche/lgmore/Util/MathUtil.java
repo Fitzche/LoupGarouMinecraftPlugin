@@ -14,6 +14,13 @@ public class MathUtil {
 	public static boolean isBeetween_inclus(int min, int max, int number) {
 		return (number<max+1 && number >min-1);
 	}
+	public static int oneOrNegOne() {
+		if (MathUtil.pourcentage(50)) {
+			return -1;
+		}else {
+			return 1;
+		}
+	}
 	
 	
 	

@@ -39,7 +39,7 @@ public class LOUP_METAMORPHE implements RoleInstance{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return ChatColor.DARK_BLUE+"Vous devez gagner avec les loups"+ "\n"+ "Pour cela vous prendrez le role du premier joueur que vous tuerez tout en restant loup garou.";
+		return Main.info +ChatColor.BLUE+"Vous devez gagner avec les loups"+ "\n"+ "Pour cela vous prendrez le role du premier joueur que vous tuerez tout en restant loup garou.";
 	}
 
 	@Override
