@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,6 +18,7 @@ import fr.fitzche.lgmore.Util.JsonUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
+import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.custom.RoleSet;
 
 public class Action {
@@ -68,6 +70,28 @@ public class Action {
 		if (listAction != null) {
 			for (JsonElement l:listAction) {
 				Action act = new Action(game, p, role, (JsonObject) l, args);
+			}
+		}
+		
+		//action à faire avec un décalage
+		JsonArray listDelayedAction = JsonUtil.getJsonArray(obj, "delayedActions");
+		if (listDelayedAction != null) {
+			for (JsonElement l:listDelayedAction) {
+				JsonObject o = l.getAsJsonObject();
+				if (o != null) {
+					JsonObject act = JsonUtil.getJsonObject(o, "action");
+					if (act != null) {
+						this.game.futures.add(new FutureAction(new BukkitRunnable() {
+
+							@Override
+							public void run() {
+								Action action = new Action(game, p, role, act, args);
+								
+							}
+							
+						}, JsonUtil.getInt(o, "time", 10)));
+					}
+				}
 			}
 		}
 		
@@ -263,14 +287,40 @@ public class Action {
 			strB.append("Jauge Augmentation");
 			for (Player ply:ps) {
 				if (this.role.jauges.get(jauge) != null && this.role.jauges.get(jauge).get(ply.getName()) != null) {
-					this.role.jauges.get(jauge).get(ply.getName()).add(jaugeAdd);
 					
+					Jauge cJauge = this.role.jauges.get(jauge).get(ply.getName());
+					if (cJauge != null) {
+						this.role.jauges.get(jauge).get(ply.getName()).add(jaugeAdd);
+						if (cJauge.displayedOnPlayer) {
+							PlayerUtil.sendActionBar(p.player, cJauge.name + ": "+cJauge.value + "/"+ cJauge.maxValue);
+						}
+					}
+						
 				}
 			}
 			break;
 			
 		case "conditionChanged":
 			this.game.conditions.put(JsonUtil.getString(obj, "conditionChanged", "null"), !this.game.conditions.getOrDefault(JsonUtil.getString(obj, "conditionChanged", "null"), false));
+			break;
+			
+		case "spectator":
+			
+			if (p.isOnline) {
+				PlayerUtil.spectator(p.player);
+			}
+			this.game.futures.add(new FutureAction(new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					if (p.isOnline) {
+						PlayerUtil.survival(p.player);
+					}
+					
+					
+				}
+				
+			}, timeForce.intValue()));
 			break;
 		}
 		

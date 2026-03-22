@@ -12,15 +12,16 @@ public class Jauge {
 	
 	
 	String playerName;
-	String name;
-	int value;
-	int maxValue;
+	public String name;
+	public int value;
+	public int maxValue;
 	boolean resetOnFinish;
 	int nbOfIteration;
 	boolean stopped = false;
 	JsonObject action;
 	CharactUHC uhc;
 	CharactRole role;
+	public boolean displayedOnPlayer;
 	
 	public Jauge(String playerName, JsonObject obj, CharactUHC uhc, CharactRole role) {
 		
@@ -31,6 +32,7 @@ public class Jauge {
 		this.resetOnFinish = JsonUtil.getBool(obj, "resetOnFinish", false);
 		this.nbOfIteration = JsonUtil.getInt(obj, "iteration", 1);
 		this.action = JsonUtil.getJsonObject(obj, "action");
+		this.displayedOnPlayer = JsonUtil.getBool(obj, "displayed", false);
 		this.role = role;
 		this.uhc = uhc;
 		

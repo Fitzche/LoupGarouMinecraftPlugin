@@ -59,6 +59,7 @@ public class PlayerUtil {
 
 	
 	public static void survival(Player p) {
+		
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "gamemode "+p.getName() + " survival");
 	}
 	

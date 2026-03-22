@@ -28,6 +28,7 @@ import fr.fitzche.lgmore.Minage.MinageWorld;
 import fr.fitzche.lgmore.Util.JsonUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.commands.FutureAction;
 import fr.fitzche.lgmore.custom.CustomGame;
 import fr.fitzche.lgmore.custom.CustomGameDataSet;
 import fr.fitzche.lgmore.custom.CustomParam;
@@ -163,6 +164,7 @@ public class CharactUHC implements CustomGame{
 	public String hoster = "";
 	private boolean started = false;
 	private ArrayList<CharactRoleList> charactRoleLists = new ArrayList<CharactRoleList>();
+	public ArrayList<FutureAction> futures = new ArrayList<FutureAction>();
 
 	
 	
@@ -250,7 +252,13 @@ public class CharactUHC implements CustomGame{
 
 	@Override
 	public void askRunFuturesActions() {
-		// TODO Auto-generated method stub
+		for (FutureAction act:this.futures) {
+			act.timeBeforeRun--;
+			if (act.timeBeforeRun == 0) {
+				act.action.run();
+				act.timeBeforeRun = -1;
+			}
+		}
 		
 	}
 
