@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -92,6 +94,16 @@ public class CharactUHC implements CustomGame{
 		int timeMinage = JsonUtil.getInt(object, "minageTime", 10);
 		int boostMinage = JsonUtil.getInt(object, "boostMinage", 1);
 		
+		//conditions par défaut (s'il est  n'est pas initialisée, la condition sera false par défaut
+		if (JsonUtil.getJsonObject(object, "conditions") != null) {
+			JsonObject conds = JsonUtil.getJsonObject(object, "conditions");
+			for (Entry<String, JsonElement> cond:conds.entrySet()) {
+				conditions.put(cond.getKey(), cond.getValue().getAsBoolean());
+					
+			
+			}
+		}
+		
 		
 		
 		if (object.get("roleListNames") != null) {
@@ -140,6 +152,7 @@ public class CharactUHC implements CustomGame{
 	CustomTimer timer;
 	
 	ArrayList<RoleSet> set;
+	HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
 	
 	
 	

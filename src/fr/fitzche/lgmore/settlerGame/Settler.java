@@ -53,11 +53,7 @@ public class Settler implements CustomRole {
 		return damage;
 	}
 
-	@Override
-	public void damage(double damage) {
-		
-
-	}
+	
 
 	@Override
 	public void death() {

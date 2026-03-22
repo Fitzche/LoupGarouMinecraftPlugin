@@ -61,6 +61,7 @@ public class CharactRole implements CustomRole{
 	
 	
 	public HashMap<String, HashMap<String, Jauge>> jauges = new HashMap<String, HashMap<String, Jauge>>();
+	private JsonObject killAct;
 	
 	public CharactRole(String pathToRole, RoleSet set, CharactUHC game) {
 		
@@ -98,6 +99,8 @@ public class CharactRole implements CustomRole{
 			this.boostHealth = JsonUtil.getInt(object, "boostHealth", 0);
 			
 			this.name = object.get("name").getAsString();
+			
+			
 			
 			
 			if (object.get("reliveTry") != null) {
@@ -155,6 +158,8 @@ public class CharactRole implements CustomRole{
 			
 			//Action avec mort
 			this.deathAction = JsonUtil.getJsonObject(object, "deathAction");
+			//Action avec kill
+			this.killAct = JsonUtil.getJsonObject(object, "killAction");
 			
 			//POUVOIR VISION
 			if (object.get("infoPowers") != null) {
@@ -332,11 +337,7 @@ public class CharactRole implements CustomRole{
 		return damage * (1+this.resistance);
 	}
 
-	@Override
-	public void damage(double damage) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void death() {
@@ -348,8 +349,15 @@ public class CharactRole implements CustomRole{
 	public boolean checkDeath(String killed, String killer) {
 		
 		
+		if (killer.equals(this.playerData.getName())) {
+			if (killAct!= null) {
+				Action act = new Action(game, playerData, this, killAct, new ArrayList<String>());
+			}
+			
+		}
 		
-		if (this.reliveTry > 0) {
+		
+		if (this.reliveTry > 0 && killed.equals(this.playerData.getName())) {
 			
 			if (!this.conditionKilledBy.equals("") && !this.conditionKilledBy.equals(this.set.rolesOfPlayer().get(killer).name())) {
 				return false;

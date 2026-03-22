@@ -10,7 +10,7 @@ public interface CustomRole {
 	public String campName();
 	public double attackModif(double damage);
 	public double damageModif(double damage);
-	public void damage(double damage);
+
 	public void death();
 	public boolean checkDeath(String killed, String killer);
 	public void setPlayer(PlayerData playerData);

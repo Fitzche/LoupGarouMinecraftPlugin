@@ -22,6 +22,8 @@ import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.uhc_color.MainColor;
 import fr.fitzche.lgmore.uhc_color.PlayerColorboard.Colorboard;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
@@ -205,6 +207,13 @@ public class PlayerUtil {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static void sendClickableText(String message, String command, Player player) {
+		TextComponent text = new TextComponent();
+		text.setText(message);
+		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, (command)));
+		player.spigot().sendMessage(text);
 	}
 	
 	

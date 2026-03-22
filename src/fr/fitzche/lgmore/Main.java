@@ -241,6 +241,9 @@ public class Main extends JavaPlugin implements Listener {
 			+ "";
 
 
+	public static HashMap<String, String> clicTexts = new HashMap<String, String>();
+
+
 	
 	@SuppressWarnings("unchecked")
 	@Override

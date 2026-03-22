@@ -114,6 +114,15 @@ public class Lg implements CommandExecutor {
 					uhc.start();
 				}
 			}
+		} else if (args[0].equals("clicText")) {
+			
+			if (args.length < 2) {
+				return true;
+			}
+			String message = Main.clicTexts.get(args[1]);
+			sender.sendMessage(message);
+			
+			
 		} else if (args[0].equals("settlerStart")) {
 			PlayerData p = Main.getData(sender);
 			if (p.game == null) {

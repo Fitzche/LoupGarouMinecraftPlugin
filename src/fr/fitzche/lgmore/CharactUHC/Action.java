@@ -1,6 +1,7 @@
 package fr.fitzche.lgmore.CharactUHC;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -15,6 +16,7 @@ import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.JsonUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
+import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.custom.RoleSet;
 
 public class Action {
@@ -73,6 +75,18 @@ public class Action {
 		this.commandTarget = JsonUtil.getBool(obj, "commandTarget", false);
 		//si actif, les uniques cibles sont les joueurs correspondant aux arguments de la commande
 		this.multipleCommandTarget = JsonUtil.getBool(obj, "multipleCommandTarget", false);
+		
+		//si actif, il faut que l'ensemble des conditions correspondent à la valeur donnée
+		if (JsonUtil.getJsonObject(obj, "conditions") != null) {
+			JsonObject conds = JsonUtil.getJsonObject(obj, "conditions");
+			for (Entry<String, JsonElement> cond:conds.entrySet()) {
+				if (!this.game.conditions.get(cond.getKey()).equals(cond.getValue().getAsBoolean())) {
+					return;
+				}
+					
+			
+			}
+		}
 		
 		
 		
@@ -234,10 +248,10 @@ public class Action {
 			
 			
 			break;
-		case "jauge":
+		case "heal":
 			strB.append("Instant Heal");
 			for (Player player:ps) {
-				int heal = 1;
+				int heal = 1 * this.force.intValue();
 				if (player.getMaxHealth() -player.getHealth() >  heal) {
 					player.setMaxHealth(player.getMaxHealth());
 				} else {
@@ -245,7 +259,7 @@ public class Action {
 				}
 			}
 			break;
-		case "heal":
+		case "jauge":
 			strB.append("Jauge Augmentation");
 			for (Player ply:ps) {
 				if (this.role.jauges.get(jauge) != null && this.role.jauges.get(jauge).get(ply.getName()) != null) {
@@ -255,14 +269,29 @@ public class Action {
 			}
 			break;
 			
+		case "conditionChanged":
+			this.game.conditions.put(JsonUtil.getString(obj, "conditionChanged", "null"), !this.game.conditions.getOrDefault(JsonUtil.getString(obj, "conditionChanged", "null"), false));
+			break;
 		}
+		
+		
 		
 		strB.append("\n"+ "Joueurs ciblés:"+ "\n"); {
 			for (Player player:ps) {
 				strB.append(player.getName()+ "\n");
 			}
 		}
-		p.sendMessage(strB.toString());
+		
+		if (!JsonUtil.getBool(obj, "withoutMessage", false)) {
+			p.sendMessage(strB.toString());
+			if (p.isOnline) {
+				String id = String.valueOf(MathUtil.generateAlInt(0, 1000));
+				PlayerUtil.sendClickableText("clickez ici pour obtenir un rapport de l'action", "/lg clicText "+ id, p.player);
+				Main.clicTexts.put(id, strB.toString());
+			}
+		}
+		
+		
 		
 		
 	}
