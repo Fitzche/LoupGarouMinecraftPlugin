@@ -62,6 +62,8 @@ public class CharactRole implements CustomRole{
 	
 	public HashMap<String, HashMap<String, Jauge>> jauges = new HashMap<String, HashMap<String, Jauge>>();
 	private JsonObject killAct;
+	private JsonObject damageAction;
+	public HashMap<Integer, JsonObject> timedAction;
 	
 	public CharactRole(String pathToRole, RoleSet set, CharactUHC game) {
 		
@@ -141,6 +143,12 @@ public class CharactRole implements CustomRole{
 				this.commands.put(elmObj.get("command").getAsString(), elmObj.get("action").getAsJsonObject());
 			}
 			
+			//Action au temps:
+			for (JsonElement elm:object.get("timedActions").getAsJsonArray()) {
+				JsonObject elmObj = elm.getAsJsonObject();
+				this.timedAction.put(JsonUtil.getInt(elmObj, "time", -1), elmObj.get("action").getAsJsonObject());
+			}
+			
 			
 			//jauges (JsonList de JsonObject correspondant aux jauges)
 			JsonArray elements = JsonUtil.getJsonArray(object, "jauges");
@@ -160,6 +168,8 @@ public class CharactRole implements CustomRole{
 			this.deathAction = JsonUtil.getJsonObject(object, "deathAction");
 			//Action avec kill
 			this.killAct = JsonUtil.getJsonObject(object, "killAction");
+			//Action avec dommage
+			this.damageAction = JsonUtil.getJsonObject(object, "damageAction");
 			
 			//POUVOIR VISION
 			if (object.get("infoPowers") != null) {
@@ -320,20 +330,30 @@ public class CharactRole implements CustomRole{
 				argsCopie.remove(0);
 				argsCopie.remove(0);
 				
+				
+				
 				Action act = new Action(game, playerData, this, commands.get(str), argsCopie);
 			}
 		}
 	}
 
 	@Override
-	public double attackModif(double damage) {
-		Action act = new Action(game, playerData, this, this.attackAction, new ArrayList<String>());
+	public double attackModif(double damage, String damaged) {
+		if (this.attackAction != null) {
+			Action act = new Action(game, playerData, this, this.attackAction, new ArrayList<String>(Arrays.asList(damaged)));
+
+		}
 		return damage * (1+this.strenght);
 	}
 
 	@Override
-	public double damageModif(double damage) {
+	public double damageModif(double damage, String damager) {
 		
+		if (this.damageAction != null) {
+			Action act = new Action(game, playerData, this, this.damageAction, new ArrayList<String>(Arrays.asList(damager)));
+
+		}
+
 		return damage * (1+this.resistance);
 	}
 
@@ -341,7 +361,10 @@ public class CharactRole implements CustomRole{
 
 	@Override
 	public void death() {
-		Action act = new Action(game, playerData, this,  this.deathAction, new ArrayList<String>());
+		if (this.deathAction != null) {
+			Action act = new Action(game, playerData, this,  this.deathAction, new ArrayList<String>());
+		}
+		
 		
 	}
 

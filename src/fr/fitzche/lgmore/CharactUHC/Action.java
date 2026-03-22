@@ -1,8 +1,10 @@
 package fr.fitzche.lgmore.CharactUHC;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -15,6 +17,7 @@ import com.google.gson.JsonObject;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
 import fr.fitzche.lgmore.Util.JsonUtil;
+import fr.fitzche.lgmore.Util.LineLocationHelper;
 import fr.fitzche.lgmore.Util.LocationUtil;
 import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
@@ -39,6 +42,7 @@ public class Action {
 	private String jauge;
 	private Integer jaugeAdd;
 	CharactRole role;
+	public HashMap<String, JsonObject> numConditions;
 	
 	public Action(CharactUHC game, PlayerData p, CharactRole role,  JsonObject obj, ArrayList<String> args) {
 		
@@ -95,6 +99,24 @@ public class Action {
 			}
 		}
 		
+		//si actif, repète après le temps donné
+		int repeatTime = JsonUtil.getInt(obj, "repeat", -1);
+		int repeatMax = JsonUtil.getInt(obj, "repeatMax", -1);
+		if (repeatTime > 0 && repeatMax > 0) {
+			this.game.futures.add(new FutureAction(new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					JsonObject objCop = obj.getAsJsonObject();
+					objCop.remove("repeatMax");
+					objCop.addProperty("repeatMax",(repeatMax - 1));
+					Action act = new Action(game, p, role, objCop, args);
+					
+				}
+				
+			}, repeatTime));
+		}
+		
 		//si actif, l'unique cible est le joueur correspondant au premier argument de la commande
 		this.commandTarget = JsonUtil.getBool(obj, "commandTarget", false);
 		//si actif, les uniques cibles sont les joueurs correspondant aux arguments de la commande
@@ -109,6 +131,36 @@ public class Action {
 				}
 					
 			
+			}
+		}
+		//si actif, il faut que l'ensemble des conditions numériques correspondent à la valeur donnée
+		if (JsonUtil.getJsonArray(obj, "numConditions") != null) {
+			JsonArray conds = JsonUtil.getJsonArray(obj, "numConditions");
+			for (JsonElement l:conds) {
+				int x = this.game.numConditions.getOrDefault(JsonUtil.getString(l.getAsJsonObject(), "name", "null"), -1);
+				int value = JsonUtil.getInt(l.getAsJsonObject(), "value", -1);
+				boolean inverted = JsonUtil.getBool(l.getAsJsonObject(), "inverted", false);
+				if (x > 0 && value > 0) {
+					
+					
+					switch (JsonUtil.getString(l.getAsJsonObject(), "comparator", "more")) {
+					case "more":
+						if (x <= value) {
+							return;
+						}
+						break;
+					case "less":
+						if (x >= value) {
+							return;
+						}
+						break;
+					case "equals":
+						if (x != value) {
+							return;
+						}
+						break;
+					}
+				}
 			}
 		}
 		
@@ -283,6 +335,21 @@ public class Action {
 				}
 			}
 			break;
+		case "changeNumConds":
+			try {
+				if (JsonUtil.getJsonArray(obj, "numConditionsChanged") != null) {
+					for (JsonElement j:JsonUtil.getJsonArray(obj, "numConditionsChanged")) {
+						JsonObject objNum = j.getAsJsonObject();
+						this.game.numConditions.put(JsonUtil.getString(objNum, "numConditionChanged", "null"), this.game.numConditions.getOrDefault(JsonUtil.getString(objNum, "numConditionChanged", "null"), -1) + JsonUtil.getInt(objNum, "numConditionChange", 0));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			
+			break;
 		case "jauge":
 			strB.append("Jauge Augmentation");
 			for (Player ply:ps) {
@@ -301,26 +368,92 @@ public class Action {
 			break;
 			
 		case "conditionChanged":
+			strB.append("conditionChanged");
 			this.game.conditions.put(JsonUtil.getString(obj, "conditionChanged", "null"), !this.game.conditions.getOrDefault(JsonUtil.getString(obj, "conditionChanged", "null"), false));
 			break;
 			
-		case "spectator":
-			
-			if (p.isOnline) {
-				PlayerUtil.spectator(p.player);
+		case "grrr":
+			strB.append("GRRR");
+			for (Player player:ps) {
+				
+				player.playSound(p.getLocation(), Sound.WOLF_GROWL, 1, 1);
 			}
-			this.game.futures.add(new FutureAction(new BukkitRunnable() {
-
-				@Override
-				public void run() {
-					if (p.isOnline) {
-						PlayerUtil.survival(p.player);
-					}
-					
-					
+			
+			break;
+		case "hurlement":
+			strB.append("Hurlement");
+			for (Player player:ps) {
+				player.playSound(p.getLocation(), Sound.WOLF_HOWL, 1, 1);
+				
+			}
+			break;
+		case "expulsion":
+			
+			strB.append("Expulsion");
+			for (Player player:ps) {
+				if (p.isOnline) {
+					LineLocationHelper.applyKnockback(player, p.player, force);
 				}
 				
-			}, timeForce.intValue()));
+				
+			}
+			
+			break;
+
+		case "attraction":
+			
+			strB.append("Attraction");
+			for (Player player:ps) {
+				if (p.isOnline) {
+					LineLocationHelper.applyForce(player, p.getLocation(), force);
+				}
+				
+				
+			}
+			
+			break;
+		case "spectator":
+			strB.append("Spectator");
+			for (Player player:ps) {
+				
+				this.game.futures.add(new FutureAction(new BukkitRunnable() {
+	
+					@Override
+					public void run() {
+						PlayerUtil.survival(player);
+						
+						
+						
+					}
+					
+				}, timeForce.intValue()));
+			}
+			break;
+		case "maxHealth":
+			strB.append("MaxHealth augmentation");
+			for (Player player:ps) {
+				player.setMaxHealth(player.getMaxHealth() + force);
+			}
+			
+			break;
+		case "fly":
+			strB.append("Fly");
+			for (Player player:ps) {
+				
+				player.setAllowFlight(true);
+				player.setFlying(true);
+				this.game.futures.add(new FutureAction(new BukkitRunnable() {
+	
+					@Override
+					public void run() {
+						player.setAllowFlight(false);
+						player.addPotionEffect( new PotionEffect(PotionEffectType.JUMP, timeForce.intValue(), force.intValue()));
+						
+						
+					}
+					
+				}, timeForce.intValue()));
+			}
 			break;
 		}
 		
@@ -332,7 +465,7 @@ public class Action {
 			}
 		}
 		
-		if (!JsonUtil.getBool(obj, "withoutMessage", false)) {
+		if (!JsonUtil.getBool(obj, "withoutMessage", true)) {
 			p.sendMessage(strB.toString());
 			if (p.isOnline) {
 				String id = String.valueOf(MathUtil.generateAlInt(0, 1000));

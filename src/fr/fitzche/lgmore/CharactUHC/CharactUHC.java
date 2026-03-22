@@ -105,6 +105,16 @@ public class CharactUHC implements CustomGame{
 			}
 		}
 		
+		//conditions numériques par défaut (s'il est  n'est pas initialisée, la condition sera false par défaut
+				if (JsonUtil.getJsonObject(object, "numConditions") != null) {
+					JsonObject condsNum = JsonUtil.getJsonObject(object, "numConditions");
+					for (Entry<String, JsonElement> cond:condsNum.entrySet()) {
+						numConditions.put(cond.getKey(), cond.getValue().getAsInt());
+							
+					
+					}
+				}
+		
 		
 		
 		if (object.get("roleListNames") != null) {
@@ -165,6 +175,7 @@ public class CharactUHC implements CustomGame{
 	private boolean started = false;
 	private ArrayList<CharactRoleList> charactRoleLists = new ArrayList<CharactRoleList>();
 	public ArrayList<FutureAction> futures = new ArrayList<FutureAction>();
+	public HashMap<String, Integer> numConditions;
 
 	
 	
@@ -277,8 +288,16 @@ public class CharactUHC implements CustomGame{
 						pow.run();
 					}
 				}
+				if (((CharactRole) setRole.rolesOfPlayer().get(p.getName())) != null) {
+					CharactRole role = ((CharactRole) setRole.rolesOfPlayer().get(p.getName()));
+					if (role.timedAction.get(this.timer.temps) != null) {
+						Action act = new Action(this, p, role, role.timedAction.get(this.timer.temps), new ArrayList<String>());
+					}
+				}
 				
 			}
+			
+			
 		}
 		
 	}

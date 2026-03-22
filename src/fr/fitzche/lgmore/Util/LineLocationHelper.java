@@ -157,7 +157,6 @@ public class LineLocationHelper {
         // Normalisation pour obtenir une direction unitaire
         knockbackDirection.normalize();
         
-        // Optionnel : ajouter une petite impulsion verticale pour un effet plus réaliste (exemple : 0.3)
         
         
         

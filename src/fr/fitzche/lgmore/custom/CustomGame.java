@@ -141,7 +141,7 @@ public interface CustomGame extends Game, Listener {
 				for (RoleSet roleSet:game.rolesSet()) {
 					CustomRole role = roleSet.rolesOfPlayer().getOrDefault(((EntityDamageByEntityEvent) e).getDamager().getName(), null);
 					if (role != null) {
-						e.setDamage(role.attackModif(e.getFinalDamage()));
+						e.setDamage(role.attackModif(e.getFinalDamage(), e.getEntity().getName()));
 					
 					}
 				}
@@ -150,7 +150,10 @@ public interface CustomGame extends Game, Listener {
 			for (RoleSet roleSet:game.rolesSet()) {
 				CustomRole role = roleSet.rolesOfPlayer().getOrDefault(e.getEntity().getName(), null);
 				if (role != null) {
-					e.setDamage(role.damageModif(e.getFinalDamage()));
+					if (e instanceof EntityDamageByEntityEvent) {
+						e.setDamage(role.damageModif(e.getFinalDamage(), ((EntityDamageByEntityEvent) e).getDamager().getName()));
+					}
+					e.setDamage(role.damageModif(e.getFinalDamage(), "pve"));
 					
 				}
 			}

@@ -42,13 +42,13 @@ public class Settler implements CustomRole {
 	}
 
 	@Override
-	public double attackModif(double damage) {
+	public double attackModif(double damage, String damaged) {
 		// TODO Auto-generated method stub
 		return damage;
 	}
 
 	@Override
-	public double damageModif(double damage) {
+	public double damageModif(double damage, String damager) {
 		// TODO Auto-generated method stub
 		return damage;
 	}

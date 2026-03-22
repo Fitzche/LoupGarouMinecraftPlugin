@@ -8,8 +8,8 @@ public interface CustomRole {
 	public String name();
 	public String campId();
 	public String campName();
-	public double attackModif(double damage);
-	public double damageModif(double damage);
+	public double attackModif(double damage, String damaged);
+	public double damageModif(double damage, String damager);
 
 	public void death();
 	public boolean checkDeath(String killed, String killer);
