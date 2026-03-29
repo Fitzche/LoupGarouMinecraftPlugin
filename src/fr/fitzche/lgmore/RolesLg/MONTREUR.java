@@ -72,7 +72,7 @@ public class MONTREUR implements RoleInstance {
 	
 	public void renifle() {
 		Location loc = this.playerWithRole.getLocation();
-		for (PlayerData target:((GameLg) playerWithRole.game).playerAlive) {
+		for (PlayerData target:((GameLg) playerWithRole.game).getPlayerAlive()) {
 			if (target.getLocation().distance(loc) < 50 && target.role.getCampOfRole().equals(Camp.Wolf) || target.getLocation().distance(loc) < 50 && target.infected) {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "Grrrrrrr" + "\n");
 				((GameLg)playerWithRole.game).playSoundMO();

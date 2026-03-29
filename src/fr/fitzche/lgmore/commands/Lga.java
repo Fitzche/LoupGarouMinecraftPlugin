@@ -739,7 +739,7 @@ public class Lga implements CommandExecutor  {
 				}
 			}
 			
-			for (PlayerData ply: game.playerAlive) {
+			for (PlayerData ply: game.getPlayerAlive()) {
 				if (ply.Name.equals(args[3])) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
@@ -909,7 +909,7 @@ public class Lga implements CommandExecutor  {
 					}return true;
 				}
 				
-				if (game.playerAlive.size() != game.roles.size()) {
+				if (game.getActualNbOfPlayer() != game.roles.size()) {
 					sender.sendMessage("Mauvais nombre de roles");
 					return true;
 				}
@@ -1072,7 +1072,7 @@ public class Lga implements CommandExecutor  {
 						
 					}return true;
 				}
-				game.playerAlive.remove(game.getPlayer(args[3]));
+				game.removePlayer(game.getPlayer(args[3]), " at cmd (lga Game removePlayer)");
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					player.sendMessage("Joueur removed: "+ playerToRemove.getDisplayName());

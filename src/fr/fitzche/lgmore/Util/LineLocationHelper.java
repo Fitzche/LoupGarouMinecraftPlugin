@@ -46,7 +46,7 @@ public class LineLocationHelper {
             // Vérifie si le bloc à cette position n'est pas de l'air.
             if (!loc.getBlock().getType().equals(Material.AIR)) {
                 // On s'arrête si un bloc non vide est rencontré.
-                break;
+                return new LineRapport(null, locations);
             }
 
             // Vérifie la présence d'entités sur cette position avec un petit rayon

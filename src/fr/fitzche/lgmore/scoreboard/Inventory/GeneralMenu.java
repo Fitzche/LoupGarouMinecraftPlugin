@@ -63,17 +63,19 @@ public class GeneralMenu implements Listener {
 		if (e.getInventory().equals(this.inv)) {
 			e.setCancelled(true);
 			if (e.getCurrentItem().getItemMeta() == null || e.getCurrentItem().getItemMeta().getDisplayName() == null) {
+				System.out.println("nul l.66 GeneralMenuInv");
 				return;
 				
 			}
 			PlayerData p = Main.getData(e.getWhoClicked());
-			if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD+""+ChatColor.BOLD+"Créer Une Partie")) {
-				
-				if (p.game != null && (p.hoster || p.Name.equals("FITZCHE") || p.Name.equals("Fitzche"))) {
+			if ((e.getCurrentItem().getItemMeta().getDisplayName()).equals(ChatColor.GOLD+""+ChatColor.BOLD+"Créer Une Partie")) {
+				System.out.println("open 71 GeneralMenu");
+				if (p.game == null && (p.hoster || p.getName().equals("FITZCHE") || p.getName().equals("Fitzche"))) {
 					GameTypeChoose chose = new GameTypeChoose();
 					chose.open(p, e.getInventory());
+					System.out.println("open l.75 GeneralMenu");
 				}
-			} else if (e.getCurrentItem().getItemMeta().getDisplayName().equals( ChatColor.GOLD+""+ChatColor.BOLD+"Config")) {
+			} else if ((ChatColor.RESET+e.getCurrentItem().getItemMeta().getDisplayName()).equals( ChatColor.RESET+"Config")) {
 				if (p.game != null && (p.hoster || p.Name.equals("FITZCHE") || p.Name.equals("Fitzche"))) {
 					CommandUtil.runCommand("lga", (Player) e.getWhoClicked(), new String[] {"Game", "config", p.game.getName()});
 					

@@ -118,7 +118,7 @@ public class ANALYSTE implements RoleInstance {
 				int r = 0;
 				
 						
-				for (PlayerData p:this.game.players) {
+				for (PlayerData p:this.game.getPlayerAlive()) {
 					if (!(p.getName().equals(playerWithRole.getName())) && LocationUtil.getDistanceBetween(p, playerWithRole) < 20) {
 						if (p.player.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
 							s = s+30;
@@ -151,7 +151,7 @@ public class ANALYSTE implements RoleInstance {
 				int r = 0;
 				
 						
-				for (PlayerData p:this.game.players) {
+				for (PlayerData p:this.game.getPlayerAlive()) {
 					if (!(p.getName().equals(playerWithRole.getName())) && LocationUtil.getDistanceBetween(p, playerWithRole) < 20) {
 						if (p.player.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
 							s = s+30;

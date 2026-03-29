@@ -35,11 +35,19 @@ import fr.fitzche.lgmore.custom.CustomParam;
 import fr.fitzche.lgmore.custom.CustomTimer;
 import fr.fitzche.lgmore.custom.RoleSet;
 import fr.fitzche.lgmore.minecraft.GameListener;
+import net.md_5.bungee.api.ChatColor;
 
 public class CharactUHC implements CustomGame{
 
 	
+	public ArrayList<SpecialCharactItem> items;
+	private CharactListener listener;
+
+
+
 	public CharactUHC(String path) {
+		
+		
 		
 		
 		File file = new File(("Gamemodes/"+path));
@@ -105,15 +113,52 @@ public class CharactUHC implements CustomGame{
 			}
 		}
 		
+		
+		//items spéciaux:
+		
+		if (JsonUtil.getJsonArray(object, "items") != null) {
+			for (JsonElement l:JsonUtil.getJsonArray(object, "items")) {
+				JsonObject o = l.getAsJsonObject();
+				
+				
+				String xName = ChatColor.BOLD + JsonUtil.getString(o, "name", "ObjetSansNom");
+				Material xMaterial ;
+				switch (JsonUtil.getString(o, "material", "feather")) {
+				case "feather":
+					xMaterial = Material.FEATHER;
+					break;
+				case "star":
+					xMaterial = Material.NETHER_STAR;
+				case "sword":
+					xMaterial = Material.DIAMOND_SWORD;
+					break;
+				default:
+					xMaterial = Material.FEATHER;
+				}
+				
+				JsonObject xEffect = JsonUtil.getJsonObject(o, "action");
+				
+				//si actif, l'objet ne s'active qu'en pointant quelqu'un avec, le pseudo du joueur sera transmis en arguments (à utiliser avec ciblage par argument dans Action)
+				boolean xTargeting = JsonUtil.getBool(o, "targeting", false);
+				
+				int xDistanceTargeting = JsonUtil.getInt(o, "distanceTargeting", 3);
+				String xDescription = JsonUtil.getString(o, "description", "pasDeDescription");
+				int xUseDefault = JsonUtil.getInt(o, "nbUse", 1000);
+				
+				this.items.add(new SpecialCharactItem(this, xName, xMaterial, xEffect, xTargeting, xDistanceTargeting, xDescription, xUseDefault));
+			}
+		}
+		
+		
 		//conditions numériques par défaut (s'il est  n'est pas initialisée, la condition sera false par défaut
-				if (JsonUtil.getJsonObject(object, "numConditions") != null) {
-					JsonObject condsNum = JsonUtil.getJsonObject(object, "numConditions");
-					for (Entry<String, JsonElement> cond:condsNum.entrySet()) {
-						numConditions.put(cond.getKey(), cond.getValue().getAsInt());
+		if (JsonUtil.getJsonObject(object, "numConditions") != null) {
+			JsonObject condsNum = JsonUtil.getJsonObject(object, "numConditions");
+			for (Entry<String, JsonElement> cond:condsNum.entrySet()) {
+				numConditions.put(cond.getKey(), cond.getValue().getAsInt());
 							
 					
-					}
-				}
+			}
+		}
 		
 		
 		
@@ -151,6 +196,8 @@ public class CharactUHC implements CustomGame{
 				set, 
 				new ArrayList<CustomParam>(Arrays.asList())
 				);
+		
+		this.listener = new CharactListener(this);
 		
 		
 		
@@ -246,7 +293,7 @@ public class CharactUHC implements CustomGame{
 	@Override
 	public GameListener getListener() {
 		// TODO Auto-generated method stub
-		return null;
+		return listener;
 	}
 
 	@Override
@@ -291,7 +338,12 @@ public class CharactUHC implements CustomGame{
 				if (((CharactRole) setRole.rolesOfPlayer().get(p.getName())) != null) {
 					CharactRole role = ((CharactRole) setRole.rolesOfPlayer().get(p.getName()));
 					if (role.timedAction.get(this.timer.temps) != null) {
-						Action act = new Action(this, p, role, role.timedAction.get(this.timer.temps), new ArrayList<String>());
+						try {
+							Action act = new Action(this, p, role.timedAction.get(this.timer.temps), new ArrayList<String>());
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 				

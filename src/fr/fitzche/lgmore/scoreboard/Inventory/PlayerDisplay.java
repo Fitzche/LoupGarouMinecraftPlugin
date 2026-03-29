@@ -34,7 +34,7 @@ public class PlayerDisplay implements Listener{
 	this.gm = gm;
 		
 	ArrayList<Player> players = new ArrayList<Player>();
-	for (PlayerData pl: gm.players) {
+	for (PlayerData pl: gm.getPlayerAlive()) {
 		players.add(pl.player);
 	}
 	
@@ -117,7 +117,7 @@ public class PlayerDisplay implements Listener{
 
 					}
 					
-					if (gm.players.size() > 0) {
+					if (gm.getActualNbOfPlayer() > 0) {
 						//System.out.println("aucun joueur");
 					}
 					//System.out.println("mm2");

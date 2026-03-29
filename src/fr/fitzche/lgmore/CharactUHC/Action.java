@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -44,7 +45,7 @@ public class Action {
 	CharactRole role;
 	public HashMap<String, JsonObject> numConditions;
 	
-	public Action(CharactUHC game, PlayerData p, CharactRole role,  JsonObject obj, ArrayList<String> args) {
+	public Action(CharactUHC game, PlayerData p,  JsonObject obj, ArrayList<String> args) {
 		
 		this.role = role;
 		
@@ -73,7 +74,7 @@ public class Action {
 		JsonArray listAction = JsonUtil.getJsonArray(obj, "actions");
 		if (listAction != null) {
 			for (JsonElement l:listAction) {
-				Action act = new Action(game, p, role, (JsonObject) l, args);
+				Action act = new Action(game, p, (JsonObject) l, args);
 			}
 		}
 		
@@ -89,7 +90,7 @@ public class Action {
 
 							@Override
 							public void run() {
-								Action action = new Action(game, p, role, act, args);
+								Action action = new Action(game, p, act, args);
 								
 							}
 							
@@ -110,7 +111,7 @@ public class Action {
 					JsonObject objCop = obj.getAsJsonObject();
 					objCop.remove("repeatMax");
 					objCop.addProperty("repeatMax",(repeatMax - 1));
-					Action act = new Action(game, p, role, objCop, args);
+					Action act = new Action(game, p, objCop, args);
 					
 				}
 				
@@ -241,10 +242,15 @@ public class Action {
 					}
 				}
 			}
+			if (!notAdded && Main.getData(ply) != null && Main.getData(ply).isOnline) {
+				psCopie.add(ply);
+			}
 		}
+		ps = psCopie;
+		
 		
 		StringBuilder strB = new StringBuilder();
-		strB.append("Action réalisée:"+ "\n" + "Type:");
+		strB.append(Main.info + ChatColor.RED+"Action réalisée:"+ ChatColor.GOLD+"\n" + "Type:"+ChatColor.GRAY);
 		
 		switch (this.type) {
 		case "damage":
@@ -256,6 +262,8 @@ public class Action {
 			}
 			
 			break;
+			
+			//à faire: considère un nouveau type d'action "changeCamp" qui est accompagné d'un "changedCamp":String (nom camp)
 		case "slowness":
 			
 			strB.append("Slow");
@@ -340,7 +348,14 @@ public class Action {
 				if (JsonUtil.getJsonArray(obj, "numConditionsChanged") != null) {
 					for (JsonElement j:JsonUtil.getJsonArray(obj, "numConditionsChanged")) {
 						JsonObject objNum = j.getAsJsonObject();
-						this.game.numConditions.put(JsonUtil.getString(objNum, "numConditionChanged", "null"), this.game.numConditions.getOrDefault(JsonUtil.getString(objNum, "numConditionChanged", "null"), -1) + JsonUtil.getInt(objNum, "numConditionChange", 0));
+						
+						if (JsonUtil.getBool(objNum, "set", false)) {
+							this.game.numConditions.put(JsonUtil.getString(objNum, "numConditionChanged", "null"), objNum.get("numConditionChange").getAsInt());
+
+						} else {
+							this.game.numConditions.put(JsonUtil.getString(objNum, "numConditionChanged", "null"), this.game.numConditions.getOrDefault(JsonUtil.getString(objNum, "numConditionChanged", "null"), -1) + JsonUtil.getInt(objNum, "numConditionChange", 0));
+
+						}
 					}
 				}
 			} catch (Exception e) {
@@ -400,6 +415,48 @@ public class Action {
 			
 			break;
 
+		case "message":
+			if (JsonUtil.getJsonArray(obj, "messages") != null) {
+				for (JsonElement l:JsonUtil.getJsonArray(obj, "messages")) {
+					if (l.getAsJsonObject() != null) {
+						ChatColor color;
+						switch (JsonUtil.getString(l.getAsJsonObject(), "color", "white")) {
+						case "white":
+							color = ChatColor.WHITE;
+							break;
+						case "gold":
+							color = ChatColor.GOLD;
+							break;
+						case "green":
+							color = ChatColor.GREEN;
+							break;
+						case "blue":
+							color = ChatColor.BLUE;
+							break;
+						case "red":
+							color = ChatColor.RED;
+							break;
+						case "purple":
+							color = ChatColor.DARK_PURPLE;
+							break;
+						default:
+							color = ChatColor.GRAY;
+							break;
+								
+						
+						}
+						for (Player player:ps) {
+							
+							player.sendMessage(color+ JsonUtil.getString(l.getAsJsonObject(), "message", "message non valide"));
+							
+						}
+						
+						
+					}
+				}
+			}
+			
+			break;
 		case "attraction":
 			
 			strB.append("Attraction");
@@ -459,7 +516,7 @@ public class Action {
 		
 		
 		
-		strB.append("\n"+ "Joueurs ciblés:"+ "\n"); {
+		strB.append(ChatColor.GOLD+"\n"+ "Joueurs ciblés:"+ChatColor.GRAY+ "\n"); {
 			for (Player player:ps) {
 				strB.append(player.getName()+ "\n");
 			}

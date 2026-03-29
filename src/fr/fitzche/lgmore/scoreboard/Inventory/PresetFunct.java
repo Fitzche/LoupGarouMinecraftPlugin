@@ -55,7 +55,7 @@ public class PresetFunct implements InvFunct {
 		switch (clickedName) {
 		case "Classic":
 			
-			switch (game1.players.size()) {
+			switch (game1.getActualNbOfPlayer()) {
 				case 25:
 					game1.roles = new ArrayList<RolesLg>(Arrays.asList(
 							RolesLg.DISCIPLE,

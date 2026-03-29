@@ -1,0 +1,404 @@
+"filename", "language", "Java", "Markdown", "JSON", "YAML", "Java Properties", "Log", "Batch", "comment", "blank", "total"
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\REPRISE_CONTEXTE_CharactUHC.md", "Markdown", 0, 66, 0, 0, 0, 0, 0, 0, 30, 96
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\StarParty\StarParty.class", "Java", 4, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\flagCapture\Color.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, 0, -16
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\flagCapture\Flag.class", "Java", -31, 0, 0, 0, 0, 0, 0, 0, 0, -31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\flagCapture\FlagTab.class", "Java", -14, 0, 0, 0, 0, 0, 0, 0, 0, -14
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\flagCapture\Main2$1.class", "Java", -30, 0, 0, 0, 0, 0, 0, 0, 0, -30
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\flagCapture\Main2.class", "Java", -75, 0, 0, 0, 0, 0, 0, 0, 0, -75
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Camp.class", "Java", -24, 0, 0, 0, 0, 0, 0, 0, 0, -24
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Game.class", "Java", -8, 0, 0, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\GameStatut.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\InfinityStones\Stone.class", "Java", -31, 0, 0, 0, 0, 0, 0, 0, -1, -32
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\InfinityStones\StonesType.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, 0, -16
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg$1.class", "Java", -34, 0, 0, 0, 0, 0, 0, 0, 0, -34
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg$2.class", "Java", -10, 0, 0, 0, 0, 0, 0, 0, 0, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg$3.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, -1, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg$4.class", "Java", -35, 0, 0, 0, 0, 0, 0, 0, 0, -35
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg$5.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg$6.class", "Java", -37, 0, 0, 0, 0, 0, 0, 0, -4, -41
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLg.class", "Java", -354, 0, 0, 0, 0, 0, 0, 0, -3, -357
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLgListener$1.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, -1, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLgListener$2.class", "Java", -8, 0, 0, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameLgListener.class", "Java", -92, 0, 0, 0, 0, 0, 0, 0, -2, -94
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameNote.class", "Java", -32, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\GameType.class", "Java", -14, 0, 0, 0, 0, 0, 0, 0, 0, -14
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\PlayerNote.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\RegisterType.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\AccuseBlockData.class", "Java", -6, 0, 0, 0, 0, 0, 0, 0, 0, -6
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\CauldronBlockData.class", "Java", -6, 0, 0, 0, 0, 0, 0, 0, 0, -6
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\SpecialBlock.class", "Java", -71, 0, 0, 0, 0, 0, 0, 0, 0, -71
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\SpecialBlockData.class", "Java", -2, 0, 0, 0, 0, 0, 0, 0, 0, -2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\SpecialBlockType.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\StoneBlockData.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\TreasureBlockData.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\TreasureBlockType.class", "Java", -14, 0, 0, 0, 0, 0, 0, 0, 0, -14
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Lg\SpecialsBlock\VoteBlockData.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Main$1.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Main$2.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, -1, -17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Main.class", "Java", -261, 0, 0, 0, 0, 0, 0, 0, 0, -261
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Minage\MinageWorld$1.class", "Java", -31, 0, 0, 0, 0, 0, 0, 0, 0, -31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Minage\MinageWorld.class", "Java", -122, 0, 0, 0, 0, 0, 0, -139, 0, -261
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Minage\TradeInv.class", "Java", -70, 0, 0, 0, 0, 0, 0, 0, 0, -70
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Minage\Trades.class", "Java", -27, 0, 0, 0, 0, 0, 0, 0, 0, -27
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\PlayerData.class", "Java", -75, 0, 0, 0, 0, 0, 0, -22, 0, -97
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Role.class", "Java", -3, 0, 0, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RoleInstance.class", "Java", -14, 0, 0, 0, 0, 0, 0, 0, 0, -14
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ALLUMEUR.class", "Java", -38, 0, 0, 0, 0, 0, 0, 0, 0, -38
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ANCIEN.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ANGE$1.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, 0, -16
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ANGE$2.class", "Java", -17, 0, 0, 0, 0, 0, 0, 0, 0, -17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ANGE.class", "Java", -59, 0, 0, 0, 0, 0, 0, 0, -1, -60
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ASSASSIN.class", "Java", -38, 0, 0, 0, 0, 0, 0, 0, 0, -38
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Aura.class", "Java", -19, 0, 0, 0, 0, 0, 0, 0, 0, -19
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\BIENFAITEUR.class", "Java", -37, 0, 0, 0, 0, 0, 0, 0, 0, -37
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\CHASSEUR.class", "Java", -38, 0, 0, 0, 0, 0, 0, 0, 0, -38
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\COMEDIEN.class", "Java", -42, 0, 0, 0, 0, 0, 0, 0, 0, -42
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\CORBEAU.class", "Java", -30, 0, 0, 0, 0, 0, 0, 0, 0, -30
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\CUPIDON$1.class", "Java", -18, 0, 0, 0, 0, 0, 0, 0, 0, -18
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\CUPIDON.class", "Java", -46, 0, 0, 0, 0, 0, 0, 0, 0, -46
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\AncienChecker.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\AngeChecker.class", "Java", -13, 0, 0, 0, 0, 0, 0, 0, 0, -13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\Brume_Checker.class", "Java", -40, 0, 0, 0, 0, 0, 0, 0, 0, -40
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\ComedienChecker.class", "Java", -37, 0, 0, 0, 0, 0, 0, 0, 0, -37
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\EnfantChecker.class", "Java", -35, 0, 0, 0, 0, 0, 0, 0, 0, -35
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\ErmiteChecker.class", "Java", -31, 0, 0, 0, 0, 0, 0, 0, 0, -31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\FauconChecker.class", "Java", -27, 0, 0, 0, 0, 0, 0, 0, 0, -27
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\IDV_Checker.class", "Java", -39, 0, 0, 0, 0, 0, 0, 0, 0, -39
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\LgBarbare_Checker.class", "Java", -26, 0, 0, 0, 0, 0, 0, 0, 0, -26
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\MysticChecker.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\NecroChecker.class", "Java", -22, 0, 0, 0, 0, 0, 0, 0, 0, -22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\ParrainChecker.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\PoisonVirusChecker.class", "Java", -18, 0, 0, 0, 0, 0, 0, 0, 0, -18
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\RegisterCheck$1.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\RegisterCheck$2.class", "Java", -19, 0, 0, 0, 0, 0, 0, 0, 0, -19
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\RegisterCheck.class", "Java", -70, 0, 0, 0, 0, 0, 0, 0, 0, -70
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\SanguinaireChecker.class", "Java", -20, 0, 0, 0, 0, 0, 0, 0, -1, -21
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\SoeurChecker.class", "Java", -34, 0, 0, 0, 0, 0, 0, 0, 0, -34
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\TimeresCheck.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\TrackRes.class", "Java", -14, 0, 0, 0, 0, 0, 0, 0, 0, -14
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\VirusChecker.class", "Java", -38, 0, 0, 0, 0, 0, 0, 0, -1, -39
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\VoleurChecker.class", "Java", -20, 0, 0, 0, 0, 0, 0, 0, 0, -20
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\VoteChecker.class", "Java", -19, 0, 0, 0, 0, 0, 0, 0, 0, -19
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\craintifChecker.class", "Java", -32, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\damneChecker.class", "Java", -15, 0, 0, 0, 0, 0, 0, -10, 0, -25
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\demonChecker.class", "Java", -27, 0, 0, 0, 0, 0, 0, 0, 0, -27
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\servantLgChecker.class", "Java", -20, 0, 0, 0, 0, 0, 0, 0, 0, -20
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Checkers\thierceAnge_Checker.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, 0, -16
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\DAMNE.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\DEMON.class", "Java", -57, 0, 0, 0, 0, 0, 0, -19, 0, -76
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\DISCIPLE$1.class", "Java", -26, 0, 0, 0, 0, 0, 0, 0, 0, -26
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\DISCIPLE.class", "Java", -48, 0, 0, 0, 0, 0, 0, 0, 0, -48
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ENFANT_SAUVAGE$1.class", "Java", -22, 0, 0, 0, 0, 0, 0, 0, 0, -22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ENFANT_SAUVAGE.class", "Java", -45, 0, 0, 0, 0, 0, 0, 0, 0, -45
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\ERMITE.class", "Java", -39, 0, 0, 0, 0, 0, 0, 0, 0, -39
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\FAUCONNIER.class", "Java", -31, 0, 0, 0, 0, 0, 0, 0, 0, -31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\IDIOT_DU_VILLAGE.class", "Java", -26, 0, 0, 0, 0, 0, 0, 0, 0, -26
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\INFECT_PERE_DES_LOUPS.class", "Java", -45, 0, 0, 0, 0, 0, 0, 0, 0, -45
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\INTERPRETE$1.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\INTERPRETE$2.class", "Java", -34, 0, 0, 0, 0, 0, 0, 0, -1, -35
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\INTERPRETE.class", "Java", -41, 0, 0, 0, 0, 0, 0, -8, 0, -49
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus$1.class", "Java", -14, 0, 0, 0, 0, 0, 0, 0, 0, -14
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus$2.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus$3.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus$4.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus$5.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus$6.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\Virus.class", "Java", -55, 0, 0, 0, 0, 0, 0, 0, 0, -55
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Infections\VirusType.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_ALCHIMISTE.class", "Java", -62, 0, 0, 0, 0, 0, 0, 0, -2, -64
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_BARBARE.class", "Java", -26, 0, 0, 0, 0, 0, 0, 0, 0, -26
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_BRUMEUX.class", "Java", -37, 0, 0, 0, 0, 0, 0, 0, 0, -37
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_CRAINTIF.class", "Java", -45, 0, 0, 0, 0, 0, 0, 0, 0, -45
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_GRIMEUR.class", "Java", -39, 0, 0, 0, 0, 0, 0, 0, 0, -39
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_HURLEUR.class", "Java", -37, 0, 0, 0, 0, 0, 0, -7, 0, -44
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_MANIPULATEUR.class", "Java", -40, 0, 0, 0, 0, 0, 0, 0, 0, -40
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_METAMORPHE.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_MYSTIQUE.class", "Java", -38, 0, 0, 0, 0, 0, 0, 0, 0, -38
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\LOUP_SANGUINAIRE.class", "Java", -33, 0, 0, 0, 0, 0, 0, 0, 0, -33
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\MONTREUR.class", "Java", -43, 0, 0, 0, 0, 0, 0, 0, -1, -44
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\NECROMANCIEN.class", "Java", -26, 0, 0, 0, 0, 0, 0, 0, 0, -26
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\NEGOCIATEUR.class", "Java", -30, 0, 0, 0, 0, 0, 0, -7, 0, -37
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PARRAIN.class", "Java", -50, 0, 0, 0, 0, 0, 0, 0, 0, -50
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PERFIDE$1.class", "Java", -10, 0, 0, 0, 0, 0, 0, 0, 0, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PERFIDE.class", "Java", -36, 0, 0, 0, 0, 0, 0, 0, 0, -36
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PETITE_FILLE$1.class", "Java", -10, 0, 0, 0, 0, 0, 0, 0, 0, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PETITE_FILLE.class", "Java", -36, 0, 0, 0, 0, 0, 0, 0, 0, -36
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PYROMANE$1.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\PYROMANE.class", "Java", -57, 0, 0, 0, 0, 0, 0, 0, 0, -57
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\RENARD.class", "Java", -53, 0, 0, 0, 0, 0, 0, 0, 0, -53
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\RoleDisplay.class", "Java", -25, 0, 0, 0, 0, 0, 0, 0, 0, -25
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\RolesLg.class", "Java", -162, 0, 0, 0, 0, 0, 0, 0, 0, -162
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SAGE.class", "Java", -27, 0, 0, 0, 0, 0, 0, -8, -1, -36
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SALVATEUR.class", "Java", -45, 0, 0, 0, 0, 0, 0, 0, 0, -45
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SIMPLE_VILLAGER.class", "Java", -27, 0, 0, 0, 0, 0, 0, 0, 0, -27
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SIMPLE_WOLF.class", "Java", -31, 0, 0, 0, 0, 0, 0, 0, 0, -31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SOEUR.class", "Java", -40, 0, 0, 0, 0, 0, 0, 0, 0, -40
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SORCIER.class", "Java", -34, 0, 0, 0, 0, 0, 0, 0, 0, -34
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SORCIERE.class", "Java", -50, 0, 0, 0, 0, 0, 0, 0, 0, -50
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\SWAPPER.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\Servant_des_loups.class", "Java", -33, 0, 0, 0, 0, 0, 0, 0, 0, -33
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\THANOS.class", "Java", -43, 0, 0, 0, 0, 0, 0, 0, 0, -43
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\THIERCE_ANGE.class", "Java", -33, 0, 0, 0, 0, 0, 0, 0, 0, -33
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\TRAQUEUR.class", "Java", -40, 0, 0, 0, 0, 0, 0, 0, 0, -40
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\VOLEUR.class", "Java", -40, 0, 0, 0, 0, 0, 0, 0, 0, -40
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\VOYANTE$1.class", "Java", -8, 0, 0, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\RolesLg\VOYANTE.class", "Java", -42, 0, 0, 0, 0, 0, 0, 0, 0, -42
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Timer.class", "Java", -32, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\CommandUtil.class", "Java", -18, 0, 0, 0, 0, 0, 0, 0, 0, -18
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\GameLgUtil.class", "Java", -69, 0, 0, 0, 0, 0, 0, 0, 0, -69
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\HealthSyncer.class", "Java", -18, 0, 0, 0, 0, 0, 0, 0, 0, -18
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\InventoryUtil.class", "Java", -25, 0, 0, 0, 0, 0, 0, 0, 0, -25
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\ItemUtil.class", "Java", -57, 0, 0, 0, 0, 0, 0, 0, 0, -57
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\LineLocationHelper.class", "Java", -54, 0, 0, 0, 0, 0, 0, 0, 0, -54
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\LineRapport.class", "Java", -7, 0, 0, 0, 0, 0, 0, 0, 0, -7
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\LocationUtil.class", "Java", -63, 0, 0, 0, 0, 0, 0, 0, 0, -63
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\MathUtil.class", "Java", -30, 0, 0, 0, 0, 0, 0, 0, 0, -30
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\MyStringUtil.class", "Java", -15, 0, 0, 0, 0, 0, 0, 0, 0, -15
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\PlayerUtil.class", "Java", -62, 0, 0, 0, 0, 0, 0, 0, 0, -62
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\PotionUtil.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\Registre.class", "Java", -8, 0, 0, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\RoleUtil.class", "Java", -108, 0, 0, 0, 0, 0, 0, 0, 0, -108
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\VoteEvent.class", "Java", -10, 0, 0, 0, 0, 0, 0, 0, 0, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\Util\WorldUtil.class", "Java", -32, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\BedListener.class", "Java", -89, 0, 0, 0, 0, 0, 0, 0, 0, -89
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\BedLoc.class", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 0, -9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\BedLocType.class", "Java", -19, 0, 0, 0, 0, 0, 0, 0, 0, -19
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\BedTeam.class", "Java", -49, 0, 0, 0, 0, 0, 0, 0, 0, -49
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\BedWarMap.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\Bedwars$1.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, 0, -16
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\Bedwars$2.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\Bedwars.class", "Java", -80, 0, 0, 0, 0, 0, 0, -17, 0, -97
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\bedwars\CW.class", "Java", -17, 0, 0, 0, 0, 0, 0, 0, 0, -17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockCommand.class", "Java", -23, 0, 0, 0, 0, 0, 0, 0, 0, -23
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockListGenerator.class", "Java", -10, 0, 0, 0, 0, 0, 0, 0, 0, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockRole.class", "Java", -16, 0, 0, 0, 0, 0, 0, 0, 0, -16
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockRoleData.class", "Java", -4, 0, 0, 0, 0, 0, 0, 0, 0, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockRoleSet.class", "Java", -15, 0, 0, 0, 0, 0, 0, 0, 0, -15
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockTower$1.class", "Java", -13, 0, 0, 0, 0, 0, 0, -4, 0, -17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\ClockTower.class", "Java", -59, 0, 0, 0, 0, 0, 0, 0, 0, -59
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\clocktower\EvilData.class", "Java", -13, 0, 0, 0, 0, 0, 0, 0, 0, -13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\FutureAction.class", "Java", -7, 0, 0, 0, 0, 0, 0, 0, 0, -7
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Hub.class", "Java", -28, 0, 0, 0, 0, 0, 0, 0, 0, -28
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Lg.class", "Java", -184, 0, 0, 0, 0, 0, 0, 0, 0, -184
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\LgTab.class", "Java", -38, 0, 0, 0, 0, 0, 0, 0, 0, -38
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Lga$1.class", "Java", -8, 0, 0, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Lga$2.class", "Java", -8, 0, 0, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Lga.class", "Java", -263, 0, 0, 0, 0, 0, 0, 0, -12, -275
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Rejoin.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\SpecialItemHolder$SpecialItemType.class", "Java", -12, 0, 0, 0, 0, 0, 0, 0, 0, -12
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\SpecialItemHolder.class", "Java", -52, 0, 0, 0, 0, 0, 0, 0, 0, -52
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\commands\Star.class", "Java", -50, 0, 0, 0, 0, 0, 0, 0, 0, -50
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomGame$1.class", "Java", -15, 0, 0, 0, 0, 0, 0, 0, 0, -15
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomGame$2.class", "Java", -25, 0, 0, 0, 0, 0, 0, 0, 0, -25
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomGame.class", "Java", -52, 0, 0, 0, 0, 0, 0, 0, 0, -52
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomGameDataSet.class", "Java", -12, 0, 0, 0, 0, 0, 0, -1, 0, -13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomGameType.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomParam.class", "Java", -2, 0, 0, 0, 0, 0, 0, 0, 0, -2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomRole.class", "Java", -6, 0, 0, 0, 0, 0, 0, 0, 0, -6
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\CustomTimer.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\custom\RoleSet.class", "Java", -5, 0, 0, 0, 0, 0, 0, 0, 0, -5
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\minecraft\GameListener.class", "Java", -5, 0, 0, 0, 0, 0, 0, 0, 0, -5
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\minecraft\PlayerDataLeft.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\minecraft\ResCheck.class", "Java", -5, 0, 0, 0, 0, 0, 0, 0, 0, -5
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\minecraft\mcListeners$1.class", "Java", -11, 0, 0, 0, 0, 0, 0, 0, 0, -11
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\minecraft\mcListeners.class", "Java", -348, 0, 0, 0, 0, 0, 0, 0, -5, -353
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\BedBoard.class", "Java", -24, 0, 0, 0, 0, 0, 0, 0, 0, -24
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\CustomGameBoard.class", "Java", -20, 0, 0, 0, 0, 0, 0, 0, 0, -20
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\DefaultBoard.class", "Java", -13, 0, 0, 0, 0, 0, 0, 0, 0, -13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\GameBoard.class", "Java", -2, 0, 0, 0, 0, 0, 0, 0, 0, -2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\CompoDisplay.class", "Java", -60, 0, 0, 0, 0, 0, 0, 0, 0, -60
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\ConfigDisplay.class", "Java", -62, 0, 0, 0, 0, 0, 0, 0, -1, -63
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\DisplayMenu.class", "Java", -62, 0, 0, 0, 0, 0, 0, 0, 0, -62
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\EventDisplay.class", "Java", -71, 0, 0, 0, 0, 0, 0, 0, 0, -71
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\GameTypeChoose.class", "Java", -32, 0, 0, 0, 0, 0, 0, 0, 0, -32
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\GeneralMenu$1.class", "Java", -13, 0, 0, 0, 0, 0, 0, 0, 0, -13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\GeneralMenu.class", "Java", -62, 0, 0, 0, 0, 0, 0, 0, 0, -62
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\InvFunct.class", "Java", -3, 0, 0, 0, 0, 0, 0, 0, -1, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\InventoryDisplay.class", "Java", -17, 0, 0, 0, 0, 0, 0, 0, 0, -17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\JoinChoose.class", "Java", -45, 0, 0, 0, 0, 0, 0, 0, 0, -45
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\PlayerDisplay.class", "Java", -51, 0, 0, 0, 0, 0, 0, 0, 0, -51
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\PlayerGameListInv.class", "Java", -35, 0, 0, 0, 0, 0, 0, 0, 0, -35
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\PresetFunct.class", "Java", -35, 0, 0, 0, 0, 0, 0, 0, 0, -35
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\ScenarioInv.class", "Java", -43, 0, 0, 0, 0, 0, 0, 0, 0, -43
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\StringChooseInv.class", "Java", -50, 0, 0, 0, 0, 0, 0, 0, 0, -50
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\SwapperConfigInv.class", "Java", -35, 0, 0, 0, 0, 0, 0, 0, 0, -35
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\VoteInv.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\playersDisplay$1.class", "Java", -10, 0, 0, 0, 0, 0, 0, 0, 0, -10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\playersDisplay.class", "Java", -51, 0, 0, 0, 0, 0, 0, 0, 0, -51
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\Inventory\sorcierInv.class", "Java", -47, 0, 0, 0, 0, 0, 0, 0, 0, -47
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\ScoreboardLg.class", "Java", -49, 0, 0, 0, 0, 0, 0, 0, 0, -49
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\scoreboard\StarBoard.class", "Java", -22, 0, 0, 0, 0, 0, 0, 0, -1, -23
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\uhc_color\Color.class", "Java", -20, 0, 0, 0, 0, 0, 0, 0, 0, -20
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\uhc_color\Gui\PlayerGui.class", "Java", -41, 0, 0, 0, 0, 0, 0, -5, 0, -46
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\uhc_color\Gui\chooseColorGui.class", "Java", -42, 0, 0, 0, 0, 0, 0, 0, 0, -42
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\uhc_color\MainColor.class", "Java", -29, 0, 0, 0, 0, 0, 0, 0, 0, -29
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\bin\fr\fitzche\lgmore\uhc_color\PlayerColorboard\Colorboard.class", "Java", -61, 0, 0, 0, 0, 0, 0, 0, -5, -66
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\font\alternate.properties", "Java Properties", 0, 0, 0, 0, -52, 0, 0, 0, 0, -52
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\font\default.properties", "Java Properties", 0, 0, 0, 0, -158, 0, 0, 0, -11, -169
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass black\glass_black.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass blue\glass_blue.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass brown\glass_brown.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass cyan\glass_cyan.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass gray\glass_gray.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass green\glass_green.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass light blue\glass_light_blue.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass light gray\glass_silver.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass lime\glass_lime.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass magenta\glass_magenta.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass orange\glass_orange.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass pink\glass_pink.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass purple\glass_purple.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass red\glass_red.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass white\glass_white.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass yellow\glass_yellow.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Black Glass\glass_black.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Blue Glass\glass_blue.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Brown Glass\glass_brown.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Cyan Glass\glass_cyan.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Green Glass\glass_green.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Grey Glass\glass_gray.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Light Blue Glass\glass_light_blue.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Light Grey Glass\glass_silver.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Lime Glass\glass_lime.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Magenta Glass\glass_magenta.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Normal\glass.properties", "Java Properties", 0, 0, 0, 0, -2, 0, 0, 0, 0, -2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Orange Glass\glass_orange.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Pink Glass\glass_pink.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Purple Glass\glass_purple.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Red Glass\glass_red.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\White Glass\glass_white.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\Yellow Glass\glass_yellow.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\ctm\glass\glass.properties", "Java Properties", 0, 0, 0, 0, -3, 0, 0, 0, -1, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\font\alternate.properties", "Java Properties", 0, 0, 0, 0, -52, 0, 0, 0, 0, -52
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\font\default.properties", "Java Properties", 0, 0, 0, 0, -158, 0, 0, 0, -11, -169
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\sky\world0\sky1.properties", "Java Properties", 0, 0, 0, 0, -8, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\sky\world0\sky2.properties", "Java Properties", 0, 0, 0, 0, -6, 0, 0, -1, -1, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\sky\world0\sky3.properties", "Java Properties", 0, 0, 0, 0, -7, 0, 0, 0, -1, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\sky\world0\sky4.properties", "Java Properties", 0, 0, 0, 0, -8, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\mcpatcher\sky\world0\skydestocazzo.properties", "Java Properties", 0, 0, 0, 0, -7, 0, 0, 0, -1, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\diamond_ore.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\emerald_ore.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\fire_0.png.mcmeta", "JSON", 0, 0, -22, 0, 0, 0, 0, 0, 0, -22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\fire_1.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\fire_layer_0.png.mcmeta", "JSON", 0, 0, -22, 0, 0, 0, 0, 0, 0, -22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\fire_layer_1.png.mcmeta", "JSON", 0, 0, -22, 0, 0, 0, 0, 0, 0, -22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\gold_ore.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\lava_flow.png.mcmeta", "JSON", 0, 0, -23, 0, 0, 0, 0, 0, -1, -24
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\lava_still.png.mcmeta", "JSON", 0, 0, -45, 0, 0, 0, 0, 0, -1, -46
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\portal.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, -1, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\prismarine_rough.png.mcmeta", "JSON", 0, 0, -30, 0, 0, 0, 0, 0, -1, -31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\redstone_ore.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\sea_lantern.png.mcmeta", "JSON", 0, 0, -5, 0, 0, 0, 0, 0, -1, -6
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\water_flow.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, -1, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\blocks\water_still.png.mcmeta", "JSON", 0, 0, -39, 0, 0, 0, 0, 0, -1, -40
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\font\ascii.properties", "Java Properties", 0, 0, 0, 0, -158, 0, 0, 0, -11, -169
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\font\ascii_sga.properties", "Java Properties", 0, 0, 0, 0, -52, 0, 0, 0, 0, -52
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\items\clock.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, -1, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\assets\minecraft\textures\items\compass.png.mcmeta", "JSON", 0, 0, -3, 0, 0, 0, 0, 0, -1, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\lgmorepack\pack.mcmeta", "JSON", 0, 0, -6, 0, 0, 0, 0, 0, 0, -6
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\oldtexture\pack.mcmeta", "JSON", 0, 0, -6, 0, 0, 0, 0, 0, -1, -7
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\plugin.yml", "YAML", 0, 0, 0, -26, 0, 0, 0, 0, -1, -27
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\resources\fitzche.json", "JSON", 0, 0, 5, 0, 0, 0, 0, 0, 3, 8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\resources\plugin.yml", "YAML", 0, 0, 0, 26, 0, 0, 0, 0, 1, 27
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\resources\voyant.json", "JSON", 0, 0, 27, 0, 0, 0, 0, 0, 4, 31
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\.VSCodeCounter\2026-03-29_15-59-57\details.md", "Markdown", 0, 241, 0, 0, 0, 0, 0, 0, 6, 247
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\.VSCodeCounter\2026-03-29_15-59-57\diff-details.md", "Markdown", 0, 419, 0, 0, 0, 0, 0, 0, 6, 425
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\.VSCodeCounter\2026-03-29_15-59-57\diff.md", "Markdown", 0, 82, 0, 0, 0, 0, 0, 0, 7, 89
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\.VSCodeCounter\2026-03-29_15-59-57\results.json", "JSON", 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\.VSCodeCounter\2026-03-29_15-59-57\results.md", "Markdown", 0, 47, 0, 0, 0, 0, 0, 0, 7, 54
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\StarParty\StarParty.java", "Java", 39, 0, 0, 0, 0, 0, 0, 0, 8, 47
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Camp.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\Action.java", "Java", 418, 0, 0, 0, 0, 0, 0, 8, 115, 541
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\CharactListener.java", "Java", 45, 0, 0, 0, 0, 0, 0, 5, 19, 69
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\CharactRole.java", "Java", 272, 0, 0, 0, 0, 0, 0, 54, 126, 452
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\CharactRoleList.java", "Java", 70, 0, 0, 0, 0, 0, 0, 3, 18, 91
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\CharactUHC.java", "Java", 283, 0, 0, 0, 0, 0, 0, 19, 116, 418
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\Jauge.java", "Java", 47, 0, 0, 0, 0, 0, 0, 0, 21, 68
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\SpecialCharactItem.java", "Java", 66, 0, 0, 0, 0, 0, 0, 0, 22, 88
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\CharactUHC\VisionPower.java", "Java", 79, 0, 0, 0, 0, 0, 0, 0, 17, 96
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Game.java", "Java", 2, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Lg\GameLg.java", "Java", -19, 0, 0, 0, 0, 0, 0, 42, 33, 56
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Lg\GameLgListener.java", "Java", 4, 0, 0, 0, 0, 0, 0, 0, 1, 5
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Lg\SpecialsBlock\SpecialBlock.java", "Java", 8, 0, 0, 0, 0, 0, 0, 25, 44, 77
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Lg\SpecialsBlock\VoteBlockData.java", "Java", 10, 0, 0, 0, 0, 0, 0, 0, 3, 13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Main.java", "Java", 60, 0, 0, 0, 0, 0, 0, 1, 36, 97
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\PlayerData.java", "Java", 15, 0, 0, 0, 0, 0, 0, 0, 7, 22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\ANALYSTE.java", "Java", 123, 0, 0, 0, 0, 0, 0, 5, 51, 179
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\ANCIEN.java", "Java", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\ARAIGNEE.java", "Java", 136, 0, 0, 0, 0, 0, 0, 3, 42, 181
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\Checkers\AraigneeChecker.java", "Java", 70, 0, 0, 0, 0, 0, 0, 10, 23, 103
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\Checkers\SoeurChecker.java", "Java", 0, 0, 0, 0, 0, 0, 0, -1, 1, 0
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\Checkers\TrackRes.java", "Java", 2, 0, 0, 0, 0, 0, 0, 0, 0, 2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\Checkers\demonChecker.java", "Java", -36, 0, 0, 0, 0, 0, 0, -1, -2, -39
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\DEMON.java", "Java", -92, 0, 0, 0, 0, 0, 0, 0, -18, -110
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\ERMITE.java", "Java", 4, 0, 0, 0, 0, 0, 0, 0, 0, 4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\INFECT_PERE_DES_LOUPS.java", "Java", -1, 0, 0, 0, 0, 0, 0, 0, 1, 0
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\LOUP_BRUMEUX.java", "Java", 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\LOUP_CRAINTIF.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\LOUP_MYSTIQUE.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\PARRAIN.java", "Java", 4, 0, 0, 0, 0, 0, 0, 0, 1, 5
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\PETITE_FILLE.java", "Java", 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\RolesLg.java", "Java", 205, 0, 0, 0, 0, 0, 0, 0, 4, 209
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\SAGE.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\SALVATEUR.java", "Java", 7, 0, 0, 0, 0, 0, 0, 0, 1, 8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\SIMPLE_VILLAGER.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\SOEUR.java", "Java", 4, 0, 0, 0, 0, 0, 0, 0, 3, 7
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\SORCIERE.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\RolesLg\VOYANTE.java", "Java", 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\BooksUtils.java", "Java", 122, 0, 0, 0, 0, 0, 0, 19, 44, 185
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\JsonUtil.java", "Java", 47, 0, 0, 0, 0, 0, 0, 0, 9, 56
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\LineLocationHelper.java", "Java", 9, 0, 0, 0, 0, 0, 0, 1, 5, 15
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\LocationUtil.java", "Java", 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\MathUtil.java", "Java", 7, 0, 0, 0, 0, 0, 0, 0, 0, 7
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\PlayerUtil.java", "Java", 63, 0, 0, 0, 0, 0, 0, 2, 22, 87
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\Util\RoleUtil.java", "Java", -190, 0, 0, 0, 0, 0, 0, 0, 2, -188
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\bedwars\Bedwars.java", "Java", 17, 0, 0, 0, 0, 0, 0, 0, 5, 22
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\clocktower\ClockTower.java", "Java", 6, 0, 0, 0, 0, 0, 0, 2, 2, 10
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\commands\Hub.java", "Java", 15, 0, 0, 0, 0, 0, 0, 0, 3, 18
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\commands\Lg.java", "Java", 14, 0, 0, 0, 0, 0, 0, 0, -5, 9
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\commands\Lga.java", "Java", 1, 0, 0, 0, 0, 0, 0, 0, 6, 7
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\commands\SpecialItemHolder.java", "Java", 52, 0, 0, 0, 0, 0, 0, 2, 25, 79
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\custom\CustomGame.java", "Java", 40, 0, 0, 0, 0, 0, 0, 1, 27, 68
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\custom\CustomGameDataSet.java", "Java", 26, 0, 0, 0, 0, 0, 0, 1, 14, 41
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\custom\CustomGameType.java", "Java", 73, 0, 0, 0, 0, 0, 0, 0, 10, 83
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\custom\CustomRole.java", "Java", -1, 0, 0, 0, 0, 0, 0, 0, 2, 1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\custom\RoleSet.java", "Java", 3, 0, 0, 0, 0, 0, 0, 1, 0, 4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\minecraft\mcListeners.java", "Java", -9, 0, 0, 0, 0, 0, 0, 0, 5, -4
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\CustomGameBoard.java", "Java", 11, 0, 0, 0, 0, 0, 0, 0, 6, 17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\GeneralMenu.java", "Java", 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\JoinChoose.java", "Java", 28, 0, 0, 0, 0, 0, 0, 2, 14, 44
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\PlayerDisplay.java", "Java", 0, 0, 0, 0, 0, 0, 0, 1, 2, 3
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\PlayerVoteChoose.java", "Java", 39, 0, 0, 0, 0, 0, 0, 1, 13, 53
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\VoteInv.java", "Java", -42, 0, 0, 0, 0, 0, 0, 0, -14, -56
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\cupidonPlayersDisplay.java", "Java", 113, 0, 0, 0, 0, 0, 0, 6, 54, 173
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\Inventory\playersDisplay.java", "Java", -113, 0, 0, 0, 0, 0, 0, -5, -55, -173
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\scoreboard\ScoreboardLg.java", "Java", -1, 0, 0, 0, 0, 0, 0, 0, 1, 0
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\settlerGame\SettleGameSet.java", "Java", 75, 0, 0, 0, 0, 0, 0, 3, 42, 120
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\settlerGame\Settler.java", "Java", 56, 0, 0, 0, 0, 0, 0, 7, 26, 89
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\settlerGame\SettlerGame.java", "Java", 195, 0, 0, 0, 0, 0, 0, 16, 60, 271
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\settlerGame\SettlerTeamData.java", "Java", 7, 0, 0, 0, 0, 0, 0, 0, 6, 13
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\uhc_color\Gui\chooseColorGui.java", "Java", 0, 0, 0, 0, 0, 0, 0, 0, 2, 2
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\src\fr\fitzche\lgmore\uhc_color\PlayerColorboard\Colorboard.java", "Java", 38, 0, 0, 0, 0, 0, 0, 0, 4, 42
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\banned-ips.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, -1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\banned-players.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, -1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\bukkit.yml", "YAML", 0, 0, 0, -29, 0, 0, 0, -12, -3, -44
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\commands.yml", "YAML", 0, 0, 0, -4, 0, 0, 0, -11, -2, -17
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\help.yml", "YAML", 0, 0, 0, 0, 0, 0, 0, -55, -2, -57
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\logs\2025-02-05-1.log", "Log", 0, 0, 0, 0, 0, -37, 0, 0, -1, -38
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\logs\2025-02-05-2.log", "Log", 0, 0, 0, 0, 0, -50, 0, 0, -1, -51
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\logs\2025-02-05-3.log", "Log", 0, 0, 0, 0, 0, -43, 0, 0, -1, -44
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\logs\2025-02-05-4.log", "Log", 0, 0, 0, 0, 0, -7, 0, 0, -1, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\logs\latest.log", "Log", 0, 0, 0, 0, 0, -171, 0, 0, -1, -172
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\ops.json", "JSON", 0, 0, -8, 0, 0, 0, 0, 0, 0, -8
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\permissions.yml", "YAML", 0, 0, 0, 0, 0, 0, 0, 0, -1, -1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\plugins\PluginMetrics\config.yml", "YAML", 0, 0, 0, -3, 0, 0, 0, -1, -1, -5
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\plugins\WorldEdit\config.yml", "YAML", 0, 0, 0, -46, 0, 0, 0, -16, -12, -74
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\server.properties", "Java Properties", 0, 0, 0, 0, -36, 0, 0, -2, -1, -39
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\spigot.yml", "YAML", 0, 0, 0, -121, 0, 0, 0, -11, -2, -134
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\start.bat", "Batch", 0, 0, 0, 0, 0, 0, -1, 0, 0, -1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\usercache.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, -1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\wepif.yml", "YAML", 0, 0, 0, -26, 0, 0, 0, -21, -3, -50
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\whitelist.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, -1
+"c:\Users\Utilisateur\Desktop\RB\Dev\MyCodes\GitHub\LoupGarouMinecraftPlugin\testServer\world\stats\3a33b73a-fab0-4151-b785-3d76c24ff129.json", "JSON", 0, 0, -1, 0, 0, 0, 0, 0, 0, -1
+"Total", "-", -5813, 855, -227, -229, -803, -308, -1, -144, 969, -5701

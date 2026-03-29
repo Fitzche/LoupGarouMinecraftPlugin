@@ -58,7 +58,7 @@ public class ConfigDisplay implements Listener{
 		config.setItem(25, ItemUtil.getItem(Material.PAPER,  0, ChatColor.BLUE + ""+ ChatColor.BOLD + "Scénarios", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"   ▪Configurez les scénarios"))));
 		
 		int x = game.roles.size();
-		int y = game.players.size();
+		int y = game.getActualNbOfPlayer();
 		String l = ChatColor.DARK_GREEN + "✓ Début de la partie";
 		if (x != y) {
 			l = ChatColor.DARK_RED +"✖ ⋙ " + x + " roles pour "+ y + " joueurs !";

@@ -251,7 +251,7 @@ public class Lg implements CommandExecutor {
 			}
 			
 			
-			cupidonPlayersDisplay display = new cupidonPlayersDisplay(game.players, null);
+			cupidonPlayersDisplay display = new cupidonPlayersDisplay(game.getPlayerAlive(), null);
 			Player p = (Player) sender;
 			display.display(p, null);
 			Main.server.getPluginManager().registerEvents(display, Main.plug);

@@ -84,7 +84,7 @@ public class GameLg implements Listener, Serializable, Game{
 	public Timer timer;
 	public String name;
 	
-	public GameType type;
+
 	
 	
 	private int epicTaux = 0;
@@ -115,7 +115,7 @@ public class GameLg implements Listener, Serializable, Game{
 	public boolean allDifferent = false;
 	
 	
-	public ArrayList<PlayerData> playerAlive;
+	private ArrayList<PlayerData> playerAlive;
 	public ArrayList<PlayerData> RealwolfAlive;
 	public ArrayList<PlayerData> RealvillagerAlive;
 	public ArrayList<PlayerData> soloAlive;
@@ -130,7 +130,7 @@ public class GameLg implements Listener, Serializable, Game{
 	public ScoreboardLg board;
 	public boolean inGame;
 	public int groupe;
-	public ArrayList<PlayerData> players = new ArrayList<PlayerData>();
+	private ArrayList<PlayerData> players = new ArrayList<PlayerData>();
 	public ArrayList<RoleInstance> rolesIn;
 	public boolean isInVote;
 	public boolean isInDisc;
@@ -177,7 +177,7 @@ public class GameLg implements Listener, Serializable, Game{
 	public GameLg(String name) {
 		
 		this.stopped = false;
-		this.type = type;
+		
 		this.listener = new GameLgListener(this);
 		Main.server.getPluginManager().registerEvents(events, Main.plug);
 		
@@ -217,6 +217,7 @@ public class GameLg implements Listener, Serializable, Game{
 		this.resCheckers.add(new RegisterCheck(this));
 		
 		this.probasEvents.put("AutomaticCheckWin", 100);
+		
 	}
 	
 	public int getGroupe() {
@@ -1126,7 +1127,7 @@ public class GameLg implements Listener, Serializable, Game{
 		ply.clearLgGameVar();
 		ply.game = null;
 		ply.isInLgGame = false;
-		System.out.println(ply.Name +" removed at "+ spec);
+		System.out.println(ply.getName() +" removed at "+ spec);
 	}
 	
 	
@@ -1174,12 +1175,7 @@ public class GameLg implements Listener, Serializable, Game{
 				
 			}, 500);
 		}  else {
-			playerAlive.remove(ply);
-			roles.remove(ply.role);
-			rolesIn.remove(ply.roleIn);
-			ply.player.getInventory().clear();
-			ply.inLife = false;
-			ply.clearLgGameVar();
+			this.removePlayer(ply, "at hunter death");
 			Hub.sendHub(ply);
 		}
 	
@@ -2099,7 +2095,7 @@ public class GameLg implements Listener, Serializable, Game{
 	@Override
 	public GameType getType() {
 		// TODO Auto-generated method stub
-		return type;
+		return gameType;
 	}
 
 	@Override

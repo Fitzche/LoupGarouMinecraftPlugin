@@ -446,7 +446,7 @@ public class PlayerData implements Serializable{
 	}
 	
 	public boolean isInThisGame(GameLg gm) {
-		for (PlayerData ply:gm.players) {
+		for (PlayerData ply:gm.getPlayerAlive()) {
 			if (this.equals(ply)) {
 				return true;
 			}

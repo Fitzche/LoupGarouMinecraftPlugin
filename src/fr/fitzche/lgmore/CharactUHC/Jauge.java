@@ -27,7 +27,7 @@ public class Jauge {
 		
 		
 		this.name = JsonUtil.getString(obj, "name", "null");
-		this.value = JsonUtil.getInt(obj, "max", 0);
+		this.value = JsonUtil.getInt(obj, "defaultValue", 0);
 		this.maxValue = JsonUtil.getInt(obj, "maxValue", 100);
 		this.resetOnFinish = JsonUtil.getBool(obj, "resetOnFinish", false);
 		this.nbOfIteration = JsonUtil.getInt(obj, "iteration", 1);
@@ -46,7 +46,7 @@ public class Jauge {
 			
 			
 			if (!stopped) {
-				Action act = new Action(uhc, Main.getData(playerName), role, action, new ArrayList<String>());
+				Action act = new Action(uhc, Main.getData(playerName), action, new ArrayList<String>());
 			}
 			
 			

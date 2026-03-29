@@ -46,7 +46,7 @@ public class FauconChecker implements ResCheck {
 		for (Location loc:fauc.spottedPoint) {
 			if (LocationUtil.getDistanceBetween(k, loc) < 50) {
 				int n = 0;
-				for (PlayerData p:((GameLg)fauc.playerWithRole.game).playerAlive) {
+				for (PlayerData p:((GameLg)fauc.playerWithRole.game).getPlayerAlive()) {
 					if (LocationUtil.getDistanceBetween(p.player, loc) < 50) {
 						n++;
 					}
