@@ -75,7 +75,7 @@ public class GeneralMenu implements Listener {
 					chose.open(p, e.getInventory());
 					System.out.println("open l.75 GeneralMenu");
 				}
-			} else if ((ChatColor.RESET+e.getCurrentItem().getItemMeta().getDisplayName()).equals( ChatColor.RESET+"Config")) {
+			} else if ((e.getCurrentItem().getItemMeta().getDisplayName()).equals( ChatColor.GOLD+""+ChatColor.BOLD+"Config")) {
 				if (p.game != null && (p.hoster || p.Name.equals("FITZCHE") || p.Name.equals("Fitzche"))) {
 					CommandUtil.runCommand("lga", (Player) e.getWhoClicked(), new String[] {"Game", "config", p.game.getName()});
 					

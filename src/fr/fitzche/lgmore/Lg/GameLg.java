@@ -1164,12 +1164,7 @@ public class GameLg implements Listener, Serializable, Game{
 				public void run() {
 					hunter.playerWithRole.sendMessage("Trop tard...");
 					
-					playerAlive.remove(ply);
-					roles.remove(ply.role);
-					rolesIn.remove(ply.roleIn);
-					ply.player.getInventory().clear();
-					ply.inLife = false;
-					ply.clearLgGameVar();
+					removePlayer(ply, "at hunter death");
 					Hub.sendHub(ply);
 				}
 				
@@ -1815,7 +1810,7 @@ public class GameLg implements Listener, Serializable, Game{
 		}
 		
 		if (winning != null) {
-			if (allDifferent && winning.equals(Camp.Villager) || winning.equals(Camp.Wolf))
+			if (allDifferent && (winning.equals(Camp.Villager) || winning.equals(Camp.Wolf)))
 			win(winning);
 			this.statut = GameStatut.ENDED;
 		}
@@ -2130,16 +2125,21 @@ public class GameLg implements Listener, Serializable, Game{
 
 	@Override
 	public int getActualNbOfPlayer() {
-		if (statut.equals(GameStatut.NOT_STARTED)) {
+		if (statut == null) {
 			return this.players.size();
+		}
+		if (statut != null &&statut.equals(GameStatut.NOT_STARTED)) {
+			
 		}
 		return this.playerAlive.size();
 	}
 
 	@Override
 	public void playerQuit(String name) {
-		if (!board.istimeRunned) {
-			this.players.remove(Main.getData(name));
+		
+		if (statut.equals(GameStatut.NOT_STARTED)) {
+			
+			this.removePlayer(Main.getData(name), " at playerQuit() Gamelg");
 		}
 		
 	}

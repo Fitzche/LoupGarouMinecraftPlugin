@@ -15,7 +15,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="ParticleAPI_v2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="worldedit-bukkit-6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Utilisateur/Desktop/RB/Dev/MyCodes/GitHub/LoupGarouMinecraftPlugin/Multiverse-Core-2.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Utilisateur/Desktop/RB/Dev/MyCodes/GitHub/LoupGarouMinecraftPlugin/EffectLib-4.1.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>

@@ -120,10 +120,11 @@ public class TradeInv implements InvFunct {
 				}
 				
 				
+				ItemStack i = basesItems.get(items.indexOf(item));
+				ItemUtil.setLore(i, new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Bedwars Item")));
 				
 				
-				
-				p.player.getInventory().addItem(basesItems.get(items.indexOf(item)));
+				p.player.getInventory().addItem(i);
 				
 				
 				

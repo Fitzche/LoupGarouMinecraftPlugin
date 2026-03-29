@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -119,6 +120,15 @@ public class BedListener implements GameListener, Listener {
 			if (e.getSlotType().equals(SlotType.ARMOR) && bed.started) {
 				e.getWhoClicked().sendMessage("Vous ne pouvez pas retirer votre armure en partie de bedwars");
 				e.setCancelled(true);
+			}
+			
+			if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().hasDisplayName()) {
+				ItemStack item = e.getCurrentItem();
+				ItemMeta meta = item.getItemMeta();
+				String name = meta.getDisplayName();
+				
+				
+				
 			}
 		}
 	}

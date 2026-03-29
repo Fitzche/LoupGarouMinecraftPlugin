@@ -44,13 +44,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
-import org.mozilla.javascript.tools.shell.Environment;
+
 
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.utils.WorldManager;
+
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitUtil;

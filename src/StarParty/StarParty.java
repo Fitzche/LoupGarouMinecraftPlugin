@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 
 import WorldEditUtil.EmptyWorldGenerator;
 import fr.fitzche.lgmore.Game;

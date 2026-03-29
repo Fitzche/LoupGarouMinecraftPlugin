@@ -38,6 +38,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -58,7 +59,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.inventivetalent.particle.ParticlePlugin;
 
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.WorldEditAPI;
@@ -479,7 +479,11 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	
-	
+	@EventHandler
+	public void onAchievement(PlayerAchievementAwardedEvent event) {
+	    event.setCancelled(true);
+	}
+
 	
 	
 	public static boolean sameGame(PlayerData a, PlayerData b) {
@@ -620,9 +624,9 @@ public class Main extends JavaPlugin implements Listener {
 
 		
 		Bukkit.broadcastMessage(e.getPlayer().getName() +" left");
-		PlayerData player = strToPlayer.get(e.getPlayer().getName());
+		PlayerData player = getData(e.getPlayer().getName());
 		if (player.game == null) {
-			
+			System.out.println("game of "+ player.getName() + "null");
 			return;
 		}
 		player.leftInv = e.getPlayer().getInventory();

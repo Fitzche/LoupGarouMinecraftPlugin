@@ -27,7 +27,7 @@ public class VoteChecker implements ResCheck {
 
 	@Override
 	public String runDeathAction(PlayerDeathEvent e, Player k) {
-		PlayerData p = Main.strToPlayer.getOrDefault(e.getEntity(), null);
+		PlayerData p = Main.getData(e.getEntity());
 		
 		if (p == null) {
 			return "";

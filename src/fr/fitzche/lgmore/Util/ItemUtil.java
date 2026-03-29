@@ -25,6 +25,11 @@ public class ItemUtil {
 		item.setItemMeta(meta);
 	}
 	
+	public static ItemStack addEnchant(ItemStack item, Enchantment enchant, int level) {
+		item.addEnchantment(enchant, level);
+		return item;
+	}
+	
 	public static void setLore(ItemStack item, List<String> lore) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setLore(lore);
@@ -73,12 +78,13 @@ public class ItemUtil {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		item.setItemMeta(meta);
 	}
-	public static void hideAttributes(ItemStack item) {
+	public static ItemStack hideAttributes(ItemStack item) {
 		ItemMeta meta = item.getItemMeta();
 		
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		
 		item.setItemMeta(meta);
+		return item;
 	}
 	
 	public static Color getColor(ChatColor color) {
@@ -171,7 +177,7 @@ public class ItemUtil {
 					item.setAmount(item.getAmount() - 1);
 					taken ++;
 					
-				} while (item.getAmount() > 0 && taken < amount);
+				} while (item.getAmount() > 0 && taken <= amount);
 				if (item.getAmount()<0) {
 					inv.remove(item);
 				}
@@ -186,7 +192,7 @@ public class ItemUtil {
 					item.setAmount(item.getAmount() - 1);
 					taken ++;
 					
-				} while (item.getAmount() > 0 && taken < amount);
+				} while (item.getAmount() > 0 && taken <= amount);
 				if (item.getAmount()<0) {
 					inv.remove(item);
 				}
