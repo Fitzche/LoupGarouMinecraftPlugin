@@ -1,13 +1,16 @@
 package fr.fitzche.lgmore.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLightningStrike;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,6 +32,8 @@ import de.slikey.effectlib.EffectType;
 import de.slikey.effectlib.effect.VortexEffect;
 import fr.fitzche.lgmore.Main;
 import fr.fitzche.lgmore.PlayerData;
+import fr.fitzche.lgmore.Util.CommandUtil;
+import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LineLocationHelper;
 import fr.fitzche.lgmore.Util.LineRapport;
 import fr.fitzche.lgmore.Util.LocationUtil;
@@ -36,7 +41,10 @@ import fr.fitzche.lgmore.Util.MathUtil;
 import fr.fitzche.lgmore.Util.PlayerUtil;
 import fr.fitzche.lgmore.scoreboard.Inventory.GeneralMenu;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_8_R3.EntityLightning;
 import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.Explosion;
+import net.minecraft.server.v1_8_R3.World;
 
 
 public class SpecialItemHolder implements Listener {
@@ -44,6 +52,49 @@ public class SpecialItemHolder implements Listener {
 	
 	public enum SpecialItemType {
 		Ataru, Lightning, Strangle, Sith;
+	}
+	
+	public static void addInvItem(PlayerData p, String name) {
+		p.specialItemsOwned.add(name);
+		p.sendMessage(Main.exclamation+ " Vous avez reçu l'item: "+ ChatColor.GOLD+ name);
+	}
+	
+	public static void giveItem(Player p, String name) {
+		switch (name) {
+		case "Jogo":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.FIREBALL, 1, ChatColor.UNDERLINE+"Jogo", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Fait exploser la cible après 5s")))));
+			
+			break;
+		case "Sith":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.FERMENTED_SPIDER_EYE, 1, ChatColor.UNDERLINE+"Sith", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Donne un boost")))));
+			
+			break;
+		case "Ataru":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.DIAMOND_SWORD, 1, ChatColor.UNDERLINE+"Ataru", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Repousse les ennemis")))));
+			break;
+		case "Dash":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.FEATHER, 1, ChatColor.UNDERLINE+"Dash", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Un Dash")))));
+			
+			break;
+		case "Inventaire d'Item":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.FEATHER, 1, ChatColor.UNDERLINE+"Inventaire d'Item", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Ouvrir l'inventaire d'items pour en choisir un")))));
+
+			break;
+		case "Kashimo":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.REDSTONE, 1, ChatColor.UNDERLINE+"Kashimo", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Ouvrir l'inventaire d'items pour en choisir un")))));
+
+			break;
+		case "Yuta":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.IRON_SWORD, 1, ChatColor.UNDERLINE+"Yuta", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Ouvrir l'inventaire d'items pour en choisir un")))));
+
+			break;
+		case "Hakari":
+			p.getInventory().addItem(ItemUtil.addAppaEnchant(ItemUtil.getItem(Material.RABBIT_FOOT, 1, ChatColor.UNDERLINE+"Hakari", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Ouvrir l'inventaire d'items pour en choisir un")))));
+
+			break;
+		default:
+			break;
+		}
 	}
 	
 
@@ -80,7 +131,19 @@ public class SpecialItemHolder implements Listener {
 				}
 			}
 			
-			if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"LightningInf")) {
+			if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Kashimo")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 40, 0.2, 0.1);
+        		if (r.p != null) {
+        			p.player.getInventory().remove(item);
+                	if (item.getAmount() > 1) {
+                		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+                	}
+        			r.p.getLocation().getWorld().strikeLightningEffect(r.p.getLocation());
+        			r.p.player.damage(4, p.player);
+        			r.p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW	, 30, 3));
+        		}
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"LightningInf")) {
             	PlayerData p = Main.getData(event.getPlayer());
             	LineRapport r = LineLocationHelper.getLineLocations(p.player, 40, 0.2, 0.1);
         		if (r.p != null) {
@@ -89,6 +152,83 @@ public class SpecialItemHolder implements Listener {
         			r.p.player.damage(4, p.player);
         			r.p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW	, 30, 3));
         		}
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Yuta")) {
+				PlayerData p = Main.getData(event.getPlayer());
+            	
+				
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 40, 0.2, 0.1);
+        		if (r.p != null) {
+        			if (r.p.specialItemsOwned != null &&r.p.specialItemsOwned.size() > 1) {
+        				p.player.getInventory().remove(item);
+        				if (item.getAmount() > 1) {
+        					p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+        				}
+        				addInvItem(p, r.p.specialItemsOwned.get(0));
+        				addInvItem(p, r.p.specialItemsOwned.get(1));
+        			} else {
+        				p.sendMessage("Ce joueur ne possède pas 2 objets spéciaux");
+        			}
+        			
+        			
+        		}
+			
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Hakari")) {
+				PlayerData p = Main.getData(event.getPlayer());
+            	
+				p.player.getInventory().remove(item);
+            	if (item.getAmount() > 1) {
+            		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+            	}
+            	
+            	if (MathUtil.generateAlInt(0, 100) == 50) {
+            		p.sendMessage(ChatColor.YELLOW+ "Jackpot !!!");
+            		p.sendMessage(ChatColor.YELLOW+ "Vous recevez 100xp, 20 feathers et une énergie illimitée pendant 60s");
+            		p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1200, 10));
+            		p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 2));
+            		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 2));
+            		for (int i = 0; i<=60;i++) {
+            			if (i<=60) {
+        					Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+	
+								@Override
+								public void run() {
+									
+									PlayerUtil.particle(p.getLocation(), Color.PURPLE, "at hakari jackpot", 2, 10);
+									
+								}
+	        					
+	        				}, i*5);
+        				}
+            		}
+            		
+            	} else {
+            		p.sendMessage("Hé non");
+            	}
+			
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"oooooo")) {
+				PlayerData p = Main.getData(event.getPlayer());
+            	
+				p.player.getInventory().remove(item);
+            	if (item.getAmount() > 1) {
+            		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+            	}
+			
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"oooooo")) {
+				PlayerData p = Main.getData(event.getPlayer());
+            	
+				p.player.getInventory().remove(item);
+            	if (item.getAmount() > 1) {
+            		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+            	}
+			
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"oooooo")) {
+				PlayerData p = Main.getData(event.getPlayer());
+            	
+				p.player.getInventory().remove(item);
+            	if (item.getAmount() > 1) {
+            		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+            	}
+			
 			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"StrangleInf")) {
             	PlayerData p = Main.getData(event.getPlayer());
             	LineRapport r = LineLocationHelper.getLineLocations(p.player, 40, 0.2, 0.1);
@@ -106,20 +246,31 @@ public class SpecialItemHolder implements Listener {
             	PlayerData p = Main.getData(event.getPlayer());
             	p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE	, 200, 0));
         		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED	, 200, 3));
-        	
+        		
+            }else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Sith")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE	, 200, 0));
+        		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED	, 200, 3));
+        		
             }else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Navigation")) {
             	PlayerData p = Main.getData(event.getPlayer());
             	if (p== null) {
             		return;
             	}
             	(new GeneralMenu(p) ).open(p);
+            }else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Inventaire d'Item")) {
+            	CommandUtil.runCommand("lg", event.getPlayer(), new String[] {"openSpecialInv"});
             }else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Dash")) {
             	PlayerData p = Main.getData(event.getPlayer());
             	if (p== null) {
             		return;
             	}
-            	event.getPlayer().getInventory().remove(item);
             	
+            	
+            	p.player.getInventory().remove(item);
+            	if (item.getAmount() > 1) {
+            		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+            	}
             	int force = 3;
             	if (item.getEnchantmentLevel(Enchantment.ARROW_INFINITE) > 0) {
             		force *= 250;
@@ -189,9 +340,9 @@ public class SpecialItemHolder implements Listener {
 						
 						
 						List<Location> locs = LineLocationHelper.getLineLocations(event.getPlayer(), 40, 10, 0, 0, -0.25, 0).locs;
-		            	System.out.println(locs.size() + "; ");
+		            	
 						if (locs.size() > 3) {
-							System.out.println("here");
+							
 		            		Location loc = locs.get(1);
 							
 		            		PlayerData p = Main.getData(event.getPlayer());
@@ -245,7 +396,92 @@ public class SpecialItemHolder implements Listener {
 					}
             		
             	}.runTaskTimer(Main.plug, 3, 3);
-            }
+            }else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"Jogo")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 5, 0.2, 0.1);
+            	PlayerData target = r.p;
+        		if (r.p != null) {
+        			p.player.getInventory().remove(item);
+                	if (item.getAmount() > 1) {
+                		p.player.getInventory().addItem(ItemUtil.setName(new ItemStack(item.getType(), item.getAmount() - 1), item.getItemMeta().getDisplayName()));
+                	}
+        			int n = 30;
+        			for (int i = 0; i<=n; i++) {
+        				if (i<n - 1) {
+        					Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+	
+								@Override
+								public void run() {
+									
+									PlayerUtil.particle(target.getLocation().add(new Vector(0, 1, 0)), EnumParticle.FLAME, " at jogo power ", 1.5, true, 100);
+									float f = 1;
+									
+								}
+	        					
+	        				}, i*5);
+        				} else {
+        					Bukkit.getScheduler().runTaskLater(Main.plug, new BukkitRunnable() {
+        						
+								@Override
+								public void run() {
+									
+									
+									ArrayList<Player> ps = new ArrayList<Player>();
+									for (Player o:target.getLocation().getWorld().getPlayers()) {
+										if (LocationUtil.getDistanceBetween(o, target.getLocation()) < 10) {
+											
+											o.addPotionEffect(new PotionEffect( PotionEffectType.DAMAGE_RESISTANCE, 40, 255));
+											ps.add(o);
+											
+										}
+									}
+									target.getLocation().getWorld().createExplosion(target.getLocation(), 10);
+									for (Player o:ps) {
+										Main.pvpWorldDamage(o, p.player, 6);
+									}
+								}
+	        					
+	        				}, i*5);
+        				}
+	        				
+        				
+        			}
+        			
+        		}
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"TargetItem")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 5, 0.2, 0.1);
+            	PlayerData target = r.p;
+            	if (r.p != null) {
+        			
+        			
+        		}
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"TargetItem")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 5, 0.2, 0.1);
+            	PlayerData target = r.p;
+            	if (r.p != null) {
+        			
+        			
+        		}
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"TargetItem")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 5, 0.2, 0.1);
+            	PlayerData target = r.p;
+            	if (r.p != null) {
+        			
+        			
+        		}
+			}else if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().equals(ChatColor.UNDERLINE+"TargetItem")) {
+            	PlayerData p = Main.getData(event.getPlayer());
+            	LineRapport r = LineLocationHelper.getLineLocations(p.player, 5, 0.2, 0.1);
+            	PlayerData target = r.p;
+            	if (r.p != null) {
+        			
+        			
+        		}
+			} 
+            
 			
 		}
 	}

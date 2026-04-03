@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LgMore — Documentation des Rôles, Événements & Scénarios</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2538;
+    --border: #2a3248;
+    --text: #c9d1e0;
+    --text-muted: #6b7a99;
+    --accent: #7c8ff0;
+
+    --village: #4ade80;
+    --village-bg: rgba(74,222,128,.08);
+    --village-border: rgba(74,222,128,.25);
+
+    --wolf: #f87171;
+    --wolf-bg: rgba(248,113,113,.08);
+    --wolf-border: rgba(248,113,113,.25);
+
+    --solo: #fbbf24;
+    --solo-bg: rgba(251,191,36,.08);
+    --solo-border: rgba(251,191,36,.25);
+
+    --love: #e879f9;
+    --love-bg: rgba(232,121,249,.08);
+    --love-border: rgba(232,121,249,.25);
+
+    --special: #38bdf8;
+    --special-bg: rgba(56,189,248,.08);
+    --special-border: rgba(56,189,248,.25);
+
+    --jedi: #60a5fa;
+    --jedi-bg: rgba(96,165,250,.08);
+    --jedi-border: rgba(96,165,250,.25);
+
+    --sith: #f87171;
+    --sith-bg: rgba(248,113,113,.08);
+    --sith-border: rgba(248,113,113,.25);
+
+    --neutral-star: #fbbf24;
+    --neutral-star-bg: rgba(251,191,36,.08);
+    --neutral-star-border: rgba(251,191,36,.25);
+
+    --aura-luminous: #4ade80;
+    --aura-obscur: #f87171;
+    --aura-neutral: #94a3b8;
+    --aura-dangerous: #fb923c;
+    --aura-unknown: #a78bfa;
+
+    --event-bg: rgba(124,143,240,.08);
+    --event-border: rgba(124,143,240,.25);
+    --scenario-bg: rgba(251,191,36,.06);
+    --scenario-border: rgba(251,191,36,.22);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15,17,23,.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 24px;
+    height: 52px;
+    overflow-x: auto;
+  }
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0 16px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+  nav a:hover { color: var(--text); }
+  nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-title {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 15px;
+    margin-right: 24px;
+    padding-right: 24px;
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  section { margin-bottom: 64px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 22px; font-weight: 700; }
+  .section-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── CAMP TABS ── */
+  .camp-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .camp-tab {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    background: transparent;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .camp-tab[data-camp="village"] { color: var(--village); border-color: var(--village-border); }
+  .camp-tab[data-camp="village"].active { background: var(--village-bg); }
+  .camp-tab[data-camp="wolf"] { color: var(--wolf); border-color: var(--wolf-border); }
+  .camp-tab[data-camp="wolf"].active { background: var(--wolf-bg); }
+  .camp-tab[data-camp="solo"] { color: var(--solo); border-color: var(--solo-border); }
+  .camp-tab[data-camp="solo"].active { background: var(--solo-bg); }
+  .camp-tab[data-camp="love"] { color: var(--love); border-color: var(--love-border); }
+  .camp-tab[data-camp="love"].active { background: var(--love-bg); }
+  .camp-tab[data-camp="special"] { color: var(--special); border-color: var(--special-border); }
+  .camp-tab[data-camp="special"].active { background: var(--special-bg); }
+  .camp-tab[data-camp="all"] { color: var(--text); border-color: var(--border); }
+  .camp-tab[data-camp="all"].active { background: var(--bg3); }
+
+  /* ── ROLE GRID ── */
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 14px;
+  }
+
+  .role-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: border-color .2s, transform .15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .role-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+  .role-card:hover { transform: translateY(-2px); }
+
+  .role-card[data-camp="village"] { border-color: var(--village-border); }
+  .role-card[data-camp="village"]::before { background: var(--village); }
+  .role-card[data-camp="village"]:hover { border-color: var(--village); }
+
+  .role-card[data-camp="wolf"] { border-color: var(--wolf-border); }
+  .role-card[data-camp="wolf"]::before { background: var(--wolf); }
+  .role-card[data-camp="wolf"]:hover { border-color: var(--wolf); }
+
+  .role-card[data-camp="solo"] { border-color: var(--solo-border); }
+  .role-card[data-camp="solo"]::before { background: var(--solo); }
+  .role-card[data-camp="solo"]:hover { border-color: var(--solo); }
+
+  .role-card[data-camp="love"] { border-color: var(--love-border); }
+  .role-card[data-camp="love"]::before { background: var(--love); }
+  .role-card[data-camp="love"]:hover { border-color: var(--love); }
+
+  .role-card[data-camp="special"] { border-color: var(--special-border); }
+  .role-card[data-camp="special"]::before { background: var(--special); }
+  .role-card[data-camp="special"]:hover { border-color: var(--special); }
+
+  .role-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .role-name {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .role-card[data-camp="village"] .role-name { color: var(--village); }
+  .role-card[data-camp="wolf"] .role-name { color: var(--wolf); }
+  .role-card[data-camp="solo"] .role-name { color: var(--solo); }
+  .role-card[data-camp="love"] .role-name { color: var(--love); }
+  .role-card[data-camp="special"] .role-name { color: var(--special); }
+
+  .role-badges {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    white-space: nowrap;
+  }
+  .badge-aura-luminous { background: rgba(74,222,128,.15); color: var(--aura-luminous); }
+  .badge-aura-obscur   { background: rgba(248,113,113,.15); color: var(--aura-obscur); }
+  .badge-aura-neutral  { background: rgba(148,163,184,.12); color: var(--aura-neutral); }
+  .badge-aura-dangerous{ background: rgba(251,146,60,.15); color: var(--aura-dangerous); }
+  .badge-aura-unknown  { background: rgba(167,139,250,.15); color: var(--aura-unknown); }
+  .badge-info          { background: rgba(56,189,248,.12); color: #38bdf8; }
+  .badge-wip           { background: rgba(251,191,36,.1); color: #fbbf24; }
+  .badge-xp            { background: rgba(124,143,240,.1); color: var(--accent); }
+
+  .role-desc {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+
+  .role-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--bg);
+  }
+  .tag.cmd { border-color: rgba(124,143,240,.3); color: #a5b4fc; background: rgba(124,143,240,.06); }
+  .tag.power { border-color: rgba(56,189,248,.3); color: #67e8f9; background: rgba(56,189,248,.06); }
+  .tag.passive { border-color: rgba(74,222,128,.2); color: #86efac; background: rgba(74,222,128,.04); }
+  .tag.night { border-color: rgba(167,139,250,.25); color: #c4b5fd; background: rgba(167,139,250,.05); }
+  .tag.day { border-color: rgba(251,191,36,.25); color: #fcd34d; background: rgba(251,191,36,.05); }
+
+  .role-hidden { display: none; }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 20px;
+    max-width: 380px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+  }
+  .search-input {
+    width: 100%;
+    padding: 9px 14px 9px 38px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-muted); }
+
+  /* ── EVENTS ── */
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .event-card {
+    background: var(--bg2);
+    border: 1px solid var(--event-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .event-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+    border-radius: 10px 0 0 10px;
+  }
+  .event-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .event-desc { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .event-note {
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 7px;
+  }
+
+  /* ── SCENARIOS ── */
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 14px;
+  }
+  .scenario-card {
+    background: var(--bg2);
+    border: 1px solid var(--scenario-border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+  }
+  .scenario-card::after {
+    content: attr(data-tag);
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(251,191,36,.1);
+    color: #fbbf24;
+    border: 1px solid rgba(251,191,36,.2);
+  }
+  .scenario-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fbbf24;
+    margin-bottom: 8px;
+  }
+  .scenario-desc { font-size: 13px; color: var(--text); line-height: 1.65; }
+  .scenario-effects {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--bg3);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .scenario-effects-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .effect-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 12.5px;
+  }
+  .effect-row:last-child { margin-bottom: 0; }
+  .effect-trigger {
+    font-weight: 600;
+    color: #fcd34d;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .effect-text { color: var(--text); }
+
+  /* ── REGISTRES ── */
+  .registre-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+  @media (max-width: 700px) { .registre-grid { grid-template-columns: 1fr; } }
+  .reg-card {
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid;
+  }
+  .reg-tragic { background: rgba(248,113,113,.06); border-color: rgba(248,113,113,.25); }
+  .reg-oratoire { background: rgba(56,189,248,.06); border-color: rgba(56,189,248,.25); }
+  .reg-epic { background: rgba(251,191,36,.06); border-color: rgba(251,191,36,.25); }
+  .reg-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .reg-tragic .reg-title { color: var(--wolf); }
+  .reg-oratoire .reg-title { color: var(--special); }
+  .reg-epic .reg-title { color: var(--solo); }
+  .reg-threshold {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    font-size: 12.5px;
+  }
+  .reg-threshold:last-child { border-bottom: none; }
+  .reg-val { font-weight: 700; font-size: 13px; min-width: 38px; }
+  .reg-tragic .reg-val { color: var(--wolf); }
+  .reg-oratoire .reg-val { color: var(--special); }
+  .reg-epic .reg-val { color: var(--solo); }
+
+  /* ── STAR WARS ── */
+  .star-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 12px;
+  }
+  .star-card {
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+  }
+  .star-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+  .star-card[data-side="jedi"] { background: var(--jedi-bg); border-color: var(--jedi-border); }
+  .star-card[data-side="jedi"]::before { background: var(--jedi); }
+  .star-card[data-side="sith"] { background: var(--sith-bg); border-color: var(--sith-border); }
+  .star-card[data-side="sith"]::before { background: var(--sith); }
+  .star-card[data-side="neutral"] { background: var(--neutral-star-bg); border-color: var(--neutral-star-border); }
+  .star-card[data-side="neutral"]::before { background: var(--neutral-star); }
+  .star-name {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .star-card[data-side="jedi"] .star-name { color: var(--jedi); }
+  .star-card[data-side="sith"] .star-name { color: var(--sith); }
+  .star-card[data-side="neutral"] .star-name { color: var(--neutral-star); }
+  .star-alias { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .star-desc { font-size: 13px; color: var(--text); line-height: 1.65; }
+  .star-equipment {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .equip-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .equip-lightsaber { background: rgba(96,165,250,.12); color: #60a5fa; }
+  .equip-gun { background: rgba(251,191,36,.1); color: #fcd34d; }
+
+  /* ── MISC ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .info-box b { color: var(--text); }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .pill {
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .counter {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 99px;
+    background: var(--bg3);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .role-card, .event-card, .scenario-card, .star-card, .reg-card {
+    animation: fadeIn .25s ease both;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-title">🐺 LgMore Docs</span>
+  <a href="#lg" class="active">Loup-Garou</a>
+  <a href="#charact">CharactUHC</a>
+  <a href="#star">StarParty</a>
+  <a href="#events">Événements</a>
+  <a href="#scenarios">Scénarios</a>
+  <a href="#registres">Registres</a>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  LOUP-GAROU                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section id="lg">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(248,113,113,.1)">🐺</div>
+    <div>
+      <div class="section-title">Loup-Garou UHC <span class="counter" id="role-count">55 rôles</span></div>
+      <div class="section-sub">Mode principal · Épisodes de 20 min · Votes · Blocs spéciaux · Système d'aura</div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="info-box">
+      <b>Objectif par camp :</b><br>
+      🟢 <b>Villageois</b> — Éliminer tous les loups et solitaires<br>
+      🔴 <b>Loups-Garou</b> — Éliminer tous les villageois<br>
+      🟡 <b>Solitaires</b> — Gagner seul (conditions propres)<br>
+      🟣 <b>Amoureux</b> — Gagner à deux (Cupidon + couple)<br>
+      🔵 <b>Spéciaux</b> — Conditions particulières
+    </div>
+    <div class="info-box">
+      <b>Système d'Aura :</b><br>
+      <span style="color:var(--aura-luminous)">● Lumineuse</span> — Généralement village<br>
+      <span style="color:var(--aura-obscur)">● Obscure</span> — Généralement loup<br>
+      <span style="color:var(--aura-neutral)">● Neutre</span> — Indéterminée<br>
+      <span style="color:var(--aura-dangerous)">● Dangereuse</span> — Attention particulière<br>
+      <span style="color:var(--aura-unknown)">● Inconnue</span> — Brouille les infos
+    </div>
+  </div>
+
+  <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:20px">
+    <div class="search-wrap" style="margin-bottom:0">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" id="role-search" placeholder="Rechercher un rôle…" oninput="filterRoles()">
+    </div>
+    <div class="camp-tabs" id="camp-tabs">
+      <button class="camp-tab active" data-camp="all" onclick="filterCamp('all',this)">Tous</button>
+      <button class="camp-tab" data-camp="village" onclick="filterCamp('village',this)">🟢 Villageois</button>
+      <button class="camp-tab" data-camp="wolf" onclick="filterCamp('wolf',this)">🔴 Loups</button>
+      <button class="camp-tab" data-camp="solo" onclick="filterCamp('solo',this)">🟡 Solitaires</button>
+      <button class="camp-tab" data-camp="love" onclick="filterCamp('love',this)">🟣 Amoureux</button>
+      <button class="camp-tab" data-camp="special" onclick="filterCamp('special',this)">🔵 Spéciaux</button>
+    </div>
+  </div>
+
+  <div class="roles-grid" id="roles-grid">
+
+    <!-- ── VILLAGEOIS ── -->
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Simple Villageois</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">100 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Aucun pouvoir actif. Gagne avec les villageois grâce à son droit de vote. À mesure que la partie avance il peut débloquer des bonus passifs : donner des cœurs, voir les morts en avance, voir les changements de registre proches, ou obtenir 5% de résistance.</div>
+      <div class="role-tags">
+        <span class="tag passive">Passif</span>
+        <span class="tag">Bonus progressifs</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Voyante</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Peut espionner le rôle exact d'un joueur et sa position une fois par épisode via <b>/lg voir [joueur]</b>. Risque : se tromper en espionnant un villageois inflige <b>5 cœurs de dégâts</b> et <b>Faiblesse 5 min</b>. Aveuglée → ne peut plus espionner pendant un épisode.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg voir [joueur]</span>
+        <span class="tag night">Épisodique</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Sorcière</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Peut ressusciter une victime des loups <b>une fois</b> dans la partie en cliquant sur un message dans le chat. Possède également des potions : Instant Heal, Instant Damage et Régénération.</div>
+      <div class="role-tags">
+        <span class="tag power">Résurrection ×1</span>
+        <span class="tag">Potions de soin/dégâts</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Chasseur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Arc Power 4 + 64 flèches. <b>+30% de force contre les loups</b>. À sa mort : peut tirer sur un joueur via <b>/lg tirer [joueur]</b>, lui infligeant <b>3 cœurs</b> et lui retirant sa force de nuit s'il est loup.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg tirer [joueur]</span>
+        <span class="tag passive">+30% vs loups</span>
+        <span class="tag">Arc Power 4</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Salvateur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">2 potions d'Instant Heal. Peut donner <b>Résistance 20% pendant 20 min</b> à un joueur cible à chaque épisode via <b>/lg proteger [joueur]</b>. La résistance est retirée automatiquement en fin de durée.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg proteger [joueur]</span>
+        <span class="tag night">Épisodique</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Corbeau</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Quand son vote correspond au joueur le plus voté, reçoit des récompenses cumulatives : <b>2 Golden Apples</b> → <b>4 Golden Apples</b> → <b>+1 cœur permanent</b> → <b>Résistance I permanente</b>.</div>
+      <div class="role-tags">
+        <span class="tag passive">Bonus de vote</span>
+        <span class="tag">Progression par épisode</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Sœur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Connaît le nom d'une autre sœur. <b>Force I</b> tant qu'une sœur se trouve à moins de 20 blocs. À la mort d'une sœur : reçoit le nom de son tueur. Peut être attribué à plusieurs joueurs simultanément.</div>
+      <div class="role-tags">
+        <span class="tag passive">Force conditionnelle</span>
+        <span class="tag">Vengeance</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Montreur d'Ours</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">À chaque épisode, un message <b>"GRRRR"</b> apparaît dans son chat pour chaque loup-garou présent dans un rayon de <b>50 blocs</b>. Permet d'estimer le nombre de loups alentours sans connaître leur identité.</div>
+      <div class="role-tags">
+        <span class="tag info">Détection de loups</span>
+        <span class="tag">Rayon 50 blocs</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Petite Fille</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>Invisibilité 5 min</b> chaque nuit (automatique). Voit le <b>chat des loups-garou</b> en temps réel. Aveuglée → ne peut pas devenir invisible à la nuit suivante.</div>
+      <div class="role-tags">
+        <span class="tag night">Invisibilité nocturne</span>
+        <span class="tag power">Chat loup visible</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Bienfaiteur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">100 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Peut donner <b>4 fois</b> (total dans la partie) un cœur permanent à un joueur via <b>/lg conferer [joueur]</b>. Ne peut conférer qu'une fois par joueur. Possède également <b>2 livres Protection II</b>.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg conferer [joueur]</span>
+        <span class="tag">4 utilisations totales</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Idiot du Village</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">120 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Si le village l'élimine par vote, <b>ressuscite</b> avec <b>-2 cœurs permanents</b> et ne peut plus être éliminé par vote. Survie garantie contre le vote villageois une fois.</div>
+      <div class="role-tags">
+        <span class="tag power">Résurrection anti-vote</span>
+        <span class="tag">-2 cœurs permanent</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Renard</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">75 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Après avoir passé <b>10 min</b> à côté d'un joueur, peut le <b>flairer</b> pour obtenir son rôle probable. <b>15% de chance d'erreur</b>, augmentant de 5% à chaque flairage. Aveuglé → tous ses flairages en cours sont remis à zéro.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg flairer [joueur]</span>
+        <span class="tag">10 min de proximité requis</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Ancien</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>Résistance +20% permanente</b> (4 boosts de résistance). S'il est tué par les loups-garou, <b>ressuscite</b> mais perd définitivement sa résistance. Mort normale → éliminé définitivement.</div>
+      <div class="role-tags">
+        <span class="tag passive">+20% résistance perma</span>
+        <span class="tag power">Résurrection anti-loup ×1</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Sage (Vieux Sage)</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">90 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">À chaque épisode, reçoit le taux de présence de chaque aura (Lumineuse / Neutre / Obscure) autour de lui. Plus il fréquente un joueur, plus la jauge de l'aura correspondante monte. Aveuglé → toutes ses jauges passent à 100% (faussées).</div>
+      <div class="role-tags">
+        <span class="tag passive">Jauges d'aura par épisode</span>
+        <span class="tag">Accumulation au contact</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Disciple</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Connaît l'identité du Sage. Progression par temps passé ensemble : <b>20 min</b> → le Sage découvre l'identité du Disciple. <b>30 min</b> → accès à <b>/lg aura [joueur]</b> × 2. <b>45 min</b> → <b>Speed I permanent</b>. Commande <b>/lg trouver</b> pour localiser le Sage.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg aura [joueur]</span>
+        <span class="tag cmd">/lg trouver</span>
+        <span class="tag passive">Progression temporelle</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Allumeur de Lampadaire</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">110 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Après <b>10 min</b> passées à côté d'un joueur, <b>corrige son aura</b> pour qu'elle corresponde à son vrai camp (Lumineuse pour village, Obscure pour loups). Permet aux rôles d'info d'avoir une lecture fiable des joueurs fréquentés par l'Allumeur.</div>
+      <div class="role-tags">
+        <span class="tag passive">Correction d'aura</span>
+        <span class="tag">10 min de proximité</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Interprète</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">95 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Avant chaque épisode, reçoit <b>3 rôles</b> au choix et en incarne un pour la durée de l'épisode. Hérite temporairement des effets complets du rôle choisi. Chaque rôle ne peut être interprété qu'une seule fois dans la partie.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg choisir [rôle]</span>
+        <span class="tag power">1 rôle différent par épisode</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Analyste</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">90 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>/lg analyse</b> (1× par épisode) : somme des % de force et résistance de tous les joueurs dans 20 blocs. <b>/lg analysePlus</b> (1× total) : détail séparé force et résistance. Aveuglé → reçoit 0% à sa prochaine commande.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg analyse</span>
+        <span class="tag cmd">/lg analysePlus</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Comédien</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Pouvoirs variables selon le Registre actif : <b>Tragique</b> → chance (= % Tragic) de connaître l'aura, les kills ou les effets d'un joueur. <b>Oratoire</b> → chance de voir qui a voté pour le plus voté. <b>Épique</b> → Résistance proportionnelle au taux (20% épique = 4% résistance).</div>
+      <div class="role-tags">
+        <span class="tag">Registre-dépendant</span>
+        <span class="tag passive">Résistance variable</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Ermite</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-unknown">Inconnue</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>+30% force le jour</b>, <b>+20% résistance la nuit</b>. Malus : <b>-5% force/joueur proche</b> le jour, <b>-3% résistance/joueur proche</b> la nuit. Registre Tragique : +10% résistance. Registre Oratoire : -10% force. <b>Sa mort n'est jamais annoncée.</b></div>
+      <div class="role-tags">
+        <span class="tag passive">Solitaire par nature</span>
+        <span class="tag">Mort silencieuse</span>
+        <span class="tag">Registre-sensible</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Parrain</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-dangerous">Dangereuse</span>
+          <span class="badge badge-xp">75 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">3 fois dans la partie, peut mettre une <b>prime</b> sur un joueur via <b>/lg prime [joueur]</b>. La prime est envoyée secrètement à 1 joueur du camp adverse. Si la cible est tuée par ce joueur : <b>+1 cœur</b> et <b>+5% force</b> pour les deux. Aveuglé → ne peut pas mettre de prime à cet épisode.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg prime [joueur]</span>
+        <span class="tag">3 primes totales</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Traqueur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">75 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Peut poser une traque sur un joueur dans un rayon de <b>20 blocs</b> via <b>/lg traquer [joueur]</b>. Puis, à tout moment, consulte sa position exacte et son nombre de kills via <b>/lg traque</b>. La traque est perdue si le joueur traqué meurt.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg traquer [joueur]</span>
+        <span class="tag cmd">/lg traque</span>
+        <span class="tag">Rayon 20 blocs</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="village">
+      <div class="role-header">
+        <div class="role-name">Fauconnier</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-xp">75 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Possède <b>3 faucons</b> placés via <b>/lg faucon</b>. Chaque faucon surveille un rayon de <b>50 blocs</b> : si quelqu'un meurt à proximité, le Fauconnier apprend le rôle du mort, le nombre de joueurs alentours et l'aura du tueur. Chaque faucon a <b>20% de chance</b> de mourir lors d'un signalement.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg faucon</span>
+        <span class="tag">3 sentinelles</span>
+        <span class="tag">Rayon 50 blocs</span>
+      </div>
+    </div>
+
+    <!-- ── LOUPS ── -->
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Simple Loup-Garou</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">100 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I la nuit. Connaît la liste complète de ses alliés loups-garou. Rôle de référence pour la mécanique de base.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag passive">Liste des alliés</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Infect Père des Loups</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-dangerous">Dangereuse</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I la nuit. Peut, <b>une fois</b> dans la partie, <b>infecter</b> une victime des loups en cliquant sur un message dans le chat. Le joueur infecté rejoint le camp des loups (gains : force de nuit, liste des loups).</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag power">Infection ×1</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup-Garou Barbare</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>Force I permanente</b>. <b>5% de chance</b> d'infliger ½ cœur supplémentaire par coup (<b>+4% par kill</b>). À chaque kill : <b>+2 min de résistance</b> et <b>-1 cœur permanent</b>. Équilibre explosif entre puissance et fragilité.</div>
+      <div class="role-tags">
+        <span class="tag passive">Force perma</span>
+        <span class="tag">Risque/récompense par kill</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Mystique</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. À chaque mort d'un loup-garou allié, <b>obtient aléatoirement un rôle</b> parmi les rôles disponibles dans la partie (y compris les pouvoirs associés). Peut devenir très puissant en fin de partie.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag power">Rôle aléatoire par mort alliée</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Perfide</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">85 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. Peut se rendre <b>invisible pendant 5 min chaque nuit</b> en retirant son armure. L'invisibilité est perdue si il remet son armure.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag night">Invisibilité 5 min/nuit</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Métamorphe</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. <b>Vole le rôle et le camp du premier joueur qu'il tue</b>. Il hérite de tous les effets du rôle volé. Extrêmement dangereux en début de partie s'il cible un rôle puissant.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag power">Vol de rôle au 1er kill</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Brumeux</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">85 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. Peut <b>2 fois</b> dans la partie <b>cacher la mort</b> d'un joueur spécifique via <b>/lg brumer [joueur]</b>. La mort n'est pas annoncée dans le chat, créant confusion et impunité pour l'équipe loups.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag cmd">/lg brumer [joueur]</span>
+        <span class="tag">2 utilisations</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Grimeur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. Peut <b>grimer</b> un joueur via <b>/lg grimer [joueur]</b> : à la mort de ce joueur, son rôle sera annoncé comme "Loup-Garou" au lieu de son vrai rôle, trompant les villageois.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag cmd">/lg grimer [joueur]</span>
+        <span class="tag">Fausse annonce de mort</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Hurleur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">85 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. Peut <b>hurler 2 fois</b> via <b>/lg hurler</b>. Tous les loups dans un certain rayon entendent le hurlement et gagnent de la <b>Régénération</b> (5 secondes par loup proche au moment du hurlement).</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag cmd">/lg hurler</span>
+        <span class="tag power">Regen pour alliés proches</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Alchimiste</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">100 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>Pas de force de nuit.</b> Après <b>15 min</b> de proximité avec un joueur, peut lui inoculer un virus via <b>/lg virus [joueur]</b>. 3 variantes : <b>Parasite</b> (effet après 10 min, transmissible par kill), <b>Épidémie</b> (transmission de joueur en joueur), <b>Poison</b> (affaiblissement jusqu'à la mort du loup).</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg virus [joueur]</span>
+        <span class="tag power">3 types d'infection</span>
+        <span class="tag">15 min de proximité requis</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Manipulateur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-unknown">Inconnue</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>Pas de force de nuit.</b> Peut <b>aveugler 3 joueurs</b> dans la partie via <b>/lg aveugler [joueur]</b>. Si la cible est un rôle à information : obtient son rôle exact et son pouvoir est mis en pause pour l'épisode.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg aveugler [joueur]</span>
+        <span class="tag">3 utilisations totales</span>
+        <span class="tag power">Vol d'info si rôle-info</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Craintif</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-unknown">Inconnue</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>+30% force la nuit</b>, <b>+20% résistance le jour</b>. Malus : <b>-5% résistance/loup proche</b> le jour, <b>-7% force/loup proche</b> la nuit. Registre Oratoire : -10% force. Registre Tragique : +5% résistance. <b>Sa mort est cachée.</b></div>
+      <div class="role-tags">
+        <span class="tag passive">Force nuit / Résistance jour</span>
+        <span class="tag">Mort silencieuse</span>
+        <span class="tag">Fuit ses alliés</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Loup Sanguinaire</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-wip">En dev</span>
+          <span class="badge badge-xp">70 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Force I nocturne. Mécaniques en cours de développement. Le rôle est attribuable mais ses pouvoirs spécifiques ne sont pas encore implémentés.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="wolf">
+      <div class="role-header">
+        <div class="role-name">Servant des Loups</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">60 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Non attribuable en début de partie (créé par d'autres mécaniques). Force I nocturne. Lié à un <b>maître loup</b> : si le maître meurt, le servant <b>meurt à sa place</b>. Apparaît comme loup-garou et possède la liste des alliés.</div>
+      <div class="role-tags">
+        <span class="tag night">Force I nocturne</span>
+        <span class="tag passive">Bouclier du maître</span>
+        <span class="tag">Non distribué en début de partie</span>
+      </div>
+    </div>
+
+    <!-- ── SOLITAIRES ── -->
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Assassin</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">140 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. <b>Force I le jour</b>. Peut <b>crafter une épée Sharpness IV</b>. Possède 3 livres : Sharpness III, Protection III, Efficacité III.</div>
+      <div class="role-tags">
+        <span class="tag day">Force I diurne</span>
+        <span class="tag">Craft Sharpness IV</span>
+        <span class="tag">3 livres offerts</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Pyromane</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">140 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. <b>Fire Resistance permanente.</b> Toggle fire aspect + flamme via <b>/lg switchfire</b>. Peut <b>enduire 3 joueurs</b> d'essence via <b>/lg recouvrir [joueur]</b> (rayon 20 blocs) puis les <b>enflammer tous</b> via <b>/lg enflammer</b> — brûlure 20 sec + propagation aux joueurs à moins de 20 blocs.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg switchfire</span>
+        <span class="tag cmd">/lg recouvrir [joueur]</span>
+        <span class="tag cmd">/lg enflammer</span>
+        <span class="tag passive">Fire Resistance perma</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Voleur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-xp">120 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. <b>+20% de force permanente</b> (jusqu'à 90 min). <b>Vole le rôle et le camp</b> du premier joueur qu'il tue. Rejoint ensuite ce camp et hérite de tous les effets du rôle volé — les alliés du camp sont prévenus de son arrivée.</div>
+      <div class="role-tags">
+        <span class="tag passive">+20% force perma</span>
+        <span class="tag power">Vol de rôle + camp au 1er kill</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Ange de Thiercelieux</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">140 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. Peut <b>crafter Sharpness IV</b>. Quand un joueur l'accuse via <b>/lg accuse</b> : l'accuseur ne gagne pas de force contre lui, mais l'Ange gagne <b>+20% force</b> contre l'accuseur, connaît son rôle, +5% résistance et +1 cœur permanent. S'il tue l'accuseur, sa mort n'est pas annoncée.</div>
+      <div class="role-tags">
+        <span class="tag power">Réaction à l'accusation</span>
+        <span class="tag">Craft Sharpness IV</span>
+        <span class="tag">Mort silencieuse possible</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Araignée</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">130 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seule. Jauge de manipulation par joueur (<b>+0.1%/s à -20 blocs</b>, <b>+10% si kill à proximité</b>). À 100% : vole ½ cœur à chaque épisode où les deux sont proches. Peut <b>aveugler 2 fois</b> via <b>/lg aveugler [joueur]</b>. Ressuscite <b>une fois</b> si tuée par un joueur manipulé à 100%. Peut crafter Sharpness IV.</div>
+      <div class="role-tags">
+        <span class="tag passive">Jauge de manipulation</span>
+        <span class="tag cmd">/lg aveugler</span>
+        <span class="tag power">Résurrection conditionnelle</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Thanos</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-dangerous">Dangereuse</span>
+          <span class="badge badge-xp">200 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. Les <b>6 pierres d'infinité</b> sont réparties dans la partie. Chaque kill d'un porteur lui fait gagner sa pierre. Avec toutes les pierres (<b>hasAll</b>) : ressuscite une fois à sa mort. Pouvoirs par pierre : <b>Espace</b> → TP, <b>Âme</b> → révèle aura, <b>Esprit</b> → change aura visible d'un joueur, <b>Pouvoir</b> → +10% force, <b>Temps</b> → effet temporel, <b>Réalité</b> → distorsion. Quand il les réunit : 50% chance d'infliger 5 cœurs à chaque joueur vivant.</div>
+      <div class="role-tags">
+        <span class="tag power">6 pierres d'infinité</span>
+        <span class="tag cmd">/lg space / ame / esprit / time / reality</span>
+        <span class="tag passive">+2 cœurs à l'attribution</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Sorcier</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">80 XP</span>
+        </div>
+      </div>
+      <div class="role-desc"><b>50%</b> de gagner seul, <b>50%</b> de gagner avec le village (déterminé à l'attribution). Peut créer des potions spéciales avec des matériaux : <b>Potion de Téléportation</b> (GAP + 3 lapis blocks + 30 redstone), <b>Potion d'Aura</b>, <b>Potion de Paralysie</b>. Un laboratoire lui est attribué.</div>
+      <div class="role-tags">
+        <span class="tag power">Craft de potions spéciales</span>
+        <span class="tag">Camp aléatoire à l'attribution</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Négociateur</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">110 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Peut gagner avec <b>les villageois ET les loups</b> sous conditions : les survivants finaux doivent avoir passé <b>+10 min</b> avec le Négociateur, ET les joueurs tués par le Négociateur du même camp que les survivants doivent avoir passé <b>-15 min</b> avec les vivants.</div>
+      <div class="role-tags">
+        <span class="tag passive">Double victoire possible</span>
+        <span class="tag">Conditions de temps très précises</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="solo">
+      <div class="role-header">
+        <div class="role-name">Démon</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-wip">En dev</span>
+          <span class="badge badge-xp">150 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. <b>+2 cœurs</b> à l'attribution. Mécaniques en cours de développement. Possède une commande associée permettant de perdre 2 cœurs (usage non finalisé).</div>
+      <div class="role-tags">
+        <span class="tag passive">+2 cœurs attribution</span>
+      </div>
+    </div>
+
+    <!-- ── AMOUREUX ── -->
+    <div class="role-card" data-camp="love">
+      <div class="role-header">
+        <div class="role-name">Cupidon</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">120 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne avec le couple qu'il désigne. Désigne 2 (ou 3 en cas de Trouple) joueurs via <b>/lg couple [j1] [j2]</b>. Les amoureux gagnent ensemble : si l'un meurt, l'autre meurt aussi. Peuvent se donner de la vie via <b>/lg don [%]</b>. Possède un arc Punch I.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg couple [j1] [j2]</span>
+        <span class="tag passive">Arc Punch I</span>
+        <span class="tag power">Couple lié à la vie</span>
+      </div>
+    </div>
+
+    <!-- ── SPÉCIAUX ── -->
+    <div class="role-card" data-camp="special">
+      <div class="role-header">
+        <div class="role-name">Enfant Sauvage</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">90 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne avec les villageois. Choisit un <b>modèle</b> via <b>/lg choose [joueur]</b>. Si le modèle meurt → l'Enfant Sauvage <b>devient loup-garou</b> (camp + force de nuit). Connaît le nom de son modèle.</div>
+      <div class="role-tags">
+        <span class="tag cmd">/lg choose [joueur]</span>
+        <span class="tag power">Transformation si modèle mort</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="special">
+      <div class="role-header">
+        <div class="role-name">Ange Gardien</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-luminous">Lumineuse</span>
+          <span class="badge badge-xp">130 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Gagne seul. Désigne aléatoirement un <b>protégé</b> (ou une cible si "Ange Déchu"). Version Gardien : protéger → gain si la cible meurt de sa main ou naturellement (+3 cœurs). Si le protégé meurt sans intervention → <b>-4 cœurs</b> permanents. Version Déchu : doit tuer la cible pour gagner 3 cœurs et Résistance.</div>
+      <div class="role-tags">
+        <span class="tag power">Protégé / Cible aléatoire</span>
+        <span class="tag passive">+2 cœurs attribution</span>
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="special">
+      <div class="role-header">
+        <div class="role-name">Nécromancien</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-obscur">Obscure</span>
+          <span class="badge badge-wip">En dev</span>
+          <span class="badge badge-xp">130 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Camp Morts-Vivants. Peut désigner une cible de résurrection. Mécaniques complètes en cours de développement — le squelette de la commande est présent mais non finalisé.</div>
+      <div class="role-tags">
+      </div>
+    </div>
+
+    <div class="role-card" data-camp="special">
+      <div class="role-header">
+        <div class="role-name">Swapper</div>
+        <div class="role-badges">
+          <span class="badge badge-aura-neutral">Neutre</span>
+          <span class="badge badge-xp">0 XP</span>
+        </div>
+      </div>
+      <div class="role-desc">Rôle exclusif au mode <b>TeamSwapper</b>. Attribué automatiquement avec la couleur d'équipe du joueur (Rouge/Bleu/Vert/Jaune/Rose). Objectif : éliminer toutes les équipes adverses. À chaque vote perdu, le joueur le plus voté change d'équipe.</div>
+      <div class="role-tags">
+        <span class="tag">Mode TeamSwapper uniquement</span>
+      </div>
+    </div>
+
+  </div><!-- /roles-grid -->
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  CHARACT UHC                                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section id="charact">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(56,189,248,.1)">📜</div>
+    <div>
+      <div class="section-title">CharactUHC — Rôles personnalisés (JSON)</div>
+      <div class="section-sub">Système de rôles scriptables · Plusieurs listes cumulables · Jauges · Conditions · Actions</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:20px">
+    <b>Dans CharactUHC, il n'y a pas de rôles fixes.</b> Chaque serveur crée ses propres rôles via des fichiers <code>.json</code>. Voici les <b>types de mécaniques</b> disponibles pour construire un rôle.
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div style="font-weight:700;color:var(--special);margin-bottom:12px;font-size:15px">⚔️ Statistiques de combat</div>
+      <div class="events-grid" style="grid-template-columns:1fr">
+        <div class="event-card">
+          <div class="event-name">strenght</div>
+          <div class="event-desc">Modificateur de dégâts infligés. <b>1.0 = normal</b>. Formule : dégâts × (1 + strenght). Exemple : 0.5 → +50% de dégâts.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-name">resistance</div>
+          <div class="event-desc">Modificateur de dégâts reçus. <b>1.0 = normal</b>. Formule : dégâts × (1 - resistance). Exemple : 0.3 → reçoit 70% des dégâts.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-name">boostHealth</div>
+          <div class="event-desc">Points de vie supplémentaires accordés dès l'attribution du rôle.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-name">Résurrection</div>
+          <div class="event-desc"><b>reliveTry</b> tentatives. Malus par résurrection : lostStrenght, lostResis, lostHealth. Conditions : conditionKilledBy (rôle du tueur) ou conditionKilledByCamp (camp du tueur).</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:var(--solo);margin-bottom:12px;font-size:15px">⚡ Types d'actions disponibles</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">damage — Dégâts directs</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">heal — Soins instantanés</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">slowness / speed</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">blindness — Cécité</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">regen — Régénération</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">fire — Feu</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">fireResistance</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">invicibility</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">tp — Téléportation</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">maxHealth — PV max</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">fly — Vol temporaire</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">expulsion — Knockback</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">attraction — Pull</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">spectator — Mode spectateur</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">grrr / hurlement</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">jauge — Incrément compteur</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">conditionChanged</div>
+        <div class="tag power" style="padding:6px 10px;border-radius:6px;font-size:12px">changeNumConds</div>
+      </div>
+      <div style="margin-top:14px;font-size:13px;color:var(--text-muted)">Chaque action peut se déclencher sur : <b>attaque</b>, <b>mort</b>, <b>kill</b>, <b>dégâts reçus</b>, <b>timer</b>, ou <b>commande</b> <code>/lg [cmd]</code>. Les actions peuvent être imbriquées, différées ou répétées.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div style="font-weight:700;color:var(--village);margin-bottom:12px;font-size:15px">🧭 Système de jauges</div>
+  <div class="info-box">
+    Une jauge est un <b>compteur par joueur</b> qui se remplit via des actions (ex : +1 à chaque attaque). Quand il atteint <b>maxValue</b> → une action se déclenche automatiquement. Peut se réinitialiser (<b>resetOnFinish</b>) et se déclencher un nombre limité de fois (<b>iteration</b>). Si <b>displayed</b> est activé, la progression apparaît dans la barre d'action du joueur.
+  </div>
+
+  <hr class="divider">
+
+  <div style="font-weight:700;color:var(--love);margin-bottom:12px;font-size:15px">👁️ Pouvoirs d'information (seeCaract)</div>
+  <div class="info-box">
+    Permet de <b>lire une propriété JSON du rôle d'un autre joueur</b> (camp, reliveTry, strenght, name…). Configurable : distance maximale, probabilité de vérité, nombre d'utilisations, commande d'activation, révèle ou non le nom de la cible, déclenchement aléatoire automatique.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  STAR PARTY                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section id="star">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(251,191,36,.1)">⭐</div>
+    <div>
+      <div class="section-title">StarParty — Rôles Star Wars</div>
+      <div class="section-sub">15–17 joueurs · Jedi vs Sith · PvP à rôles découverts · Items spéciaux</div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="info-box">
+      <b>Jedi (bleu) :</b> Luke, Obi-Wan, Qui-Gon, Mace Windu, Leïa, Han Solo, Chewbacca, Yoda<br>
+      <b>Sith (rouge) :</b> Dark Vador, Dark Sidious (Palpatine), Comte Dooku, Dark Maul, Général Grievous, Jango Fett, Stormtrooper, Garde Impérial<br>
+      <span style="color:var(--neutral-star)"><b>Neutre :</b> Jango Fett (mercenaire)</span>
+    </div>
+    <div class="info-box">
+      <b>Items spéciaux :</b><br>
+      🔵 <b>Sabre laser</b> — Épée améliorée<br>
+      🔫 <b>Blaster</b> — Arc chargé rapidement<br>
+      ⚡ <b>Lightning</b> — Éclair de force (×2, 2 cœurs)<br>
+      💨 <b>Ataru</b> — Éjection des joueurs proches (Obi-Wan)<br>
+      🔥 <b>Flamethrower</b> — Rayon de feu (Jango)<br>
+      🌀 <b>Strangle</b> — Blindness + Slowness + Poison (Vador)<br>
+      ⚔️ <b>Makashi</b> — Duel 1v1 forcé 30s (Dooku)<br>
+      🔴 <b>Sith</b> — Speed III + Force 10s (Sith)
+    </div>
+  </div>
+
+  <div class="star-grid">
+
+    <!-- JEDI -->
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Luke Skywalker</div>
+      <div class="star-alias">LucSkywalker</div>
+      <div class="star-desc">+20% de force à proximité de Leïa (rayon 15 blocs), dont il connaît l'identité au départ. Possède un sabre laser et un blaster.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+        <span class="equip-tag equip-gun">🔫 Blaster</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Obi-Wan Kenobi</div>
+      <div class="star-alias">Obiwan</div>
+      <div class="star-desc">+20% de résistance permanente. L'item <b>Ataru</b> éjecte tous les joueurs dans un rayon de 3 blocs quand activé en parade. Possède un sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Maître Yoda</div>
+      <div class="star-alias">MaitreYoda</div>
+      <div class="star-desc">12% de chance d'esquiver/réduire les dégâts reçus à chaque coup. Inflige 10 secondes de Speed au joueur qu'il frappe. Possède un sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Mace Windu</div>
+      <div class="star-alias">MaitreWindu</div>
+      <div class="star-desc">Force variable contre les Sith selon leur utilisation du côté obscur. +5% de force par kill réalisé. Possède un sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Qui-Gon Jinn</div>
+      <div class="star-alias">QuiGon</div>
+      <div class="star-desc">Voit des particules colorées autour des joueurs qui prennent des dégâts, indiquant visuellement leur état de santé. Possède un sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Princesse Leïa</div>
+      <div class="star-alias">Leila</div>
+      <div class="star-desc">Donne +10% de force à ses alliés dans 15 blocs et -10% aux ennemis. À sa mort : régénère légèrement tous ses alliés environnants. Possède un blaster.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-gun">🔫 Blaster</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Han Solo</div>
+      <div class="star-alias">HanSolo</div>
+      <div class="star-desc">20% de chance de gagner 1% de force à chacune de ses attaques (cumulatif). Possède un blaster.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-gun">🔫 Blaster</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="jedi">
+      <div class="star-name">Chewbacca</div>
+      <div class="star-alias">Chewbaca</div>
+      <div class="star-desc">+10% de résistance à proximité de Han Solo. Son blaster a 30% de chance de générer une mini-explosion infligeant +1 cœur supplémentaire. Pas de sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-gun">🔫 Blaster</span>
+      </div>
+    </div>
+
+    <!-- SITH -->
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Dark Vador</div>
+      <div class="star-alias">DarkVador</div>
+      <div class="star-desc">+15% de force permanente. Item <b>Strangle</b> (×2) : inflige Blindness + Slowness + Poison 3 secondes. Item <b>Sith</b> : Speed III + Force 10 secondes.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Dark Sidious</div>
+      <div class="star-alias">Palpatine / DarkSidious</div>
+      <div class="star-desc">Item <b>Lightning</b> (×2) : éclair de force infligeant 2 cœurs à la cible visée. Item <b>Sith</b> : Speed III + Force 10s. Possède un sabre laser mais pas de blaster.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Comte Dooku</div>
+      <div class="star-alias">Dooku</div>
+      <div class="star-desc">+15% de force contre les utilisateurs de sabre laser. Item <b>Makashi</b> : engage un duel forcé de 30s contre le joueur visé (les deux ne peuvent combattre que l'un l'autre). Possède un sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Dark Maul</div>
+      <div class="star-alias">Dark Maul</div>
+      <div class="star-desc">Item <b>Sith</b> : Speed III + Force 10s. Peut <b>ressusciter une fois</b>, perdant 2 cœurs permanents. Possède un sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-lightsaber">⚔️ Sabre laser</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Général Grievous</div>
+      <div class="star-alias">Grievous</div>
+      <div class="star-desc">Gagne +5% de force à chaque kill sur un utilisateur de sabre laser. Pas de sabre laser ni de blaster — force brute uniquement.</div>
+    </div>
+
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Stormtrooper</div>
+      <div class="star-alias">Stormtrooper</div>
+      <div class="star-desc">Son blaster est toujours à pleine charge (cadence de tir maximale). À chaque kill : régénère l'intégralité de ses points de vie. Pas de sabre laser.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-gun">🔫 Blaster</span>
+      </div>
+    </div>
+
+    <div class="star-card" data-side="sith">
+      <div class="star-name">Garde Impérial</div>
+      <div class="star-alias">GardeImpérial</div>
+      <div class="star-desc">Attribué à <b>2 joueurs simultanément</b>. Partagent une vie commune de 20 cœurs au total. +10% de résistance à moins de 10 blocs l'un de l'autre. Pas de sabre laser ni blaster.</div>
+    </div>
+
+    <!-- NEUTRE -->
+    <div class="star-card" data-side="neutral">
+      <div class="star-name">Jango Fett</div>
+      <div class="star-alias">JangoFett — Camp neutre (mercenaire)</div>
+      <div class="star-desc">12 cœurs de base. 10% de chance de voler ½ cœur à chaque attaque. Item <b>Flamethrower</b> : chargement de 4s (Slowness III pendant le chargement), puis rayon de feu en direction du regard pendant 4s (½ cœur toutes les ½ sec). Possède un blaster.</div>
+      <div class="star-equipment">
+        <span class="equip-tag equip-gun">🔫 Blaster</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  ÉVÉNEMENTS                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section id="events">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(124,143,240,.1)">🎲</div>
+    <div>
+      <div class="section-title">Événements aléatoires (Loup-Garou)</div>
+      <div class="section-sub">Probabilité réglable par l'organisateur via le menu Config → Événements</div>
+    </div>
+  </div>
+
+  <div class="events-grid">
+
+    <div class="event-card">
+      <div class="event-name">Exposed</div>
+      <div class="event-desc">À chaque épisode, une probabilité que 4 rôles soient révélés dans le chat pour un joueur choisi aléatoirement — dont son vrai rôle parmi eux.</div>
+      <div class="event-note">Déclenchement conditionné par le taux de Tragique s'il est actif. La probabilité configurée représente la chance que l'Exposed ait lieu avant même le calcul du taux Tragique.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Brume</div>
+      <div class="event-desc">Probabilité que chaque mort dans la partie soit cachée — aucun message n'est envoyé dans le chat quand ce joueur meurt.</div>
+      <div class="event-note">S'applique à chaque mort individuellement. Distinct de la Brume du Loup Brumeux (ciblée).</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Premonition</div>
+      <div class="event-desc">Probabilité qu'un joueur reçoive au début d'un épisode un "pressentiment" sur son entourage — une information floue sur les auras proches.</div>
+      <div class="event-note">Mécanisme d'info supplémentaire aléatoire, indépendant des rôles à information.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Trouple</div>
+      <div class="event-desc">Probabilité que le couple désigné par Cupidon soit en réalité un <b>trouple</b> : 3 joueurs sont liés au lieu de 2. Tous meurent si l'un d'eux décède.</div>
+      <div class="event-note">Actif uniquement si Cupidon est dans la composition. Augmente considérablement la dangerosité du rôle.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Mal visé</div>
+      <div class="event-desc">Probabilité que Cupidon rate son tir et se retrouve lui-même inclus dans le couple avec un joueur aléatoire, au lieu de désigner librement ses deux cibles.</div>
+      <div class="event-note">Cupidon perd le contrôle de son pouvoir. Peut créer des situations très déséquilibrées.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Loup Solitaire</div>
+      <div class="event-desc">Probabilité qu'à un épisode aléatoire, un loup-garou vivant soit converti en joueur solitaire — <b>+4 cœurs permanents</b> et <b>+5% de résistance</b>. Ne peut se déclencher qu'une seule fois par partie.</div>
+      <div class="event-note">Le loup solitaire doit désormais gagner seul. Peut créer un retournement de situation majeur.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Couple aléatoire</div>
+      <div class="event-desc">Probabilité que le couple ne soit pas choisi par Cupidon en début de partie, mais désigné <b>aléatoirement</b> parmi tous les joueurs vivants.</div>
+      <div class="event-note">Peut mettre en couple deux joueurs de camps opposés ou des rôles clés.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Nombre Bâtiments Leurre</div>
+      <div class="event-desc">Nombre de bâtiments placés dans le monde qui n'ont <b>aucun intérêt</b>. Servent à diluer les bâtiments bonus et rendre leur recherche plus difficile.</div>
+      <div class="event-note">Valeur entière. Ne pas trop élever pour ne pas surcharger le monde de structures inutiles.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">Nombre Bâtiments à Bonus</div>
+      <div class="event-desc">Nombre de bâtiments bonus placés dans le monde. Chaque bâtiment contient un effet aléatoire parmi : Analyseur d'Aura (15%), Potion d'Aura (15%), Potion de Téléportation (15%), Potion de Paralysie (15%), Bienfaisance (20%).</div>
+      <div class="event-note">Ne pas trop élever pour maintenir la tension autour de la recherche des bâtiments.</div>
+    </div>
+
+    <div class="event-card">
+      <div class="event-name">AutomaticCheckWin</div>
+      <div class="event-desc">Probabilité que la condition de victoire soit automatiquement vérifiée après chaque mort de joueur. Par défaut à <b>100%</b> — la partie se termine dès qu'un camp unique reste.</div>
+      <div class="event-note">Réduire ce pourcentage permet de créer des situations de survie prolongée. Valeur à 0% = la victoire doit être vérifiée manuellement.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SCÉNARIOS                                                -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section id="scenarios">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(251,191,36,.08)">🎭</div>
+    <div>
+      <div class="section-title">Scénarios</div>
+      <div class="section-sub">Modificateurs globaux activables via le menu Config → Scénarios</div>
+    </div>
+  </div>
+
+  <div class="scenarios-grid">
+
+    <div class="scenario-card" data-tag="Immersion">
+      <div class="scenario-name">🎭 Théâtre</div>
+      <div class="scenario-desc">Active le <b>système de Registres</b> — la partie évolue selon une "ambiance" dramatique entre Tragique, Oratoire et Épique. Certains rôles (Comédien, Ermite, Loup Craintif) sont directement affectés par le registre actif.</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Incompatible avec</div>
+        <div class="effect-row"><span class="effect-text">TeamSwapper (les deux s'excluent mutuellement)</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card" data-tag="Combat">
+      <div class="scenario-name">⚔️ DirectFights</div>
+      <div class="scenario-desc">Les <b>rôles de tous les joueurs sont visibles</b> au-dessus de leur tête dès le début. La partie devient un PvP frontal avec un équipement complet distribué au démarrage (mode Meetup automatique).</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Effets</div>
+        <div class="effect-row"><span class="effect-trigger">Immédiat</span><span class="effect-text">Mode Meetup activé, rôles affichés en display name</span></div>
+        <div class="effect-row"><span class="effect-trigger">XP</span><span class="effect-text">L'XP gagné est divisé par 5 (partie "facile")</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card" data-tag="Spécial">
+      <div class="scenario-name">💀 Necromancie</div>
+      <div class="scenario-desc">Active le rôle Nécromancien dans la partie. Ce dernier peut tenter de faire revivre des joueurs morts sous conditions particulières (en cours de développement).</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Note</div>
+        <div class="effect-row"><span class="effect-text">Le rôle Nécromancien doit être dans la composition</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card" data-tag="Équipes">
+      <div class="scenario-name">🔴 TeamSwapper — Duel</div>
+      <div class="scenario-desc">Mode équipes en <b>2 équipes</b>. Les joueurs sont répartis aléatoirement en équipes colorées (Rouge / Bleu). Rôles visibles, équipement complet au départ.</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Mécanique Swapper</div>
+        <div class="effect-row"><span class="effect-trigger">Vote</span><span class="effect-text">Le joueur le plus voté change d'équipe</span></div>
+        <div class="effect-row"><span class="effect-trigger">Victoire</span><span class="effect-text">Quand une seule équipe reste vivante</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card" data-tag="Équipes">
+      <div class="scenario-name">🟠 TeamSwapper — Trio</div>
+      <div class="scenario-desc">Mode équipes en <b>3 équipes</b>. Équipes Rouge, Bleu et Rose. Même mécanique que Duel mais avec un camp supplémentaire.</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Équipes</div>
+        <div class="effect-row"><span class="effect-text">🔴 Rouge · 🔵 Bleu · 🩷 Rose</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card" data-tag="Équipes">
+      <div class="scenario-name">🟣 TeamSwapper — Quatuor</div>
+      <div class="scenario-desc">Mode équipes en <b>4 équipes</b>. Équipes Rouge, Bleu, Rose et Vert. Recommandé pour 16+ joueurs.</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Équipes</div>
+        <div class="effect-row"><span class="effect-text">🔴 Rouge · 🔵 Bleu · 🩷 Rose · 🟢 Vert</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card" data-tag="Équipes">
+      <div class="scenario-name">🟡 TeamSwapper — Five</div>
+      <div class="scenario-desc">Mode équipes en <b>5 équipes</b>. Équipes Rouge, Bleu, Rose, Vert et Jaune. Recommandé pour 20+ joueurs.</div>
+      <div class="scenario-effects">
+        <div class="scenario-effects-title">Équipes</div>
+        <div class="effect-row"><span class="effect-text">🔴 Rouge · 🔵 Bleu · 🩷 Rose · 🟢 Vert · 🟡 Jaune</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  REGISTRES                                                -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section id="registres">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(248,113,113,.08)">📊</div>
+    <div>
+      <div class="section-title">Registres (scénario Théâtre)</div>
+      <div class="section-sub">Trois ambiances qui évoluent dynamiquement · Influencées par les rôles et les actions des joueurs</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:20px">
+    Les registres sont des <b>jauges globales</b> (0–100+) qui évoluent selon les actions des joueurs, les rôles actifs et les bâtiments bonus. Chaque seuil débloque des effets automatiques. Les rôles comme le Comédien, l'Ermite ou le Loup Craintif sont directement sensibles au registre dominant.
+  </div>
+
+  <div class="registre-grid">
+
+    <div class="reg-card reg-tragic">
+      <div class="reg-title">🔴 Tragique</div>
+      <div class="reg-threshold">
+        <span class="reg-val">&gt;25</span>
+        <span>Le tueur d'un joueur gagne ½ cœur immédiatement</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">≥ taux %</span>
+        <span>Taille des groupes réduite de 1 à chaque épisode (si registre correspond)</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">20%+</span>
+        <span>Comédien : chance de connaître l'aura, kills ou effets d'un joueur</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">actif</span>
+        <span>Ermite : +10% résistance</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">actif</span>
+        <span>Loup Craintif : +5% résistance</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">≥ 100</span>
+        <span>TP général de tous les joueurs vivants</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">proche</span>
+        <span>Joueurs avec visionRegistre alertés des changements</span>
+      </div>
+    </div>
+
+    <div class="reg-card reg-oratoire">
+      <div class="reg-title">🔵 Oratoire</div>
+      <div class="reg-threshold">
+        <span class="reg-val">≥ taux %</span>
+        <span>Taille des groupes augmentée de 1 à chaque épisode</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">20%+</span>
+        <span>Comédien : chance de voir qui a voté pour le plus voté</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">actif</span>
+        <span>Ermite : -10% force</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">actif</span>
+        <span>Loup Craintif : -10% force</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">≥ 80</span>
+        <span>Déclenchement d'un <b>vote supplémentaire</b> (ou programmé dans 10 min si vote proche)</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">≥ 100</span>
+        <span>3 joueurs aléatoires sont exposés (leurs rôles partiellement révélés)</span>
+      </div>
+    </div>
+
+    <div class="reg-card reg-epic">
+      <div class="reg-title">🟡 Épique</div>
+      <div class="reg-threshold">
+        <span class="reg-val">taux/6 %</span>
+        <span>Le tueur d'un joueur gagne Speed I (6000 ticks)</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">taux/3 %</span>
+        <span>Si la victime est un loup : le tueur est révélé en broadcast</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">20%+</span>
+        <span>Comédien : Résistance = taux/5 % permanent</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">≥ 100</span>
+        <span><b>🌕 Pleine Lune :</b> nuit forcée, rôles brumés pendant 5 min, auras LUMINOUS révélées avec particules pendant 60s, loups font hurler</span>
+      </div>
+      <div class="reg-threshold">
+        <span class="reg-val">proche</span>
+        <span>Joueurs avec visionRegistre alertés des changements</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<script>
+  let currentCamp = 'all';
+
+  function filterCamp(camp, btn) {
+    currentCamp = camp;
+    document.querySelectorAll('.camp-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    filterRoles();
+  }
+
+  function filterRoles() {
+    const q = document.getElementById('role-search').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.role-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const matchCamp = currentCamp === 'all' || card.dataset.camp === currentCamp;
+      const matchQ = !q || card.textContent.toLowerCase().includes(q);
+      if (matchCamp && matchQ) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    document.getElementById('role-count').textContent = visible + ' rôle' + (visible > 1 ? 's' : '');
+  }
+
+  // Nav active highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a[href]');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) cur = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>

@@ -58,6 +58,7 @@ import fr.fitzche.lgmore.RolesLg.VOYANTE;
 import fr.fitzche.lgmore.RolesLg.Infections.Virus;
 import fr.fitzche.lgmore.RolesLg.Infections.VirusType;
 import fr.fitzche.lgmore.Util.BooksUtils;
+import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LocationUtil;
@@ -69,6 +70,8 @@ import fr.fitzche.lgmore.custom.CustomGame;
 import fr.fitzche.lgmore.custom.RoleSet;
 import fr.fitzche.lgmore.minecraft.ResCheck;
 import fr.fitzche.lgmore.scoreboard.Inventory.PlayerGameListInv;
+import fr.fitzche.lgmore.scoreboard.Inventory.SpecialItemChoser;
+import fr.fitzche.lgmore.scoreboard.Inventory.StringChooseInv;
 import fr.fitzche.lgmore.scoreboard.Inventory.cupidonPlayersDisplay;
 import fr.fitzche.lgmore.settlerGame.SettlerGame;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -123,6 +126,14 @@ public class Lg implements CommandExecutor {
 			sender.sendMessage(message);
 			
 			
+		} else if (args[0].equals("openSpecialInv")) {
+		
+			SpecialItemChoser choser = new SpecialItemChoser(senderData);
+			choser.open(senderData, ((Player) sender).getInventory());
+			
+			
+		}else if (args[0].equals("openSpecialInvItem")) {
+			SpecialItemHolder.giveItem((Player) sender, "Inventaire d'Item");
 		} else if (args[0].equals("settlerStart")) {
 			PlayerData p = Main.getData(sender);
 			if (p.game == null) {

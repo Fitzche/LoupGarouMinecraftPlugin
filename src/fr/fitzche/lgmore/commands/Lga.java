@@ -4,12 +4,17 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -70,6 +75,7 @@ import fr.fitzche.lgmore.InfinityStones.Stone;
 import fr.fitzche.lgmore.InfinityStones.StonesType;
 import fr.fitzche.lgmore.Lg.GameLg;
 import fr.fitzche.lgmore.Lg.GameNote;
+import fr.fitzche.lgmore.Lg.PlayerNote;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlock;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.SpecialBlockType;
 import fr.fitzche.lgmore.Lg.SpecialsBlock.TreasureBlockData;
@@ -94,6 +100,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.BiomeDecorator;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -128,6 +136,11 @@ public class Lga implements CommandExecutor  {
 				Main.getData(p).clearLgGameVar();
 				Hub.sendHub(Main.getData(p));
 			}
+		}else if (args[0].equals("export")) {
+			onCommandExport(sender, cmd, msg,
+		            Arrays.copyOfRange(args, 1, args.length));
+			System.out.println("sended for "+ args.length);
+		        return true;
 		}else if (args[0].equals("addS5")) {
 			if (args.length < 3) {
 				sender.sendMessage("erreur de commande");
@@ -163,7 +176,30 @@ public class Lga implements CommandExecutor  {
 			
 			Player p = (Player) sender;
 			p.getInventory().addItem(dash);
-		} else if (args[0].equals("infDashGive")) {
+		}else if (args[0].equals("Jogo")) {
+			System.out.println("Jogo");
+			ItemStack dash = new ItemStack(Material.FEATHER);
+			ItemUtil.setName(dash, ChatColor.UNDERLINE+"Jogo");
+			ItemUtil.addAppaEnchant(dash);
+			
+			
+			
+			Player p = (Player) sender;
+			p.getInventory().addItem(ItemUtil.getItem(Material.FIREBALL, 1, ChatColor.UNDERLINE+"Jogo", new ArrayList<String>(Arrays.asList(ChatColor.GRAY+"Fait exploser la cible après 5s"))));
+			
+			
+		}else if (args[0].equals("itemInv")) {
+			
+			if (args.length > 2) {
+				for (int i = 0; i < Integer.valueOf(args[2]); i++) {
+					SpecialItemHolder.addInvItem(Main.getData(sender), args[1]);
+				}
+			}
+			SpecialItemHolder.addInvItem(Main.getData(sender), args[1]);
+			
+		}else if (args[0].equals("item")) {
+			SpecialItemHolder.giveItem((Player) sender, args[1]);
+		}else if (args[0].equals("infDashGive")) {
 			ItemStack dash = new ItemStack(Material.FEATHER);
 			ItemUtil.setName(dash, ChatColor.UNDERLINE+"DashInf");
 			ItemUtil.addAppaEnchant(dash);
@@ -684,7 +720,8 @@ public class Lga implements CommandExecutor  {
 				return true;
 			}
 			p.addXp(x);
-		}
+		} 
+		
 		if (args[0].equals("removeXp")) {
 			if (args.length < 3) {
 				return false;
@@ -1250,5 +1287,212 @@ public class Lga implements CommandExecutor  {
 		return (!(args.length< nb));
 	}
 	
+	
+	// ── CONFIGURATION — à modifier avant déploiement ──────────────────────────
+    private static final String SITE_URL  = "http://localhost:3000";       // URL du backend
+    private static final String ADMIN_KEY = "lgmore-admin-key-fitzche";   // Même valeur que dans server.js
+    // ──────────────────────────────────────────────────────────────────────────
+
+    private static final Gson GSON = new GsonBuilder().serializeNulls().create();
+
+    
+    public boolean onCommandExport(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (!sender.hasPermission("lgop") && !sender.isOp()) {
+            sender.sendMessage(ChatColor.RED + "Permission insuffisante.");
+            return true;
+        }
+
+        List<PlayerData> toExport = new ArrayList<>();
+
+        if (args.length == 0) {
+            // Tous les joueurs connus (connectés ou non)
+            toExport.addAll(Main.strToPlayer.values());
+            sender.sendMessage(Main.info + ChatColor.GREEN
+                    + "Export de tous les joueurs (" + toExport.size() + ")...");
+
+        } else if (args[0].equalsIgnoreCase("online")) {
+            // Seulement les connectés
+            for (PlayerData p : Main.strToPlayer.values()) {
+                if (p.isOnline) toExport.add(p);
+            }
+            sender.sendMessage(Main.info + ChatColor.GREEN
+                    + "Export des joueurs en ligne (" + toExport.size() + ")...");
+
+        } else {
+            // Un joueur spécifique
+            String name = args[0];
+            PlayerData p = Main.strToPlayer.getOrDefault(name,
+                           Main.strToPlayer.getOrDefault(name.toLowerCase(), null));
+            if (p == null) {
+                sender.sendMessage(ChatColor.RED + "Joueur introuvable : " + name);
+                return true;
+            }
+            toExport.add(p);
+            sender.sendMessage(Main.info + ChatColor.GREEN
+                    + "Export de " + p.getName() + "...");
+        }
+
+        // Envoi asynchrone pour ne pas bloquer le thread principal Spigot
+        final List<PlayerData> finalList = toExport;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    String json   = buildPayload(finalList);
+                    int    status = postToSite(json);
+
+                    // Retour sur le thread principal pour envoyer le message
+                    new BukkitRunnable() {
+                        @Override public void run() {
+                            if (status == 200) {
+                                sender.sendMessage(Main.info + ChatColor.GREEN
+                                        + "✔ Export réussi ("
+                                        + finalList.size() + " joueur(s)) → " + SITE_URL);
+                            } else {
+                                sender.sendMessage(ChatColor.RED
+                                        + "✘ Export échoué (HTTP " + status
+                                        + "). Vérifiez l'URL et la clé admin dans ExportCommand.java.");
+                            }
+                        }
+                    }.runTask(Main.plug);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    new BukkitRunnable() {
+                        @Override public void run() {
+                            sender.sendMessage(ChatColor.RED
+                                    + "✘ Erreur réseau : " + e.getMessage()
+                                    + " — Vérifiez que le backend est lancé sur " + SITE_URL);
+                        }
+                    }.runTask(Main.plug);
+                }
+            }
+        }.runTaskAsynchronously(Main.plug);
+
+        return true;
+    }
+
+    /**
+     * Sérialise une liste de PlayerData en JSON structuré pour le backend.
+     * Tous les champs envoyés ici doivent correspondre à ce que le frontend attend.
+     */
+    private String buildPayload(List<PlayerData> players) {
+        List<Map<String, Object>> list = new ArrayList<>();
+
+        for (PlayerData p : players) {
+            Map<String, Object> map = new HashMap<>();
+
+            // ── Identité ───────────────────────────────────────────────────
+            map.put("Name",     p.getName());
+            map.put("xp",       p.xp);
+            map.put("feathers", p.feathers);
+
+            // ── Statistiques PvP Zone ──────────────────────────────────────
+            map.put("pvpZoneKill",  p.pvpZoneKill);
+            map.put("pvpZoneDeath", p.pvpZoneDeath);
+
+            // ── Pierres d'Infinité ─────────────────────────────────────────
+            map.put("hasSpaceUsed",   p.hasSpaceUsed);
+            map.put("hasSoulUsed",    p.hasSoulUsed);
+            map.put("hasPowerUsed",   p.hasPowerUsed);
+            map.put("hasTimeUsed",    p.hasTimeUsed);
+            map.put("hasRealityUsed", p.hasRealityUsed);
+            map.put("hasMindUsed",    p.hasMindUsed);
+
+            // ── Inventaire spécial ─────────────────────────────────────────
+            map.put("specialItemsOwned",
+                    p.specialItemsOwned != null ? new ArrayList<>(p.specialItemsOwned) : new ArrayList<>());
+
+            // ── Grades ────────────────────────────────────────────────────
+            map.put("grades",
+                    p.grades != null ? new ArrayList<>(p.grades) : new ArrayList<>());
+
+            // ── Annonces de mort personnalisées ───────────────────────────
+            map.put("specialDeathAnnounces",
+                    p.specialDeathAnnounces != null ? new ArrayList<>(p.specialDeathAnnounces) : new ArrayList<>());
+
+            // ── Historique des parties ─────────────────────────────────────
+            List<Map<String, Object>> notes = new ArrayList<>();
+            if (p.notes != null) {
+                for (GameNote note : p.notes) {
+                    Map<String, Object> n = new HashMap<>();
+                    n.put("name", note.name);
+                    n.put("winningCamp", note.winningCamp != null
+                            ? new HashMap<String, String>() {{ put("name", note.winningCamp.getName()); }}
+                            : null);
+                    n.put("winners",
+                            note.winners != null ? new ArrayList<>(note.winners) : new ArrayList<>());
+
+                    // Détail par joueur (PlayerNote)
+                    List<Map<String, Object>> plys = new ArrayList<>();
+                    if (note.plysNote != null) {
+                        for (PlayerNote pn : note.plysNote) {
+                            Map<String, Object> pm = new HashMap<>();
+                            pm.put("name",     pn.name);
+                            pm.put("role",     pn.role != null ? pn.role.getName() : null);
+                            pm.put("kill",     pn.kill);
+                            pm.put("inLove",   pn.inLove);
+                            pm.put("infected", pn.infected);
+                            pm.put("hasWin",   pn.hasWin);
+                            plys.add(pm);
+                        }
+                    }
+                    n.put("plysNote", plys);
+                    notes.add(n);
+                }
+            }
+            map.put("notes", notes);
+
+            // ── Rôle forcé si applicable ───────────────────────────────────
+            if (p.settedRole != null) {
+                map.put("settedRole", p.settedRole.getName());
+            }
+
+            list.add(map);
+        }
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("players", list);
+        return GSON.toJson(payload);
+    }
+
+    /**
+     * Envoie le JSON au backend via HTTP POST.
+     * Retourne le code de réponse HTTP (200 = succès).
+     */
+    private int postToSite(String jsonPayload) throws IOException {
+        URL url = new URL(SITE_URL + "/api/ingest");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        conn.setRequestProperty("x-admin-key", ADMIN_KEY);
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(10000);
+
+        byte[] body = jsonPayload.getBytes(StandardCharsets.UTF_8);
+        conn.setRequestProperty("Content-Length", String.valueOf(body.length));
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(body);
+            os.flush();
+        }
+
+        int status = conn.getResponseCode();
+        conn.disconnect();
+        return status;
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+

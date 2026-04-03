@@ -19,10 +19,11 @@ import org.inventivetalent.reflection.minecraft.Minecraft;
 import com.mojang.authlib.GameProfile;
 
 public class ItemUtil {
-	public static void setName(ItemStack item, String name) {
+	public static ItemStack setName(ItemStack item, String name) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		item.setItemMeta(meta);
+		return item;
 	}
 	
 	public static ItemStack addEnchant(ItemStack item, Enchantment enchant, int level) {
@@ -71,12 +72,13 @@ public class ItemUtil {
     }
   
 	
-	public static void addAppaEnchant(ItemStack item) {
+	public static ItemStack addAppaEnchant(ItemStack item) {
 		ItemMeta meta = item.getItemMeta();
 		meta.addEnchant(Enchantment.DURABILITY	, 1, false);
 		
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		item.setItemMeta(meta);
+		return item;
 	}
 	public static ItemStack hideAttributes(ItemStack item) {
 		ItemMeta meta = item.getItemMeta();

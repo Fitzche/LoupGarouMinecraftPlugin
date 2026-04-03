@@ -121,24 +121,23 @@ public class PlayerUtil {
 		try {
 			for (int i = 0; i < nbOfTime; i++) { // Générer plus de particules en augmentant le nombre de répétitions
                 
-				if (!strict) {
-					//ParticleEffect.RED_DUST.sendColor(Main.server.getOnlinePlayers(), new Location(loc.getWorld(), loc.getX() + MathUtil.betweenNegOneAndOne() * radius , loc.getY()+1+ MathUtil.betweenNegOneAndOne() * radius, loc.getZ()+ MathUtil.betweenNegOneAndOne() * radius), color, true);
-
-				} else {
-					Vector vector =new Vector(loc.getX(), loc.getY(), loc.getZ()).add(LineLocationHelper.getRandomDirectionVector(radius));
-					ArrayList<Player> players = new ArrayList<Player>();
+				double r = radius;
+				if (strict) {
+					r = (MathUtil.generateAlInt(50, 100) / 100)*r;
+				}
+				Vector vector =new Vector(loc.getX(), loc.getY(), loc.getZ()).add(LineLocationHelper.getRandomDirectionVector(r));
+				ArrayList<Player> players = new ArrayList<Player>();
+				for (Player p:Main.server.getOnlinePlayers()) {
+					players.add(p);
+				}
+				if (particle.equals(EnumParticle.DRIP_WATER)) {
 					for (Player p:Main.server.getOnlinePlayers()) {
-						players.add(p);
+						ParticleEffect.RED_DUST.sendColor(p, new Location(Main.world, vector.getX(), vector.getY(), vector.getZ()), Color.BLUE, true);
 					}
-					if (particle.equals(EnumParticle.DRIP_WATER)) {
-						for (Player p:Main.server.getOnlinePlayers()) {
-							ParticleEffect.RED_DUST.sendColor(p, new Location(Main.world, vector.getX(), vector.getY(), vector.getZ()), Color.BLUE, true);
-						}
-						
-					} else {
-						sendParticle(players, particle ,new Location(loc.getWorld(), vector.getX(), vector.getY(), vector.getZ()), 0, 0, 0, -1000000000, 0);
-	
-					}
+					
+				} else {
+					sendParticle(players, particle ,new Location(loc.getWorld(), vector.getX(), vector.getY(), vector.getZ()), 0, 0, 0, -1000000000, 0);
+
 				}
 				
             }

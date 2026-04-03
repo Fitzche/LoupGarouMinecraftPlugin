@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -94,6 +96,19 @@ public class GeneralMenu implements Listener {
 				WorldCreator c = new WorldCreator("pvpWorld");
 				World worldPvP = Bukkit.createWorld(c);
 				e.getWhoClicked().teleport(worldPvP.getSpawnLocation());
+				
+				e.getWhoClicked().getInventory().addItem(new ItemStack(Material.ARROW, 64));
+				e.getWhoClicked().getInventory().addItem(ItemUtil.addEnchant(new ItemStack(Material.BOW, 1), Enchantment.ARROW_DAMAGE, 2));
+				e.getWhoClicked().getInventory().addItem(ItemUtil.addEnchant(new ItemStack(Material.DIAMOND_HELMET, 1), Enchantment.PROTECTION_ENVIRONMENTAL, 2));
+				e.getWhoClicked().getInventory().addItem(ItemUtil.addEnchant(new ItemStack(Material.DIAMOND_CHESTPLATE, 1), Enchantment.PROTECTION_ENVIRONMENTAL, 2));
+				e.getWhoClicked().getInventory().addItem(ItemUtil.addEnchant(new ItemStack(Material.IRON_LEGGINGS, 1), Enchantment.PROTECTION_ENVIRONMENTAL, 3));
+				e.getWhoClicked().getInventory().addItem(ItemUtil.addEnchant(new ItemStack(Material.IRON_BOOTS, 1), Enchantment.PROTECTION_ENVIRONMENTAL, 3));
+				e.getWhoClicked().getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 16));
+				e.getWhoClicked().getInventory().addItem(ItemUtil.addEnchant(new ItemStack(Material.DIAMOND_SWORD, 1), Enchantment.DAMAGE_ALL, 3));
+				e.getWhoClicked().getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
+				e.getWhoClicked().getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
+				
+				
 			}else if (e.getCurrentItem().getItemMeta().getDisplayName().equals( ChatColor.DARK_PURPLE+ ""+ChatColor.BOLD+ "BedWar")) {
 				p.sendMessage("bloqué temporairement, et si t pas content, et bah faut DEGAGER !!!");
 				boolean v = true;

@@ -29,7 +29,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -878,9 +878,44 @@ public class Main extends JavaPlugin implements Listener {
 	
 	
 	public static void setServer(Server server) {
-		Main.server = server;
+			Main.server = server;
+	}
+
+
+	public static void pvpWorldKill(Player killed, Entity killer, World world) {
+		killed.getInventory().clear();
+		killed.teleport(Main.world.getSpawnLocation());
+		PlayerData killedD = Main.getData(killed);
+		PlayerData killerD = Main.getData(killer);
+		killed.setMaxHealth(20);
+		killed.setHealth(killed.getMaxHealth());
+		if (killerD != null && killedD != null) {
+			killedD.pvpZoneDeath ++;
+			killerD.pvpZoneKill ++;
+			for (Player p:world.getPlayers()) {
+				
+				String message = "";
+				if (killerD.specialDeathAnnounces != null&& killerD.specialDeathAnnounces.size() > 0) {
+					message = killerD.specialDeathAnnounces.get(MathUtil.generateAlInt(0, killerD.specialDeathAnnounces.size() - 1));
+				}
+				
+				
+				p.sendMessage(killed.getName() + " a été éliminé par "+ killer.getName() + ", "+ message);
+			}
+		}
+		
+	}
+	
+	public static void pvpWorldDamage(Player damaged, Player damager, double damage) {
+		if (damaged.getHealth() - damage <= 0) {
+			
+			
+			pvpWorldKill(damaged, damager, damaged.getLocation().getWorld());
+		} else {
+			damaged.setHealth(damaged.getHealth() - damage);
 		}
 	}
+}
 
 
 

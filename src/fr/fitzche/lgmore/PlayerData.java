@@ -54,12 +54,20 @@ public class PlayerData implements Serializable{
 	public int xp = 0;
 	public int feathers = 0;
 	public boolean hoster = false;
+	
 	public boolean absoluteOp = false;
 	public transient Location rejoinLoc;
 	
 	
+	public ArrayList<String> specialItemsOwned = new ArrayList<String>();
+	public int pvpZoneKill = 0;
+	public int pvpZoneDeath = 0;
 	
 	public transient BedTeam bedTeam;
+	
+	public ArrayList<String> grades = new ArrayList<String>();
+	public ArrayList<String> specialDeathAnnounces = new ArrayList<String>();
+	
 	
 	
 	

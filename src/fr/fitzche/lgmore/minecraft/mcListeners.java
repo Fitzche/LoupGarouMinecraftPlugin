@@ -132,6 +132,8 @@ public class mcListeners implements Listener {
 		}
 		
 		
+		
+		
 		//RECUP INFOS
 		Location loc = e.getEntity().getPlayer().getLocation();
 		
@@ -204,6 +206,36 @@ public class mcListeners implements Listener {
 		}
 		
 	
+	}
+	
+	@EventHandler
+	public void onEntityDamage(EntityDamageEvent e) {
+		
+		if (e.getEntity() instanceof Player && !e.getCause().equals(DamageCause.ENTITY_ATTACK)) {
+			Player p = (Player) e.getEntity();
+			if (p.getHealth() - e.getFinalDamage() <= 0 && p.getLocation().getWorld().getName().equals("pvpWorld")) {
+				
+				
+				
+				Player player = null;
+				double x = 10000;
+				for (Player ply:p.getWorld().getPlayers()) {
+					if (LocationUtil.getDistanceBetween(p, ply) < x) {
+						x = LocationUtil.getDistanceBetween(p, ply);
+						player = ply;
+					}
+				}
+
+				if (player != null) {
+					Main.pvpWorldKill(p, player, e.getEntity().getWorld());
+				} else {
+					Main.pvpWorldKill(p, e.getEntity(), e.getEntity().getWorld());
+				}
+				
+				
+				e.setCancelled(true);
+			}
+		}
 	}
 	
 	
@@ -398,9 +430,7 @@ public class mcListeners implements Listener {
 			more += (0.05*damager.boostS5);
 			System.out.println("more = "+ more);
 
-			if (damager.role == null) {
-				return;	
-			}
+			
 			if (damager.hasStrenghtAgainst.getOrDefault(e.getEntity(), false)) {
 				more += 0.2;
 			}
@@ -455,7 +485,7 @@ public class mcListeners implements Listener {
 				finalDamage = damaged.game.getListener().damagePbyP(damager, damaged, finalDamage, isArrow);
 			} else {
 				finalDamage = 0;
-				return;
+				
 			}
 		}
 		if (damaged.starParty != null) {
@@ -463,7 +493,7 @@ public class mcListeners implements Listener {
 				finalDamage = damaged.starParty.listener.damagePbyP(damager, damaged, finalDamage, isArrow);
 			} else {
 				finalDamage = 0;
-				return;
+				
 			}
 		}
 		if (damaged.game != null && damaged.game instanceof Bedwars) {
@@ -475,7 +505,7 @@ public class mcListeners implements Listener {
 				}
 			} else {
 				finalDamage = 0;
-				return;
+				
 			}
 		}
 		
@@ -487,9 +517,11 @@ public class mcListeners implements Listener {
 		
 		
 		if (e.getEntity() instanceof Player && e.getFinalDamage() > ((Player) e.getEntity()).getHealth() && e.getEntity().getLocation().getWorld().getName().equals("pvpWorld")) {
-			e.setDamage(0);
-			((Player) e.getEntity()).getInventory().clear();
-			e.getEntity().teleport(Main.world.getSpawnLocation());
+			
+			
+			
+			Main.pvpWorldKill((Player) e.getEntity(), e.getDamager(), e.getEntity().getWorld());
+			e.setCancelled(true);
 		}
 		if (e.getEntity() instanceof Player && e.getEntity().getLocation().getWorld().getName().equals("world")) {
 			e.setDamage(0);
