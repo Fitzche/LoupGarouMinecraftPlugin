@@ -1855,7 +1855,12 @@ public class GameLg implements Listener, Serializable, Game{
 				if (displayedRoles ) {
 					gain /= 5;
 				}
-				p.xp += gain;
+				p.addXp(gain);
+				
+				int fPlus = Math.round(gain/25);
+				p.sendMessage(ChatColor.GREEN+"Vous avez gagné "+ ChatColor.WHITE+ fPlus+ ChatColor.GREEN+ " feathers ");
+				p.feathers += Math.round(gain/25);
+				p.hasWinLg = true;
 			}
 			
 			

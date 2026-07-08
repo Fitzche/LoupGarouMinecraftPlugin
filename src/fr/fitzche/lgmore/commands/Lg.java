@@ -126,7 +126,12 @@ public class Lg implements CommandExecutor {
 			sender.sendMessage(message);
 			
 			
-		} else if (args[0].equals("openSpecialInv")) {
+		} else if (args[0].equals("plant")){
+			WorldEditUtil.BiomeChanger.plant((Player) sender, 15, 15);
+			sender.sendMessage("plant in plant command lg");
+			return true;
+			
+		}  else if (args[0].equals("openSpecialInv")) {
 		
 			SpecialItemChoser choser = new SpecialItemChoser(senderData);
 			choser.open(senderData, ((Player) sender).getInventory());

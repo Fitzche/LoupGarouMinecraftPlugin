@@ -153,9 +153,18 @@ public class PlayerData implements Serializable{
 	
 	
 	public PlayerData coupleL;
+	public  transient boolean itemsLocked = false;
+	public boolean toji = false;
+	public boolean hasWinLg = false;
+	public transient boolean autel = false;
+	public transient boolean sphere = false;
+	public boolean hasSpecialActivated = false;
+	public boolean hasTerritotyOpened = false;
+	public HashMap<String, Integer> __slotPref__ = new HashMap<String, Integer>();
 	public void clearLgGameVar() {
 		coupleL = null;
 		settedRole = null;
+		itemsLocked = false;
 		hasSpace = false;
 		hasSoul = false;
 		hasPower = false;
@@ -244,6 +253,8 @@ public class PlayerData implements Serializable{
 		this.inLife = true;
 		
 		//System.out.println("5");
+		
+		
 
 	}
 	

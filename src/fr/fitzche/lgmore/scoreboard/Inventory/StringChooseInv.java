@@ -43,7 +43,7 @@ public class StringChooseInv implements Listener{
 		int reper = 0;
 		ArrayList<ItemStack> stock = new ArrayList<ItemStack>();
 		do {
-			if (reper == 18) {
+			if (reper == 29) {
 				addInv(stock);
 				stock = new ArrayList<ItemStack>();
 				
@@ -51,7 +51,7 @@ public class StringChooseInv implements Listener{
 			
 			//ItemStack item = new ItemStack(Material.PAPER);
 			ItemStack item = notes.get(0);
-			String s = Integer.toString(gameNotes.size());
+			String s = ChatColor.MAGIC + Integer.toString(gameNotes.size());
 			ArrayList<String> toSet = new ArrayList<String>();
 			toSet.add(s);
 			if (notes.get(0).getItemMeta().getLore() != null) {
@@ -66,6 +66,7 @@ public class StringChooseInv implements Listener{
 			stock.add(item);
 			gameNotes.add(notes.get(0));
 			notes.remove(0);
+			reper++;
 			
 		} while (notes.size() > 0);
 		if (stock.size() > 0) {
@@ -130,7 +131,7 @@ public class StringChooseInv implements Listener{
 				
 				
 				
-				if (Integer.valueOf(event.getCurrentItem().getItemMeta().getLore().get(0)) != null){
+				if (Integer.valueOf(event.getCurrentItem().getItemMeta().getLore().get(0).substring(2, event.getCurrentItem().getItemMeta().getLore().get(0).length())) != null){
 					PlayerData p = Main.getData(event.getWhoClicked());
 					
 					ArrayList<String> lores = new ArrayList<String>();

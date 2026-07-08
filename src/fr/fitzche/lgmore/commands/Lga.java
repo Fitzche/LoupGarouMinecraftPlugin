@@ -148,6 +148,20 @@ public class Lga implements CommandExecutor  {
 			}
 			int added = Integer.valueOf(args[2]);
 			Main.getData(args[1]).boostS5 += added;
+		}else if (args[0].equals("addXp")) {
+			if (args.length < 3) {
+				sender.sendMessage("erreur de commande");
+				return true;
+			}
+			int added = Integer.valueOf(args[2]);
+			Main.getData(args[1]).xp += added;
+		}else if (args[0].equals("addFeather")) {
+			if (args.length < 3) {
+				sender.sendMessage("erreur de commande");
+				return true;
+			}
+			int added = Integer.valueOf(args[2]);
+			Main.getData(args[1]).feathers += added;
 		}else if (args[0].equals("addR5")) {
 			if (args.length < 3) {
 				sender.sendMessage("erreur de commande");
@@ -706,21 +720,7 @@ public class Lga implements CommandExecutor  {
 				}
 				game.removePlayer(p, " at remove command");
 			}
-		}else if (args[0].equals("addXp")) {
-			if (args.length < 3) {
-				return false;
-			}
-			int x = -1;
-			x = Integer.valueOf(args[2]);
-			if (x < 1) {
-				return true;
-			}
-			PlayerData p = Main.strToPlayer.getOrDefault(args[1], null);
-			if (p == null) {
-				return true;
-			}
-			p.addXp(x);
-		} 
+		}
 		
 		if (args[0].equals("removeXp")) {
 			if (args.length < 3) {
@@ -1289,7 +1289,7 @@ public class Lga implements CommandExecutor  {
 	
 	
 	// ── CONFIGURATION — à modifier avant déploiement ──────────────────────────
-    private static final String SITE_URL  = "http://localhost:3000";       // URL du backend
+    private static final String SITE_URL  = "https://lgweb.onrender.com";       // URL du backend
     private static final String ADMIN_KEY = "lgmore-admin-key-fitzche";   // Même valeur que dans server.js
     // ──────────────────────────────────────────────────────────────────────────
 
@@ -1308,17 +1308,23 @@ public class Lga implements CommandExecutor  {
         if (args.length == 0) {
             // Tous les joueurs connus (connectés ou non)
             toExport.addAll(Main.strToPlayer.values());
-            sender.sendMessage(Main.info + ChatColor.GREEN
+            if (sender != null) {
+            	sender.sendMessage(Main.info + ChatColor.GREEN
                     + "Export de tous les joueurs (" + toExport.size() + ")...");
 
+            }
+            
         } else if (args[0].equalsIgnoreCase("online")) {
             // Seulement les connectés
             for (PlayerData p : Main.strToPlayer.values()) {
                 if (p.isOnline) toExport.add(p);
             }
-            sender.sendMessage(Main.info + ChatColor.GREEN
-                    + "Export des joueurs en ligne (" + toExport.size() + ")...");
+            if (sender != null) {
+            	 sender.sendMessage(Main.info + ChatColor.GREEN
+                         + "Export des joueurs en ligne (" + toExport.size() + ")...");
 
+            } 
+           
         } else {
             // Un joueur spécifique
             String name = args[0];

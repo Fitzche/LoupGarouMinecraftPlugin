@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.inventory.*;
@@ -38,6 +39,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -81,6 +83,25 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class mcListeners implements Listener {
 	
 	
+	
+	
+	@EventHandler
+	public void onEntityDeath(EntityDeathEvent e) {
+		System.out.println("death entity");
+		if (e.getEntity() != null && e.getEntity().getKiller() != null) {
+			System.out.println("death entity not null");
+			if (e.getEntity().hasMetadata("makora") && e.getEntity().getMetadata("makora").get(0).equals( Main.makoraMeta)) {
+				System.out.println("death entity makora");
+				Player p = e.getEntity().getKiller();
+				PlayerData pd = Main.getData(p);
+				pd.sendMessage(Main.exclamation+" Vous êtes venu à bout de Makora");
+			}	
+		}
+		
+		
+	}
+	
+	
 	@EventHandler
 	@Deprecated
 	public void onPlayerDeath(PlayerDeathEvent e ) {
@@ -117,7 +138,10 @@ public class mcListeners implements Listener {
 		final PlayerData killedData = Main.strToPlayer.getOrDefault(killed.getName(), null);
 		
 		
-		
+		if (killedData.itemsLocked) {
+			killedData.setMaxHealth(20);
+			killedData.itemsLocked = false;
+		}
 		
 		if (killedData == null || (killer != null && killerData == null)) {
 			log.append("A Player of the death isn't registred"+"\n");
@@ -211,7 +235,7 @@ public class mcListeners implements Listener {
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent e) {
 		
-		if (e.getEntity() instanceof Player && !e.getCause().equals(DamageCause.ENTITY_ATTACK)) {
+		if (e.getEntity() instanceof Player && !e.getCause().equals(DamageCause.ENTITY_ATTACK  )&& !(e instanceof org.bukkit.event.entity.EntityDamageByEntityEvent)) {
 			Player p = (Player) e.getEntity();
 			if (p.getHealth() - e.getFinalDamage() <= 0 && p.getLocation().getWorld().getName().equals("pvpWorld")) {
 				
@@ -225,12 +249,12 @@ public class mcListeners implements Listener {
 						player = ply;
 					}
 				}
-
+				/*
 				if (player != null) {
 					Main.pvpWorldKill(p, player, e.getEntity().getWorld());
 				} else {
 					Main.pvpWorldKill(p, e.getEntity(), e.getEntity().getWorld());
-				}
+				}*/
 				
 				
 				e.setCancelled(true);
@@ -365,10 +389,10 @@ public class mcListeners implements Listener {
 			byPlayer = true;
 		}
 		
-		if (Main.strToPlayer.getOrDefault(e.getEntity().getName(), null) == null || Main.strToPlayer.getOrDefault(e.getDamager().getName(), null) == null || Main.strToPlayer.getOrDefault(e.getEntity().getName(), null).game == null || Main.strToPlayer.getOrDefault(e.getDamager().getName(), null).game == null) {
+		if (Main.getData(e.getEntity().getName()) == null || Main.getData(e.getDamager().getName()) == null ) {
 			return;
 		}
-		System.out.println("base damage: " + e.getDamage());
+		//System.out.println("base damage: " + e.getDamage());
 
 
 		//CHECK IF PLAYER IG
@@ -407,11 +431,11 @@ public class mcListeners implements Listener {
 				
 				if (ef.getType().equals(PotionEffectType.INCREASE_DAMAGE)) {
 
-					System.out.println("has strenght: "+ e.getDamage());
+					//System.out.println("has strenght: "+ e.getDamage());
 					hasStrenght = true;
 					finalDamage/= 1.884;
-					System.out.println("has strenght annulated: "+ e.getDamage());
-					System.out.println(e.getDamage());
+					//System.out.println("has strenght annulated: "+ e.getDamage());
+					//System.out.println(e.getDamage());
 				
 				} 
 				
@@ -426,18 +450,18 @@ public class mcListeners implements Listener {
 
 			//CREATE BOOST R or S WITH PLAYERS BOOST
 			less += (0.05*damaged.boostR5);
-			System.out.println("less = "+ less);
+			//System.out.println("less = "+ less);
 			more += (0.05*damager.boostS5);
-			System.out.println("more = "+ more);
+			//System.out.println("more = "+ more);
 
 			
-			if (damager.hasStrenghtAgainst.getOrDefault(e.getEntity(), false)) {
+			if (damager.hasStrenghtAgainst != null && damager.hasStrenghtAgainst.getOrDefault(e.getEntity(), false)) {
 				more += 0.2;
 			}
 
 
 			//SET DAMAGE WITH MORE
-			System.out.println("base damage: "+ finalDamage + " into "+ finalDamage * (1 + more));
+			//System.out.println("base damage: "+ finalDamage + " into "+ finalDamage * (1 + more));
 			finalDamage *= (1+more);
 			
 		}
@@ -458,10 +482,10 @@ public class mcListeners implements Listener {
 			
 			if (ef.getType().equals(PotionEffectType.DAMAGE_RESISTANCE)) {
 				
-				System.out.println("has resistance");
+				//System.out.println("has resistance");
 				finalDamage  /= 1.25;
 				hasRes = true;
-				System.out.println("correct resis"+e.getDamage());
+				//System.out.println("correct resis"+e.getDamage());
 				
 			}
 			
@@ -475,7 +499,7 @@ public class mcListeners implements Listener {
 		}
 	
 		//SET DAMAGE WITH LESS
-		System.out.println("base damage: "+ finalDamage + " into "+ finalDamage * (1 - less));
+		//System.out.println("base damage: "+ finalDamage + " into "+ finalDamage * (1 - less));
 		finalDamage *= (1 - less);
 		
 		
@@ -513,7 +537,7 @@ public class mcListeners implements Listener {
 		
 		finalDamage *=0.89;
 		e.setDamage(finalDamage);
-		System.out.println("damage: "+e.getDamage() + "; final damage: "+e.getFinalDamage());
+		//System.out.println("damage: "+e.getDamage() + "; final damage: "+e.getFinalDamage());
 		
 		
 		if (e.getEntity() instanceof Player && e.getFinalDamage() > ((Player) e.getEntity()).getHealth() && e.getEntity().getLocation().getWorld().getName().equals("pvpWorld")) {
@@ -522,6 +546,8 @@ public class mcListeners implements Listener {
 			
 			Main.pvpWorldKill((Player) e.getEntity(), e.getDamager(), e.getEntity().getWorld());
 			e.setCancelled(true);
+			e.setDamage(0);
+			
 		}
 		if (e.getEntity() instanceof Player && e.getEntity().getLocation().getWorld().getName().equals("world")) {
 			e.setDamage(0);

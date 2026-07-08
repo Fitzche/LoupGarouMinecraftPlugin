@@ -60,12 +60,12 @@ public class Hub implements CommandExecutor {
 		}
 		
 		
-		
+		p.player.getInventory().clear();
 		p.player.teleport(Main.world.getSpawnLocation());
 		p.setDisplayName(p.player.getName());
 		PlayerUtil.survival(p.player);
 		p.player.getInventory().setItem(0, ItemUtil.getItem(Material.BOOK, 1, ChatColor.UNDERLINE+"Navigation", new ArrayList<String>(Arrays.asList("Pour accéder au menu principal"))));
-
+		p.toji = false;
 	}
 	
 	

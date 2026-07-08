@@ -103,6 +103,12 @@ public class PlayerUtil {
 		}
 		
 	}
+	public static void setPlayerView(Player p, float yaw, float pitch) {
+	    Location loc = p.getLocation();
+	    loc.setYaw(yaw);
+	    loc.setPitch(pitch);
+	    p.teleport(loc);
+	}
 	public static void particle(Location loc, org.bukkit.Color color, String checkWorld, double radius) {
 		try {
 			for (int i = 0; i < 10; i++) { // Générer plus de particules en augmentant le nombre de répétitions

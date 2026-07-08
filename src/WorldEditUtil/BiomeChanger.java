@@ -3,6 +3,7 @@ package WorldEditUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalWorld;
@@ -25,6 +26,18 @@ public class BiomeChanger {
 
 	
 	
+	public static void plant(Player p, int force, int rayon) {
+		if (!p.isOp()) {
+			p.setOp(true);
+			p.performCommand("//forestgen 15 RANDOM 15");
+			p.setOp(false);
+		} else {
+			p.performCommand("worldedit:forestgen 15 RANDOM 15");
+		}
+		
+		
+	}
+	
 	public static void change(int radius, int biomeId, World world) {
 		CuboidRegion region = new CuboidRegion(BukkitUtil.getLocalWorld(world), new Vector(-1000, 0, -1000), new Vector(1000, 255, 1000));
 		EditSession editSession = new EditSession(BukkitUtil.getLocalWorld(Main.world), 1000);
@@ -32,6 +45,7 @@ public class BiomeChanger {
             for (int z = 0 - radius; z <= radius; z++) {
                 Vector2D position = new Vector2D(x, z);
                 editSession.setBiome(position, new BaseBiome(biomeId));
+                
             }
         }
 		

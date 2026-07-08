@@ -29,6 +29,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.craftbukkit.v1_8_R3.command.ServerCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -96,6 +97,7 @@ import fr.fitzche.lgmore.RolesLg.RoleDisplay;
 import fr.fitzche.lgmore.RolesLg.RolesLg;
 import fr.fitzche.lgmore.RolesLg.SOEUR;
 import fr.fitzche.lgmore.RolesLg.THANOS;
+import fr.fitzche.lgmore.Util.CommandUtil;
 import fr.fitzche.lgmore.Util.GameLgUtil;
 import fr.fitzche.lgmore.Util.ItemUtil;
 import fr.fitzche.lgmore.Util.LineLocationHelper;
@@ -188,7 +190,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static ArrayList<ClockTower> clocks = new ArrayList<ClockTower>();
 	
 	public static FixedMetadataValue unbreakableMeta = null;
-	
+	public static FixedMetadataValue makoraMeta = null;
 	
 	public static HashMap<CustomGameType, ArrayList<CustomGame>> games = new HashMap<CustomGameType, ArrayList<CustomGame>>();
 
@@ -347,6 +349,7 @@ public class Main extends JavaPlugin implements Listener {
 		Main.world = getServer().getWorld("world");
 		
 		this.unbreakableMeta = new FixedMetadataValue(plug, "unbreakable");
+		this.makoraMeta = new FixedMetadataValue(plug, "makora");
 		
 		
 	    
@@ -474,6 +477,51 @@ public class Main extends JavaPlugin implements Listener {
 			}
 			
 		}, 20, 20);
+		Bukkit.getScheduler().runTaskTimer(Main.plug, new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				Player p = null;
+				CommandUtil.runCommand("lga", new ServerCommandSender() {
+					
+					@Override
+					public void setOp(boolean arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public boolean isOp() {
+						// TODO Auto-generated method stub
+						return true;
+					}
+					
+					@Override
+					public void sendMessage(String[] arg0) {
+						for (String arg:arg0) {
+							System.out.println("Rapport de Commande: " +arg);
+						}
+						
+						
+					}
+					
+					@Override
+					public void sendMessage(String arg0) {
+						System.out.println("Rapport de Commande: " +arg0);
+						
+					}
+					
+					@Override
+					public String getName() {
+						// TODO Auto-generated method stub
+						return "console";
+					}
+				}, new String[] {" export"});
+				
+				
+			}
+			
+		}, 20*60*10, 20*60*10);		
 		
 		
 	}
@@ -884,11 +932,37 @@ public class Main extends JavaPlugin implements Listener {
 
 	public static void pvpWorldKill(Player killed, Entity killer, World world) {
 		killed.getInventory().clear();
+		killed.getInventory().setArmorContents(null);
 		killed.teleport(Main.world.getSpawnLocation());
 		PlayerData killedD = Main.getData(killed);
 		PlayerData killerD = Main.getData(killer);
 		killed.setMaxHealth(20);
 		killed.setHealth(killed.getMaxHealth());
+		killerD.addXp(MathUtil.generateAlInt(1, 4));
+		killedD.autel = false;
+		killedD.sphere = false;
+		killerD.toji = false;
+		if (killerD.getHealth() + 6 > killerD.getMaxHealth()) {
+			killerD.setHealth(killerD.getMaxHealth());
+		} else {
+			killerD.setHealth(killerD.getHealth()+ 6);
+		}
+		killerD.player.setHealth(decalageBatX);
+		SpecialItemHolder.giveItem(killedD.player, "Navigation");
+		killed.removePotionEffect(PotionEffectType.SPEED);
+		killed.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+		killed.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+		if (MathUtil.generateAlInt(0, 100) > 70) {
+			
+			if (MathUtil.generateAlInt(0, 100) > 90) {
+				killerD.sendMessage(Main.info + " Vous avez gagné 10 feather");
+				killerD.feathers += 10;
+			} else {
+				killerD.feathers++;
+				killerD.sendMessage(Main.info + " Vous avez gagné 1 feather");
+			}
+		}
+		
 		if (killerD != null && killedD != null) {
 			killedD.pvpZoneDeath ++;
 			killerD.pvpZoneKill ++;
